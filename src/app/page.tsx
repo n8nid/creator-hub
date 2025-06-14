@@ -3,30 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Users, Workflow, Search } from "lucide-react"
 import Link from "next/link"
+import { HeaderNav } from "@/components/header-nav"
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Workflow className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">AutoTalent</span>
-          </div>
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/directory" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Browse Talent
-            </Link>
-            <Link href="/auth/login" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Login
-            </Link>
-            <Button asChild>
-              <Link href="/auth/signup">Join as Talent</Link>
-            </Button>
-          </nav>
-        </div>
-      </header>
+      <HeaderNav />
 
       {/* Hero Section */}
       <section className="py-20 px-4">
@@ -50,7 +32,7 @@ export default function HomePage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild className="text-lg px-8 py-6">
-              <Link href="/auth/signup">Join as Talent</Link>
+              <Link href="/auth">Join as Talent</Link>
             </Button>
           </div>
         </div>
@@ -129,7 +111,7 @@ export default function HomePage() {
               asChild
               className="text-lg px-8 py-6 border-white text-white hover:bg-white hover:text-blue-600"
             >
-              <Link href="/auth/signup">Create Your Profile</Link>
+              <Link href="/auth">Create Your Profile</Link>
             </Button>
           </div>
         </div>
@@ -155,7 +137,7 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/auth/signup" className="hover:text-white transition-colors">
+                  <Link href="/auth" className="hover:text-white transition-colors">
                     Join as Talent
                   </Link>
                 </li>

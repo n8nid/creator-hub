@@ -66,17 +66,9 @@ export function TalentDirectory() {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Automation Talent Directory</h1>
-            <p className="text-gray-600">Discover skilled automation experts and workflow specialists</p>
-          </div>
-          <Link href="/">
-            <Button variant="outline">
-              <Workflow className="h-4 w-4 mr-2" />
-              Back to Home
-            </Button>
-          </Link>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Automation Talent Directory</h1>
+          <p className="text-gray-600">Discover skilled automation experts and workflow specialists</p>
         </div>
 
         {/* Filters */}
