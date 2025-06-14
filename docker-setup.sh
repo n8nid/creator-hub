@@ -232,10 +232,10 @@ main() {
             run_production
             ;;
         3)
-            run_with_nginx
+            run_simple_production
             ;;
         4)
-            stop_services
+            run_with_nginx
             ;;
         5)
             show_logs "dev"
