@@ -1,0 +1,16 @@
+# This is a CODEOWNERS file. It defines who is responsible for different parts of the codebase.
+
+# These owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence, they will be requested for review when someone opens a pull request.
+* @n8nid/maintainers
+
+# Documentation
+/docs/ @n8nid/documentation-team
+
+# Workflows
+/workflows/ @n8nid/workflow-team
+
+# Configuration files
+/.github/ @n8nid/maintainers
+/package.json @n8nid/maintainers
+/tsconfig.json @n8nid/maintainers 
