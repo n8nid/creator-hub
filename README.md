@@ -18,7 +18,35 @@ Creator Hub is a dedicated platform for Indonesian n8n creators to share, collab
 
 ### Prerequisites
 
+Before you begin, ensure you have the following installed:
+- [Node.js](https://nodejs.org/) (v16 or higher)
+- [Git](https://git-scm.com/)
+- [pnpm](https://pnpm.io/) (latest version recommended)
+- A code editor (VS Code recommended)
+
 ### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/your-username/creator-hub.git
+cd creator-hub
+```
+
+2. Install dependencies:
+```bash
+pnpm install
+```
+
+3. Set up your environment:
+   - Copy `.env.example` to `.env`
+   - Update the environment variables with your configuration
+
+4. Start the development server:
+```bash
+pnpm dev
+```
+
+5. Access the application at `http://localhost:3000`
 
 
 ## Usage
