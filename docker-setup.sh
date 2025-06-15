@@ -222,7 +222,7 @@ main() {
     echo "10) Exit"
     echo
     
-    read -p "Enter your choice (1-9): " choice
+    read -p "Enter your choice (1-10): " choice
     
     case $choice in
         1)
