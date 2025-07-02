@@ -37,7 +37,7 @@ export function TalentDirectory() {
       if (error) throw error
       setProfiles(data || [])
     } catch (error) {
-      console.error("Error fetching profiles:", error)
+      
     } finally {
       setLoading(false)
     }
