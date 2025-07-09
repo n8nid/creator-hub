@@ -16,6 +16,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { TagInput } from "@/components/ui/tag-input";
 
 export default function WorkflowsSubPage() {
   const { user } = useAuth();
@@ -27,6 +28,7 @@ export default function WorkflowsSubPage() {
     title: string;
     description: string;
     tags: string[];
+    category: string;
     screenshot_url: string;
     video_url: string;
     complexity: string;
@@ -35,6 +37,7 @@ export default function WorkflowsSubPage() {
     title: "",
     description: "",
     tags: [],
+    category: "",
     screenshot_url: "",
     video_url: "",
     complexity: "",
@@ -87,6 +90,7 @@ export default function WorkflowsSubPage() {
       title: workflowForm.title,
       description: workflowForm.description,
       tags: workflowForm.tags,
+      category: workflowForm.category,
       screenshot_url: workflowForm.screenshot_url,
       video_url: workflowForm.video_url,
       complexity: workflowForm.complexity,
@@ -102,6 +106,7 @@ export default function WorkflowsSubPage() {
       title: "",
       description: "",
       tags: [],
+      category: "",
       screenshot_url: "",
       video_url: "",
       complexity: "",
@@ -155,11 +160,11 @@ export default function WorkflowsSubPage() {
               />
             </div>
             <div>
-              <label className="block font-medium mb-1">Tags (Kategori)</label>
+              <label className="block font-medium mb-1">Kategori</label>
               <Select
-                value={workflowForm.tags[0] || ""}
+                value={workflowForm.category}
                 onValueChange={(val) =>
-                  setWorkflowForm((f) => ({ ...f, tags: [val] }))
+                  setWorkflowForm((f) => ({ ...f, category: val }))
                 }
               >
                 <SelectTrigger>
@@ -175,6 +180,17 @@ export default function WorkflowsSubPage() {
               </Select>
               <div className="text-xs text-gray-500 mt-1">
                 Pilih satu kategori
+              </div>
+            </div>
+            <div>
+              <label className="block font-medium mb-1">Tags</label>
+              <TagInput
+                value={workflowForm.tags}
+                onChange={(tags) => setWorkflowForm((f) => ({ ...f, tags }))}
+                placeholder="Tambah tag..."
+              />
+              <div className="text-xs text-gray-500 mt-1">
+                Input bebas, tekan enter untuk menambah tag
               </div>
             </div>
             <div className="md:col-span-2">

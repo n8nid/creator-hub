@@ -16,6 +16,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { TagInput } from "@/components/ui/tag-input";
 
 export default function WorkflowDetailUserPage() {
   const { user } = useAuth();
@@ -30,6 +31,7 @@ export default function WorkflowDetailUserPage() {
     title: "",
     description: "",
     tags: [],
+    category: "",
     screenshot_url: "",
     video_url: "",
     complexity: "",
@@ -59,6 +61,7 @@ export default function WorkflowDetailUserPage() {
           title: data.title || "",
           description: data.description || "",
           tags: data.tags || [],
+          category: data.category || "",
           screenshot_url: data.screenshot_url || "",
           video_url: data.video_url || "",
           complexity: data.complexity || "",
@@ -87,6 +90,7 @@ export default function WorkflowDetailUserPage() {
         title: editForm.title,
         description: editForm.description,
         tags: editForm.tags,
+        category: editForm.category,
         screenshot_url: editForm.screenshot_url,
         video_url: editForm.video_url,
         complexity: editForm.complexity,
@@ -168,11 +172,14 @@ export default function WorkflowDetailUserPage() {
                 />
               </div>
               <div>
-                <label className="block font-medium mb-1">Tags</label>
+                <label className="block font-medium mb-1">Kategori</label>
                 <Select
-                  value={editForm.tags[0] || ""}
+                  value={editForm.category}
                   onValueChange={(val) =>
-                    setEditForm((f: typeof editForm) => ({ ...f, tags: [val] }))
+                    setEditForm((f: typeof editForm) => ({
+                      ...f,
+                      category: val,
+                    }))
                   }
                 >
                   <SelectTrigger>
@@ -188,6 +195,19 @@ export default function WorkflowDetailUserPage() {
                 </Select>
                 <div className="text-xs text-gray-500 mt-1">
                   Pilih satu kategori
+                </div>
+              </div>
+              <div>
+                <label className="block font-medium mb-1">Tags</label>
+                <TagInput
+                  value={editForm.tags}
+                  onChange={(tags) =>
+                    setEditForm((f: typeof editForm) => ({ ...f, tags }))
+                  }
+                  placeholder="Tambah tag..."
+                />
+                <div className="text-xs text-gray-500 mt-1">
+                  Input bebas, tekan enter untuk menambah tag
                 </div>
               </div>
               <div>

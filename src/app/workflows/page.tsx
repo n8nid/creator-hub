@@ -63,7 +63,7 @@ export default function WorkflowsPage() {
     // Fetch workflows for current page
     const { data, error, count } = await supabase
       .from("workflows")
-      .select("*, profile:profiles(name)", { count: "exact" })
+      .select("*, profile:profiles(name), category")
       .eq("status", "approved")
       .order("created_at", { ascending: false })
       .range(from, to);
@@ -81,15 +81,16 @@ export default function WorkflowsPage() {
   const allWorkflows = [...workflows, ...dummyWorkflows];
 
   const filteredWorkflows = allWorkflows.filter((w) => {
-    const matchesSearch =
-      w.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      w.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (w.tags || []).some((tag: string) =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    const matchesCategory =
+    const search = searchTerm.toLowerCase();
+    const matchesTitle = w.title?.toLowerCase().includes(search);
+    const matchesCategory = w.category?.toLowerCase().includes(search);
+    const matchesTags = (w.tags || []).some((tag: string) =>
+      tag.toLowerCase().includes(search)
+    );
+    const matchesSearch = matchesTitle || matchesCategory || matchesTags;
+    const matchesCategoryFilter =
       categoryFilter === "All" || w.category === categoryFilter;
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesCategoryFilter;
   });
 
   // Hitung total halaman dari filteredWorkflows
@@ -256,8 +257,8 @@ export default function WorkflowsPage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-50/0 to-pink-50/0 group-hover:from-purple-50/50 group-hover:to-pink-50/30 transition-all duration-300 rounded-2xl"></div>
 
                 <div className="relative z-10">
-                  {/* Category Badge */}
-                  <div className="flex items-center justify-between mb-4">
+                  {/* Category Badge di atas icon */}
+                  <div className="flex items-center justify-between mb-2">
                     <span className="inline-flex items-center px-3 py-1 text-xs font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 rounded-full">
                       {workflow.category || "-"}
                     </span>
@@ -302,9 +303,9 @@ export default function WorkflowsPage() {
                     </div>
                   </div>
 
-                  {/* Tags */}
+                  {/* Tags (input bebas user) */}
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {(workflow.tags || []).slice(0, 3).map((tag: string) => (
+                    {(workflow.tags || []).map((tag: string) => (
                       <span
                         key={tag}
                         className="px-3 py-1 text-xs bg-white border border-gray-200 text-gray-700 rounded-full hover:border-purple-300 hover:text-purple-700 transition-colors"
