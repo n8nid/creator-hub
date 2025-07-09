@@ -8,7 +8,14 @@ import { Plus, Workflow } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
-import { TagInput } from "@/components/ui/tag-input";
+import { workflowCategories } from "@/data/category-workflows";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 export default function WorkflowsSubPage() {
   const { user } = useAuth();
@@ -16,10 +23,18 @@ export default function WorkflowsSubPage() {
   const [profile, setProfile] = useState<any>(null);
   const [myWorkflows, setMyWorkflows] = useState<any[]>([]);
   const [showAddWorkflow, setShowAddWorkflow] = useState(false);
-  const [workflowForm, setWorkflowForm] = useState({
+  const [workflowForm, setWorkflowForm] = useState<{
+    title: string;
+    description: string;
+    tags: string[];
+    screenshot_url: string;
+    video_url: string;
+    complexity: string;
+    json_n8n: string;
+  }>({
     title: "",
     description: "",
-    tags: "",
+    tags: [],
     screenshot_url: "",
     video_url: "",
     complexity: "",
@@ -57,19 +72,21 @@ export default function WorkflowsSubPage() {
   ) => {
     setWorkflowForm({ ...workflowForm, [e.target.name]: e.target.value });
   };
+  const handleWorkflowTags = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = Array.from(e.target.selectedOptions).map(
+      (opt) => opt.value
+    );
+    setWorkflowForm({ ...workflowForm, tags: selected });
+  };
 
   const handleAddWorkflow = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile?.id) return;
-    const tagsArr = workflowForm.tags
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
     const { error } = await supabase.from("workflows").insert({
       profile_id: profile.id,
       title: workflowForm.title,
       description: workflowForm.description,
-      tags: tagsArr,
+      tags: workflowForm.tags,
       screenshot_url: workflowForm.screenshot_url,
       video_url: workflowForm.video_url,
       complexity: workflowForm.complexity,
@@ -84,7 +101,7 @@ export default function WorkflowsSubPage() {
     setWorkflowForm({
       title: "",
       description: "",
-      tags: "",
+      tags: [],
       screenshot_url: "",
       video_url: "",
       complexity: "",
@@ -138,15 +155,27 @@ export default function WorkflowsSubPage() {
               />
             </div>
             <div>
-              <label className="block font-medium mb-1">
-                Tags (pisahkan dengan koma)
-              </label>
-              <Input
-                name="tags"
-                value={workflowForm.tags}
-                onChange={handleWorkflowInput}
-                placeholder="misal: email, automation, api"
-              />
+              <label className="block font-medium mb-1">Tags (Kategori)</label>
+              <Select
+                value={workflowForm.tags[0] || ""}
+                onValueChange={(val) =>
+                  setWorkflowForm((f) => ({ ...f, tags: [val] }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih kategori..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {workflowCategories.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="text-xs text-gray-500 mt-1">
+                Pilih satu kategori
+              </div>
             </div>
             <div className="md:col-span-2">
               <label className="block font-medium mb-1">Deskripsi</label>

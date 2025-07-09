@@ -8,6 +8,13 @@ import { Pencil, Globe, Linkedin, Twitter, Github } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { TagInput } from "@/components/ui/tag-input";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { PROVINCES } from "@/data/indonesia-regions";
 
 const defaultProfileForm = {
@@ -80,7 +87,9 @@ export default function ProfileSubPage() {
     const allowedExtensions = ["jpg", "jpeg", "png"];
     const fileExt = file.name.split(".").pop()?.toLowerCase();
     if (!fileExt || !allowedExtensions.includes(fileExt)) {
-      alert("Hanya file gambar dengan format JPG, JPEG, atau PNG yang diperbolehkan.");
+      alert(
+        "Hanya file gambar dengan format JPG, JPEG, atau PNG yang diperbolehkan."
+      );
       return;
     }
     const filePath = `user-profiles/${user.id}.${fileExt}`;
@@ -250,38 +259,49 @@ export default function ProfileSubPage() {
                   Lokasi
                 </label>
                 <div className="flex gap-2">
-                  <select
-                    name="provinsi"
-                    className="w-1/2 border rounded px-2 py-2"
-                    value={provinsi}
-                    onChange={(e) => {
-                      setProvinsi(e.target.value);
-                      setKota("");
-                    }}
-                  >
-                    <option value="">Pilih Provinsi</option>
-                    {PROVINCES.map((p) => (
-                      <option key={p.name} value={p.name}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    name="kota"
-                    className="w-1/2 border rounded px-2 py-2"
-                    value={kota}
-                    onChange={(e) => setKota(e.target.value)}
-                    disabled={!provinsi}
-                  >
-                    <option value="">Pilih Kota/Kabupaten</option>
-                    {PROVINCES.find((p) => p.name === provinsi)?.cities.map(
-                      (k, idx) => (
-                        <option key={`${provinsi}-${k}-${idx}`} value={k}>
-                          {k}
-                        </option>
-                      )
-                    )}
-                  </select>
+                  <div className="w-1/2">
+                    <Select
+                      value={provinsi}
+                      onValueChange={(val) => {
+                        setProvinsi(val);
+                        setKota("");
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih Provinsi" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PROVINCES.map((p) => (
+                          <SelectItem key={p.name} value={p.name}>
+                            {p.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="w-1/2">
+                    <Select
+                      value={kota}
+                      onValueChange={setKota}
+                      disabled={!provinsi}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Pilih Kota/Kabupaten" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PROVINCES.find((p) => p.name === provinsi)?.cities.map(
+                          (k, idx) => (
+                            <SelectItem
+                              key={`${provinsi}-${k}-${idx}`}
+                              value={k}
+                            >
+                              {k}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
               <div>
@@ -299,34 +319,42 @@ export default function ProfileSubPage() {
                   <label className="font-semibold text-gray-900 mb-1 block">
                     Level Pengalaman
                   </label>
-                  <select
-                    name="experience_level"
-                    className="w-full border rounded px-2 py-2"
+                  <Select
                     value={form.experience_level}
-                    onChange={handleSelect}
+                    onValueChange={(val) =>
+                      setForm((f) => ({ ...f, experience_level: val }))
+                    }
                   >
-                    <option value="">Pilih</option>
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
-                    <option value="expert">Expert</option>
-                  </select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="beginner">Beginner</SelectItem>
+                      <SelectItem value="intermediate">Intermediate</SelectItem>
+                      <SelectItem value="advanced">Advanced</SelectItem>
+                      <SelectItem value="expert">Expert</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="flex-1">
                   <label className="font-semibold text-gray-900 mb-1 block">
                     Status (Availability)
                   </label>
-                  <select
-                    name="availability"
-                    className="w-full border rounded px-2 py-2"
+                  <Select
                     value={form.availability}
-                    onChange={handleSelect}
+                    onValueChange={(val) =>
+                      setForm((f) => ({ ...f, availability: val }))
+                    }
                   >
-                    <option value="">Pilih</option>
-                    <option value="available">Available</option>
-                    <option value="busy">Busy</option>
-                    <option value="unavailable">Unavailable</option>
-                  </select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="available">Available</SelectItem>
+                      <SelectItem value="busy">Busy</SelectItem>
+                      <SelectItem value="unavailable">Unavailable</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <Button type="submit" className="mt-4">

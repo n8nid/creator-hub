@@ -13,19 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
-
-const categories = [
-  "All",
-  "E-commerce",
-  "Communication",
-  "Data Management",
-  "Analytics",
-  "Finance",
-  "Marketing",
-  "Operations",
-  "HR",
-  "Content",
-];
+import { workflowCategories } from "@/data/category-workflows";
 
 export default function WorkflowsPage() {
   const [workflows, setWorkflows] = useState<any[]>([]);
@@ -232,7 +220,7 @@ export default function WorkflowsPage() {
             </span>
           </div>
           <div className="flex flex-wrap justify-center gap-3">
-            {categories.map((category, index) => (
+            {["All", ...workflowCategories].map((category) => (
               <button
                 key={category}
                 className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${

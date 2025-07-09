@@ -8,7 +8,14 @@ import { Workflow, Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter, useParams } from "next/navigation";
-import { TagInput } from "@/components/ui/tag-input";
+import { workflowCategories } from "@/data/category-workflows";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 export default function WorkflowDetailUserPage() {
   const { user } = useAuth();
@@ -162,11 +169,26 @@ export default function WorkflowDetailUserPage() {
               </div>
               <div>
                 <label className="block font-medium mb-1">Tags</label>
-                <TagInput
-                  value={editForm.tags}
-                  onChange={handleTags}
-                  placeholder="Tambah tag..."
-                />
+                <Select
+                  value={editForm.tags[0] || ""}
+                  onValueChange={(val) =>
+                    setEditForm((f: typeof editForm) => ({ ...f, tags: [val] }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Pilih kategori..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {workflowCategories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <div className="text-xs text-gray-500 mt-1">
+                  Pilih satu kategori
+                </div>
               </div>
               <div>
                 <label className="block font-medium mb-1">Screenshot URL</label>
