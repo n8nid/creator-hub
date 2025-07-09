@@ -81,16 +81,15 @@ export default function WorkflowsPage() {
   const allWorkflows = [...workflows, ...dummyWorkflows];
 
   const filteredWorkflows = allWorkflows.filter((w) => {
-    const search = searchTerm.toLowerCase();
-    const matchesTitle = w.title?.toLowerCase().includes(search);
-    const matchesCategory = w.category?.toLowerCase().includes(search);
-    const matchesTags = (w.tags || []).some((tag: string) =>
-      tag.toLowerCase().includes(search)
-    );
-    const matchesSearch = matchesTitle || matchesCategory || matchesTags;
-    const matchesCategoryFilter =
+    const matchesSearch =
+      w.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      w.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (w.tags || []).some((tag: string) =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    const matchesCategory =
       categoryFilter === "All" || w.category === categoryFilter;
-    return matchesSearch && matchesCategoryFilter;
+    return matchesSearch && matchesCategory;
   });
 
   // Hitung total halaman dari filteredWorkflows
