@@ -32,24 +32,67 @@ export default function WorkflowsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const workflowsPerPage = 12;
   const supabase = createClientComponentClient();
 
-  useEffect(() => {
-    fetchWorkflows();
-  }, []);
+  // Data dummy workflows untuk testing pagination
+  const dummyWorkflows = Array.from({ length: 15 }, (_, i) => ({
+    id: `dummy-${i + 1}`,
+    title: `Dummy Workflow ${i + 1}`,
+    description: `Deskripsi workflow dummy ke-${
+      i + 1
+    }. Ini hanya data testing untuk pagination.`,
+    category: [
+      "E-Commerce",
+      "Automation",
+      "Analytics",
+      "Marketing",
+      "Finance",
+      "Content",
+    ][i % 6],
+    tags: ["dummy", `tag${i + 1}`],
+    nodes: Math.floor(Math.random() * 10) + 1,
+    downloads: Math.floor(Math.random() * 100),
+    profile: { name: `Dummy Creator ${i + 1}` },
+    screenshot_url: null,
+    video_url: null,
+    complexity: ["simple", "medium", "complex"][i % 3],
+    status: "approved",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }));
 
-  const fetchWorkflows = async () => {
+  useEffect(() => {
+    fetchWorkflows(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
+
+  const fetchWorkflows = async (page = 1) => {
     setLoading(true);
-    const { data, error } = await supabase
+    const from = (page - 1) * workflowsPerPage;
+    const to = from + workflowsPerPage - 1;
+    // Fetch workflows for current page
+    const { data, error, count } = await supabase
       .from("workflows")
-      .select("*")
+      .select("*, profile:profiles(name)", { count: "exact" })
       .eq("status", "approved")
-      .order("created_at", { ascending: false });
-    if (!error) setWorkflows(data || []);
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (!error) {
+      setWorkflows(data || []);
+      // Fetch total count for pagination
+      if (typeof count === "number") {
+        // setTotalPages(Math.ceil(count / workflowsPerPage)); // This line is removed
+      }
+    }
     setLoading(false);
   };
 
-  const filteredWorkflows = workflows.filter((w) => {
+  // Gabungkan data workflows dari Supabase dan dummy
+  const allWorkflows = [...workflows, ...dummyWorkflows];
+
+  const filteredWorkflows = allWorkflows.filter((w) => {
     const matchesSearch =
       w.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       w.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -60,6 +103,61 @@ export default function WorkflowsPage() {
       categoryFilter === "All" || w.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
+
+  // Hitung total halaman dari filteredWorkflows
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredWorkflows.length / workflowsPerPage)
+  );
+
+  // Ambil data sesuai halaman aktif
+  const paginatedWorkflows = filteredWorkflows.slice(
+    (currentPage - 1) * workflowsPerPage,
+    currentPage * workflowsPerPage
+  );
+
+  // Reset currentPage jika filter/search mengurangi jumlah halaman
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalPages]);
+
+  // Pagination component
+  const Pagination = () => (
+    <div className="flex justify-center items-center gap-2 mt-12">
+      <button
+        className="px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
+        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+        disabled={currentPage === 1}
+      >
+        Prev
+      </button>
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <button
+          key={page}
+          className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow
+            ${
+              page === currentPage
+                ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
+                : "bg-gray-100 text-gray-700 hover:bg-purple-50 hover:text-purple-700"
+            }
+          `}
+          onClick={() => setCurrentPage(page)}
+        >
+          {page}
+        </button>
+      ))}
+      <button
+        className="px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
+        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+        disabled={currentPage === totalPages}
+      >
+        Next
+      </button>
+    </div>
+  );
 
   return (
     <>
@@ -156,12 +254,12 @@ export default function WorkflowsPage() {
             <div className="col-span-full text-center py-12 text-gray-400">
               Loading...
             </div>
-          ) : filteredWorkflows.length === 0 ? (
+          ) : paginatedWorkflows.length === 0 ? (
             <div className="col-span-full text-center py-12 text-gray-400">
               No workflows found.
             </div>
           ) : (
-            filteredWorkflows.map((workflow) => (
+            paginatedWorkflows.map((workflow) => (
               <div
                 key={workflow.id}
                 className="group bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-2xl hover:border-purple-200 transition-all duration-300 cursor-pointer transform hover:-translate-y-2 relative overflow-hidden"
@@ -233,10 +331,10 @@ export default function WorkflowsPage() {
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
                         {/* In real app, ambil dari relasi profile/creator */}
-                        {workflow.author?.charAt?.(0) || "C"}
+                        {workflow.profile?.name?.charAt?.(0) || "C"}
                       </div>
                       <span className="text-sm text-gray-600 font-medium">
-                        {workflow.author || "Creator"}
+                        {workflow.profile?.name || "Creator"}
                       </span>
                     </div>
                     <Link
@@ -253,18 +351,11 @@ export default function WorkflowsPage() {
           )}
         </div>
 
-        {/* Load More Button */}
-        <div className="text-center mt-16">
-          <button className="group px-12 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:scale-105 font-semibold text-lg">
-            <span className="flex items-center gap-3">
-              Load More Workflows
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </button>
-          <p className="text-gray-500 text-sm mt-4">
-            Showing {filteredWorkflows.length} of {workflows.length} workflows
-          </p>
-        </div>
+        {/* Pagination */}
+        {totalPages > 1 && <Pagination />}
+        <p className="text-gray-500 text-sm mt-4 text-center">
+          Showing page {currentPage} of {totalPages}
+        </p>
       </div>
     </>
   );
