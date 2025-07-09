@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth-context";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pencil, Globe, Linkedin, Twitter, Github } from "lucide-react";
+import { Pencil, Globe, Linkedin, Twitter, Github, Instagram, Youtube } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { TagInput } from "@/components/ui/tag-input";
@@ -16,6 +16,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { PROVINCES } from "@/data/indonesia-regions";
+import { FaDiscord } from "react-icons/fa";
 
 const defaultProfileForm = {
   name: "",
@@ -27,6 +28,10 @@ const defaultProfileForm = {
   experience_level: "",
   availability: "",
   location: "",
+  instagram: "",
+  threads: "",
+  discord: "",
+  youtube: "",
 };
 
 export default function ProfileSubPage() {
@@ -62,6 +67,10 @@ export default function ProfileSubPage() {
           experience_level: data.experience_level || "",
           availability: data.availability || "",
           location: data.location || "",
+          instagram: data.instagram || "",
+          threads: data.threads || "",
+          discord: data.discord || "",
+          youtube: data.youtube || "",
         });
         setSkills(data.skills || []);
         setProfileImage(data.profile_image || "");
@@ -132,6 +141,10 @@ export default function ProfileSubPage() {
       skills: safeSkills,
       profile_image: profileImage || null,
       status: "approved",
+      instagram: form.instagram || null,
+      threads: form.threads || null,
+      discord: form.discord || null,
+      youtube: form.youtube || null,
     };
     const { error } = await supabase
       .from("profiles")
@@ -239,6 +252,47 @@ export default function ProfileSubPage() {
                     className="flex-1"
                   />
                 </div>
+                <div className="flex items-center gap-2">
+                  <Instagram className="h-5 w-5 text-blue-600" />
+                  <Input
+                    name="instagram"
+                    value={form.instagram || ""}
+                    onChange={handleChange}
+                    placeholder="Instagram"
+                    className="flex-1"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  {/* Threads pakai SVG manual */}
+                  <svg className="h-5 w-5 text-blue-600" fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Zm0 18.5A8.5 8.5 0 1 1 12 3.5a8.5 8.5 0 0 1 0 17Zm.25-13.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Zm-2.5 2.5a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm5 0a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm-2.5 8.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Z"/></svg>
+                  <Input
+                    name="threads"
+                    value={form.threads || ""}
+                    onChange={handleChange}
+                    placeholder="Threads"
+                    className="flex-1"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaDiscord className="h-5 w-5 text-blue-600" />
+                  <Input
+                    name="discord"
+                    value={form.discord || ""}
+                    onChange={handleChange}
+                    placeholder="Discord"
+                    className="flex-1"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Youtube className="h-5 w-5 text-blue-600" />
+                  <Input
+                    name="youtube"
+                    value={form.youtube || ""}
+                    onChange={handleChange}
+                    placeholder="YouTube"
+                    className="flex-1"
+                  />
+                </div>
               </div>
             </div>
             <div className="flex-1 space-y-4">
@@ -304,6 +358,7 @@ export default function ProfileSubPage() {
                   </div>
                 </div>
               </div>
+              {/*
               <div>
                 <label className="font-semibold text-gray-900 mb-1 block">
                   Skills
@@ -314,6 +369,7 @@ export default function ProfileSubPage() {
                   placeholder="Tambah skill..."
                 />
               </div>
+*/}
               <div className="flex gap-4">
                 <div className="flex-1">
                   <label className="font-semibold text-gray-900 mb-1 block">
