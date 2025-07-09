@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { useAuth } from '@/lib/auth-context'
-import { Button } from '@/components/ui/button'
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useAuth } from "@/lib/auth-context";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,66 +13,65 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { useToast } from '@/components/ui/use-toast'
-import { useRouter } from 'next/navigation'
-import { Eye, EyeOff } from 'lucide-react'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 const formSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-})
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 export function LoginForm() {
-  const { signIn } = useAuth()
-  const { toast } = useToast()
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
+  const { signIn } = useAuth();
+  const { toast } = useToast();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      setIsLoading(true)
-      console.log('=== LOGIN PROCESS START ===')
-      console.log('Starting login process...')
-      
-      await signIn(values.email, values.password)
-      
-      console.log('Login successful, showing toast...')
+      setIsLoading(true);
+      console.log("=== LOGIN PROCESS START ===");
+      console.log("Starting login process...");
+
+      await signIn(values.email, values.password);
+
+      console.log("Login successful, showing toast...");
       toast({
-        title: 'Success',
-        description: 'You have been logged in successfully.',
-      })
-      
+        title: "Success",
+        description: "You have been logged in successfully.",
+      });
+
       // Check what cookies are set after login
-      console.log('Cookies after login:', document.cookie)
-      
-      console.log('=== LOGIN PROCESS END ===')
-      
+      console.log("Cookies after login:", document.cookie);
+
+      console.log("=== LOGIN PROCESS END ===");
+
       // Small delay to let the session sync, then redirect
       setTimeout(() => {
-        console.log('Redirecting to /admin after login...')
-        router.push('/admin')
-      }, 500)
-      
+        console.log("Redirecting to /admin after login...");
+        router.push("/admin");
+      }, 500);
     } catch (error) {
-      console.error('Login error:', error)
+      console.error("Login error:", error);
       toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to sign in. Please check your credentials.',
-      })
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to sign in. Please check your credentials.",
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -100,10 +99,10 @@ export function LoginForm() {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <div className="relative">
-                  <Input 
-                    type={showPassword ? 'text' : 'password'} 
-                    placeholder="Enter your password" 
-                    {...field} 
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    {...field}
                   />
                   <Button
                     type="button"
@@ -125,9 +124,9 @@ export function LoginForm() {
           )}
         />
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? 'Signing in...' : 'Sign in'}
+          {isLoading ? "Signing in..." : "Sign in"}
         </Button>
       </form>
     </Form>
-  )
-} 
+  );
+}
