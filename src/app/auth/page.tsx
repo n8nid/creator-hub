@@ -1,43 +1,50 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { LoginForm } from '@/components/auth/login-form'
-import { SignUpForm } from '@/components/auth/signup-form'
-import { ResetPasswordForm } from '@/components/auth/reset-password-form'
-import { HeaderNav } from '@/components/header-nav'
-import { useAuth } from '@/lib/auth-context'
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LoginForm } from "@/components/auth/login-form";
+import { SignUpForm } from "@/components/auth/signup-form";
+import { ResetPasswordForm } from "@/components/auth/reset-password-form";
+import { useAuth } from "@/lib/auth-context";
 
 export default function AuthPage() {
-  const { user, loading } = useAuth()
-  const router = useRouter()
-  const [isRedirecting, setIsRedirecting] = useState(false)
-  const [forceShow, setForceShow] = useState(false)
+  const { user, loading, isAdmin } = useAuth();
+  const router = useRouter();
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [forceShow, setForceShow] = useState(false);
+
+  const handleRedirect = useCallback(async () => {
+    if (!loading && user) {
+      setIsRedirecting(true);
+      const admin = await isAdmin(user.id);
+      if (admin) {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
+    }
+  }, [user, loading, isAdmin, router]);
 
   useEffect(() => {
-    if (!loading && user) {
-      setIsRedirecting(true)
-      router.push('/admin')
-    }
-  }, [user, loading, router])
+    handleRedirect();
+  }, [handleRedirect]);
 
   // Fallback to show the page after 2 seconds if still loading
   useEffect(() => {
     const timer = setTimeout(() => {
       if (loading) {
-        setForceShow(true)
+        setForceShow(true);
       }
-    }, 2000)
-    
-    return () => clearTimeout(timer)
-  }, [loading])
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   // Show loading state only briefly while checking authentication
   if (loading && !forceShow) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <HeaderNav />
         <div className="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -45,14 +52,13 @@ export default function AuthPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   // Show redirecting state briefly for logged in users
   if (user && isRedirecting) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <HeaderNav />
         <div className="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -60,11 +66,10 @@ export default function AuthPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <HeaderNav />
       <div className="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
@@ -75,7 +80,7 @@ export default function AuthPage() {
               Enter your credentials to access your account
             </p>
           </div>
-          
+
           <div className="bg-white shadow-xl rounded-lg p-8">
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-3 mb-6">
@@ -97,5 +102,5 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
-  )
-} 
+  );
+}
