@@ -73,16 +73,23 @@ export default function ProfileSubPage() {
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || !user) return;
+    if (!e.target.files || e.target.files.length === 0 || !user) return;
     const file = e.target.files[0];
-    const fileExt = file.name.split(".").pop();
-    const filePath = `avatars/${user.id}.${fileExt}`;
+    if (!file || !file.name) return;
+    // Validasi ekstensi file
+    const allowedExtensions = ["jpg", "jpeg", "png"];
+    const fileExt = file.name.split(".").pop()?.toLowerCase();
+    if (!fileExt || !allowedExtensions.includes(fileExt)) {
+      alert("Hanya file gambar dengan format JPG, JPEG, atau PNG yang diperbolehkan.");
+      return;
+    }
+    const filePath = `user-profiles/${user.id}.${fileExt}`;
     const { error } = await supabase.storage
-      .from("avatars")
+      .from("user-profiles")
       .upload(filePath, file, { upsert: true });
     if (!error) {
       const { data: urlData } = supabase.storage
-        .from("avatars")
+        .from("user-profiles")
         .getPublicUrl(filePath);
       setProfileImage(urlData.publicUrl);
     }
