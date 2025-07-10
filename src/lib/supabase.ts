@@ -64,6 +64,10 @@ export type Database = {
           admin_notes: string | null;
           created_at: string;
           updated_at: string;
+          instagram: string | null;
+          threads: string | null;
+          discord: string | null;
+          youtube: string | null;
         };
         Insert: {
           id?: string;
@@ -89,6 +93,10 @@ export type Database = {
           admin_notes?: string | null;
           created_at?: string;
           updated_at?: string;
+          instagram?: string | null;
+          threads?: string | null;
+          discord?: string | null;
+          youtube?: string | null;
         };
         Update: {
           id?: string;
@@ -114,6 +122,10 @@ export type Database = {
           admin_notes?: string | null;
           created_at?: string;
           updated_at?: string;
+          instagram?: string | null;
+          threads?: string | null;
+          discord?: string | null;
+          youtube?: string | null;
         };
       };
       workflows: {

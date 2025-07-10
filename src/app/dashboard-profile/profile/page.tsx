@@ -4,18 +4,20 @@ import { useAuth } from "@/lib/auth-context";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pencil, Globe, Linkedin, Twitter, Github } from "lucide-react";
+import {
+  Pencil,
+  Globe,
+  Linkedin,
+  Twitter,
+  Github,
+  Instagram,
+  Youtube,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { TagInput } from "@/components/ui/tag-input";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { PROVINCES } from "@/data/indonesia-regions";
+import { FaDiscord } from "react-icons/fa";
 
 const defaultProfileForm = {
   name: "",
@@ -27,6 +29,10 @@ const defaultProfileForm = {
   experience_level: "",
   availability: "",
   location: "",
+  instagram: "",
+  threads: "",
+  discord: "",
+  youtube: "",
 };
 
 export default function ProfileSubPage() {
@@ -62,6 +68,10 @@ export default function ProfileSubPage() {
           experience_level: data.experience_level || "",
           availability: data.availability || "",
           location: data.location || "",
+          instagram: data.instagram || "",
+          threads: data.threads || "",
+          discord: data.discord || "",
+          youtube: data.youtube || "",
         });
         setSkills(data.skills || []);
         setProfileImage(data.profile_image || "");
@@ -132,6 +142,10 @@ export default function ProfileSubPage() {
       skills: safeSkills,
       profile_image: profileImage || null,
       status: "approved",
+      instagram: form.instagram || null,
+      threads: form.threads || null,
+      discord: form.discord || null,
+      youtube: form.youtube || null,
     };
     const { error } = await supabase
       .from("profiles")
@@ -239,6 +253,56 @@ export default function ProfileSubPage() {
                     className="flex-1"
                   />
                 </div>
+                <div className="flex items-center gap-2">
+                  <Instagram className="h-5 w-5 text-blue-600" />
+                  <Input
+                    name="instagram"
+                    value={form.instagram || ""}
+                    onChange={handleChange}
+                    placeholder="Instagram"
+                    className="flex-1"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  {/* Threads pakai SVG manual */}
+                  <svg
+                    className="h-5 w-5 text-blue-600"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Zm0 18.5A8.5 8.5 0 1 1 12 3.5a8.5 8.5 0 0 1 0 17Zm.25-13.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Zm-2.5 2.5a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm5 0a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm-2.5 8.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Z" />
+                  </svg>
+                  <Input
+                    name="threads"
+                    value={form.threads || ""}
+                    onChange={handleChange}
+                    placeholder="Threads"
+                    className="flex-1"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaDiscord className="h-5 w-5 text-blue-600" />
+                  <Input
+                    name="discord"
+                    value={form.discord || ""}
+                    onChange={handleChange}
+                    placeholder="Discord"
+                    className="flex-1"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Youtube className="h-5 w-5 text-blue-600" />
+                  <Input
+                    name="youtube"
+                    value={form.youtube || ""}
+                    onChange={handleChange}
+                    placeholder="YouTube"
+                    className="flex-1"
+                  />
+                </div>
               </div>
             </div>
             <div className="flex-1 space-y-4">
@@ -259,51 +323,41 @@ export default function ProfileSubPage() {
                   Lokasi
                 </label>
                 <div className="flex gap-2">
-                  <div className="w-1/2">
-                    <Select
-                      value={provinsi}
-                      onValueChange={(val) => {
-                        setProvinsi(val);
-                        setKota("");
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Pilih Provinsi" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PROVINCES.map((p) => (
-                          <SelectItem key={p.name} value={p.name}>
-                            {p.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="w-1/2">
-                    <Select
-                      value={kota}
-                      onValueChange={setKota}
-                      disabled={!provinsi}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Pilih Kota/Kabupaten" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PROVINCES.find((p) => p.name === provinsi)?.cities.map(
-                          (k, idx) => (
-                            <SelectItem
-                              key={`${provinsi}-${k}-${idx}`}
-                              value={k}
-                            >
-                              {k}
-                            </SelectItem>
-                          )
-                        )}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <select
+                    name="provinsi"
+                    className="w-1/2 border rounded px-2 py-2"
+                    value={provinsi}
+                    onChange={(e) => {
+                      setProvinsi(e.target.value);
+                      setKota("");
+                    }}
+                  >
+                    <option value="">Pilih Provinsi</option>
+                    {PROVINCES.map((p) => (
+                      <option key={p.name} value={p.name}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    name="kota"
+                    className="w-1/2 border rounded px-2 py-2"
+                    value={kota}
+                    onChange={(e) => setKota(e.target.value)}
+                    disabled={!provinsi}
+                  >
+                    <option value="">Pilih Kota/Kabupaten</option>
+                    {PROVINCES.find((p) => p.name === provinsi)?.cities.map(
+                      (k, idx) => (
+                        <option key={`${provinsi}-${k}-${idx}`} value={k}>
+                          {k}
+                        </option>
+                      )
+                    )}
+                  </select>
                 </div>
               </div>
+              {/*
               <div>
                 <label className="font-semibold text-gray-900 mb-1 block">
                   Skills
@@ -314,47 +368,40 @@ export default function ProfileSubPage() {
                   placeholder="Tambah skill..."
                 />
               </div>
+*/}
               <div className="flex gap-4">
                 <div className="flex-1">
                   <label className="font-semibold text-gray-900 mb-1 block">
                     Level Pengalaman
                   </label>
-                  <Select
+                  <select
+                    name="experience_level"
+                    className="w-full border rounded px-2 py-2"
                     value={form.experience_level}
-                    onValueChange={(val) =>
-                      setForm((f) => ({ ...f, experience_level: val }))
-                    }
+                    onChange={handleSelect}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Pilih" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="beginner">Beginner</SelectItem>
-                      <SelectItem value="intermediate">Intermediate</SelectItem>
-                      <SelectItem value="advanced">Advanced</SelectItem>
-                      <SelectItem value="expert">Expert</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    <option value="">Pilih</option>
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="expert">Expert</option>
+                  </select>
                 </div>
                 <div className="flex-1">
                   <label className="font-semibold text-gray-900 mb-1 block">
                     Status (Availability)
                   </label>
-                  <Select
+                  <select
+                    name="availability"
+                    className="w-full border rounded px-2 py-2"
                     value={form.availability}
-                    onValueChange={(val) =>
-                      setForm((f) => ({ ...f, availability: val }))
-                    }
+                    onChange={handleSelect}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Pilih" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="available">Available</SelectItem>
-                      <SelectItem value="busy">Busy</SelectItem>
-                      <SelectItem value="unavailable">Unavailable</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    <option value="">Pilih</option>
+                    <option value="available">Available</option>
+                    <option value="busy">Busy</option>
+                    <option value="unavailable">Unavailable</option>
+                  </select>
                 </div>
               </div>
               <Button type="submit" className="mt-4">
