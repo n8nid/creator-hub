@@ -17,6 +17,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { TagInput } from "@/components/ui/tag-input";
+import { useToast } from "@/hooks/use-toast";
 
 export default function WorkflowDetailUserPage() {
   const { user } = useAuth();
@@ -24,9 +25,12 @@ export default function WorkflowDetailUserPage() {
   const router = useRouter();
   const params = useParams();
   const workflowId = params?.id as string;
+  const { toast } = useToast();
   const [workflow, setWorkflow] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState<{ [key: string]: string }>({});
   const [editForm, setEditForm] = useState<any>({
     title: "",
     description: "",
@@ -37,7 +41,6 @@ export default function WorkflowDetailUserPage() {
     complexity: "",
     json_n8n: "",
   });
-  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetchWorkflow = async () => {
@@ -72,10 +75,32 @@ export default function WorkflowDetailUserPage() {
     fetchWorkflow();
   }, [workflowId, user]);
 
+  const validateForm = () => {
+    const errors: { [key: string]: string } = {};
+    if (!editForm.title.trim()) errors.title = "Judul wajib diisi.";
+    if (!editForm.description.trim())
+      errors.description = "Deskripsi wajib diisi.";
+    if (!editForm.category) errors.category = "Kategori wajib dipilih.";
+    if (
+      editForm.screenshot_url &&
+      !/^https?:\/\//.test(editForm.screenshot_url)
+    ) {
+      errors.screenshot_url = "Screenshot URL harus diawali http(s)://";
+    }
+    if (editForm.video_url && !/^https?:\/\//.test(editForm.video_url)) {
+      errors.video_url = "Video URL harus diawali http(s)://";
+    }
+    return errors;
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
+    // Clear error when user types
+    if (formError[e.target.name]) {
+      setFormError({ ...formError, [e.target.name]: "" });
+    }
   };
   const handleTags = (tags: string[]) => {
     setEditForm({ ...editForm, tags });
@@ -83,47 +108,93 @@ export default function WorkflowDetailUserPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
-    const { error } = await supabase
-      .from("workflows")
-      .update({
-        title: editForm.title,
-        description: editForm.description,
-        tags: editForm.tags,
-        category: editForm.category,
-        screenshot_url: editForm.screenshot_url,
-        video_url: editForm.video_url,
-        complexity: editForm.complexity,
-        json_n8n: editForm.json_n8n,
-      })
-      .eq("id", workflowId);
-    setSaving(false);
-    if (error) {
-      alert("Gagal menyimpan perubahan: " + error.message);
+    setFormError({});
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFormError(errors);
+      toast({
+        title: "Validasi gagal",
+        description: Object.values(errors).join(" "),
+        variant: "destructive",
+      });
       return;
     }
-    alert("Perubahan workflow berhasil disimpan!");
-    // Refresh data
-    const { data } = await supabase
-      .from("workflows")
-      .select("*")
-      .eq("id", workflowId)
-      .single();
-    setWorkflow(data);
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from("workflows")
+        .update({
+          title: editForm.title,
+          description: editForm.description,
+          tags: editForm.tags,
+          category: editForm.category,
+          screenshot_url: editForm.screenshot_url,
+          video_url: editForm.video_url,
+          complexity: editForm.complexity,
+          json_n8n: editForm.json_n8n,
+        })
+        .eq("id", workflowId);
+      if (error) {
+        toast({
+          title: "Gagal menyimpan perubahan",
+          description: error.message,
+          variant: "destructive",
+        });
+        setSaving(false);
+        return;
+      }
+      toast({
+        title: "Perubahan berhasil disimpan",
+        description: "Workflow berhasil diperbarui!",
+        variant: "default",
+      });
+      // Refresh data
+      const { data } = await supabase
+        .from("workflows")
+        .select("*")
+        .eq("id", workflowId)
+        .single();
+      setWorkflow(data);
+    } catch (err: any) {
+      toast({
+        title: "Terjadi error",
+        description: err?.message || "Gagal menyimpan perubahan.",
+        variant: "destructive",
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async () => {
     if (!workflowId) return;
     if (!confirm("Yakin ingin menghapus workflow ini?")) return;
-    const { error } = await supabase
-      .from("workflows")
-      .delete()
-      .eq("id", workflowId);
-    if (error) {
-      alert("Gagal menghapus workflow: " + error.message);
-      return;
+    try {
+      const { error } = await supabase
+        .from("workflows")
+        .delete()
+        .eq("id", workflowId);
+      if (error) {
+        toast({
+          title: "Gagal menghapus workflow",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+      toast({
+        title: "Workflow berhasil dihapus",
+        description: "Workflow telah dihapus dari sistem.",
+        variant: "default",
+      });
+      router.push("/dashboard-profile/workflows");
+    } catch (err: any) {
+      toast({
+        title: "Terjadi error",
+        description: err?.message || "Gagal menghapus workflow.",
+        variant: "destructive",
+      });
     }
-    router.push("/dashboard-profile/workflows");
   };
 
   if (loading) {
@@ -160,7 +231,11 @@ export default function WorkflowDetailUserPage() {
                   value={editForm.title}
                   onChange={handleChange}
                   required
+                  disabled={saving}
                 />
+                {formError.title && (
+                  <p className="text-sm text-red-600 mt-1">{formError.title}</p>
+                )}
               </div>
               <div>
                 <label className="block font-medium mb-1">Deskripsi</label>
@@ -169,7 +244,13 @@ export default function WorkflowDetailUserPage() {
                   value={editForm.description}
                   onChange={handleChange}
                   required
+                  disabled={saving}
                 />
+                {formError.description && (
+                  <p className="text-sm text-red-600 mt-1">
+                    {formError.description}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block font-medium mb-1">Kategori</label>
@@ -181,6 +262,7 @@ export default function WorkflowDetailUserPage() {
                       category: val,
                     }))
                   }
+                  disabled={saving}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Pilih kategori..." />
@@ -193,6 +275,11 @@ export default function WorkflowDetailUserPage() {
                     ))}
                   </SelectContent>
                 </Select>
+                {formError.category && (
+                  <p className="text-sm text-red-600 mt-1">
+                    {formError.category}
+                  </p>
+                )}
                 <div className="text-xs text-gray-500 mt-1">
                   Pilih satu kategori
                 </div>
@@ -216,7 +303,13 @@ export default function WorkflowDetailUserPage() {
                   name="screenshot_url"
                   value={editForm.screenshot_url}
                   onChange={handleChange}
+                  disabled={saving}
                 />
+                {formError.screenshot_url && (
+                  <p className="text-sm text-red-600 mt-1">
+                    {formError.screenshot_url}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block font-medium mb-1">Video URL</label>
@@ -224,7 +317,13 @@ export default function WorkflowDetailUserPage() {
                   name="video_url"
                   value={editForm.video_url}
                   onChange={handleChange}
+                  disabled={saving}
                 />
+                {formError.video_url && (
+                  <p className="text-sm text-red-600 mt-1">
+                    {formError.video_url}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block font-medium mb-1">Complexity</label>
@@ -233,6 +332,7 @@ export default function WorkflowDetailUserPage() {
                   value={editForm.complexity}
                   onChange={handleChange}
                   placeholder="simple/medium/complex"
+                  disabled={saving}
                 />
               </div>
               <div>
@@ -245,6 +345,7 @@ export default function WorkflowDetailUserPage() {
                   onChange={handleChange}
                   placeholder="Paste JSON workflow dari n8n di sini"
                   rows={6}
+                  disabled={saving}
                 />
               </div>
               {/* Live preview n8n demo */}
@@ -262,12 +363,20 @@ export default function WorkflowDetailUserPage() {
               )}
               <div className="flex gap-2 mt-4">
                 <Button type="submit" disabled={saving}>
-                  {saving ? "Menyimpan..." : "Simpan Perubahan"}
+                  {saving ? (
+                    <span className="flex items-center gap-2">
+                      <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-4 h-4"></span>
+                      Menyimpan...
+                    </span>
+                  ) : (
+                    "Simpan Perubahan"
+                  )}
                 </Button>
                 <Button
                   type="button"
                   variant="destructive"
                   onClick={handleDelete}
+                  disabled={saving}
                 >
                   <Trash className="w-4 h-4 mr-1" /> Hapus
                 </Button>
@@ -275,6 +384,7 @@ export default function WorkflowDetailUserPage() {
                   type="button"
                   variant="outline"
                   onClick={() => router.push("/dashboard-profile/workflows")}
+                  disabled={saving}
                 >
                   Kembali
                 </Button>
@@ -286,7 +396,17 @@ export default function WorkflowDetailUserPage() {
                 <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 rounded-full mr-2">
                   {workflow.complexity || "-"}
                 </span>
-                <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-gray-100 text-gray-700 rounded-full">
+                <span
+                  className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full ${
+                    workflow.status === "approved"
+                      ? "bg-green-100 text-green-800"
+                      : workflow.status === "pending"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : workflow.status === "rejected"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-gray-100 text-gray-700"
+                  }`}
+                >
                   {workflow.status}
                 </span>
               </div>

@@ -20,6 +20,7 @@ import { TagInput } from "@/components/ui/tag-input";
 import { PROVINCES } from "@/data/indonesia-regions";
 import { FaDiscord } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const defaultProfileForm = {
   name: "",
@@ -49,6 +50,9 @@ export default function EditProfilePage() {
   const [form, setForm] = useState(defaultProfileForm);
   const [provinsi, setProvinsi] = useState("");
   const [kota, setKota] = useState("");
+  const { toast } = useToast();
+  const [formError, setFormError] = useState<{ [key: string]: string }>({});
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -92,17 +96,28 @@ export default function EditProfilePage() {
     fileInputRef.current?.click();
   };
 
+  const validateForm = () => {
+    const errors: { [key: string]: string } = {};
+    if (!form.name.trim()) errors.name = "Nama wajib diisi.";
+    if (form.website && !/^https?:\/\//.test(form.website))
+      errors.website = "Website harus diawali http(s)://";
+    // Bisa tambah validasi lain jika perlu
+    return errors;
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0 || !user) return;
     const file = e.target.files[0];
     if (!file || !file.name) return;
-    // Validasi ekstensi file
     const allowedExtensions = ["jpg", "jpeg", "png"];
     const fileExt = file.name.split(".").pop()?.toLowerCase();
     if (!fileExt || !allowedExtensions.includes(fileExt)) {
-      alert(
-        "Hanya file gambar dengan format JPG, JPEG, atau PNG yang diperbolehkan."
-      );
+      toast({
+        title: "Format file tidak valid",
+        description:
+          "Hanya file gambar JPG, JPEG, atau PNG yang diperbolehkan.",
+        variant: "destructive",
+      });
       return;
     }
     const filePath = `user-profiles/${user.id}.${fileExt}`;
@@ -129,37 +144,72 @@ export default function EditProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
-    const safeSkills = Array.isArray(skills) ? skills : skills ? [skills] : [];
-    const location = provinsi && kota ? `${provinsi}, ${kota}` : form.location;
-    const updateData: Record<string, any> = {
-      name: form.name,
-      bio: form.bio || null,
-      website: form.website || null,
-      linkedin: form.linkedin || null,
-      twitter: form.twitter || null,
-      github: form.github || null,
-      experience_level: form.experience_level || null,
-      availability: form.availability || null,
-      location,
-      skills: safeSkills,
-      profile_image: profileImage || null,
-      status: "approved",
-      instagram: form.instagram || null,
-      threads: form.threads || null,
-      discord: form.discord || null,
-      youtube: form.youtube || null,
-    };
-    const { error } = await supabase
-      .from("profiles")
-      .update(updateData)
-      .eq("user_id", user.id);
-    if (error) {
-      alert("Gagal menyimpan perubahan: " + error.message);
+    setFormError({});
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFormError(errors);
+      toast({
+        title: "Validasi gagal",
+        description: Object.values(errors).join(" "),
+        variant: "destructive",
+      });
       return;
     }
-    alert("Perubahan profil berhasil disimpan!");
-    router.push("/dashboard-profile/profile");
+    if (!user) return;
+    setSubmitting(true);
+    try {
+      const safeSkills = Array.isArray(skills)
+        ? skills
+        : skills
+        ? [skills]
+        : [];
+      const location =
+        provinsi && kota ? `${provinsi}, ${kota}` : form.location;
+      const updateData: Record<string, any> = {
+        name: form.name,
+        bio: form.bio || null,
+        website: form.website || null,
+        linkedin: form.linkedin || null,
+        twitter: form.twitter || null,
+        github: form.github || null,
+        experience_level: form.experience_level || null,
+        availability: form.availability || null,
+        location,
+        skills: safeSkills,
+        profile_image: profileImage || null,
+        status: "approved",
+        instagram: form.instagram || null,
+        threads: form.threads || null,
+        discord: form.discord || null,
+        youtube: form.youtube || null,
+      };
+      const { error } = await supabase
+        .from("profiles")
+        .update(updateData)
+        .eq("user_id", user.id);
+      if (error) {
+        toast({
+          title: "Gagal menyimpan perubahan",
+          description: error.message,
+          variant: "destructive",
+        });
+        setSubmitting(false);
+        return;
+      }
+      toast({
+        title: "Profil berhasil disimpan",
+        description: "Perubahan profil berhasil disimpan!",
+        variant: "default",
+      });
+      router.push("/dashboard-profile/profile");
+    } catch (err: any) {
+      toast({
+        title: "Terjadi error",
+        description: err?.message || "Gagal menyimpan perubahan.",
+        variant: "destructive",
+      });
+      setSubmitting(false);
+    }
   };
 
   if (!user) {
@@ -228,8 +278,14 @@ export default function EditProfilePage() {
                       onChange={handleChange}
                       placeholder="Website"
                       className="flex-1"
+                      disabled={submitting}
                     />
                   </div>
+                  {formError.website && (
+                    <p className="text-sm text-red-600 mt-1">
+                      {formError.website}
+                    </p>
+                  )}
                   <div className="flex items-center gap-2">
                     <Linkedin className="h-5 w-5 text-blue-600" />
                     <Input
@@ -238,6 +294,7 @@ export default function EditProfilePage() {
                       onChange={handleChange}
                       placeholder="LinkedIn"
                       className="flex-1"
+                      disabled={submitting}
                     />
                   </div>
                   <div className="flex items-center gap-2">
@@ -248,6 +305,7 @@ export default function EditProfilePage() {
                       onChange={handleChange}
                       placeholder="Twitter"
                       className="flex-1"
+                      disabled={submitting}
                     />
                   </div>
                   <div className="flex items-center gap-2">
@@ -258,6 +316,7 @@ export default function EditProfilePage() {
                       onChange={handleChange}
                       placeholder="GitHub"
                       className="flex-1"
+                      disabled={submitting}
                     />
                   </div>
                   <div className="flex items-center gap-2">
@@ -268,6 +327,7 @@ export default function EditProfilePage() {
                       onChange={handleChange}
                       placeholder="Instagram"
                       className="flex-1"
+                      disabled={submitting}
                     />
                   </div>
                   <div className="flex items-center gap-2">
@@ -288,6 +348,7 @@ export default function EditProfilePage() {
                       onChange={handleChange}
                       placeholder="Threads"
                       className="flex-1"
+                      disabled={submitting}
                     />
                   </div>
                   <div className="flex items-center gap-2">
@@ -298,6 +359,7 @@ export default function EditProfilePage() {
                       onChange={handleChange}
                       placeholder="Discord"
                       className="flex-1"
+                      disabled={submitting}
                     />
                   </div>
                   <div className="flex items-center gap-2">
@@ -308,6 +370,7 @@ export default function EditProfilePage() {
                       onChange={handleChange}
                       placeholder="YouTube"
                       className="flex-1"
+                      disabled={submitting}
                     />
                   </div>
                 </div>
@@ -321,7 +384,13 @@ export default function EditProfilePage() {
                     name="name"
                     value={form.name}
                     onChange={handleChange}
+                    disabled={submitting}
                   />
+                  {formError.name && (
+                    <p className="text-sm text-red-600 mt-1">
+                      {formError.name}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="font-semibold text-gray-900 mb-1 block">
@@ -331,6 +400,7 @@ export default function EditProfilePage() {
                     name="bio"
                     value={form.bio}
                     onChange={handleChange}
+                    disabled={submitting}
                   />
                 </div>
                 <div>
@@ -346,6 +416,7 @@ export default function EditProfilePage() {
                         setProvinsi(e.target.value);
                         setKota("");
                       }}
+                      disabled={submitting}
                     >
                       <option value="">Pilih Provinsi</option>
                       {PROVINCES.map((p) => (
@@ -359,7 +430,7 @@ export default function EditProfilePage() {
                       className="w-1/2 border rounded px-2 py-2"
                       value={kota}
                       onChange={(e) => setKota(e.target.value)}
-                      disabled={!provinsi}
+                      disabled={!provinsi || submitting}
                     >
                       <option value="">Pilih Kota/Kabupaten</option>
                       {PROVINCES.find((p) => p.name === provinsi)?.cities.map(
@@ -394,6 +465,7 @@ export default function EditProfilePage() {
                       className="w-full border rounded px-2 py-2"
                       value={form.experience_level}
                       onChange={handleSelect}
+                      disabled={submitting}
                     >
                       <option value="">Pilih</option>
                       <option value="beginner">Beginner</option>
@@ -411,6 +483,7 @@ export default function EditProfilePage() {
                       className="w-full border rounded px-2 py-2"
                       value={form.availability}
                       onChange={handleSelect}
+                      disabled={submitting}
                     >
                       <option value="">Pilih</option>
                       <option value="available">Available</option>
@@ -419,8 +492,15 @@ export default function EditProfilePage() {
                     </select>
                   </div>
                 </div>
-                <Button type="submit" className="mt-4">
-                  Simpan Perubahan
+                <Button type="submit" className="mt-4" disabled={submitting}>
+                  {submitting ? (
+                    <span className="flex items-center gap-2">
+                      <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-4 h-4"></span>{" "}
+                      Menyimpan...
+                    </span>
+                  ) : (
+                    "Simpan Perubahan"
+                  )}
                 </Button>
               </div>
             </div>

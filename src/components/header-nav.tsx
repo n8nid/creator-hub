@@ -68,12 +68,6 @@ export function HeaderNav() {
             Creator
           </Link>
           <Link
-            href="/directory"
-            className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
-          >
-            Talent
-          </Link>
-          <Link
             href="/workflows"
             className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
           >
@@ -114,9 +108,13 @@ export function HeaderNav() {
                 </div>
                 <div className="border-t my-2" />
                 <DropdownMenuItem
-                  onClick={() => router.push("/dashboard-profile/profile")}
+                  onClick={() =>
+                    isUserAdmin
+                      ? router.push("/admin")
+                      : router.push("/dashboard-profile")
+                  }
                 >
-                  Dashboard Profile
+                  Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={handleSignOut}

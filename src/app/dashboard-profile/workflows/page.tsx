@@ -5,44 +5,16 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Workflow } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
-import { workflowCategories } from "@/data/category-workflows";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import { TagInput } from "@/components/ui/tag-input";
+import { useToast } from "@/hooks/use-toast";
 
 export default function WorkflowsSubPage() {
   const { user } = useAuth();
   const supabase = createClientComponentClient();
+  const { toast } = useToast();
   const [profile, setProfile] = useState<any>(null);
   const [myWorkflows, setMyWorkflows] = useState<any[]>([]);
-  const [showAddWorkflow, setShowAddWorkflow] = useState(false);
-  const [workflowForm, setWorkflowForm] = useState<{
-    title: string;
-    description: string;
-    tags: string[];
-    category: string;
-    screenshot_url: string;
-    video_url: string;
-    complexity: string;
-    json_n8n: string;
-  }>({
-    title: "",
-    description: "",
-    tags: [],
-    category: "",
-    screenshot_url: "",
-    video_url: "",
-    complexity: "",
-    json_n8n: "",
-  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -60,66 +32,17 @@ export default function WorkflowsSubPage() {
   useEffect(() => {
     if (!profile?.id) return;
     const fetchMyWorkflows = async () => {
+      setLoading(true);
       const { data } = await supabase
         .from("workflows")
         .select("*")
         .eq("profile_id", profile.id)
         .order("created_at", { ascending: false });
       setMyWorkflows(data || []);
+      setLoading(false);
     };
     fetchMyWorkflows();
   }, [profile]);
-
-  const handleWorkflowInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setWorkflowForm({ ...workflowForm, [e.target.name]: e.target.value });
-  };
-  const handleWorkflowTags = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = Array.from(e.target.selectedOptions).map(
-      (opt) => opt.value
-    );
-    setWorkflowForm({ ...workflowForm, tags: selected });
-  };
-
-  const handleAddWorkflow = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profile?.id) return;
-    const { error } = await supabase.from("workflows").insert({
-      profile_id: profile.id,
-      title: workflowForm.title,
-      description: workflowForm.description,
-      tags: workflowForm.tags,
-      category: workflowForm.category,
-      screenshot_url: workflowForm.screenshot_url,
-      video_url: workflowForm.video_url,
-      complexity: workflowForm.complexity,
-      json_n8n: workflowForm.json_n8n,
-      status: "pending",
-    });
-    if (error) {
-      alert("Gagal menambah workflow: " + error.message);
-      return;
-    }
-    setShowAddWorkflow(false);
-    setWorkflowForm({
-      title: "",
-      description: "",
-      tags: [],
-      category: "",
-      screenshot_url: "",
-      video_url: "",
-      complexity: "",
-      json_n8n: "",
-    });
-    // Refresh list
-    const { data } = await supabase
-      .from("workflows")
-      .select("*")
-      .eq("profile_id", profile.id)
-      .order("created_at", { ascending: false });
-    setMyWorkflows(data || []);
-  };
 
   if (!user) {
     return (
@@ -137,178 +60,132 @@ export default function WorkflowsSubPage() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold">Workflow Saya</h2>
         <Button
-          onClick={() => setShowAddWorkflow(true)}
+          asChild
           className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white"
         >
-          <Plus className="w-4 h-4" /> Tambah Workflow
+          <Link href="/dashboard-profile/workflows/add">
+            <Plus className="w-4 h-4" /> Tambah Workflow
+          </Link>
         </Button>
       </div>
-      {/* Form tambah workflow */}
-      {showAddWorkflow && (
-        <form
-          onSubmit={handleAddWorkflow}
-          className="mb-8 bg-gray-50 p-6 rounded-xl border"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block font-medium mb-1">Judul</label>
-              <Input
-                name="title"
-                value={workflowForm.title}
-                onChange={handleWorkflowInput}
-                required
-              />
-            </div>
-            <div>
-              <label className="block font-medium mb-1">Kategori</label>
-              <Select
-                value={workflowForm.category}
-                onValueChange={(val) =>
-                  setWorkflowForm((f) => ({ ...f, category: val }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Pilih kategori..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {workflowCategories.map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <div className="text-xs text-gray-500 mt-1">
-                Pilih satu kategori
-              </div>
-            </div>
-            <div>
-              <label className="block font-medium mb-1">Tags</label>
-              <TagInput
-                value={workflowForm.tags}
-                onChange={(tags) => setWorkflowForm((f) => ({ ...f, tags }))}
-                placeholder="Tambah tag..."
-              />
-              <div className="text-xs text-gray-500 mt-1">
-                Input bebas, tekan enter untuk menambah tag
-              </div>
-            </div>
-            <div className="md:col-span-2">
-              <label className="block font-medium mb-1">Deskripsi</label>
-              <Textarea
-                name="description"
-                value={workflowForm.description}
-                onChange={handleWorkflowInput}
-                required
-              />
-            </div>
-            <div>
-              <label className="block font-medium mb-1">Screenshot URL</label>
-              <Input
-                name="screenshot_url"
-                value={workflowForm.screenshot_url}
-                onChange={handleWorkflowInput}
-              />
-            </div>
-            <div>
-              <label className="block font-medium mb-1">Video URL</label>
-              <Input
-                name="video_url"
-                value={workflowForm.video_url}
-                onChange={handleWorkflowInput}
-              />
-            </div>
-            <div>
-              <label className="block font-medium mb-1">Complexity</label>
-              <Input
-                name="complexity"
-                value={workflowForm.complexity}
-                onChange={handleWorkflowInput}
-                placeholder="simple/medium/complex"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block font-medium mb-1">
-                JSON n8n Workflow
-              </label>
-              <Textarea
-                name="json_n8n"
-                value={workflowForm.json_n8n}
-                onChange={handleWorkflowInput}
-                placeholder="Paste JSON workflow dari n8n di sini"
-                rows={6}
-              />
-            </div>
-          </div>
-          <div className="flex gap-2 mt-4">
-            <Button type="submit">Simpan Workflow</Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setShowAddWorkflow(false)}
-            >
-              Batal
-            </Button>
-          </div>
-        </form>
-      )}
+
       {/* List workflow user */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {myWorkflows.map((w) => (
-          <Card key={w.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader className="pb-4">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                  <Workflow className="w-6 h-6 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-lg text-gray-900 truncate">
-                    {w.title}
-                  </h3>
-                  <div className="flex items-center space-x-2 mt-2">
-                    <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 rounded-full">
-                      {w.complexity || "-"}
-                    </span>
-                    <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-gray-100 text-gray-700 rounded-full">
-                      {w.status}
-                    </span>
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <Card key={i} className="animate-pulse">
+              <CardHeader className="pb-4">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-gray-200 rounded-xl"></div>
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="flex gap-2">
+                      <div className="h-6 bg-gray-200 rounded-full w-16"></div>
+                      <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                    </div>
                   </div>
                 </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-2">
+                  <div className="h-3 bg-gray-200 rounded w-full"></div>
+                  <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                </div>
+                <div className="flex gap-1 mt-4">
+                  <div className="h-5 bg-gray-200 rounded-full w-12"></div>
+                  <div className="h-5 bg-gray-200 rounded-full w-16"></div>
+                </div>
+                <div className="h-3 bg-gray-200 rounded w-24 mt-4"></div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {myWorkflows.map((w) => (
+            <Card key={w.id} className="hover:shadow-lg transition-shadow">
+              <CardHeader className="pb-4">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                    <Workflow className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-lg text-gray-900 truncate">
+                      {w.title}
+                    </h3>
+                    <div className="flex items-center space-x-2 mt-2">
+                      <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 rounded-full">
+                        {w.complexity || "-"}
+                      </span>
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full ${
+                          w.status === "approved"
+                            ? "bg-green-100 text-green-800"
+                            : w.status === "pending"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : w.status === "rejected"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-gray-100 text-gray-700"
+                        }`}
+                      >
+                        {w.status}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                  {w.description}
+                </p>
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {(w.tags || []).map((tag: string) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-0.5 text-xs bg-white border border-gray-200 text-gray-700 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="text-xs text-gray-400">
+                  Created: {w.created_at?.slice(0, 10)}
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <Button asChild size="sm" variant="outline">
+                    <Link href={`/dashboard-profile/workflows/${w.id}`}>
+                      View
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+          {myWorkflows.length === 0 && (
+            <div className="text-gray-500 text-center col-span-full py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Workflow className="w-8 h-8 text-gray-400" />
               </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                {w.description}
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Belum ada workflow
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Mulai dengan menambahkan workflow pertama Anda
               </p>
-              <div className="flex flex-wrap gap-1 mb-2">
-                {(w.tags || []).map((tag: string) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 text-xs bg-white border border-gray-200 text-gray-700 rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="text-xs text-gray-400">
-                Created: {w.created_at?.slice(0, 10)}
-              </div>
-              <div className="flex gap-2 mt-4">
-                <Button asChild size="sm" variant="outline">
-                  <Link href={`/dashboard-profile/workflows/${w.id}`}>
-                    View
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {myWorkflows.length === 0 && (
-          <div className="text-gray-500 text-center col-span-full py-8">
-            Belum ada workflow.
-          </div>
-        )}
-      </div>
+              <Button
+                asChild
+                className="bg-gradient-to-r from-purple-600 to-pink-500 text-white"
+              >
+                <Link href="/dashboard-profile/workflows/add">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Tambah Workflow Pertama
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
