@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -12,40 +12,20 @@ import {
   Github,
   Instagram,
   Youtube,
+  MapPin,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { TagInput } from "@/components/ui/tag-input";
-import { PROVINCES } from "@/data/indonesia-regions";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import { FaDiscord } from "react-icons/fa";
-
-const defaultProfileForm = {
-  name: "",
-  bio: "",
-  website: "",
-  linkedin: "",
-  twitter: "",
-  github: "",
-  experience_level: "",
-  availability: "",
-  location: "",
-  instagram: "",
-  threads: "",
-  discord: "",
-  youtube: "",
-};
+import Link from "next/link";
 
 export default function ProfileSubPage() {
   const { user } = useAuth();
   const supabase = createClientComponentClient();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [skills, setSkills] = useState<string[]>([]);
   const [profileImage, setProfileImage] = useState<string>("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [form, setForm] = useState(defaultProfileForm);
-  const [provinsi, setProvinsi] = useState("");
-  const [kota, setKota] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -58,111 +38,11 @@ export default function ProfileSubPage() {
       setProfile(data);
       setLoading(false);
       if (data) {
-        setForm({
-          name: data.name || "",
-          bio: data.bio || "",
-          website: data.website || "",
-          linkedin: data.linkedin || "",
-          twitter: data.twitter || "",
-          github: data.github || "",
-          experience_level: data.experience_level || "",
-          availability: data.availability || "",
-          location: data.location || "",
-          instagram: data.instagram || "",
-          threads: data.threads || "",
-          discord: data.discord || "",
-          youtube: data.youtube || "",
-        });
-        setSkills(data.skills || []);
         setProfileImage(data.profile_image || "");
-        if (data.location) {
-          const [prov, city] = data.location.split(", ");
-          setProvinsi(prov || "");
-          setKota(city || "");
-        }
       }
     };
     fetchProfile();
   }, [user]);
-
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0 || !user) return;
-    const file = e.target.files[0];
-    if (!file || !file.name) return;
-    // Validasi ekstensi file
-    const allowedExtensions = ["jpg", "jpeg", "png"];
-    const fileExt = file.name.split(".").pop()?.toLowerCase();
-    if (!fileExt || !allowedExtensions.includes(fileExt)) {
-      alert(
-        "Hanya file gambar dengan format JPG, JPEG, atau PNG yang diperbolehkan."
-      );
-      return;
-    }
-    const filePath = `user-profiles/${user.id}.${fileExt}`;
-    const { error } = await supabase.storage
-      .from("user-profiles")
-      .upload(filePath, file, { upsert: true });
-    if (!error) {
-      const { data: urlData } = supabase.storage
-        .from("user-profiles")
-        .getPublicUrl(filePath);
-      setProfileImage(urlData.publicUrl);
-    }
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-    const safeSkills = Array.isArray(skills) ? skills : skills ? [skills] : [];
-    const location = provinsi && kota ? `${provinsi}, ${kota}` : form.location;
-    const updateData: Record<string, any> = {
-      name: form.name,
-      bio: form.bio || null,
-      website: form.website || null,
-      linkedin: form.linkedin || null,
-      twitter: form.twitter || null,
-      github: form.github || null,
-      experience_level: form.experience_level || null,
-      availability: form.availability || null,
-      location,
-      skills: safeSkills,
-      profile_image: profileImage || null,
-      status: "approved",
-      instagram: form.instagram || null,
-      threads: form.threads || null,
-      discord: form.discord || null,
-      youtube: form.youtube || null,
-    };
-    const { error } = await supabase
-      .from("profiles")
-      .update(updateData)
-      .eq("user_id", user.id);
-    if (error) {
-      alert("Gagal menyimpan perubahan: " + error.message);
-      return;
-    }
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("user_id", user.id)
-      .single();
-    setProfile(data);
-    alert("Perubahan profil berhasil disimpan!");
-  };
 
   if (!user) {
     return (
@@ -180,237 +60,188 @@ export default function ProfileSubPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <Card>
-        <CardHeader>
-          <h1 className="text-2xl font-bold text-gray-900 mt-2">Edit Profil</h1>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Avatar dan link sosial di sini */}
-          <div className="flex flex-col md:flex-row gap-8 mb-6">
-            <div className="flex flex-col items-center gap-4 w-full md:w-1/3">
-              <div className="relative flex flex-col items-center">
-                <img
-                  src={profileImage || "/placeholder-user.jpg"}
-                  alt="Avatar"
-                  className="h-32 w-32 rounded-full object-cover border mx-auto mb-2"
-                />
-                <button
-                  type="button"
-                  className="absolute bottom-4 right-1/2 translate-x-1/2 bg-white rounded-full p-1 border shadow hover:bg-gray-100"
-                  onClick={handleAvatarClick}
-                  title="Ubah Foto Profil"
-                >
-                  <Pencil className="h-5 w-5 text-gray-600" />
-                </button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleFileChange}
-                />
-              </div>
-              {/* Media sosial: ikon + input */}
-              <div className="flex flex-col gap-3 w-full">
-                <div className="flex items-center gap-2">
-                  <Globe className="h-5 w-5 text-blue-600" />
-                  <Input
-                    name="website"
-                    value={form.website}
-                    onChange={handleChange}
-                    placeholder="Website"
-                    className="flex-1"
-                  />
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Profil Saya</h1>
+        <Button asChild>
+          <Link href="/dashboard-profile/profile/edit">
+            <Pencil className="h-4 w-4 mr-2" />
+            Edit Profile
+          </Link>
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Profile Sidebar */}
+        <div className="lg:col-span-1 flex justify-center">
+          <Card className="sticky top-8 w-full max-w-xs md:max-w-sm mx-auto">
+            <CardHeader className="text-center">
+              <Avatar className="h-32 w-32 mx-auto mb-4">
+                <AvatarImage src={profileImage || undefined} />
+                <AvatarFallback className="text-2xl">
+                  {profile?.name
+                    ?.split(" ")
+                    .map((n: string) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {profile?.name}
+              </h1>
+              {profile?.location && (
+                <div className="flex items-center justify-center text-gray-500 mt-2">
+                  <MapPin className="h-4 w-4 mr-1" />
+                  {profile.location}
                 </div>
-                <div className="flex items-center gap-2">
-                  <Linkedin className="h-5 w-5 text-blue-600" />
-                  <Input
-                    name="linkedin"
-                    value={form.linkedin}
-                    onChange={handleChange}
-                    placeholder="LinkedIn"
-                    className="flex-1"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <Twitter className="h-5 w-5 text-blue-600" />
-                  <Input
-                    name="twitter"
-                    value={form.twitter}
-                    onChange={handleChange}
-                    placeholder="Twitter"
-                    className="flex-1"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <Github className="h-5 w-5 text-blue-600" />
-                  <Input
-                    name="github"
-                    value={form.github}
-                    onChange={handleChange}
-                    placeholder="GitHub"
-                    className="flex-1"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <Instagram className="h-5 w-5 text-blue-600" />
-                  <Input
-                    name="instagram"
-                    value={form.instagram || ""}
-                    onChange={handleChange}
-                    placeholder="Instagram"
-                    className="flex-1"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  {/* Threads pakai SVG manual */}
-                  <svg
-                    className="h-5 w-5 text-blue-600"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
+              )}
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+              {/* Status Badges */}
+              <div className="flex flex-wrap gap-2 justify-center">
+                {profile?.experience_level && (
+                  <Badge variant="secondary">{profile.experience_level}</Badge>
+                )}
+                {profile?.availability && (
+                  <Badge
+                    variant={
+                      profile.availability === "available"
+                        ? "default"
+                        : "outline"
+                    }
                   >
-                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Zm0 18.5A8.5 8.5 0 1 1 12 3.5a8.5 8.5 0 0 1 0 17Zm.25-13.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Zm-2.5 2.5a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm5 0a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm-2.5 8.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Z" />
-                  </svg>
-                  <Input
-                    name="threads"
-                    value={form.threads || ""}
-                    onChange={handleChange}
-                    placeholder="Threads"
-                    className="flex-1"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaDiscord className="h-5 w-5 text-blue-600" />
-                  <Input
-                    name="discord"
-                    value={form.discord || ""}
-                    onChange={handleChange}
-                    placeholder="Discord"
-                    className="flex-1"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <Youtube className="h-5 w-5 text-blue-600" />
-                  <Input
-                    name="youtube"
-                    value={form.youtube || ""}
-                    onChange={handleChange}
-                    placeholder="YouTube"
-                    className="flex-1"
-                  />
-                </div>
+                    {profile.availability}
+                  </Badge>
+                )}
               </div>
-            </div>
-            <div className="flex-1 space-y-4">
-              <div>
-                <label className="font-semibold text-gray-900 mb-1 block">
-                  Nama
-                </label>
-                <Input name="name" value={form.name} onChange={handleChange} />
-              </div>
-              <div>
-                <label className="font-semibold text-gray-900 mb-1 block">
-                  Bio
-                </label>
-                <Textarea name="bio" value={form.bio} onChange={handleChange} />
-              </div>
-              <div>
-                <label className="font-semibold text-gray-900 mb-1 block">
-                  Lokasi
-                </label>
-                <div className="flex gap-2">
-                  <select
-                    name="provinsi"
-                    className="w-1/2 border rounded px-2 py-2"
-                    value={provinsi}
-                    onChange={(e) => {
-                      setProvinsi(e.target.value);
-                      setKota("");
-                    }}
-                  >
-                    <option value="">Pilih Provinsi</option>
-                    {PROVINCES.map((p) => (
-                      <option key={p.name} value={p.name}>
-                        {p.name}
-                      </option>
+
+              <Separator />
+
+              {/* Skills */}
+              {profile?.skills && profile.skills.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Skills</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.skills.map((skill: string) => (
+                      <Badge key={skill} variant="outline">
+                        {skill}
+                      </Badge>
                     ))}
-                  </select>
-                  <select
-                    name="kota"
-                    className="w-1/2 border rounded px-2 py-2"
-                    value={kota}
-                    onChange={(e) => setKota(e.target.value)}
-                    disabled={!provinsi}
-                  >
-                    <option value="">Pilih Kota/Kabupaten</option>
-                    {PROVINCES.find((p) => p.name === provinsi)?.cities.map(
-                      (k, idx) => (
-                        <option key={`${provinsi}-${k}-${idx}`} value={k}>
-                          {k}
-                        </option>
-                      )
-                    )}
-                  </select>
+                  </div>
+                </div>
+              )}
+
+              {/* Social Links - Horizontal, rapi, besar, dan center */}
+              <div className="flex justify-center mt-8 mb-2">
+                <div className="flex gap-6 flex-wrap justify-center">
+                  {profile?.website && (
+                    <a
+                      href={profile.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Website"
+                    >
+                      <Globe className="h-6 w-6 text-blue-500 hover:text-blue-700 transition-colors" />
+                    </a>
+                  )}
+                  {profile?.linkedin && (
+                    <a
+                      href={profile.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="LinkedIn"
+                    >
+                      <Linkedin className="h-6 w-6 text-blue-500 hover:text-blue-700 transition-colors" />
+                    </a>
+                  )}
+                  {profile?.twitter && (
+                    <a
+                      href={profile.twitter}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Twitter"
+                    >
+                      <Twitter className="h-6 w-6 text-blue-500 hover:text-blue-700 transition-colors" />
+                    </a>
+                  )}
+                  {profile?.github && (
+                    <a
+                      href={profile.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="GitHub"
+                    >
+                      <Github className="h-6 w-6 text-blue-500 hover:text-blue-700 transition-colors" />
+                    </a>
+                  )}
+                  {profile?.instagram && (
+                    <a
+                      href={profile.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Instagram"
+                    >
+                      <Instagram className="h-6 w-6 text-blue-500 hover:text-blue-700 transition-colors" />
+                    </a>
+                  )}
+                  {profile?.threads && (
+                    <a
+                      href={profile.threads}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Threads"
+                    >
+                      <svg
+                        className="h-6 w-6 text-blue-500 hover:text-blue-700 transition-colors"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Zm0 18.5A8.5 8.5 0 1 1 12 3.5a8.5 8.5 0 0 1 0 17Zm.25-13.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Zm-2.5 2.5a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm5 0a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm-2.5 8.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Z" />
+                      </svg>
+                    </a>
+                  )}
+                  {profile?.discord && (
+                    <a
+                      href={profile.discord}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Discord"
+                    >
+                      <FaDiscord className="h-6 w-6 text-blue-500 hover:text-blue-700 transition-colors" />
+                    </a>
+                  )}
+                  {profile?.youtube && (
+                    <a
+                      href={profile.youtube}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="YouTube"
+                    >
+                      <Youtube className="h-6 w-6 text-blue-500 hover:text-blue-700 transition-colors" />
+                    </a>
+                  )}
                 </div>
               </div>
-              {/*
-              <div>
-                <label className="font-semibold text-gray-900 mb-1 block">
-                  Skills
-                </label>
-                <TagInput
-                  value={skills}
-                  onChange={setSkills}
-                  placeholder="Tambah skill..."
-                />
-              </div>
-*/}
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <label className="font-semibold text-gray-900 mb-1 block">
-                    Level Pengalaman
-                  </label>
-                  <select
-                    name="experience_level"
-                    className="w-full border rounded px-2 py-2"
-                    value={form.experience_level}
-                    onChange={handleSelect}
-                  >
-                    <option value="">Pilih</option>
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="advanced">Advanced</option>
-                    <option value="expert">Expert</option>
-                  </select>
-                </div>
-                <div className="flex-1">
-                  <label className="font-semibold text-gray-900 mb-1 block">
-                    Status (Availability)
-                  </label>
-                  <select
-                    name="availability"
-                    className="w-full border rounded px-2 py-2"
-                    value={form.availability}
-                    onChange={handleSelect}
-                  >
-                    <option value="">Pilih</option>
-                    <option value="available">Available</option>
-                    <option value="busy">Busy</option>
-                    <option value="unavailable">Unavailable</option>
-                  </select>
-                </div>
-              </div>
-              <Button type="submit" className="mt-4">
-                Simpan Perubahan
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </form>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Main Content */}
+        <div className="lg:col-span-2 space-y-8">
+          {/* About Section */}
+          <Card>
+            <CardHeader>
+              <h2 className="text-xl font-semibold text-gray-900">About</h2>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                {profile?.bio || "No bio available."}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   );
 }
