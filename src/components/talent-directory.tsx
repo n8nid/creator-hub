@@ -1,65 +1,111 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { MapPin, DollarSign, Search, Filter, Workflow } from "lucide-react"
-import Link from "next/link"
-import { supabase } from "@/lib/supabase"
-import type { Database } from "@/lib/supabase"
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { MapPin, DollarSign, Search, Filter, Workflow } from "lucide-react";
+import Link from "next/link";
+// import { supabase } from "@/lib/supabase"
+// import type { Database } from "@/lib/supabase"
 
-type Profile = Database["public"]["Tables"]["profiles"]["Row"]
+// type Profile = Database["public"]["Tables"]["profiles"]["Row"]
+type Profile = {
+  id: string;
+  user_id: string;
+  name: string;
+  bio: string | null;
+  location: string | null;
+  website?: string | null;
+  linkedin?: string | null;
+  twitter?: string | null;
+  github?: string | null;
+  skills?: string[] | null;
+  experience_level?: string | null;
+  hourly_rate?: number | null;
+  availability?: string | null;
+  profile_image?: string | null;
+  status?: string;
+  admin_notes?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
 
 export function TalentDirectory() {
-  const [profiles, setProfiles] = useState<Profile[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [experienceFilter, setExperienceFilter] = useState<string>("all")
-  const [availabilityFilter, setAvailabilityFilter] = useState<string>("all")
-  const [skillFilter, setSkillFilter] = useState<string>("all")
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [experienceFilter, setExperienceFilter] = useState<string>("all");
+  const [availabilityFilter, setAvailabilityFilter] = useState<string>("all");
+  const [skillFilter, setSkillFilter] = useState<string>("all");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchProfiles()
-  }, [])
+    fetchProfiles();
+  }, []);
 
   const fetchProfiles = async () => {
     try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("status", "approved")
-        .order("created_at", { ascending: false })
-
-      if (error) throw error
-      setProfiles(data || [])
-    } catch (error) {
-      
+      setLoading(true);
+      setError(null);
+      const res = await fetch("/api/creators");
+      const json = await res.json();
+      if (res.ok) {
+        setProfiles(json.creators || []);
+      } else {
+        setError(json.error || "Gagal memuat data talent");
+      }
+    } catch (err: any) {
+      setError(err.message || "Gagal memuat data talent");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const filteredProfiles = profiles.filter((profile) => {
     const matchesSearch =
       profile.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      profile.bio?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      profile.skills?.some((skill) => skill.toLowerCase().includes(searchTerm.toLowerCase()))
+      (profile.bio?.toLowerCase().includes(searchTerm.toLowerCase()) ??
+        false) ||
+      (profile.skills?.some((skill) =>
+        skill.toLowerCase().includes(searchTerm.toLowerCase())
+      ) ??
+        false);
 
-    const matchesExperience = experienceFilter === "all" || profile.experience_level === experienceFilter
-    const matchesAvailability = availabilityFilter === "all" || profile.availability === availabilityFilter
-    const matchesSkill = skillFilter === "all" || profile.skills?.includes(skillFilter)
+    const matchesExperience =
+      experienceFilter === "all" ||
+      profile.experience_level === experienceFilter;
+    const matchesAvailability =
+      availabilityFilter === "all" ||
+      profile.availability === availabilityFilter;
+    const matchesSkill =
+      skillFilter === "all" || (profile.skills?.includes(skillFilter) ?? false);
 
-    return matchesSearch && matchesExperience && matchesAvailability && matchesSkill
-  })
+    return (
+      matchesSearch && matchesExperience && matchesAvailability && matchesSkill
+    );
+  });
 
-  const allSkills = Array.from(new Set(profiles.flatMap((p) => p.skills || [])))
+  const allSkills = Array.from(
+    new Set(profiles.flatMap((p) => p.skills || []))
+  );
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-8">Loading...</div>
+    return <div className="container mx-auto px-4 py-8">Loading...</div>;
+  }
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-red-500">{error}</div>
+    );
   }
 
   return (
@@ -67,8 +113,12 @@ export function TalentDirectory() {
       {/* Header */}
       <div className="mb-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Automation Talent Directory</h1>
-          <p className="text-gray-600">Discover skilled automation experts and workflow specialists</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Automation Talent Directory
+          </h1>
+          <p className="text-gray-600">
+            Discover skilled automation experts and workflow specialists
+          </p>
         </div>
 
         {/* Filters */}
@@ -96,7 +146,10 @@ export function TalentDirectory() {
             </SelectContent>
           </Select>
 
-          <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
+          <Select
+            value={availabilityFilter}
+            onValueChange={setAvailabilityFilter}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Availability" />
             </SelectTrigger>
@@ -144,7 +197,9 @@ export function TalentDirectory() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-lg text-gray-900 truncate">{profile.name}</h3>
+                  <h3 className="font-semibold text-lg text-gray-900 truncate">
+                    {profile.name}
+                  </h3>
                   {profile.location && (
                     <div className="flex items-center text-gray-500 text-sm mt-1">
                       <MapPin className="h-3 w-3 mr-1" />
@@ -158,7 +213,14 @@ export function TalentDirectory() {
                       </Badge>
                     )}
                     {profile.availability && (
-                      <Badge variant={profile.availability === "available" ? "default" : "outline"} className="text-xs">
+                      <Badge
+                        variant={
+                          profile.availability === "available"
+                            ? "default"
+                            : "outline"
+                        }
+                        className="text-xs"
+                      >
                         {profile.availability}
                       </Badge>
                     )}
@@ -168,7 +230,9 @@ export function TalentDirectory() {
             </CardHeader>
 
             <CardContent className="pt-0">
-              <p className="text-gray-600 text-sm mb-4 line-clamp-3">{profile.bio}</p>
+              <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                {profile.bio}
+              </p>
 
               {profile.skills && profile.skills.length > 0 && (
                 <div className="mb-4">
@@ -190,7 +254,8 @@ export function TalentDirectory() {
               <div className="flex items-center justify-between">
                 {profile.hourly_rate && (
                   <div className="flex items-center text-gray-600 text-sm">
-                    <DollarSign className="h-3 w-3 mr-1" />${profile.hourly_rate}/hr
+                    <DollarSign className="h-3 w-3 mr-1" />$
+                    {profile.hourly_rate}/hr
                   </div>
                 )}
                 <Button asChild size="sm">
@@ -207,10 +272,12 @@ export function TalentDirectory() {
           <div className="text-gray-400 mb-4">
             <Filter className="h-12 w-12 mx-auto" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No talents found</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            No talents found
+          </h3>
           <p className="text-gray-600">Try adjusting your search criteria</p>
         </div>
       )}
     </div>
-  )
+  );
 }

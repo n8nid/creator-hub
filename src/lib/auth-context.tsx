@@ -46,6 +46,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, [supabase]);
 
+  useEffect(() => {
+    if (user && session) {
+      console.log("[Auth Debug] User:", user);
+      console.log("[Auth Debug] Session:", session);
+    }
+  }, [user, session]);
+
   const signIn = async (email: string, password: string) => {
     console.log("SignIn called with email:", email);
     const { data, error } = await supabase.auth.signInWithPassword({

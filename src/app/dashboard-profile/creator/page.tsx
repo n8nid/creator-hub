@@ -205,29 +205,31 @@ export default function CreatorSubPage() {
   };
 
   // Stepper visual status
-  const statusStep =
-    profile?.status === "approved"
-      ? 3
-      : profile?.status === "pending"
-      ? 2
-      : profile?.status === "rejected"
-      ? 1
-      : 0;
-  const statusLabel = {
-    draft: "Lengkapi Profil",
-    pending: "Menunggu Review",
-    approved: "Creator Aktif",
-    rejected: "Ditolak",
-  };
-  const statusIcon = {
-    draft: <FileText className="w-5 h-5 text-gray-400" />,
-    pending: <Clock className="w-5 h-5 text-yellow-500" />,
-    approved: <CheckCircle className="w-5 h-5 text-green-600" />,
-    rejected: <XCircle className="w-5 h-5 text-red-500" />,
-  };
+  // Cari status aplikasi creator terakhir
+  const lastApp = applications[0];
+  let statusStep = 0;
+  let statusLabel = "Belum Mengajukan Creator";
+  let statusIcon = <FileText className="w-5 h-5 text-gray-400" />;
+
+  if (!lastApp) {
+    statusStep = 0;
+    statusLabel = "Belum Mengajukan Creator";
+    statusIcon = <FileText className="w-5 h-5 text-gray-400" />;
+  } else if (lastApp.status === "pending") {
+    statusStep = 1;
+    statusLabel = "Menunggu Review";
+    statusIcon = <Clock className="w-5 h-5 text-yellow-500" />;
+  } else if (lastApp.status === "approved") {
+    statusStep = 2;
+    statusLabel = "Creator Aktif";
+    statusIcon = <CheckCircle className="w-5 h-5 text-green-600" />;
+  } else if (lastApp.status === "rejected") {
+    statusStep = 3;
+    statusLabel = "Ditolak";
+    statusIcon = <XCircle className="w-5 h-5 text-red-500" />;
+  }
 
   // Cari status terakhir
-  const lastApp = applications[0];
   const canResubmit = lastApp && lastApp.status === "rejected";
 
   if (!user) {
@@ -258,18 +260,8 @@ export default function CreatorSubPage() {
                   : "bg-gray-100 text-gray-700"
               }`}
             >
-              {
-                statusIcon[
-                  (profile?.status as keyof typeof statusIcon) || "draft"
-                ]
-              }
-              <span className="ml-1">
-                {
-                  statusLabel[
-                    (profile?.status as keyof typeof statusLabel) || "draft"
-                  ]
-                }
-              </span>
+              {statusIcon}
+              <span className="ml-1">{statusLabel}</span>
             </span>
           </div>
         </div>

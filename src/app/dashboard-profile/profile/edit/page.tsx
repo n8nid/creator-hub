@@ -177,7 +177,6 @@ export default function EditProfilePage() {
         location,
         skills: safeSkills,
         profile_image: profileImage || null,
-        status: "approved",
         instagram: form.instagram || null,
         threads: form.threads || null,
         discord: form.discord || null,

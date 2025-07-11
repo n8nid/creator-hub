@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useToast } from "@/hooks/use-toast";
 
 interface CreatorApplication {
@@ -29,6 +29,7 @@ export default function ModerasiCreatorPage() {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const { toast } = useToast();
+  const supabase = createClientComponentClient();
 
   // Fetch statistik dan daftar pengajuan
   useEffect(() => {
@@ -63,24 +64,37 @@ export default function ModerasiCreatorPage() {
         rejected: rejected ?? 0,
         total: total ?? 0,
       });
-      // Daftar pengajuan (pending)
+      // Ambil data pengajuan tanpa join
       const { data: apps } = await supabase
         .from("creator_applications")
-        .select(
-          `id, user_id, status, tanggal_pengajuan, users(email), profiles(name)`
-        )
+        .select("id, user_id, status, tanggal_pengajuan")
         .eq("status", "pending")
         .order("tanggal_pengajuan", { ascending: false });
+      // Fetch data user dan profile manual
+      const userIds = (apps || []).map((a: any) => a.user_id);
+      // Ambil data users
+      const { data: usersData } = await supabase
+        .from("users")
+        .select("id, email")
+        .in("id", userIds);
+      // Ambil data profiles
+      const { data: profilesData } = await supabase
+        .from("profiles")
+        .select("user_id, name")
+        .in("user_id", userIds);
       setPendingApps(
         (apps || []).map((a: any) => ({
           id: a.id,
           user_id: a.user_id,
           status: a.status,
           tanggal_pengajuan: a.tanggal_pengajuan,
-          user_email: a.users?.email || "",
-          profile_name: a.profiles?.name || "",
+          user_email:
+            usersData?.find((u: any) => u.id === a.user_id)?.email || "",
+          profile_name:
+            profilesData?.find((p: any) => p.user_id === a.user_id)?.name || "",
         }))
       );
+      console.log("apps", apps);
       setLoading(false);
     };
     fetchData();
