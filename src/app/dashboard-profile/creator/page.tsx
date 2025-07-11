@@ -33,28 +33,38 @@ export default function CreatorSubPage() {
   const [isCreator, setIsCreator] = useState(false);
   const [creatorStats, setCreatorStats] = useState<any>(null);
   const [showResubmit, setShowResubmit] = useState(false);
+  const [applications, setApplications] = useState<any[]>([]);
+  const [loadingApps, setLoadingApps] = useState(true);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileAndCreatorStatus = async () => {
       if (!user) return;
-      const { data } = await supabase
+      // Ambil profile
+      const { data: profileData } = await supabase
         .from("profiles")
         .select("*")
         .eq("user_id", user.id)
         .single();
-      setProfile(data);
-      setIsCreator(data?.status === "approved");
-      // Fetch statistik jika sudah approved
-      if (data?.status === "approved") {
+      setProfile(profileData);
+      // Cek apakah user sudah menjadi creator (ada pengajuan approved)
+      const { data: creatorApp } = await supabase
+        .from("creator_applications")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("status", "approved")
+        .maybeSingle();
+      setIsCreator(!!creatorApp);
+      // Fetch statistik jika sudah creator
+      if (creatorApp && profileData) {
         const { data: stats } = await supabase
           .from("creator_stats")
           .select("*")
-          .eq("profile_id", data.id)
+          .eq("profile_id", profileData.id)
           .single();
         setCreatorStats(stats);
       }
     };
-    fetchProfile();
+    fetchProfileAndCreatorStatus();
   }, [user]);
 
   useEffect(() => {
@@ -104,6 +114,23 @@ export default function CreatorSubPage() {
     fetchFollowedCreators();
   }, [user, toast]);
 
+  useEffect(() => {
+    if (!user) return;
+    const fetchApplications = async () => {
+      setLoadingApps(true);
+      const { data } = await supabase
+        .from("creator_applications")
+        .select(
+          "id, status, tanggal_pengajuan, tanggal_approval, alasan_penolakan"
+        )
+        .eq("user_id", user.id)
+        .order("tanggal_pengajuan", { ascending: false });
+      setApplications(data || []);
+      setLoadingApps(false);
+    };
+    fetchApplications();
+  }, [user]);
+
   const handleUnfollow = async (creatorId: string) => {
     try {
       const { error } = await supabase
@@ -140,10 +167,11 @@ export default function CreatorSubPage() {
   // Handler pengajuan/ajukan ulang
   const handleAjukanCreator = async () => {
     try {
-      const { error } = await supabase
-        .from("profiles")
-        .update({ status: "pending" })
-        .eq("user_id", user?.id);
+      const { error } = await supabase.from("creator_applications").insert({
+        user_id: user?.id,
+        status: "pending",
+        tanggal_pengajuan: new Date().toISOString(),
+      });
       if (error) {
         toast({
           title: "Gagal mengajukan",
@@ -152,13 +180,20 @@ export default function CreatorSubPage() {
         });
         return;
       }
+      // Insert notifikasi ke admin (hardcode user_id admin)
+      const ADMIN_ID = "f3533c71-fc66-4df9-9efa-968d685f2de4"; // Ganti dengan UUID admin dari Supabase
+      await supabase.from("notifications").insert({
+        user_id: ADMIN_ID,
+        type: "creator_application",
+        message: `Ada pengajuan creator baru dari ${user?.email}`,
+        read: false,
+      });
       toast({
         title: "Pengajuan berhasil",
         description:
           "Pengajuan creator berhasil dikirim. Mohon tunggu review admin.",
         variant: "default",
       });
-      setProfile((prev: any) => ({ ...prev, status: "pending" }));
       setShowResubmit(false);
     } catch (error) {
       toast({
@@ -191,6 +226,10 @@ export default function CreatorSubPage() {
     rejected: <XCircle className="w-5 h-5 text-red-500" />,
   };
 
+  // Cari status terakhir
+  const lastApp = applications[0];
+  const canResubmit = lastApp && lastApp.status === "rejected";
+
   if (!user) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
@@ -203,7 +242,7 @@ export default function CreatorSubPage() {
   }
 
   return (
-    <div>
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold">Creator Saya</h2>
@@ -559,6 +598,55 @@ export default function CreatorSubPage() {
                 <Star className="w-4 h-4 mr-2" />
                 Jelajahi Creator
               </Link>
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-xl font-bold mb-4">Riwayat Pengajuan Creator</h2>
+        {loadingApps ? (
+          <div>Loading riwayat pengajuan...</div>
+        ) : applications.length === 0 ? (
+          <div>Belum ada riwayat pengajuan creator.</div>
+        ) : (
+          <table className="min-w-full text-sm border">
+            <thead>
+              <tr className="border-b bg-muted/50">
+                <th className="px-4 py-2 text-left">Status</th>
+                <th className="px-4 py-2 text-left">Tanggal Pengajuan</th>
+                <th className="px-4 py-2 text-left">Tanggal Approval</th>
+                <th className="px-4 py-2 text-left">Alasan Penolakan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {applications.map((app) => (
+                <tr key={app.id} className="border-b">
+                  <td className="px-4 py-2 capitalize">{app.status}</td>
+                  <td className="px-4 py-2">
+                    {app.tanggal_pengajuan
+                      ? new Date(app.tanggal_pengajuan).toLocaleDateString(
+                          "id-ID"
+                        )
+                      : "-"}
+                  </td>
+                  <td className="px-4 py-2">
+                    {app.tanggal_approval
+                      ? new Date(app.tanggal_approval).toLocaleDateString(
+                          "id-ID"
+                        )
+                      : "-"}
+                  </td>
+                  <td className="px-4 py-2">{app.alasan_penolakan || "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        {canResubmit && (
+          <div className="mt-4">
+            <Button onClick={handleAjukanCreator}>
+              Ajukan Ulang Sebagai Creator
             </Button>
           </div>
         )}

@@ -71,12 +71,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) throw error;
     setSession(data.session);
     setUser(data.session?.user ?? null);
-    // Insert ke tabel profiles dengan status approved
+    // Insert ke tabel profiles dengan status approved (user aktif), BUKAN creator
     if (data.user) {
       await supabase.from("profiles").insert({
         user_id: data.user.id,
         name: email,
-        status: "approved",
+        status: "approved", // hanya menandakan user aktif/email verified
+        // JANGAN set flag creator apapun di sini
       });
     }
   };

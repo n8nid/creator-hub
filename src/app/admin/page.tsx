@@ -54,10 +54,10 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function fetchStats() {
       setStatsLoading(true);
-      // Total Users
+      // Total Users (hanya yang punya profile)
       const { count: totalUsers } = await supabase
-        .from("users")
-        .select("id", { count: "exact", head: true });
+        .from("profiles")
+        .select("user_id", { count: "exact", head: true });
       // Active Creators
       const { count: activeCreators } = await supabase
         .from("profiles")
@@ -69,18 +69,10 @@ export default function AdminDashboard() {
         .select("id", { count: "exact", head: true })
         .eq("status", "approved");
       // Pending Creator Applications
-      let pendingCreatorApplications = null;
-      const {
-        data: creatorAppData,
-        error: creatorAppError,
-        count: creatorAppCount,
-      } = await supabase
-        .from("creator_applications")
-        .select("id", { count: "exact", head: true })
+      const { count: pendingCreatorApplications } = await supabase
+        .from("profiles")
+        .select("user_id", { count: "exact", head: true })
         .eq("status", "pending");
-      if (!creatorAppError) {
-        pendingCreatorApplications = creatorAppCount;
-      }
       // Pending Workflows
       const { count: pendingWorkflows } = await supabase
         .from("workflows")
@@ -111,8 +103,10 @@ export default function AdminDashboard() {
       // 2. Pengajuan creator
       const { data: creatorAppData } = await supabase
         .from("creator_applications")
-        .select("id, user_id, status, created_at")
-        .order("created_at", { ascending: false })
+        .select(
+          "id, user_id, status, tanggal_pengajuan, tanggal_approval, alasan_penolakan"
+        )
+        .order("tanggal_pengajuan", { ascending: false })
         .limit(10);
       // 3. Workflow baru
       const { data: workflowsData } = await supabase
@@ -139,7 +133,7 @@ export default function AdminDashboard() {
               ? "Creator Disetujui"
               : "Pengajuan Creator Ditolak",
           description: `User ID: ${c.user_id}`,
-          created_at: c.created_at,
+          created_at: c.tanggal_pengajuan, // Use tanggal_pengajuan for activity
         })),
         ...(workflowsData || []).map((w: any) => ({
           id: w.id,
