@@ -10,9 +10,9 @@ export default function Page() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
         <HeroSection />
-        <AboutSection />
-        <FeaturedWorkflows />
+        {/* <FeaturedWorkflows /> */}
         <FeaturedCreators />
+        <AboutSection />
       </main>
       <MainFooter />
     </div>
