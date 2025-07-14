@@ -15,6 +15,12 @@ import {
 import Link from "next/link";
 import { workflowCategories } from "@/data/category-workflows";
 
+type WorkflowWithProfileName = {
+  profile_id: string;
+  [key: string]: any;
+  profile_name?: string;
+};
+
 export default function WorkflowsPage() {
   const [workflows, setWorkflows] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,12 +69,39 @@ export default function WorkflowsPage() {
     // Fetch workflows for current page
     const { data, error, count } = await supabase
       .from("workflows")
-      .select("*, profile:profiles(name), category")
+      .select("*, category")
       .eq("status", "approved")
       .order("created_at", { ascending: false })
       .range(from, to);
+    // Ambil semua profile_id unik
+    const profileIds = [...new Set((data || []).map((w) => w.profile_id))];
+    let profilesMap: Record<string, string> = {};
+    if (profileIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, name")
+        .in("id", profileIds);
+      profilesMap = (profiles || []).reduce(
+        (acc: Record<string, string>, p: { id: string; name: string }) => {
+          acc[p.id] = p.name;
+          return acc;
+        },
+        {}
+      );
+    }
+    // Mapping nama profile ke workflow
+    const workflowsArr: any[] = data || [];
+    const workflowsWithName: WorkflowWithProfileName[] = workflowsArr.map(
+      (w: { profile_id: string }) => {
+        const id = String(w.profile_id);
+        return {
+          ...w,
+          profile_name: profilesMap[id] || "-",
+        };
+      }
+    );
     if (!error) {
-      setWorkflows(data || []);
+      setWorkflows(workflowsWithName || []);
       // Fetch total count for pagination
       if (typeof count === "number") {
         // setTotalPages(Math.ceil(count / workflowsPerPage)); // This line is removed
@@ -319,10 +352,10 @@ export default function WorkflowsPage() {
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
                         {/* In real app, ambil dari relasi profile/creator */}
-                        {workflow.profile?.name?.charAt?.(0) || "C"}
+                        {workflow.profile_name?.charAt?.(0) || "C"}
                       </div>
                       <span className="text-sm text-gray-600 font-medium">
-                        {workflow.profile?.name || "Creator"}
+                        {workflow.profile_name || "Creator"}
                       </span>
                     </div>
                     <Link
