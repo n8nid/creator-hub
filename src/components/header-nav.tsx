@@ -13,7 +13,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 function getInitials(nameOrEmail: string) {
   if (!nameOrEmail) return "?";
@@ -27,6 +27,7 @@ export function HeaderNav() {
   const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
   const [profile, setProfile] = useState<any>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchRoleAndProfile = async () => {
@@ -50,89 +51,106 @@ export function HeaderNav() {
   };
 
   return (
-    <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+    <header className="header-gradient sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link
-          href="/"
-          className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
-        >
-          <Workflow className="h-8 w-8 text-blue-600" />
-          <span className="text-2xl font-bold text-gray-900">AutoTalent</span>
-        </Link>
-        <nav className="hidden md:flex items-center space-x-6">
-          {/* Menu utama */}
+        <div className="header-nav-group ml-0">
           <Link
-            href="/creators"
-            className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
+            href="/"
+            className={`header-btn header-btn-home${
+              pathname === "/" ? " header-btn-active" : ""
+            }`}
+          >
+            Home
+          </Link>
+          <Link
+            href="/workflows"
+            className={`header-btn header-btn-workflow${
+              pathname === "/workflows" ? " header-btn-active" : ""
+            }`}
+          >
+            Workflow
+          </Link>
+          <Link
+            href="/directory"
+            className={`header-btn header-btn-creator${
+              pathname === "/directory" ? " header-btn-active" : ""
+            }`}
           >
             Creator
           </Link>
           <Link
-            href="/workflows"
-            className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
+            href="/connect"
+            className={`header-btn header-btn-connect${
+              pathname === "/connect" ? " header-btn-active" : ""
+            }`}
           >
-            Workflow
+            Connect With Us
           </Link>
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar>
+        </div>
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar>
+                <AvatarImage
+                  src={profile?.profile_image || undefined}
+                  alt={profile?.name || user.email}
+                />
+                <AvatarFallback style={{ fontSize: 24, fontWeight: "bold" }}>
+                  {getInitials(profile?.name || user.email)}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-64 p-0">
+              <div className="flex flex-col items-center p-4 pb-2">
+                <Avatar className="h-16 w-16 mb-2">
                   <AvatarImage
                     src={profile?.profile_image || undefined}
                     alt={profile?.name || user.email}
                   />
-                  <AvatarFallback style={{ fontSize: 24, fontWeight: "bold" }}>
+                  <AvatarFallback style={{ fontSize: 32, fontWeight: "bold" }}>
                     {getInitials(profile?.name || user.email)}
                   </AvatarFallback>
                 </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-64 p-0">
-                <div className="flex flex-col items-center p-4 pb-2">
-                  <Avatar className="h-16 w-16 mb-2">
-                    <AvatarImage
-                      src={profile?.profile_image || undefined}
-                      alt={profile?.name || user.email}
-                    />
-                    <AvatarFallback
-                      style={{ fontSize: 32, fontWeight: "bold" }}
-                    >
-                      {getInitials(profile?.name || user.email)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="font-semibold text-lg text-center w-full truncate">
-                    {profile?.name || user.email}
-                  </div>
-                  <div className="text-xs text-gray-500 text-center w-full truncate">
-                    {user.email}
-                  </div>
+                <div className="font-semibold text-lg text-center w-full truncate">
+                  {profile?.name || user.email}
                 </div>
-                <div className="border-t my-2" />
-                <DropdownMenuItem
-                  onClick={() =>
-                    isUserAdmin
-                      ? router.push("/admin")
-                      : router.push("/dashboard-profile")
-                  }
-                >
-                  Dashboard
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={handleSignOut}
-                  className="text-red-600"
-                >
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Link
-              href="/auth"
-              className="ml-4 px-5 py-2 rounded-lg bg-black text-white font-semibold shadow hover:bg-gray-900 transition-all"
+                <div className="text-xs text-gray-500 text-center w-full truncate">
+                  {user.email}
+                </div>
+              </div>
+              <div className="border-t my-2" />
+              <DropdownMenuItem
+                onClick={() => router.push("/dashboard-profile/profile")}
+              >
+                Dashboard Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="text-red-600"
+              >
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link href="/auth" className="btn-login flex items-center gap-2">
+            Join Community
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-5 h-5"
             >
-              Login
-            </Link>
-          )}
-        </nav>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.5 3.75h2.25A2.25 2.25 0 0 1 21 6v12a2.25 2.25 0 0 1-2.25 2.25H16.5m-6-4.5 3-3m0 0-3-3m3 3H3"
+              />
+            </svg>
+          </Link>
+        )}
       </div>
     </header>
   );
