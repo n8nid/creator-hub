@@ -193,6 +193,10 @@ export default function StatisticsPage() {
 
   const COLORS = ["#facc15", "#22c55e", "#ef4444"];
 
+  // Tambahkan fungsi custom label
+  const renderCustomLabel = ({ name, value, percent }: any) =>
+    `${name}: ${value} (${(percent * 100).toFixed(0)}%)`;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -292,67 +296,9 @@ export default function StatisticsPage() {
       </Card>
 
       {/* Grafik Distribusi Status */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Distribusi Status Pengajuan Creator</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="w-full h-64 flex items-center justify-center">
-              <PieChart width={250} height={250}>
-                <Pie
-                  data={creatorStatus}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) =>
-                    `${name} (${(percent * 100).toFixed(0)}%)`
-                  }
-                  outerRadius={90}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {creatorStatus.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Distribusi Status Workflow</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="w-full h-64 flex items-center justify-center">
-              <PieChart width={250} height={250}>
-                <Pie
-                  data={workflowStatus}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) =>
-                    `${name} (${(percent * 100).toFixed(0)}%)`
-                  }
-                  outerRadius={90}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {workflowStatus.map((entry, index) => (
-                    <Cell
-                      key={`cell-wf-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="text-center text-sm text-gray-500 mt-4">
+        Statistik distribusi status pengajuan creator dan workflow akan segera
+        tersedia.
       </div>
 
       {/* Grafik User Baru per Bulan */}
@@ -377,32 +323,13 @@ export default function StatisticsPage() {
         </CardContent>
       </Card>
 
-      {/* Coming Soon */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Fitur Sedang Dalam Pengembangan</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8">
-            <div className="mx-auto h-12 w-12 text-gray-400 mb-4">
-              <AlertCircle className="h-12 w-12" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Dashboard Statistik
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Fitur untuk menganalisis data pengguna, creator, workflow, dan
-              performa platform akan segera tersedia.
-            </p>
-            <div className="space-y-2 text-sm text-gray-500">
-              <p>• Grafik pertumbuhan pengguna</p>
-              <p>• Analisis performa creator</p>
-              <p>• Statistik workflow populer</p>
-              <p>• Laporan aktivitas platform</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Keterangan Pengembangan */}
+      <div className="mt-8">
+        <p className="text-sm text-muted-foreground">
+          Fitur panel statistik lanjutan, analisis performa, dan laporan
+          aktivitas platform akan segera tersedia.
+        </p>
+      </div>
     </div>
   );
 }

@@ -8,28 +8,91 @@ import {
   AlertTriangle,
   Info,
   AlertCircle,
+  Trash2,
+  CheckSquare,
+  Square,
+  MinusSquare,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+// Hapus import Supabase client
+
+const NOTIF_TYPES = [
+  "all",
+  "system",
+  "creator_application",
+  "workflow_moderation",
+  "comment",
+  "interaction",
+  "warning",
+  "report",
+  "verification",
+  "important",
+];
+
+const STATUS_FILTERS = [
+  { label: "All", value: "all" },
+  { label: "Unread", value: "unread" },
+  { label: "Read", value: "read" },
+];
+
+const PAGE_SIZE = 10;
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const ADMIN_ID = "f3533c71-fc66-4df9-9efa-968d685f2de4";
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [selectedNotif, setSelectedNotif] = useState<any | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  // Hapus ADMIN_ID
+
+  // Fetch notifications function (agar bisa dipanggil ulang)
+  const fetchNotifications = async () => {
+    setLoading(true);
+    const res = await fetch("/api/notifications");
+    if (res.ok) {
+      const json = await res.json();
+      setNotifications(json.notifications || []);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchNotifications = async () => {
-      setLoading(true);
-      const supabase = createClientComponentClient();
-      const { data, error } = await supabase
-        .from("notifications")
-        .select("*")
-        .eq("user_id", ADMIN_ID)
-        .order("created_at", { ascending: false });
-      if (!error) setNotifications(data || []);
-      setLoading(false);
-    };
     fetchNotifications();
+  }, []);
+
+  // Supabase Realtime subscribe
+  useEffect(() => {
+    const supabase = createClientComponentClient();
+    const channel = supabase.channel("notifications-admin-panel");
+    channel
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notifications",
+        },
+        (payload) => {
+          // Fetch ulang data jika ada perubahan
+          fetchNotifications();
+        }
+      )
+      .subscribe();
+    return () => {
+      channel.unsubscribe();
+    };
   }, []);
 
   // Statistik
@@ -40,7 +103,87 @@ export default function NotificationsPage() {
       n.created_at &&
       new Date(n.created_at).toDateString() === new Date().toDateString()
   ).length;
-  const important = notifications.filter((n) => n.type === "important").length;
+  // Important: type === 'warning' atau 'important'
+  const important = notifications.filter(
+    (n) => n.type === "warning" || n.type === "important"
+  ).length;
+
+  // Handler mark as read
+  const markAsRead = async (notifId: string) => {
+    const res = await fetch(`/api/notifications/${notifId}`, {
+      method: "PATCH",
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      alert(
+        "Gagal menandai notifikasi sebagai sudah dibaca: " +
+          (err.error || res.status)
+      );
+      return;
+    }
+    // Refresh data
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notifId ? { ...n, read: true } : n))
+    );
+  };
+
+  // Handler hapus notifikasi
+  const handleDelete = async (notifId: string) => {
+    if (!window.confirm("Yakin ingin menghapus notifikasi ini?")) return;
+    const res = await fetch(`/api/notifications/${notifId}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      alert("Gagal menghapus notifikasi: " + (err.error || res.status));
+      return;
+    }
+    // Update state lokal agar notifikasi langsung hilang dari tampilan
+    setNotifications((prev) => prev.filter((n) => n.id !== notifId));
+    if (selectedNotif && selectedNotif.id === notifId) {
+      setModalOpen(false);
+      setSelectedNotif(null);
+    }
+  };
+
+  // Handler open detail modal
+  const openDetail = (notif: any) => {
+    setSelectedNotif(notif);
+    setModalOpen(true);
+    if (!notif.read) markAsRead(notif.id);
+  };
+
+  // Filter logic
+  const filteredNotifications = notifications.filter((notif) => {
+    let typeOk =
+      typeFilter === "all" ||
+      notif.type === typeFilter ||
+      (typeFilter === "important" &&
+        (notif.type === "important" || notif.type === "warning"));
+    let statusOk =
+      statusFilter === "all" ||
+      (statusFilter === "unread" && !notif.read) ||
+      (statusFilter === "read" && notif.read);
+    let searchOk =
+      !search ||
+      notif.message?.toLowerCase().includes(search.toLowerCase()) ||
+      notif.type?.toLowerCase().includes(search.toLowerCase()) ||
+      notif.user_name?.toLowerCase().includes(search.toLowerCase()) ||
+      notif.user_email?.toLowerCase().includes(search.toLowerCase());
+    return typeOk && statusOk && searchOk;
+  });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredNotifications.length / PAGE_SIZE) || 1;
+  const pagedNotifications = filteredNotifications.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE
+  );
+
+  // Reset page ke 1 jika filter/search berubah
+  useEffect(() => {
+    setPage(1);
+  }, [typeFilter, statusFilter, search]);
 
   return (
     <div className="space-y-6">
@@ -49,6 +192,41 @@ export default function NotificationsPage() {
           <h1 className="text-2xl font-bold">Notifikasi</h1>
           <p className="text-gray-600">Kelola notifikasi sistem dan pengguna</p>
         </div>
+      </div>
+
+      {/* Filter & Search Bar */}
+      <div className="flex flex-wrap gap-2 items-center mb-2">
+        <label className="text-sm">Tipe:</label>
+        <select
+          className="border rounded px-2 py-1 text-sm"
+          value={typeFilter}
+          onChange={(e) => setTypeFilter(e.target.value)}
+        >
+          {NOTIF_TYPES.map((type) => (
+            <option key={type} value={type}>
+              {type === "all" ? "Semua" : type}
+            </option>
+          ))}
+        </select>
+        <label className="text-sm ml-4">Status:</label>
+        <select
+          className="border rounded px-2 py-1 text-sm"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          {STATUS_FILTERS.map((s) => (
+            <option key={s.value} value={s.value}>
+              {s.label}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          className="border rounded px-2 py-1 text-sm ml-4 flex-1 min-w-[200px]"
+          placeholder="Cari notifikasi..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
 
       {/* Stats Cards */}
@@ -106,42 +284,143 @@ export default function NotificationsPage() {
         <CardContent>
           {loading ? (
             <div className="text-center py-8 text-gray-400">Loading...</div>
-          ) : notifications.length === 0 ? (
+          ) : pagedNotifications.length === 0 ? (
             <div className="text-center py-8 text-gray-400">
               Belum ada notifikasi.
             </div>
           ) : (
-            <ul className="divide-y divide-gray-100">
-              {notifications.map((notif) => (
-                <li
-                  key={notif.id}
-                  className={`py-4 flex flex-col gap-1 ${
-                    !notif.read ? "bg-blue-50" : ""
-                  }`}
+            <>
+              <ul className="divide-y divide-gray-100">
+                {pagedNotifications.map((notif) => (
+                  <li
+                    key={notif.id}
+                    className={`py-4 flex flex-col gap-1 ${
+                      !notif.read
+                        ? "bg-blue-50 cursor-pointer"
+                        : "cursor-pointer"
+                    }`}
+                    onClick={() => openDetail(notif)}
+                    title="Lihat detail notifikasi"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold uppercase text-gray-500">
+                        {notif.type}
+                      </span>
+                      <span
+                        className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
+                          notif.read
+                            ? "bg-gray-200 text-gray-500"
+                            : "bg-blue-200 text-blue-800"
+                        }`}
+                      >
+                        {notif.read ? "Read" : "Unread"}
+                      </span>
+                      <span className="ml-auto text-xs text-gray-400">
+                        {notif.created_at
+                          ? new Date(notif.created_at).toLocaleString()
+                          : ""}
+                      </span>
+                      <button
+                        className="ml-2 p-1 text-red-500 hover:text-red-700"
+                        title="Hapus notifikasi"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(notif.id);
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div className="text-gray-900 text-sm">{notif.message}</div>
+                    <div className="text-xs text-gray-500">
+                      {notif.user_name || "-"} ({notif.user_email || "-"})
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              {/* Pagination Controls */}
+              <div className="flex justify-center items-center gap-2 mt-4">
+                <button
+                  className="px-2 py-1 border rounded disabled:opacity-50"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold uppercase text-gray-500">
-                      {notif.type}
-                    </span>
-                    <span
-                      className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
-                        notif.read
-                          ? "bg-gray-200 text-gray-500"
-                          : "bg-blue-200 text-blue-800"
-                      }`}
-                    >
-                      {notif.read ? "Read" : "Unread"}
-                    </span>
-                    <span className="ml-auto text-xs text-gray-400">
-                      {notif.created_at
-                        ? new Date(notif.created_at).toLocaleString()
-                        : ""}
-                    </span>
-                  </div>
-                  <div className="text-gray-900 text-sm">{notif.message}</div>
-                </li>
-              ))}
-            </ul>
+                  Previous
+                </button>
+                <span className="text-sm">
+                  Halaman {page} dari {totalPages}
+                </span>
+                <button
+                  className="px-2 py-1 border rounded disabled:opacity-50"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                >
+                  Next
+                </button>
+              </div>
+              {/* Modal Detail Notifikasi */}
+              <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Detail Notifikasi</DialogTitle>
+                    <DialogDescription>
+                      Informasi lengkap notifikasi
+                    </DialogDescription>
+                  </DialogHeader>
+                  {selectedNotif && (
+                    <div className="space-y-2">
+                      <div>
+                        <span className="font-semibold">Tipe:</span>{" "}
+                        {selectedNotif.type}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Status:</span>{" "}
+                        {selectedNotif.read ? "Read" : "Unread"}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Waktu:</span>{" "}
+                        {selectedNotif.created_at
+                          ? new Date(selectedNotif.created_at).toLocaleString()
+                          : "-"}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Pesan:</span>
+                        <div className="bg-gray-100 rounded p-2 mt-1 text-sm">
+                          {selectedNotif.message}
+                        </div>
+                      </div>
+                      <div>
+                        <span className="font-semibold">Nama:</span>{" "}
+                        {selectedNotif.user_name || "-"}{" "}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Email:</span>{" "}
+                        {selectedNotif.user_email || "-"}
+                      </div>
+                      {selectedNotif.user_id && (
+                        <div>
+                          <span className="font-semibold">User ID:</span>{" "}
+                          {selectedNotif.user_id}
+                        </div>
+                      )}
+                      <div className="flex gap-2 mt-4">
+                        <DialogClose asChild>
+                          <button className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+                            Tutup
+                          </button>
+                        </DialogClose>
+                        <button
+                          className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                          onClick={() => handleDelete(selectedNotif.id)}
+                        >
+                          Hapus Notifikasi
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </DialogContent>
+              </Dialog>
+            </>
           )}
         </CardContent>
       </Card>

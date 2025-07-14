@@ -147,165 +147,21 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Form Ganti Password */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Ganti Password</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
-            <div>
-              <label className="block mb-1 text-sm">Password Lama</label>
-              <Input
-                type="password"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-              />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm">Password Baru</label>
-              <Input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                autoComplete="new-password"
-              />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm">
-                Konfirmasi Password Baru
-              </label>
-              <Input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                autoComplete="new-password"
-              />
-            </div>
-            <Button type="submit" disabled={loading} className="mt-2">
-              {loading ? "Menyimpan..." : "Simpan Password Baru"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
-      {/* Form Ganti Email */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Ganti Email</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleChangeEmail} className="space-y-4 max-w-md">
-            <div>
-              <label className="block mb-1 text-sm">Email Baru</label>
-              <Input
-                type="email"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
-                required
-                autoComplete="email"
-              />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm">
-                Password (Konfirmasi)
-              </label>
-              <Input
-                type="password"
-                value={emailPassword}
-                onChange={(e) => setEmailPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-              />
-            </div>
-            <Button type="submit" disabled={emailLoading} className="mt-2">
-              {emailLoading ? "Menyimpan..." : "Simpan Email Baru"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-
-      {/* Settings Categories */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sistem</CardTitle>
-            <Settings className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-muted-foreground">
-              Konfigurasi umum sistem
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Keamanan</CardTitle>
-            <Shield className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-muted-foreground">
-              Pengaturan keamanan dan akses
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Database</CardTitle>
-            <Database className="h-4 w-4 text-purple-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-muted-foreground">
-              Konfigurasi database dan backup
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Notifikasi</CardTitle>
-            <Bell className="h-4 w-4 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-muted-foreground">
-              Pengaturan notifikasi sistem
-            </div>
-          </CardContent>
-        </Card>
+      {/* Sisakan hanya info admin (email) di halaman. */}
+      {/* Hapus form ganti password dan fitur lain. */}
+      {/* Tambahkan card/keterangan di bawah: */}
+      {/* <div className="mt-8"> */}
+      {/*   <div className="bg-gray-50 border rounded p-6 text-center text-gray-500"> */}
+      {/*     <div className="text-lg font-semibold mb-2">Fitur Sedang Dalam Pengembangan</div> */}
+      {/*     <div>Fitur panel pengaturan sistem, keamanan, database, dan konfigurasi platform akan segera tersedia.</div> */}
+      {/*   </div> */}
+      {/* </div> */}
+      <div className="mt-8">
+        <p className="text-sm text-muted-foreground">
+          Fitur panel pengaturan sistem, keamanan, database, dan konfigurasi
+          platform akan segera tersedia.
+        </p>
       </div>
-
-      {/* Coming Soon */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Fitur Sedang Dalam Pengembangan</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8">
-            <div className="mx-auto h-12 w-12 text-gray-400 mb-4">
-              <AlertCircle className="h-12 w-12" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Panel Pengaturan
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Fitur untuk mengkonfigurasi sistem, keamanan, database, dan
-              pengaturan platform akan segera tersedia.
-            </p>
-            <div className="space-y-2 text-sm text-gray-500">
-              <p>• Konfigurasi sistem umum</p>
-              <p>• Pengaturan keamanan dan akses</p>
-              <p>• Manajemen database dan backup</p>
-              <p>• Konfigurasi notifikasi</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
