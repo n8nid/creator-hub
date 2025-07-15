@@ -23,8 +23,8 @@ const FeaturedWorkflows = () => {
   }, []);
 
   return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
+    <section className="py-16 content-above-gradient">
+      <div className="w-full px-16 relative z-10">
         <div className="flex flex-col items-start justify-start mb-12">
           <div className="flex flex-row items-center justify-between w-full gap-6">
             <h2

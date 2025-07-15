@@ -29,6 +29,10 @@ export default function RootLayout({
         ></script>
       </head>
       <body className={inter.className}>
+        {/* Dekorasi Ellipse Angular Gradient - Level Body */}
+        <div className="ellipse-angular-hero"></div>
+        <div className="ellipse-angular-about"></div>
+        <div className="ellipse-angular-footer"></div>
         <AuthProvider>
           <HeaderNav />
           {children}

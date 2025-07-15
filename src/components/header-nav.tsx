@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Workflow } from "lucide-react";
+import { Home, Workflow, User, Link as LinkIcon } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect, useState } from "react";
@@ -22,10 +22,34 @@ function getInitials(nameOrEmail: string) {
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
+const navItems = [
+  {
+    label: "Home",
+    href: "/",
+    icon: Home,
+  },
+  {
+    label: "Workflow",
+    href: "/workflows",
+    icon: Workflow,
+  },
+  {
+    label: "Creator",
+    href: "/directory",
+    icon: User,
+  },
+  {
+    label: "Connect With Us",
+    href: "/connect",
+    icon: LinkIcon,
+  },
+];
+
 export function HeaderNav() {
   const { user, isAdmin, signOut } = useAuth();
   const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
   const [profile, setProfile] = useState<any>(null);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -33,7 +57,6 @@ export function HeaderNav() {
     const fetchRoleAndProfile = async () => {
       if (user) {
         setIsUserAdmin(await isAdmin(user.id));
-        // Ambil data profil user
         const { data } = await supabase
           .from("profiles")
           .select("name, profile_image")
@@ -45,48 +68,78 @@ export function HeaderNav() {
     fetchRoleAndProfile();
   }, [user, isAdmin]);
 
+  // Handle scroll untuk mengubah transparansi header
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      // Header akan blur ketika scroll lebih dari 50px
+      // Atau ketika mencapai section Key Benefits (sekitar 1000px)
+      const shouldBeBlurred = scrollTop > 50 || scrollTop > 1000;
+      setIsScrolled(shouldBeBlurred);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleSignOut = async () => {
     await signOut();
     router.push("/");
   };
 
   return (
-    <header className="header-gradient sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="header-nav-group ml-0">
-          <Link
-            href="/"
-            className={`header-btn header-btn-home${
-              pathname === "/" ? " header-btn-active" : ""
-            }`}
-          >
-            Home
-          </Link>
-          <Link
-            href="/workflows"
-            className={`header-btn header-btn-workflow${
-              pathname === "/workflows" ? " header-btn-active" : ""
-            }`}
-          >
-            Workflow
-          </Link>
-          <Link
-            href="/directory"
-            className={`header-btn header-btn-creator${
-              pathname === "/directory" ? " header-btn-active" : ""
-            }`}
-          >
-            Creator
-          </Link>
-          <Link
-            href="/connect"
-            className={`header-btn header-btn-connect${
-              pathname === "/connect" ? " header-btn-active" : ""
-            }`}
-          >
-            Connect With Us
-          </Link>
+    <header
+      className={`${
+        isScrolled ? "header-transparent" : "header-completely-transparent"
+      } sticky top-0 z-50 transition-all duration-300`}
+      style={{
+        background: isScrolled ? "rgba(32, 26, 44, 0.98)" : "transparent",
+        backdropFilter: isScrolled ? "blur(40px)" : "none",
+        WebkitBackdropFilter: isScrolled ? "blur(40px)" : "none",
+        borderBottom: isScrolled
+          ? "1px solid rgba(255, 255, 255, 0.15)"
+          : "none",
+        boxShadow: isScrolled ? "0 10px 40px rgba(0, 0, 0, 0.4)" : "none",
+        isolation: "isolate",
+        transform: "translateZ(0)",
+      }}
+    >
+      <div
+        className={`${
+          isScrolled ? "w-full px-4 py-4" : "w-full px-4 py-4 bg-transparent"
+        } flex items-center justify-between`}
+      >
+        {/* NAVBAR MENU */}
+        <div
+          className={`${
+            isScrolled ? "navbar-container-scrolled" : "navbar-container-top"
+          } flex border-2 border-white/40 rounded-full px-2 py-1 gap-2 ${
+            isScrolled ? "shadow-lg" : "shadow-sm"
+          }`}
+        >
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-2 px-6 py-2 rounded-full font-semibold transition-all duration-200 text-base select-none
+                  ${
+                    isActive
+                      ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
+                      : "bg-transparent text-white hover:bg-white/10"
+                  }
+                `}
+                style={{ minWidth: 0 }}
+              >
+                <span className="truncate">{item.label}</span>
+                {isActive && <Icon className="w-5 h-5 text-purple-700" />}
+              </Link>
+            );
+          })}
         </div>
+        {/* AVATAR / JOIN COMMUNITY */}
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -133,7 +186,7 @@ export function HeaderNav() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Link href="/auth" className="btn-login flex items-center gap-2">
+          <Link href="/auth" className="btn-login flex items-center gap-2 ml-4">
             Join Community
             <svg
               xmlns="http://www.w3.org/2000/svg"

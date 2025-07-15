@@ -52,8 +52,8 @@ const FeaturedCreators = () => {
 
   if (loading) {
     return (
-      <section className="py-20 hero-bg-custom">
-        <div className="container mx-auto px-4">
+      <section className="py-20 content-above-gradient">
+        <div className="w-full px-16">
           <div className="flex flex-row items-center justify-between mb-16">
             <h2 className="text-6xl font-thin text-white">Meet the Creators</h2>
             <a
@@ -100,8 +100,8 @@ const FeaturedCreators = () => {
   }
 
   return (
-    <section className="py-20 hero-bg-custom">
-      <div className="container mx-auto px-4">
+    <section className="py-20 content-above-gradient">
+      <div className="w-full px-16 relative z-10">
         <div className="flex flex-row items-center justify-between mb-16">
           <h2 className="text-6xl font-thin text-white">Meet the Creators</h2>
           <a

@@ -1,80 +1,150 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const AboutSection = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [ctaMousePosition, setCtaMousePosition] = useState({ x: 0, y: 0 });
+  const [isCtaHovering, setIsCtaHovering] = useState(false);
+  const [isCtaTransitioning, setIsCtaTransitioning] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Update posisi cursor secara langsung untuk responsivitas maksimal
+    setMousePosition({ x, y });
+  };
+
+  const handleMouseEnter = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setIsHovering(true);
+      setIsTransitioning(false);
+    }, 50);
+  };
+
+  const handleMouseLeave = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setIsHovering(false);
+      setIsTransitioning(false);
+    }, 50);
+  };
+
+  const handleCtaMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Update posisi cursor secara langsung untuk responsivitas maksimal
+    setCtaMousePosition({ x, y });
+  };
+
+  const handleCtaMouseEnter = () => {
+    setIsCtaTransitioning(true);
+    setTimeout(() => {
+      setIsCtaHovering(true);
+      setIsCtaTransitioning(false);
+    }, 50);
+  };
+
+  const handleCtaMouseLeave = () => {
+    setIsCtaTransitioning(true);
+    setTimeout(() => {
+      setIsCtaHovering(false);
+      setIsCtaTransitioning(false);
+    }, 50);
+  };
   return (
-    <section
-      className="relative overflow-hidden w-full"
-      style={{ background: "#201A2C" }}
-    >
-      <div className="ellipse-angular-about" />
-      <div className="ellipse-blur-dark" />
-      <div>
+    <section className="relative w-full content-above-gradient">
+      <div className="relative z-10">
         {/* About Section Content */}
         <div className="py-24">
-          <div className="container mx-auto px-4 flex justify-center">
+          <div className="w-full px-16 flex justify-center">
             <div
+              className="relative rounded-2xl border border-white/20 p-8 cursor-pointer overflow-hidden"
               style={{
                 maxWidth: "820px",
+                width: "100%",
                 textAlign: "center",
                 position: "relative",
                 zIndex: 2,
               }}
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
-              <h2
+              {/* Gradient overlay yang mengikuti cursor */}
+              <div
+                className="absolute inset-0 pointer-events-none"
                 style={{
-                  fontFamily: "Albert Sans, Arial, sans-serif",
-                  fontWeight: 250,
-                  fontStyle: "thin",
-                  fontSize: "80px",
-                  lineHeight: "94px",
-                  letterSpacing: "-0.05em",
-                  color: "#FFFBFB",
-                  marginBottom: "40px",
+                  background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.4) 0%, rgba(168, 85, 247, 0.3) 30%, rgba(236, 72, 153, 0.2) 60%, transparent 100%)`,
+                  opacity: isHovering ? 1 : 0,
+                  transition: "opacity 0.2s ease-in-out",
                 }}
-              >
-                Platform ini hadir untuk menghubungkan creator
-              </h2>
-              <p
-                style={{
-                  fontFamily: "Inter, Arial, sans-serif",
-                  fontWeight: 300,
-                  fontStyle: "light",
-                  fontSize: "20px",
-                  lineHeight: "150%",
-                  letterSpacing: "-0.01em",
-                  color: "#FFFFFF",
-                  background: "transparent",
-                  marginBottom: "0",
-                }}
-              >
-                dari berbagai bidang dengan para pengguna yang mencari
-                inspirasi, ide, dan solusi melalui workflow yang praktis. Kami
-                percaya, kolaborasi kreatif akan lebih mudah ketika prosesnya
-                terbuka, sederhana, dan saling berbagi.
-                <br />
-                <br />
-                Di sini, Anda bisa menemukan kreator berbakat, menjelajahi
-                berbagai workflow, hingga membangun proses kerja yang lebih
-                terarah dan efisien.
-              </p>
-              <div className="mt-10 flex justify-center">
-                <a
-                  href="/connect"
-                  className="btn-jelajah flex items-center gap-3"
-                  style={{ fontSize: "20px" }}
+              />
+              {/* Content */}
+              <div className="relative z-10">
+                <h2
+                  style={{
+                    fontFamily: "Albert Sans, Arial, sans-serif",
+                    fontWeight: 250,
+                    fontStyle: "thin",
+                    fontSize: "80px",
+                    lineHeight: "94px",
+                    letterSpacing: "-0.05em",
+                    color: "#FFFBFB",
+                    marginBottom: "40px",
+                    margin: 0,
+                  }}
                 >
-                  Connect With Us
-                </a>
+                  Platform ini hadir untuk menghubungkan creator
+                </h2>
+                <p
+                  style={{
+                    fontFamily: "Inter, Arial, sans-serif",
+                    fontWeight: 300,
+                    fontStyle: "light",
+                    fontSize: "20px",
+                    lineHeight: "150%",
+                    letterSpacing: "-0.01em",
+                    color: "#FFFFFF",
+                    background: "transparent",
+                    marginBottom: "32px",
+                  }}
+                >
+                  dari berbagai bidang dengan para pengguna yang mencari
+                  inspirasi, ide, dan solusi melalui workflow yang praktis. Kami
+                  percaya, kolaborasi kreatif akan lebih mudah ketika prosesnya
+                  terbuka, sederhana, dan saling berbagi.
+                  <br />
+                  <br />
+                  Di sini, Anda bisa menemukan kreator berbakat, menjelajahi
+                  berbagai workflow, hingga membangun proses kerja yang lebih
+                  terarah dan efisien.
+                </p>
+                <div className="flex justify-center">
+                  <a
+                    href="/connect"
+                    className="btn-jelajah flex items-center gap-3"
+                    style={{ fontSize: "20px" }}
+                  >
+                    Connect With Us
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Key Benefits Content */}
-        <div className="w-full mt-24 px-4 md:px-12 relative">
-          <div className="ellipse-linear-keybenefit" />
+        <div className="w-full mt-24 px-16 relative">
           {/* SVG Ellipse tipis untuk menghubungkan icon centang */}
           <svg
             width="900"
@@ -212,54 +282,78 @@ const AboutSection = () => {
       </div>
       {/* Call to Action Section */}
       <div
-        className="w-full flex flex-col md:flex-row items-center justify-between gap-8 mt-24 px-4 md:px-12 py-16"
+        className="w-full mt-24 px-16 py-16 flex justify-center"
         style={{ background: "transparent" }}
       >
-        <div className="w-full md:w-auto flex-1 flex flex-col items-center md:items-center justify-center text-center">
+        <div
+          className="relative rounded-2xl border border-white/20 p-8 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden"
+          style={{
+            maxWidth: "1000px",
+            width: "fit-content",
+          }}
+          onMouseMove={handleCtaMouseMove}
+          onMouseEnter={handleCtaMouseEnter}
+          onMouseLeave={handleCtaMouseLeave}
+        >
+          {/* Gradient overlay yang mengikuti cursor */}
           <div
+            className="absolute inset-0 pointer-events-none"
             style={{
-              fontFamily: "Albert Sans, Arial, sans-serif",
-              fontWeight: 200,
-              fontSize: "28px",
-              lineHeight: "120%",
-              color: "#CFC6E2",
-              letterSpacing: "-0.01em",
-              maxWidth: "700px",
+              background: `radial-gradient(circle at ${ctaMousePosition.x}px ${ctaMousePosition.y}px, rgba(59, 130, 246, 0.4) 0%, rgba(168, 85, 247, 0.3) 30%, rgba(236, 72, 153, 0.2) 60%, transparent 100%)`,
+              opacity: isCtaHovering ? 1 : 0,
+              transition: "opacity 0.2s ease-in-out",
             }}
-          >
-            Sudah 3.000+ orang bergabung.
-            <br />
-            Ayo, mulai perjalanan Anda hari ini!
+          />
+          {/* Content */}
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 w-full">
+            <div className="flex flex-col items-start justify-center">
+              <div
+                style={{
+                  fontFamily: "Albert Sans, Arial, sans-serif",
+                  fontWeight: 200,
+                  fontSize: "28px",
+                  lineHeight: "120%",
+                  color: "#CFC6E2",
+                  letterSpacing: "-0.01em",
+                  maxWidth: "500px",
+                  textAlign: "left",
+                }}
+              >
+                Sudah 3.000+ orang bergabung.
+                <br />
+                Ayo, mulai perjalanan Anda hari ini!
+              </div>
+            </div>
+            <a
+              href="/auth"
+              className="rounded-full px-10 py-4 text-base font-semibold flex items-center gap-3"
+              style={{
+                background: "linear-gradient(90deg, #D900FF 0%, #9500FF 100%)",
+                color: "#fff",
+                boxShadow: "0 2px 8px 0 #9500FF33",
+                minWidth: "200px",
+                justifyContent: "center",
+                transition: "filter 0.2s",
+              }}
+            >
+              Join Community
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.5 3.75h2.25A2.25 2.25 0 0 1 21 6v12a2.25 2.25 0 0 1-2.25 2.25H16.5m-6-4.5 3-3m0 0-3-3m3 3H3"
+                />
+              </svg>
+            </a>
           </div>
         </div>
-        <a
-          href="/auth"
-          className="rounded-full px-10 py-4 text-base font-semibold flex items-center gap-3 mt-8 md:mt-0 md:ml-8"
-          style={{
-            background: "linear-gradient(90deg, #D900FF 0%, #9500FF 100%)",
-            color: "#fff",
-            boxShadow: "0 2px 8px 0 #9500FF33",
-            minWidth: "200px",
-            justifyContent: "center",
-            transition: "filter 0.2s",
-          }}
-        >
-          Join Community
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M16.5 3.75h2.25A2.25 2.25 0 0 1 21 6v12a2.25 2.25 0 0 1-2.25 2.25H16.5m-6-4.5 3-3m0 0-3-3m3 3H3"
-            />
-          </svg>
-        </a>
       </div>
     </section>
   );
