@@ -29,10 +29,10 @@ const FeaturedWorkflows = () => {
           <div className="flex flex-row items-center justify-between w-full gap-6">
             <h2
               style={{
-                fontFamily: "Albert Sans",
+                fontFamily: "Albert Sans, Arial, sans-serif",
                 fontWeight: 300,
                 fontStyle: "normal",
-                fontSize: 100,
+                fontSize: 80,
                 lineHeight: "120%",
                 letterSpacing: 0,
                 color: "#FFFFFF",

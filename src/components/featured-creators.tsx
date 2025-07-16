@@ -55,7 +55,22 @@ const FeaturedCreators = () => {
       <section className="py-20 content-above-gradient">
         <div className="w-full px-16">
           <div className="flex flex-row items-center justify-between mb-16">
-            <h2 className="text-6xl font-thin text-white">Meet the Creators</h2>
+            <h2
+              style={{
+                fontFamily: "Albert Sans, Arial, sans-serif",
+                fontWeight: 300,
+                fontStyle: "normal",
+                fontSize: 80,
+                lineHeight: "120%",
+                letterSpacing: 0,
+                color: "#FFFFFF",
+                textAlign: "left",
+                margin: 0,
+                padding: 0,
+              }}
+            >
+              Meet the Creators
+            </h2>
             <a
               href="/directory"
               className="btn-jelajah flex items-center gap-2 px-8 py-3 rounded-full text-white text-base font-medium bg-gradient-to-r from-fuchsia-500 to-violet-600 hover:from-fuchsia-600 hover:to-violet-700 transition-all"
@@ -103,7 +118,22 @@ const FeaturedCreators = () => {
     <section className="py-20 content-above-gradient">
       <div className="w-full px-16 relative z-10">
         <div className="flex flex-row items-center justify-between mb-16">
-          <h2 className="text-6xl font-thin text-white">Meet the Creators</h2>
+          <h2
+            style={{
+              fontFamily: "Albert Sans, Arial, sans-serif",
+              fontWeight: 300,
+              fontStyle: "normal",
+              fontSize: 80,
+              lineHeight: "120%",
+              letterSpacing: 0,
+              color: "#FFFFFF",
+              textAlign: "left",
+              margin: 0,
+              padding: 0,
+            }}
+          >
+            Meet the Creators
+          </h2>
           <a
             href="/directory"
             className="btn-jelajah flex items-center gap-2 px-8 py-3 rounded-full text-white text-base font-medium bg-gradient-to-r from-fuchsia-500 to-violet-600 hover:from-fuchsia-600 hover:to-violet-700 transition-all"
