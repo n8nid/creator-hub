@@ -3,6 +3,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "@/components/ui/toaster";
 import { DebugAuth } from "@/components/auth/debug-auth";
 import { HeaderNav } from "@/components/header-nav";
+import MainFooter from "@/components/main-footer";
 import "@/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,13 +30,10 @@ export default function RootLayout({
         ></script>
       </head>
       <body className={inter.className}>
-        {/* Dekorasi Ellipse Angular Gradient - Level Body */}
-        <div className="ellipse-angular-hero"></div>
-        <div className="ellipse-angular-about"></div>
-        <div className="ellipse-angular-footer"></div>
         <AuthProvider>
           <HeaderNav />
           {children}
+          <MainFooter />
           <Toaster />
           <DebugAuth />
         </AuthProvider>

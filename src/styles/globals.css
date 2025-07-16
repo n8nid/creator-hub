@@ -299,34 +299,6 @@ body {
   }
 }
 
-/* Animated gradient for workflows section */
-.animated-gradient-workflows {
-  background: linear-gradient(
-    135deg,
-    #111827,
-    #1f2937,
-    #374151,
-    #111827,
-    #1e293b,
-    #475569,
-    #111827
-  );
-  background-size: 400% 400%;
-  animation: gradient-flow-workflows 20s ease infinite;
-}
-
-@keyframes gradient-flow-workflows {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
 /* Gradient Circle Rotate Animations */
 @keyframes rotate-gradient {
   0% {
@@ -459,14 +431,13 @@ body {
 }
 
 @layer components {
-  /* Dekorasi Ellipse Angular Gradient */
+  /* Universal Gradient Circles - Viewport Based */
   .ellipse-angular-hero {
     position: absolute;
     width: 550px;
     height: 550px;
-    top: 100px;
-    left: 35%;
-    right: auto;
+    top: 15vh;
+    left: 30vw;
     transform: translateX(-50%);
     opacity: 0.4;
     background: conic-gradient(
@@ -484,14 +455,14 @@ body {
     pointer-events: none;
     animation: rotate-fade-scale-gradient 12s linear infinite;
   }
+
   .ellipse-angular-about {
     position: absolute;
     width: 550px;
     height: 550px;
-    top: 1600px;
-    left: 70%;
-    right: auto;
-    transform: translateX(-50%);
+    top: 60vh;
+    right: 10vw;
+    transform: translateX(50%);
     opacity: 0.4;
     background: conic-gradient(
       from 90deg at 50% 50%,
@@ -508,13 +479,13 @@ body {
     pointer-events: none;
     animation: rotate-fade-scale-gradient-reverse 15s linear infinite;
   }
+
   .ellipse-angular-footer {
     position: absolute;
     width: 550px;
     height: 550px;
-    top: 3300px;
-    left: 25%;
-    right: auto;
+    top: 85vh;
+    left: 20vw;
     transform: translateX(-50%);
     opacity: 0.4;
     background: conic-gradient(
@@ -531,52 +502,6 @@ body {
     border-radius: 50%;
     pointer-events: none;
     animation: rotate-fade-scale-gradient 18s linear infinite;
-  }
-  .ellipse-angular-keybenefit {
-    position: absolute;
-    width: 550px;
-    height: 550px;
-    top: 80px;
-    left: 65%;
-    right: auto;
-    transform: translateX(-50%);
-    opacity: 0.4;
-    background: conic-gradient(
-      from 270deg at 50% 50%,
-      #03a3dc 0deg,
-      #f73e8e 120deg,
-      #622a9a 240deg,
-      #03a3dc 360deg
-    );
-    box-shadow: 0 0 60px 30px #03a3dc33, 0 0 60px 30px #f73e8e33,
-      0 0 60px 30px #622a9a33;
-    filter: blur(90px);
-    z-index: 0;
-    border-radius: 50%;
-    pointer-events: none;
-    animation: rotate-fade-scale-gradient-reverse 14s linear infinite;
-  }
-  .ellipse-linear-keybenefit {
-    position: absolute;
-    width: 550px;
-    height: 550px;
-    top: 350px;
-    left: 60%;
-    transform: translateX(-50%);
-    opacity: 0.5;
-    background: conic-gradient(
-      from 0deg at 50% 50%,
-      #9460cd 0deg,
-      #3d1654 120deg,
-      #9460cd 240deg,
-      #3d1654 360deg
-    );
-    box-shadow: 0 0 60px 30px #9460cd33, 0 0 60px 30px #3d165433;
-    filter: blur(90px);
-    z-index: 0;
-    border-radius: 50%;
-    pointer-events: none;
-    animation: rotate-fade-scale-gradient 16s linear infinite;
   }
   .hero-bg-custom {
     background: #201a2c;

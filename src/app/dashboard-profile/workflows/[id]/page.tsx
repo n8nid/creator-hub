@@ -228,7 +228,7 @@ export default function WorkflowDetailUserPage() {
                 <label className="block font-medium mb-1">Judul</label>
                 <Input
                   name="title"
-                  value={editForm.title}
+                  value={editForm.title || ""}
                   onChange={handleChange}
                   required
                   disabled={saving}
@@ -241,7 +241,7 @@ export default function WorkflowDetailUserPage() {
                 <label className="block font-medium mb-1">Deskripsi</label>
                 <Textarea
                   name="description"
-                  value={editForm.description}
+                  value={editForm.description || ""}
                   onChange={handleChange}
                   required
                   disabled={saving}
@@ -255,7 +255,7 @@ export default function WorkflowDetailUserPage() {
               <div>
                 <label className="block font-medium mb-1">Kategori</label>
                 <Select
-                  value={editForm.category}
+                  value={editForm.category || ""}
                   onValueChange={(val) =>
                     setEditForm((f: typeof editForm) => ({
                       ...f,
@@ -287,7 +287,7 @@ export default function WorkflowDetailUserPage() {
               <div>
                 <label className="block font-medium mb-1">Tags</label>
                 <TagInput
-                  value={editForm.tags}
+                  value={editForm.tags || []}
                   onChange={(tags) =>
                     setEditForm((f: typeof editForm) => ({ ...f, tags }))
                   }
@@ -301,7 +301,7 @@ export default function WorkflowDetailUserPage() {
                 <label className="block font-medium mb-1">Screenshot URL</label>
                 <Input
                   name="screenshot_url"
-                  value={editForm.screenshot_url}
+                  value={editForm.screenshot_url || ""}
                   onChange={handleChange}
                   disabled={saving}
                 />
@@ -315,7 +315,7 @@ export default function WorkflowDetailUserPage() {
                 <label className="block font-medium mb-1">Video URL</label>
                 <Input
                   name="video_url"
-                  value={editForm.video_url}
+                  value={editForm.video_url || ""}
                   onChange={handleChange}
                   disabled={saving}
                 />
@@ -329,7 +329,7 @@ export default function WorkflowDetailUserPage() {
                 <label className="block font-medium mb-1">Complexity</label>
                 <Input
                   name="complexity"
-                  value={editForm.complexity}
+                  value={editForm.complexity || ""}
                   onChange={handleChange}
                   placeholder="simple/medium/complex"
                   disabled={saving}
@@ -341,7 +341,7 @@ export default function WorkflowDetailUserPage() {
                 </label>
                 <Textarea
                   name="json_n8n"
-                  value={editForm.json_n8n}
+                  value={editForm.json_n8n || ""}
                   onChange={handleChange}
                   placeholder="Paste JSON workflow dari n8n di sini"
                   rows={6}

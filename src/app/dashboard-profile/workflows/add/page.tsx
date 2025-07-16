@@ -201,7 +201,7 @@ export default function AddWorkflowPage() {
                 </label>
                 <Input
                   name="title"
-                  value={workflowForm.title}
+                  value={workflowForm.title || ""}
                   onChange={handleWorkflowInput}
                   placeholder="Masukkan judul workflow..."
                   required
@@ -216,7 +216,7 @@ export default function AddWorkflowPage() {
                   Kategori
                 </label>
                 <Select
-                  value={workflowForm.category}
+                  value={workflowForm.category || ""}
                   onValueChange={(val) =>
                     setWorkflowForm((f) => ({ ...f, category: val }))
                   }
@@ -247,7 +247,7 @@ export default function AddWorkflowPage() {
               </label>
               <Textarea
                 name="description"
-                value={workflowForm.description}
+                value={workflowForm.description || ""}
                 onChange={handleWorkflowInput}
                 placeholder="Jelaskan workflow Anda secara detail..."
                 rows={4}
@@ -266,7 +266,7 @@ export default function AddWorkflowPage() {
                 Tags
               </label>
               <TagInput
-                value={workflowForm.tags}
+                value={workflowForm.tags || []}
                 onChange={(tags) => setWorkflowForm((f) => ({ ...f, tags }))}
                 placeholder="Tambah tag untuk workflow..."
               />
@@ -282,7 +282,7 @@ export default function AddWorkflowPage() {
                 </label>
                 <Input
                   name="screenshot_url"
-                  value={workflowForm.screenshot_url}
+                  value={workflowForm.screenshot_url || ""}
                   onChange={handleWorkflowInput}
                   placeholder="https://example.com/screenshot.jpg"
                   disabled={submitting}
@@ -302,7 +302,7 @@ export default function AddWorkflowPage() {
                 </label>
                 <Input
                   name="video_url"
-                  value={workflowForm.video_url}
+                  value={workflowForm.video_url || ""}
                   onChange={handleWorkflowInput}
                   placeholder="https://youtube.com/watch?v=..."
                   disabled={submitting}
@@ -323,7 +323,7 @@ export default function AddWorkflowPage() {
                 Complexity Level
               </label>
               <Select
-                value={workflowForm.complexity}
+                value={workflowForm.complexity || ""}
                 onValueChange={(val) =>
                   setWorkflowForm((f) => ({ ...f, complexity: val }))
                 }
@@ -349,7 +349,7 @@ export default function AddWorkflowPage() {
               </label>
               <Textarea
                 name="json_n8n"
-                value={workflowForm.json_n8n}
+                value={workflowForm.json_n8n || ""}
                 onChange={handleWorkflowInput}
                 placeholder="Paste JSON workflow dari n8n di sini..."
                 rows={8}

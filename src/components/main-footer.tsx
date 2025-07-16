@@ -4,7 +4,7 @@ import { MessageCircle, Instagram, Github } from "lucide-react";
 const MainFooter = () => {
   return (
     <footer className="footer-transparent relative w-full text-white overflow-hidden">
-      <div className="relative z-10 w-full px-16 pt-16 pb-12 flex flex-col min-h-[320px]">
+      <div className="relative z-10 w-full px-16 pt-8 pb-12 flex flex-col min-h-[320px]">
         {/* Konten utama */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 md:gap-0">
           {/* Kiri: Judul & Deskripsi */}

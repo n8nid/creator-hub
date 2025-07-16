@@ -273,7 +273,7 @@ export default function EditProfilePage() {
                     <Globe className="h-5 w-5 text-blue-600" />
                     <Input
                       name="website"
-                      value={form.website}
+                      value={form.website || ""}
                       onChange={handleChange}
                       placeholder="Website"
                       className="flex-1"
@@ -289,7 +289,7 @@ export default function EditProfilePage() {
                     <Linkedin className="h-5 w-5 text-blue-600" />
                     <Input
                       name="linkedin"
-                      value={form.linkedin}
+                      value={form.linkedin || ""}
                       onChange={handleChange}
                       placeholder="LinkedIn"
                       className="flex-1"
@@ -300,7 +300,7 @@ export default function EditProfilePage() {
                     <Twitter className="h-5 w-5 text-blue-600" />
                     <Input
                       name="twitter"
-                      value={form.twitter}
+                      value={form.twitter || ""}
                       onChange={handleChange}
                       placeholder="Twitter"
                       className="flex-1"
@@ -311,7 +311,7 @@ export default function EditProfilePage() {
                     <Github className="h-5 w-5 text-blue-600" />
                     <Input
                       name="github"
-                      value={form.github}
+                      value={form.github || ""}
                       onChange={handleChange}
                       placeholder="GitHub"
                       className="flex-1"
@@ -381,7 +381,7 @@ export default function EditProfilePage() {
                   </label>
                   <Input
                     name="name"
-                    value={form.name}
+                    value={form.name || ""}
                     onChange={handleChange}
                     disabled={submitting}
                   />
@@ -397,7 +397,7 @@ export default function EditProfilePage() {
                   </label>
                   <Textarea
                     name="bio"
-                    value={form.bio}
+                    value={form.bio || ""}
                     onChange={handleChange}
                     disabled={submitting}
                   />
@@ -462,7 +462,7 @@ export default function EditProfilePage() {
                     <select
                       name="experience_level"
                       className="w-full border rounded px-2 py-2"
-                      value={form.experience_level}
+                      value={form.experience_level || ""}
                       onChange={handleSelect}
                       disabled={submitting}
                     >
@@ -480,7 +480,7 @@ export default function EditProfilePage() {
                     <select
                       name="availability"
                       className="w-full border rounded px-2 py-2"
-                      value={form.availability}
+                      value={form.availability || ""}
                       onChange={handleSelect}
                       disabled={submitting}
                     >
