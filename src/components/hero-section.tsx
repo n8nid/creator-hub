@@ -14,7 +14,6 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { useRouter, usePathname } from "next/navigation";
-import FeaturedWorkflows from "@/components/featured-workflows";
 
 function getInitials(nameOrEmail: string) {
   if (!nameOrEmail) return "?";
@@ -147,6 +146,8 @@ const HeroSection = () => {
               style={{
                 maxWidth: "840px",
                 width: "100%",
+                background: "rgba(255, 255, 255, 0.05)",
+                backdropFilter: "blur(10px)",
               }}
               onMouseMove={handleMouseMove}
               onMouseEnter={handleMouseEnter}
@@ -227,9 +228,6 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-20 md:mt-24">
-        <FeaturedWorkflows />
       </div>
     </section>
   );

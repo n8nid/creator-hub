@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Award, Users } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import CreatorCard from "@/components/creator-card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface Creator {
   id: string;
@@ -17,6 +17,13 @@ interface Creator {
   hourly_rate: number | null;
   availability: "available" | "busy" | "unavailable" | null;
   status: "draft" | "pending" | "approved" | "rejected";
+}
+
+function getInitials(name: string) {
+  if (!name) return "?";
+  const parts = name.split(" ");
+  if (parts.length === 1) return parts[0][0].toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
 const FeaturedCreators = () => {
@@ -92,19 +99,19 @@ const FeaturedCreators = () => {
               </svg>
             </a>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
-            {[...Array(8)].map((_, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+            {[...Array(3)].map((_, i) => (
               <div key={i} className="flex flex-row items-center gap-6">
-                <div className="w-40 h-40 bg-gray-500 rounded-full" />
+                <Avatar className="w-40 h-40">
+                  <AvatarFallback className="text-4xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
+                    ?
+                  </AvatarFallback>
+                </Avatar>
                 <div>
                   <div className="font-bold text-white text-xl mb-1">
-                    John Hopkins
+                    Loading...
                   </div>
-                  <div className="text-gray-300 text-base">
-                    Lead Developer,
-                    <br />
-                    CEO
-                  </div>
+                  <div className="text-gray-300 text-base">Loading...</div>
                 </div>
               </div>
             ))}
@@ -155,22 +162,22 @@ const FeaturedCreators = () => {
             </svg>
           </a>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
           {creators.length > 0
             ? creators.map((creator) => (
                 <div
                   key={creator.id}
                   className="flex flex-row items-center gap-6"
                 >
-                  <div className="w-40 h-40 bg-gray-500 rounded-full overflow-hidden flex items-center justify-center">
-                    {creator.profile_image ? (
-                      <img
-                        src={creator.profile_image}
-                        alt={creator.name}
-                        className="w-full h-full object-cover rounded-full"
-                      />
-                    ) : null}
-                  </div>
+                  <Avatar className="w-40 h-40">
+                    <AvatarImage
+                      src={creator.profile_image || undefined}
+                      alt={creator.name}
+                    />
+                    <AvatarFallback className="text-4xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
+                      {getInitials(creator.name)}
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
                     <div className="font-bold text-white text-xl mb-1">
                       {creator.name}
@@ -181,17 +188,19 @@ const FeaturedCreators = () => {
                   </div>
                 </div>
               ))
-            : [...Array(8)].map((_, i) => (
+            : [...Array(3)].map((_, i) => (
                 <div key={i} className="flex flex-row items-center gap-6">
-                  <div className="w-40 h-40 bg-gray-500 rounded-full" />
+                  <Avatar className="w-40 h-40">
+                    <AvatarFallback className="text-4xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
+                      ?
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
                     <div className="font-bold text-white text-xl mb-1">
-                      John Hopkins
+                      No Creators Found
                     </div>
                     <div className="text-gray-300 text-base">
-                      Lead Developer,
-                      <br />
-                      CEO
+                      No creators available
                     </div>
                   </div>
                 </div>

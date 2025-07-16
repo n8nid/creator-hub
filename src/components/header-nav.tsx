@@ -118,7 +118,24 @@ export function HeaderNav() {
           }`}
         >
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            // Logika untuk menentukan apakah menu aktif
+            let isActive = false;
+            if (item.href === "/") {
+              // Home aktif hanya jika di halaman utama
+              isActive = pathname === "/";
+            } else if (item.href === "/workflows") {
+              // Workflow aktif jika di /workflows atau /workflows/[id]
+              isActive =
+                pathname === "/workflows" || pathname.startsWith("/workflows/");
+            } else if (item.href === "/directory") {
+              // Creator aktif jika di /directory atau /talent/[id]
+              isActive =
+                pathname === "/directory" || pathname.startsWith("/talent/");
+            } else {
+              // Untuk menu lain, gunakan exact match
+              isActive = pathname === item.href;
+            }
+
             const Icon = item.icon;
             return (
               <Link

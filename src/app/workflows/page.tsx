@@ -208,7 +208,7 @@ export default function WorkflowsPage() {
           <div className="flex flex-col md:flex-row md:items-center w-full">
             {/* Kiri: Heading */}
             <div className="flex flex-col items-start flex-1 min-w-0">
-              <h1 className="font-sans font-thin text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-white mb-0 text-left">
+              <h1 className="font-sans font-semibold text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-white mb-0 text-left">
                 Explore
               </h1>
               <h2 className="font-sans font-thin text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white mb-0 text-left">

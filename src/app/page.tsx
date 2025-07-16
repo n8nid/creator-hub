@@ -24,7 +24,7 @@ export default function Page() {
       <GradientCircle
         type="about"
         style={{
-          top: "1500px",
+          top: "2000px",
           left: "70%",
           transform: "translateX(-50%)",
           zIndex: -1,
@@ -35,7 +35,7 @@ export default function Page() {
       <GradientCircle
         type="footer"
         style={{
-          top: "3500px",
+          top: "3200px",
           left: "25%",
           transform: "translateX(-50%)",
           zIndex: -1,
@@ -44,7 +44,7 @@ export default function Page() {
 
       <main className="flex-grow relative z-10">
         <HeroSection />
-        {/* <FeaturedWorkflows /> */}
+        <FeaturedWorkflows />
         <FeaturedCreators />
         <AboutSection />
       </main>
