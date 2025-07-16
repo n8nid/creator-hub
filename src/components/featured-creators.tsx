@@ -80,9 +80,9 @@ const FeaturedCreators = () => {
             </h2>
             <a
               href="/directory"
-              className="btn-jelajah flex items-center gap-2 px-8 py-3 rounded-full text-white text-base font-medium bg-gradient-to-r from-fuchsia-500 to-violet-600 hover:from-fuchsia-600 hover:to-violet-700 transition-all"
+              className="btn-jelajah flex items-center gap-3"
+              style={{ height: 60 }}
             >
-              Temukan Creator
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -97,6 +97,7 @@ const FeaturedCreators = () => {
                   d="M13 7l5 5m0 0l-5 5m5-5H6"
                 />
               </svg>
+              Temukan Creator
             </a>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
@@ -143,9 +144,9 @@ const FeaturedCreators = () => {
           </h2>
           <a
             href="/directory"
-            className="btn-jelajah flex items-center gap-2 px-8 py-3 rounded-full text-white text-base font-medium bg-gradient-to-r from-fuchsia-500 to-violet-600 hover:from-fuchsia-600 hover:to-violet-700 transition-all"
+            className="btn-jelajah flex items-center gap-3"
+            style={{ height: 60 }}
           >
-            Temukan Creator
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -160,6 +161,7 @@ const FeaturedCreators = () => {
                 d="M13 7l5 5m0 0l-5 5m5-5H6"
               />
             </svg>
+            Temukan Creator
           </a>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">

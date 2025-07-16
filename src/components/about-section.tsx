@@ -65,9 +65,12 @@ const AboutSection = () => {
     <section className="relative w-full content-above-gradient">
       <div className="relative z-10">
         {/* About Section Content */}
-        <div className="py-24 relative">
+        <div className="py-24 relative" style={{ isolation: "isolate" }}>
           {/* Network Graphic - Absolute positioned to the right */}
-          <div className="absolute right-0 top-0 bottom-0 w-[70vw] h-full flex items-center justify-end z-0">
+          <div
+            className="absolute right-0 top-0 bottom-0 w-[70vw] h-full flex items-center justify-end"
+            style={{ zIndex: -1 }}
+          >
             <svg
               width="100%"
               height="100%"
@@ -122,6 +125,48 @@ const AboutSection = () => {
                 <line x1="250" y1="300" x2="350" y2="400" />
                 <line x1="350" y1="400" x2="450" y2="350" />
                 <line x1="250" y1="300" x2="150" y2="400" />
+
+                {/* Extended connections that go beyond the page */}
+                <line x1="650" y1="500" x2="750" y2="450" />
+                <line x1="600" y1="250" x2="750" y2="200" />
+                <line x1="500" y1="600" x2="750" y2="650" />
+                <line x1="50" y1="100" x2="-50" y2="150" />
+                <line x1="100" y1="400" x2="-50" y2="350" />
+                <line x1="50" y1="500" x2="-50" y2="550" />
+                <line x1="200" y1="200" x2="100" y2="50" />
+                <line x1="450" y1="350" x2="550" y2="200" />
+                <line x1="300" y1="550" x2="400" y2="650" />
+                <line x1="100" y1="400" x2="200" y2="550" />
+
+                {/* Additional connections extending to the left (behind Platform ini hadir) */}
+                <line x1="150" y1="200" x2="50" y2="250" />
+                <line x1="250" y1="300" x2="150" y2="350" />
+                <line x1="350" y1="400" x2="250" y2="450" />
+                <line x1="200" y1="200" x2="100" y2="150" />
+                <line x1="300" y1="100" x2="200" y2="50" />
+                <line x1="450" y1="350" x2="350" y2="300" />
+                <line x1="550" y1="150" x2="450" y2="100" />
+                <line x1="650" y1="500" x2="550" y2="450" />
+                <line x1="500" y1="600" x2="400" y2="550" />
+                <line x1="600" y1="250" x2="500" y2="200" />
+
+                {/* Additional connections for extended nodes */}
+                <line x1="750" y1="450" x2="700" y2="600" />
+                <line x1="750" y1="200" x2="700" y2="100" />
+
+                <line x1="-50" y1="150" x2="-20" y2="100" />
+                <line x1="-50" y1="350" x2="-20" y2="600" />
+                <line x1="-50" y1="550" x2="-20" y2="600" />
+                <line x1="100" y1="50" x2="-20" y2="100" />
+                <line x1="550" y1="200" x2="700" y2="100" />
+                <line x1="400" y1="650" x2="100" y2="650" />
+                <line x1="200" y1="550" x2="100" y2="650" />
+                <line x1="750" y1="300" x2="700" y2="100" />
+                <line x1="-30" y1="250" x2="-20" y2="100" />
+
+                <line x1="50" y1="100" x2="-20" y2="100" />
+                <line x1="600" y1="650" x2="700" y2="600" />
+                <line x1="100" y1="650" x2="600" y2="650" />
               </g>
 
               {/* Large Nodes with gradient and stronger glow */}
@@ -190,6 +235,33 @@ const AboutSection = () => {
                   stroke="white"
                   strokeWidth="3"
                 />
+
+                {/* Extended large nodes outside the viewport */}
+                <circle
+                  cx="750"
+                  cy="300"
+                  r="10"
+                  fill="url(#nodeGradient)"
+                  stroke="white"
+                  strokeWidth="2.5"
+                />
+                <circle
+                  cx="-30"
+                  cy="250"
+                  r="10"
+                  fill="url(#nodeGradient)"
+                  stroke="white"
+                  strokeWidth="2.5"
+                />
+
+                <circle
+                  cx="50"
+                  cy="100"
+                  r="10"
+                  fill="url(#nodeGradient)"
+                  stroke="white"
+                  strokeWidth="2.5"
+                />
               </g>
 
               {/* Medium Nodes with stronger stroke */}
@@ -253,6 +325,56 @@ const AboutSection = () => {
                 <circle
                   cx="550"
                   cy="150"
+                  r="8"
+                  fill="rgba(255,255,255,0.9)"
+                  stroke="white"
+                  strokeWidth="2"
+                />
+
+                {/* Extended medium nodes outside the viewport */}
+                <circle
+                  cx="700"
+                  cy="100"
+                  r="8"
+                  fill="rgba(255,255,255,0.9)"
+                  stroke="white"
+                  strokeWidth="2"
+                />
+                <circle
+                  cx="700"
+                  cy="600"
+                  r="8"
+                  fill="rgba(255,255,255,0.9)"
+                  stroke="white"
+                  strokeWidth="2"
+                />
+                <circle
+                  cx="-20"
+                  cy="100"
+                  r="8"
+                  fill="rgba(255,255,255,0.9)"
+                  stroke="white"
+                  strokeWidth="2"
+                />
+                <circle
+                  cx="-20"
+                  cy="600"
+                  r="8"
+                  fill="rgba(255,255,255,0.9)"
+                  stroke="white"
+                  strokeWidth="2"
+                />
+                <circle
+                  cx="100"
+                  cy="650"
+                  r="8"
+                  fill="rgba(255,255,255,0.9)"
+                  stroke="white"
+                  strokeWidth="2"
+                />
+                <circle
+                  cx="600"
+                  cy="650"
                   r="8"
                   fill="rgba(255,255,255,0.9)"
                   stroke="white"
@@ -345,6 +467,163 @@ const AboutSection = () => {
                 <circle
                   cx="680"
                   cy="450"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+
+                {/* Extended nodes outside the viewport */}
+                <circle
+                  cx="750"
+                  cy="450"
+                  r="6"
+                  fill="rgba(255,255,255,0.6)"
+                  stroke="white"
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx="750"
+                  cy="200"
+                  r="6"
+                  fill="rgba(255,255,255,0.6)"
+                  stroke="white"
+                  strokeWidth="1.5"
+                />
+
+                <circle
+                  cx="-50"
+                  cy="150"
+                  r="6"
+                  fill="rgba(255,255,255,0.6)"
+                  stroke="white"
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx="-50"
+                  cy="350"
+                  r="6"
+                  fill="rgba(255,255,255,0.6)"
+                  stroke="white"
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx="-50"
+                  cy="550"
+                  r="6"
+                  fill="rgba(255,255,255,0.6)"
+                  stroke="white"
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx="100"
+                  cy="50"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="550"
+                  cy="200"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="400"
+                  cy="650"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="200"
+                  cy="550"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+
+                {/* Additional nodes extending to the left (behind Platform ini hadir) */}
+                <circle
+                  cx="50"
+                  cy="250"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="150"
+                  cy="350"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="250"
+                  cy="450"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="100"
+                  cy="150"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="200"
+                  cy="50"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="350"
+                  cy="300"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="450"
+                  cy="100"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="550"
+                  cy="450"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="400"
+                  cy="550"
+                  r="5"
+                  fill="rgba(255,255,255,0.7)"
+                  stroke="white"
+                  strokeWidth="1"
+                />
+                <circle
+                  cx="500"
+                  cy="200"
                   r="5"
                   fill="rgba(255,255,255,0.7)"
                   stroke="white"
@@ -447,7 +726,7 @@ const AboutSection = () => {
 
           {/* Text Content - Positioned to the left */}
           <div className="w-full px-16 flex justify-start">
-            <div className="max-w-2xl relative z-10">
+            <div className="max-w-2xl relative" style={{ zIndex: 10 }}>
               <div
                 className="relative rounded-2xl border border-white/20 p-8 cursor-pointer overflow-hidden"
                 style={{
@@ -526,41 +805,54 @@ const AboutSection = () => {
         </div>
 
         {/* Key Benefits Content */}
-        <div className="w-full mt-24 px-16 relative">
-          {/* SVG Ellipse tipis untuk menghubungkan icon centang */}
-          <svg
-            width="900"
-            height="900"
-            viewBox="0 0 900 900"
-            fill="none"
-            className="absolute -left-[150px] top-[40px] z-0"
-            style={{ pointerEvents: "none", opacity: 0.44 }}
+        <div
+          className="w-full mt-24 px-16 relative"
+          style={{ isolation: "isolate" }}
+        >
+          {/* SVG Ellipse tipis untuk menghubungkan icon centang - dipindah ke belakang */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ zIndex: -10 }}
           >
-            <defs>
-              <linearGradient
-                id="ellipseStroke"
-                x1="0"
-                y1="0"
-                x2="900"
-                y2="900"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#9460CD" />
-                <stop offset="1" stopColor="#3D1654" />
-              </linearGradient>
-            </defs>
-            <ellipse
-              cx="450"
-              cy="450"
-              rx="440"
-              ry="440"
+            <svg
+              width="900"
+              height="900"
+              viewBox="0 0 900 900"
               fill="none"
-              stroke="url(#ellipseStroke)"
-              strokeWidth="2"
-            />
-          </svg>
-          <div className="flex flex-col items-start w-full text-left">
-            <div className="mb-12 z-10 w-full">
+              className="absolute -left-[150px] top-[40px]"
+              style={{ pointerEvents: "none", opacity: 0.44 }}
+            >
+              <defs>
+                <linearGradient
+                  id="ellipseStroke"
+                  x1="0"
+                  y1="0"
+                  x2="900"
+                  y2="900"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#9460CD" />
+                  <stop offset="1" stopColor="#3D1654" />
+                </linearGradient>
+              </defs>
+              <ellipse
+                cx="450"
+                cy="450"
+                rx="440"
+                ry="440"
+                fill="none"
+                stroke="url(#ellipseStroke)"
+                strokeWidth="2"
+              />
+            </svg>
+          </div>
+
+          {/* Konten di atas SVG */}
+          <div
+            className="flex flex-col items-start w-full text-left relative"
+            style={{ zIndex: 10 }}
+          >
+            <div className="mb-12 w-full">
               <h3
                 className="text-5xl font-thin text-white/80 mb-4"
                 style={{ fontFamily: "Albert Sans, Arial, sans-serif" }}
@@ -573,7 +865,7 @@ const AboutSection = () => {
                 lebih efektif.
               </p>
             </div>
-            <div className="flex flex-col gap-16 w-full z-10">
+            <div className="flex flex-col gap-16 w-full">
               {/* Item 1 */}
               <div
                 className="flex items-start gap-4 relative"
@@ -664,8 +956,8 @@ const AboutSection = () => {
       </div>
       {/* Call to Action Section */}
       <div
-        className="w-full mt-24 px-16 py-16 flex justify-center"
-        style={{ background: "transparent" }}
+        className="w-full mt-24 px-16 py-16 flex justify-center relative"
+        style={{ background: "transparent", isolation: "isolate", zIndex: 20 }}
       >
         <div
           className="relative rounded-2xl border border-white/20 p-8 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden"
@@ -674,6 +966,7 @@ const AboutSection = () => {
             width: "fit-content",
             background: "rgba(255, 255, 255, 0.05)",
             backdropFilter: "blur(10px)",
+            zIndex: 30,
           }}
           onMouseMove={handleCtaMouseMove}
           onMouseEnter={handleCtaMouseEnter}
@@ -689,7 +982,10 @@ const AboutSection = () => {
             }}
           />
           {/* Content */}
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 w-full">
+          <div
+            className="relative flex flex-col md:flex-row items-center justify-between gap-8 w-full"
+            style={{ zIndex: 40 }}
+          >
             <div className="flex flex-col items-start justify-center">
               <div
                 style={{
