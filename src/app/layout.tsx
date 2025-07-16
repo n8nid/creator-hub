@@ -1,9 +1,7 @@
 import { Inter } from "next/font/google";
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "@/components/ui/toaster";
-import { DebugAuth } from "@/components/auth/debug-auth";
-import { HeaderNav } from "@/components/header-nav";
-import MainFooter from "@/components/main-footer";
+import { AuthLayout } from "@/components/auth/auth-layout";
 import "@/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -31,11 +29,8 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <AuthProvider>
-          <HeaderNav />
-          {children}
-          <MainFooter />
+          <AuthLayout>{children}</AuthLayout>
           <Toaster />
-          <DebugAuth />
         </AuthProvider>
       </body>
     </html>
