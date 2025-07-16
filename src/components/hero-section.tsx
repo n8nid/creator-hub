@@ -167,8 +167,6 @@ const HeroSection = () => {
                 <h2
                   style={{
                     fontFamily: "Albert Sans, Arial, sans-serif",
-                    fontWeight: 250,
-                    fontStyle: "thin",
                     fontSize: "48px",
                     lineHeight: "120%",
                     letterSpacing: "-0.02em",
@@ -178,9 +176,27 @@ const HeroSection = () => {
                     marginBottom: "32px",
                   }}
                 >
-                  Dapatkan insight, workflow siap pakai, dan dukungan dari
-                  komunitas yang aktif dan solutif. Workflow Hebat Dimulai dari
-                  Sini.
+                  <span
+                    style={{
+                      fontFamily: "Albert Sans, Arial, sans-serif",
+                      fontWeight: 100,
+                      fontStyle: "normal",
+                      color: "rgba(255, 255, 255, 0.8)",
+                    }}
+                  >
+                    Dapatkan insight, workflow siap pakai, dan dukungan dari
+                    komunitas yang aktif dan solutif.
+                  </span>
+                  <br />
+                  <span
+                    style={{
+                      fontWeight: 600,
+                      fontStyle: "normal",
+                      color: "#FFFBFB",
+                    }}
+                  >
+                    Workflow hebat dimulai dari sini.
+                  </span>
                 </h2>
                 <div className="flex flex-row gap-4 md:gap-6">
                   <a
