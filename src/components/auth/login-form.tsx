@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -26,7 +25,6 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const { signIn } = useAuth();
-  const { toast } = useToast();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -47,15 +45,7 @@ export function LoginForm() {
 
       await signIn(values.email, values.password);
 
-      console.log("Login successful, showing toast...");
-      toast({
-        title: "Success",
-        description: "You have been logged in successfully.",
-      });
-
-      // Check what cookies are set after login
-      console.log("Cookies after login:", document.cookie);
-
+      console.log("Login successful!");
       console.log("=== LOGIN PROCESS END ===");
 
       // Small delay to let the session sync, then redirect
@@ -65,11 +55,7 @@ export function LoginForm() {
       }, 500);
     } catch (error) {
       console.error("Login error:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to sign in. Please check your credentials.",
-      });
+      // Error sudah dihandle di auth-context dengan sonner toast
     } finally {
       setIsLoading(false);
     }
