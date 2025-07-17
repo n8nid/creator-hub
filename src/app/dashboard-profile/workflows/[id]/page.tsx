@@ -2,9 +2,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Workflow, Trash } from "lucide-react";
+import { Trash, ArrowLeft } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter, useParams } from "next/navigation";
@@ -17,7 +16,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { TagInput } from "@/components/ui/tag-input";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import MDEditor from "@uiw/react-md-editor";
 
 export default function WorkflowDetailUserPage() {
   const { user } = useAuth();
@@ -25,7 +25,6 @@ export default function WorkflowDetailUserPage() {
   const router = useRouter();
   const params = useParams();
   const workflowId = params?.id as string;
-  const { toast } = useToast();
   const [workflow, setWorkflow] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
@@ -36,8 +35,6 @@ export default function WorkflowDetailUserPage() {
     description: "",
     tags: [],
     category: "",
-    screenshot_url: "",
-    video_url: "",
     complexity: "",
     json_n8n: "",
   });
@@ -65,8 +62,6 @@ export default function WorkflowDetailUserPage() {
           description: data.description || "",
           tags: data.tags || [],
           category: data.category || "",
-          screenshot_url: data.screenshot_url || "",
-          video_url: data.video_url || "",
           complexity: data.complexity || "",
           json_n8n: data.json_n8n || "",
         });
@@ -81,15 +76,6 @@ export default function WorkflowDetailUserPage() {
     if (!editForm.description.trim())
       errors.description = "Deskripsi wajib diisi.";
     if (!editForm.category) errors.category = "Kategori wajib dipilih.";
-    if (
-      editForm.screenshot_url &&
-      !/^https?:\/\//.test(editForm.screenshot_url)
-    ) {
-      errors.screenshot_url = "Screenshot URL harus diawali http(s)://";
-    }
-    if (editForm.video_url && !/^https?:\/\//.test(editForm.video_url)) {
-      errors.video_url = "Video URL harus diawali http(s)://";
-    }
     return errors;
   };
 
@@ -102,9 +88,6 @@ export default function WorkflowDetailUserPage() {
       setFormError({ ...formError, [e.target.name]: "" });
     }
   };
-  const handleTags = (tags: string[]) => {
-    setEditForm({ ...editForm, tags });
-  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,11 +95,7 @@ export default function WorkflowDetailUserPage() {
     const errors = validateForm();
     if (Object.keys(errors).length > 0) {
       setFormError(errors);
-      toast({
-        title: "Validasi gagal",
-        description: Object.values(errors).join(" "),
-        variant: "destructive",
-      });
+      toast.error(`Validasi gagal: ${Object.values(errors).join(" ")}`);
       return;
     }
     setSaving(true);
@@ -128,39 +107,20 @@ export default function WorkflowDetailUserPage() {
           description: editForm.description,
           tags: editForm.tags,
           category: editForm.category,
-          screenshot_url: editForm.screenshot_url,
-          video_url: editForm.video_url,
           complexity: editForm.complexity,
           json_n8n: editForm.json_n8n,
         })
         .eq("id", workflowId);
       if (error) {
-        toast({
-          title: "Gagal menyimpan perubahan",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(`Gagal menyimpan perubahan: ${error.message}`);
         setSaving(false);
         return;
       }
-      toast({
-        title: "Perubahan berhasil disimpan",
-        description: "Workflow berhasil diperbarui!",
-        variant: "default",
-      });
-      // Refresh data
-      const { data } = await supabase
-        .from("workflows")
-        .select("*")
-        .eq("id", workflowId)
-        .single();
-      setWorkflow(data);
+      toast.success("Perubahan berhasil disimpan!");
+      // Redirect ke halaman workflow saya
+      router.push("/dashboard-profile/workflows");
     } catch (err: any) {
-      toast({
-        title: "Terjadi error",
-        description: err?.message || "Gagal menyimpan perubahan.",
-        variant: "destructive",
-      });
+      toast.error(err?.message || "Gagal menyimpan perubahan.");
     } finally {
       setSaving(false);
     }
@@ -175,25 +135,13 @@ export default function WorkflowDetailUserPage() {
         .delete()
         .eq("id", workflowId);
       if (error) {
-        toast({
-          title: "Gagal menghapus workflow",
-          description: error.message,
-          variant: "destructive",
-        });
+        toast.error(`Gagal menghapus workflow: ${error.message}`);
         return;
       }
-      toast({
-        title: "Workflow berhasil dihapus",
-        description: "Workflow telah dihapus dari sistem.",
-        variant: "default",
-      });
+      toast.success("Workflow berhasil dihapus!");
       router.push("/dashboard-profile/workflows");
     } catch (err: any) {
-      toast({
-        title: "Terjadi error",
-        description: err?.message || "Gagal menghapus workflow.",
-        variant: "destructive",
-      });
+      toast.error(err?.message || "Gagal menghapus workflow.");
     }
   };
 
@@ -209,238 +157,252 @@ export default function WorkflowDetailUserPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
-      <Card>
-        <CardHeader className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-              <Workflow className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              {workflow.title}
-            </h1>
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex items-center gap-4 mb-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push("/dashboard-profile/workflows")}
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Kembali
+          </Button>
+        </div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          {workflow.title}
+        </h1>
+        <p className="text-gray-600">Edit workflow template Anda</p>
+      </div>
+
+      {isOwner ? (
+        <form onSubmit={handleSave} className="space-y-8">
+          {/* Judul */}
+          <div>
+            <label className="block font-medium mb-2">Judul</label>
+            <Input
+              name="title"
+              value={editForm.title || ""}
+              onChange={handleChange}
+              required
+              disabled={saving}
+              className="text-lg"
+            />
+            {formError.title && (
+              <p className="text-sm text-red-600 mt-1">{formError.title}</p>
+            )}
           </div>
-        </CardHeader>
-        <CardContent>
-          {isOwner ? (
-            <form onSubmit={handleSave} className="space-y-4">
-              <div>
-                <label className="block font-medium mb-1">Judul</label>
-                <Input
-                  name="title"
-                  value={editForm.title || ""}
-                  onChange={handleChange}
-                  required
-                  disabled={saving}
-                />
-                {formError.title && (
-                  <p className="text-sm text-red-600 mt-1">{formError.title}</p>
-                )}
-              </div>
-              <div>
-                <label className="block font-medium mb-1">Deskripsi</label>
-                <Textarea
-                  name="description"
-                  value={editForm.description || ""}
-                  onChange={handleChange}
-                  required
-                  disabled={saving}
-                />
-                {formError.description && (
-                  <p className="text-sm text-red-600 mt-1">
-                    {formError.description}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className="block font-medium mb-1">Kategori</label>
-                <Select
-                  value={editForm.category || ""}
-                  onValueChange={(val) =>
-                    setEditForm((f: typeof editForm) => ({
-                      ...f,
-                      category: val,
-                    }))
-                  }
-                  disabled={saving}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih kategori..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {workflowCategories.map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        {cat}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {formError.category && (
-                  <p className="text-sm text-red-600 mt-1">
-                    {formError.category}
-                  </p>
-                )}
-                <div className="text-xs text-gray-500 mt-1">
-                  Pilih satu kategori
-                </div>
-              </div>
-              <div>
-                <label className="block font-medium mb-1">Tags</label>
-                <TagInput
-                  value={editForm.tags || []}
-                  onChange={(tags) =>
-                    setEditForm((f: typeof editForm) => ({ ...f, tags }))
-                  }
-                  placeholder="Tambah tag..."
-                />
-                <div className="text-xs text-gray-500 mt-1">
-                  Input bebas, tekan enter untuk menambah tag
-                </div>
-              </div>
-              <div>
-                <label className="block font-medium mb-1">Screenshot URL</label>
-                <Input
-                  name="screenshot_url"
-                  value={editForm.screenshot_url || ""}
-                  onChange={handleChange}
-                  disabled={saving}
-                />
-                {formError.screenshot_url && (
-                  <p className="text-sm text-red-600 mt-1">
-                    {formError.screenshot_url}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className="block font-medium mb-1">Video URL</label>
-                <Input
-                  name="video_url"
-                  value={editForm.video_url || ""}
-                  onChange={handleChange}
-                  disabled={saving}
-                />
-                {formError.video_url && (
-                  <p className="text-sm text-red-600 mt-1">
-                    {formError.video_url}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label className="block font-medium mb-1">Complexity</label>
-                <Input
-                  name="complexity"
-                  value={editForm.complexity || ""}
-                  onChange={handleChange}
-                  placeholder="simple/medium/complex"
-                  disabled={saving}
-                />
-              </div>
-              <div>
-                <label className="block font-medium mb-1">
-                  JSON n8n Workflow
-                </label>
-                <Textarea
-                  name="json_n8n"
-                  value={editForm.json_n8n || ""}
-                  onChange={handleChange}
-                  placeholder="Paste JSON workflow dari n8n di sini"
-                  rows={6}
-                  disabled={saving}
-                />
-              </div>
-              {/* Live preview n8n demo */}
-              {editForm.json_n8n && (
-                <div className="mt-4 border rounded bg-gray-50 p-2 overflow-x-auto">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: `<n8n-demo workflow='${editForm.json_n8n.replace(
-                        /'/g,
-                        "&#39;"
-                      )}' frame="true"></n8n-demo>`,
-                    }}
-                  />
-                </div>
-              )}
-              <div className="flex gap-2 mt-4">
-                <Button type="submit" disabled={saving}>
-                  {saving ? (
-                    <span className="flex items-center gap-2">
-                      <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-4 h-4"></span>
-                      Menyimpan...
-                    </span>
-                  ) : (
-                    "Simpan Perubahan"
-                  )}
-                </Button>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={handleDelete}
-                  disabled={saving}
-                >
-                  <Trash className="w-4 h-4 mr-1" /> Hapus
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => router.push("/dashboard-profile/workflows")}
-                  disabled={saving}
-                >
-                  Kembali
-                </Button>
-              </div>
-            </form>
-          ) : (
-            <>
-              <div className="mb-4">
-                <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 rounded-full mr-2">
-                  {workflow.complexity || "-"}
-                </span>
-                <span
-                  className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full ${
-                    workflow.status === "approved"
-                      ? "bg-green-100 text-green-800"
-                      : workflow.status === "pending"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : workflow.status === "rejected"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {workflow.status}
-                </span>
-              </div>
-              <div className="mb-4 text-gray-600">{workflow.description}</div>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {(workflow.tags || []).map((tag: string) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 text-xs bg-white border border-gray-200 text-gray-700 rounded-full"
-                  >
-                    {tag}
-                  </span>
+
+          {/* Deskripsi dengan Markdown */}
+          <div>
+            <label className="block font-medium mb-2">Deskripsi</label>
+            <div data-color-mode="light">
+              <MDEditor
+                value={editForm.description || ""}
+                onChange={(value) =>
+                  setEditForm({ ...editForm, description: value || "" })
+                }
+                preview="edit"
+                height={300}
+              />
+            </div>
+            {formError.description && (
+              <p className="text-sm text-red-600 mt-1">
+                {formError.description}
+              </p>
+            )}
+            <p className="text-sm text-gray-600 mt-2">
+              Gunakan Markdown untuk memformat teks. Contoh: **tebal**,
+              *miring*, [link](url), dll.
+            </p>
+          </div>
+
+          {/* Kategori */}
+          <div>
+            <label className="block font-medium mb-2">Kategori</label>
+            <Select
+              value={editForm.category || ""}
+              onValueChange={(val) =>
+                setEditForm((f: typeof editForm) => ({
+                  ...f,
+                  category: val,
+                }))
+              }
+              disabled={saving}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih kategori..." />
+              </SelectTrigger>
+              <SelectContent>
+                {workflowCategories.map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    {cat}
+                  </SelectItem>
                 ))}
+              </SelectContent>
+            </Select>
+            {formError.category && (
+              <p className="text-sm text-red-600 mt-1">{formError.category}</p>
+            )}
+          </div>
+
+          {/* Tags */}
+          <div>
+            <label className="block font-medium mb-2">Tags</label>
+            <TagInput
+              value={editForm.tags || []}
+              onChange={(tags) =>
+                setEditForm((f: typeof editForm) => ({ ...f, tags }))
+              }
+              placeholder="Tambah tag..."
+            />
+            <p className="text-sm text-gray-600 mt-2">
+              Input bebas, tekan enter untuk menambah tag
+            </p>
+          </div>
+
+          {/* Complexity */}
+          <div>
+            <label className="block font-medium mb-2">Complexity</label>
+            <Select
+              value={editForm.complexity || ""}
+              onValueChange={(val) =>
+                setEditForm((f: typeof editForm) => ({
+                  ...f,
+                  complexity: val,
+                }))
+              }
+              disabled={saving}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih complexity..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="simple">Simple</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="complex">Complex</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* JSON n8n Workflow */}
+          <div>
+            <label className="block font-medium mb-2">JSON n8n Workflow</label>
+            <Textarea
+              name="json_n8n"
+              value={editForm.json_n8n || ""}
+              onChange={handleChange}
+              placeholder="Paste JSON workflow dari n8n di sini"
+              rows={8}
+              disabled={saving}
+              className="font-mono text-sm"
+            />
+          </div>
+
+          {/* Preview JSON */}
+          {editForm.json_n8n && (
+            <div>
+              <label className="block font-medium mb-2">Preview JSON</label>
+              <div className="border rounded-lg bg-gray-50 p-4 overflow-x-auto">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: `<n8n-demo workflow='${editForm.json_n8n.replace(
+                      /'/g,
+                      "&#39;"
+                    )}' frame="true"></n8n-demo>`,
+                  }}
+                />
               </div>
-              <div className="text-xs text-gray-400 mb-4">
-                Created: {workflow.created_at?.slice(0, 10)}
-              </div>
-              {/* Preview n8n workflow jika ada json_n8n */}
-              {workflow.json_n8n && (
-                <div className="mt-4 border rounded bg-gray-50 p-2 overflow-x-auto">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: `<n8n-demo workflow='${workflow.json_n8n.replace(
-                        /'/g,
-                        "&#39;"
-                      )}' frame="true"></n8n-demo>`,
-                    }}
-                  />
-                </div>
-              )}
-            </>
+            </div>
           )}
-        </CardContent>
-      </Card>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-4 border-t">
+            <Button
+              type="submit"
+              disabled={saving}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              {saving ? (
+                <span className="flex items-center gap-2">
+                  <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-4 h-4"></span>
+                  Menyimpan...
+                </span>
+              ) : (
+                "Simpan Perubahan"
+              )}
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={saving}
+            >
+              <Trash className="w-4 h-4 mr-2" />
+              Hapus Workflow
+            </Button>
+          </div>
+        </form>
+      ) : (
+        <div className="space-y-6">
+          <div className="flex gap-2">
+            <span className="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 rounded-full">
+              {workflow.complexity || "-"}
+            </span>
+            <span
+              className={`inline-flex items-center px-3 py-1 text-sm font-semibold rounded-full ${
+                workflow.status === "approved"
+                  ? "bg-green-100 text-green-800"
+                  : workflow.status === "pending"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : workflow.status === "rejected"
+                  ? "bg-red-100 text-red-800"
+                  : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              {workflow.status}
+            </span>
+          </div>
+
+          <div className="prose max-w-none">
+            <div dangerouslySetInnerHTML={{ __html: workflow.description }} />
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {(workflow.tags || []).map((tag: string) => (
+              <span
+                key={tag}
+                className="px-3 py-1 text-sm bg-white border border-gray-200 text-gray-700 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className="text-sm text-gray-500">
+            Created: {workflow.created_at?.slice(0, 10)}
+          </div>
+
+          {/* Preview n8n workflow jika ada json_n8n */}
+          {workflow.json_n8n && (
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Preview Workflow</h3>
+              <div className="border rounded-lg bg-gray-50 p-4 overflow-x-auto">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: `<n8n-demo workflow='${workflow.json_n8n.replace(
+                      /'/g,
+                      "&#39;"
+                    )}' frame="true"></n8n-demo>`,
+                  }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
