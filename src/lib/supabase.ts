@@ -45,6 +45,7 @@ export type Database = {
           user_id: string;
           name: string;
           bio: string | null;
+          about_markdown: string | null;
           location: string | null;
           website: string | null;
           linkedin: string | null;
@@ -74,6 +75,7 @@ export type Database = {
           user_id: string;
           name: string;
           bio?: string | null;
+          about_markdown?: string | null;
           location?: string | null;
           website?: string | null;
           linkedin?: string | null;
@@ -103,6 +105,7 @@ export type Database = {
           user_id?: string;
           name?: string;
           bio?: string | null;
+          about_markdown?: string | null;
           location?: string | null;
           website?: string | null;
           linkedin?: string | null;

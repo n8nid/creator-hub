@@ -19,12 +19,8 @@ export function DashboardHeader() {
 
   const navigation = [
     {
-      label: "Dashboard",
+      label: "Dashboard Profile",
       href: "/dashboard-profile",
-    },
-    {
-      label: "Profil Saya",
-      href: "/dashboard-profile/profile",
     },
     {
       label: "Workflow Saya",
@@ -145,19 +141,29 @@ export function DashboardHeader() {
 
           {/* Navigation Menu */}
           <nav className="flex items-center gap-6">
-            {navigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`text-sm font-medium transition-colors ${
-                  pathname === item.href
-                    ? "text-gray-900"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <div key={item.href} className="relative">
+                  <Link
+                    href={item.href}
+                    className={`text-sm font-medium transition-colors pb-2 ${
+                      isActive
+                        ? "text-gray-900 font-semibold"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                  {isActive && (
+                    <div
+                      className="absolute -bottom-4 left-0 right-0 h-0.5 bg-purple-600 z-10"
+                      style={{ bottom: "-16px" }}
+                    ></div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
         </div>
 

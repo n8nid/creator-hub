@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Markdown Editor Styles */
+[data-color-mode*="light"] {
+  --color-canvas-default: #ffffff;
+  --color-canvas-subtle: #f6f8fa;
+  --color-border-default: #d0d7de;
+  --color-border-muted: #d0d7de;
+  --color-neutral-muted: rgba(175, 184, 193, 0.2);
+  --color-accent-fg: #0969da;
+  --color-accent-emphasis: #0969da;
+  --color-attention-subtle: rgba(187, 128, 9, 0.15);
+  --color-danger-subtle: rgba(248, 81, 73, 0.1);
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
