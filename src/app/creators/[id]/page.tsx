@@ -22,8 +22,10 @@ import {
   Instagram,
   Github,
   Globe,
+  ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 
 interface Creator {
   id: string;
@@ -32,6 +34,7 @@ interface Creator {
   hourly_rate: number;
   location: string;
   bio: string;
+  about_markdown?: string;
   linkedin_url?: string;
   instagram_url?: string;
   github_url?: string;
@@ -110,6 +113,7 @@ export default function CreatorDetailPage() {
         hourly_rate: profileData.hourly_rate || 0,
         location: profileData.location || "",
         bio: profileData.bio || "",
+        about_markdown: profileData.about_markdown || "",
         linkedin_url: profileData.linkedin,
         instagram_url: profileData.twitter,
         github_url: profileData.github,
@@ -268,6 +272,18 @@ export default function CreatorDetailPage() {
       />
       <main className="flex-grow relative z-10">
         <div className="w-full px-16 pt-12">
+          {/* Back Button */}
+          <div className="mb-6">
+            <Button
+              variant="ghost"
+              className="flex items-center gap-2 text-white hover:text-white/80 hover:bg-white/10 w-fit"
+              onClick={() => window.history.back()}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Kembali ke Creator
+            </Button>
+          </div>
+
           {/* Creator Profile Section */}
           <div className="flex flex-col lg:flex-row items-center gap-8 mb-8">
             {/* Left Side - Avatar */}
@@ -314,15 +330,83 @@ export default function CreatorDetailPage() {
             {/* Right Side - Bio and Social Links (With container) */}
             <div className="flex-1">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
-                {/* Bio */}
-                {creator.bio && (
+                {/* About Creator */}
+                {creator.about_markdown && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-white mb-2">
-                      Tentang Creator
-                    </h3>
-                    <p className="text-gray-300 leading-relaxed">
-                      {creator.bio}
-                    </p>
+                    <div className="prose prose-invert prose-lg max-w-none text-gray-300 leading-relaxed">
+                      <ReactMarkdown
+                        components={{
+                          h1: ({ children }) => (
+                            <h1 className="text-2xl font-bold text-white mb-4">
+                              {children}
+                            </h1>
+                          ),
+                          h2: ({ children }) => (
+                            <h2 className="text-xl font-bold text-white mb-3">
+                              {children}
+                            </h2>
+                          ),
+                          h3: ({ children }) => (
+                            <h3 className="text-lg font-bold text-white mb-2">
+                              {children}
+                            </h3>
+                          ),
+                          p: ({ children }) => (
+                            <p className="text-gray-300 mb-4 leading-relaxed">
+                              {children}
+                            </p>
+                          ),
+                          ul: ({ children }) => (
+                            <ul className="list-disc list-outside text-gray-300 mb-4 space-y-1 ml-4">
+                              {children}
+                            </ul>
+                          ),
+                          ol: ({ children }) => (
+                            <ol className="list-decimal list-outside text-gray-300 mb-4 space-y-1 ml-4">
+                              {children}
+                            </ol>
+                          ),
+                          li: ({ children }) => (
+                            <li className="text-gray-300">{children}</li>
+                          ),
+                          strong: ({ children }) => (
+                            <strong className="font-bold text-white">
+                              {children}
+                            </strong>
+                          ),
+                          em: ({ children }) => (
+                            <em className="italic text-white/90">{children}</em>
+                          ),
+                          code: ({ children }) => (
+                            <code className="bg-white/10 text-white px-2 py-1 rounded text-sm font-mono">
+                              {children}
+                            </code>
+                          ),
+                          pre: ({ children }) => (
+                            <pre className="bg-white/10 text-white p-4 rounded-lg overflow-x-auto mb-4">
+                              {children}
+                            </pre>
+                          ),
+                          a: ({ children, href }) => (
+                            <a
+                              href={href}
+                              className="text-purple-300 hover:text-purple-200 underline"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {children}
+                            </a>
+                          ),
+                          blockquote: ({ children }) => (
+                            <blockquote className="border-l-4 border-purple-400 pl-4 italic text-white/70 mb-4">
+                              {children}
+                            </blockquote>
+                          ),
+                        }}
+                      >
+                        {creator.about_markdown}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 )}
 
