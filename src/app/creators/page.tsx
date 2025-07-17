@@ -319,7 +319,7 @@ export default function CreatorsPage() {
             paginatedCreators.map((creator) => (
               <Link
                 key={creator.id}
-                href={`/talent/${creator.id}`}
+                href={`/creators/${creator.id}`}
                 className="block group"
               >
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-2 max-w-sm mx-auto w-full">

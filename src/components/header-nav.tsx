@@ -130,7 +130,9 @@ export function HeaderNav() {
             } else if (item.href === "/creators") {
               // Creator aktif jika di /creators atau /talent/[id]
               isActive =
-                pathname === "/creators" || pathname.startsWith("/talent/");
+                pathname === "/creators" ||
+                pathname.startsWith("/talent/") ||
+                pathname.startsWith("/creators/");
             } else {
               // Untuk menu lain, gunakan exact match
               isActive = pathname === item.href;
