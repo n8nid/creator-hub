@@ -40,7 +40,7 @@ const navItems = [
   },
   {
     label: "Connect With Us",
-    href: "/connect",
+    href: "/connect-with-us",
     icon: LinkIcon,
   },
 ];
@@ -133,6 +133,9 @@ export function HeaderNav() {
                 pathname === "/creators" ||
                 pathname.startsWith("/talent/") ||
                 pathname.startsWith("/creators/");
+            } else if (item.href === "/connect-with-us") {
+              // Connect With Us aktif jika di /connect-with-us
+              isActive = pathname === "/connect-with-us";
             } else {
               // Untuk menu lain, gunakan exact match
               isActive = pathname === item.href;
