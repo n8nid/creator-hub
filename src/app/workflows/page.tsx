@@ -32,34 +32,6 @@ export default function WorkflowsPage() {
   const workflowsPerPage = 12;
   const supabase = createClientComponentClient();
 
-  // Data dummy workflows untuk testing pagination
-  const dummyWorkflows = Array.from({ length: 15 }, (_, i) => ({
-    id: `dummy-${i + 1}`,
-    title: `Dummy Workflow ${i + 1}`,
-    description: `Deskripsi workflow dummy ke-${
-      i + 1
-    }. Ini hanya data testing untuk pagination.`,
-    category: [
-      "E-Commerce",
-      "Automation",
-      "Analytics",
-      "Marketing",
-      "Finance",
-      "Content",
-    ][i % 6],
-    tags: ["dummy", `tag${i + 1}`],
-    nodes: Math.floor(Math.random() * 10) + 1,
-    downloads: Math.floor(Math.random() * 100),
-    profile: { name: `Dummy Creator ${i + 1}` },
-    screenshot_url: null,
-    json_n8n: null,
-    video_url: null,
-    complexity: ["simple", "medium", "complex"][i % 3],
-    status: "approved",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  }));
-
   useEffect(() => {
     fetchWorkflows(currentPage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,10 +91,7 @@ export default function WorkflowsPage() {
     setLoading(false);
   };
 
-  // Gabungkan data workflows dari Supabase dan dummy
-  const allWorkflows = [...workflows, ...dummyWorkflows];
-
-  const filteredWorkflows = allWorkflows.filter((w) => {
+  const filteredWorkflows = workflows.filter((w) => {
     const matchesSearch =
       w.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       w.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -236,8 +205,8 @@ export default function WorkflowsPage() {
                   textAlign: "left",
                 }}
               >
-                Temukan beragam workflow N8N buatan kreator Indonesia, dari yang
-                simpel hingga kompleks, untuk mempermudah pekerjaan Anda.
+                Temukan workflow automation yang powerful dan siap pakai.
+                Tingkatkan produktivitas dengan solusi yang sudah teruji.
               </div>
               {/* Search Bar */}
               <div className="relative w-full max-w-md">
@@ -268,8 +237,8 @@ export default function WorkflowsPage() {
                 textAlign: "left",
               }}
             >
-              Temukan beragam workflow N8N buatan kreator Indonesia, dari yang
-              simpel hingga kompleks, untuk mempermudah pekerjaan Anda.
+              Temukan workflow automation yang powerful dan siap pakai.
+              Tingkatkan produktivitas dengan solusi yang sudah teruji.
             </div>
             {/* Search Bar Mobile */}
             <div className="relative w-full">
@@ -285,25 +254,33 @@ export default function WorkflowsPage() {
           </div>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <Filter className="w-5 h-5 text-white/60" />
-          <span className="text-white/80 font-medium">Filter by category:</span>
-        </div>
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {["All", ...workflowCategories].map((category) => (
-            <button
-              key={category}
-              className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
-                categoryFilter === category
-                  ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
-                  : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20"
-              }`}
-              onClick={() => setCategoryFilter(category)}
-            >
-              {category}
-            </button>
-          ))}
+        {/* Filter Section */}
+        <div className="flex flex-col items-center justify-center mt-12 mb-8 gap-2">
+          <div className="flex flex-row items-center gap-4">
+            <Filter className="w-4 h-4 text-white/60" />
+            <span className="text-white/80 font-medium">
+              Filter by category:
+            </span>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {["All", ...workflowCategories].map((category) => (
+              <button
+                key={category}
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
+                  categoryFilter === category
+                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
+                    : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20"
+                }`}
+                onClick={() => setCategoryFilter(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+          <div className="text-white/60 text-sm text-center">
+            {filteredWorkflows.length} workflow
+            {filteredWorkflows.length !== 1 ? "s" : ""} found
+          </div>
         </div>
 
         {/* Workflows Grid */}
@@ -314,7 +291,7 @@ export default function WorkflowsPage() {
             </div>
           ) : paginatedWorkflows.length === 0 ? (
             <div className="col-span-full text-center py-12 text-white/60">
-              No workflows found.
+              Tidak ada workflow ditemukan.
             </div>
           ) : (
             paginatedWorkflows.map((workflow) => (
