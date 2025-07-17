@@ -6,6 +6,7 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import GradientCircle from "@/components/GradientCircle";
+import ReactMarkdown from "react-markdown";
 
 export default function WorkflowDetailPublicPage() {
   const supabase = createClientComponentClient();
@@ -281,12 +282,80 @@ export default function WorkflowDetailPublicPage() {
 
             {/* Kanan - Deskripsi Workflow */}
             <div className="lg:col-span-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
-              <h3 className="text-xl font-semibold text-white mb-4">
-                Deskripsi Workflow
-              </h3>
-              <div className="text-white/80 leading-relaxed whitespace-pre-line">
-                {workflow.description ||
-                  "Tidak ada deskripsi yang tersedia untuk workflow ini."}
+              <div className="prose prose-invert prose-lg max-w-none text-white/80 leading-relaxed">
+                <ReactMarkdown
+                  components={{
+                    h1: ({ children }) => (
+                      <h1 className="text-2xl font-bold text-white mb-4">
+                        {children}
+                      </h1>
+                    ),
+                    h2: ({ children }) => (
+                      <h2 className="text-xl font-bold text-white mb-3">
+                        {children}
+                      </h2>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 className="text-lg font-bold text-white mb-2">
+                        {children}
+                      </h3>
+                    ),
+                    p: ({ children }) => (
+                      <p className="text-white/80 mb-4 leading-relaxed">
+                        {children}
+                      </p>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="list-disc list-outside text-white/80 mb-4 space-y-1 ml-4">
+                        {children}
+                      </ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className="list-decimal list-outside text-white/80 mb-4 space-y-1 ml-4">
+                        {children}
+                      </ol>
+                    ),
+                    li: ({ children }) => (
+                      <li className="text-white/80">{children}</li>
+                    ),
+                    strong: ({ children }) => (
+                      <strong className="font-bold text-white">
+                        {children}
+                      </strong>
+                    ),
+                    em: ({ children }) => (
+                      <em className="italic text-white/90">{children}</em>
+                    ),
+                    code: ({ children }) => (
+                      <code className="bg-white/10 text-white px-2 py-1 rounded text-sm font-mono">
+                        {children}
+                      </code>
+                    ),
+                    pre: ({ children }) => (
+                      <pre className="bg-white/10 text-white p-4 rounded-lg overflow-x-auto mb-4">
+                        {children}
+                      </pre>
+                    ),
+                    a: ({ children, href }) => (
+                      <a
+                        href={href}
+                        className="text-purple-300 hover:text-purple-200 underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {children}
+                      </a>
+                    ),
+                    blockquote: ({ children }) => (
+                      <blockquote className="border-l-4 border-purple-400 pl-4 italic text-white/70 mb-4">
+                        {children}
+                      </blockquote>
+                    ),
+                  }}
+                >
+                  {workflow.description ||
+                    "Tidak ada deskripsi yang tersedia untuk workflow ini."}
+                </ReactMarkdown>
               </div>
             </div>
           </div>
