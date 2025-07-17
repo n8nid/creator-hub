@@ -177,6 +177,62 @@ export default function WorkflowDetailUserPage() {
         <p className="text-gray-600">Edit workflow template Anda</p>
       </div>
 
+      {/* Guidelines Section */}
+      <div className="mb-8">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
+          <h2 className="text-lg font-semibold text-amber-900 mb-3">
+            Tips untuk mengedit workflow:
+          </h2>
+          <div className="space-y-3 text-sm text-amber-800">
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-amber-700 text-xs font-bold">1</span>
+              </div>
+              <p>
+                <strong>Periksa perubahan sebelum simpan</strong> - Pastikan
+                semua field sudah benar dan workflow masih berfungsi
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-amber-700 text-xs font-bold">2</span>
+              </div>
+              <p>
+                <strong>Update deskripsi jika diperlukan</strong> - Gunakan
+                Markdown untuk menjelaskan perubahan yang dibuat
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-amber-700 text-xs font-bold">3</span>
+              </div>
+              <p>
+                <strong>Periksa JSON workflow</strong> - Pastikan JSON masih
+                valid dan tidak ada error syntax
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-amber-700 text-xs font-bold">4</span>
+              </div>
+              <p>
+                <strong>Update tags dan kategori</strong> - Sesuaikan jika ada
+                perubahan pada fungsi workflow
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="text-amber-700 text-xs font-bold">5</span>
+              </div>
+              <p>
+                <strong>Test preview workflow</strong> - Gunakan preview untuk
+                memastikan workflow masih berjalan dengan baik
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {isOwner ? (
         <form onSubmit={handleSave} className="space-y-8">
           {/* Judul */}

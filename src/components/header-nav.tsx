@@ -165,46 +165,72 @@ export function HeaderNav() {
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Avatar>
+              <Avatar className="h-12 w-12 cursor-pointer hover:opacity-80 transition-opacity">
                 <AvatarImage
                   src={profile?.profile_image || undefined}
                   alt={profile?.name || user.email}
                 />
-                <AvatarFallback style={{ fontSize: 24, fontWeight: "bold" }}>
+                <AvatarFallback
+                  style={{
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    backgroundColor: "#374151",
+                    color: "#F9FAFB",
+                  }}
+                >
                   {getInitials(profile?.name || user.email)}
                 </AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64 p-0">
-              <div className="flex flex-col items-center p-4 pb-2">
-                <Avatar className="h-16 w-16 mb-2">
+            <DropdownMenuContent
+              align="end"
+              className="w-64 p-0 border border-white/10 shadow-2xl"
+              style={{
+                background: "rgba(32, 26, 44, 0.4)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <div className="flex flex-col items-center p-4 pb-3">
+                <Avatar className="h-16 w-16 mb-3">
                   <AvatarImage
                     src={profile?.profile_image || undefined}
                     alt={profile?.name || user.email}
                   />
-                  <AvatarFallback style={{ fontSize: 32, fontWeight: "bold" }}>
+                  <AvatarFallback
+                    style={{
+                      fontSize: 28,
+                      fontWeight: "bold",
+                      backgroundColor: "rgba(55, 65, 81, 0.6)",
+                      color: "#F9FAFB",
+                    }}
+                  >
                     {getInitials(profile?.name || user.email)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="font-semibold text-lg text-center w-full truncate">
+                <div className="font-semibold text-lg text-center w-full truncate text-white mb-1">
                   {profile?.name || user.email}
                 </div>
-                <div className="text-xs text-gray-500 text-center w-full truncate">
+                <div className="text-xs text-white/70 text-center w-full truncate">
                   {user.email}
                 </div>
               </div>
-              <div className="border-t my-2" />
-              <DropdownMenuItem
-                onClick={() => router.push("/dashboard-profile/profile")}
-              >
-                Dashboard Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={handleSignOut}
-                className="text-red-600"
-              >
-                Sign Out
-              </DropdownMenuItem>
+              <div className="border-t border-white/10 mx-3" />
+              <div className="p-1">
+                <DropdownMenuItem
+                  onClick={() => router.push("/dashboard-profile")}
+                  className="text-white/90 hover:text-white hover:bg-white/5 focus:text-white focus:bg-white/5 rounded-lg mx-1 mb-1 px-3 py-2 transition-all duration-200 text-sm"
+                >
+                  Dashboard Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleSignOut}
+                  className="text-red-300 hover:text-red-200 hover:bg-red-500/10 focus:text-red-200 focus:bg-red-500/10 rounded-lg mx-1 px-3 py-2 transition-all duration-200 text-sm"
+                >
+                  Sign Out
+                </DropdownMenuItem>
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (

@@ -46,7 +46,7 @@ export function DashboardHeader() {
         {/* Logo dan Brand */}
         <div className="flex items-center gap-8">
           <Link
-            href="/dashboard-profile"
+            href="/"
             className="flex items-center gap-2 text-gray-900 hover:text-gray-700 transition-colors"
           >
             {/* N8N Logo - Node yang saling terhubung */}
