@@ -35,7 +35,7 @@ const navItems = [
   },
   {
     label: "Creator",
-    href: "/directory",
+    href: "/creators",
     icon: User,
   },
   {
@@ -127,10 +127,10 @@ export function HeaderNav() {
               // Workflow aktif jika di /workflows atau /workflows/[id]
               isActive =
                 pathname === "/workflows" || pathname.startsWith("/workflows/");
-            } else if (item.href === "/directory") {
-              // Creator aktif jika di /directory atau /talent/[id]
+            } else if (item.href === "/creators") {
+              // Creator aktif jika di /creators atau /talent/[id]
               isActive =
-                pathname === "/directory" || pathname.startsWith("/talent/");
+                pathname === "/creators" || pathname.startsWith("/talent/");
             } else {
               // Untuk menu lain, gunakan exact match
               isActive = pathname === item.href;
