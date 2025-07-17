@@ -46,7 +46,7 @@ export default function ProfileSubPage() {
 
   if (!user) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
+      <div className="text-center py-16">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">Not Logged In</h1>
         <p className="text-gray-600 mb-6">
           Silakan login untuk melihat profil Anda.
@@ -56,13 +56,18 @@ export default function ProfileSubPage() {
   }
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-8">Loading...</div>;
+    return (
+      <div className="text-center py-16">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="text-gray-600 mt-4">Loading...</p>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Profil Saya</h1>
+    <div className="space-y-10 mt-4">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-gray-900">Profil Saya</h1>
         <Button asChild>
           <Link href="/dashboard-profile/profile/edit">
             <Pencil className="h-4 w-4 mr-2" />

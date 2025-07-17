@@ -14,7 +14,21 @@ export function AuthLayout({ children }: AuthLayoutProps) {
   const isAuthPage =
     pathname === "/auth" || pathname === "/auth/reset-password";
 
+  // Halaman yang menggunakan layout sendiri (tidak perlu header/footer lama)
+  const isDashboardPage = pathname.startsWith("/dashboard-profile");
+  const isAdminPage = pathname.startsWith("/admin");
+
   if (isAuthPage) {
+    return (
+      <>
+        {children}
+        <DebugAuth />
+      </>
+    );
+  }
+
+  // Untuk halaman dashboard dan admin, tidak tampilkan header/footer lama
+  if (isDashboardPage || isAdminPage) {
     return (
       <>
         {children}

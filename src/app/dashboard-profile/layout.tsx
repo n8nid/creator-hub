@@ -1,5 +1,6 @@
 "use client";
-import { DashboardSidebar } from "@/components/dashboard-sidebar";
+import { DashboardHeader } from "@/components/dashboard-header";
+import { DashboardFooter } from "@/components/dashboard-footer";
 
 export default function DashboardProfileLayout({
   children,
@@ -7,9 +8,17 @@ export default function DashboardProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <DashboardSidebar />
-      <main className="flex-1 p-6">{children}</main>
+    <div className="min-h-screen bg-white flex flex-col">
+      {/* Header - Sticky */}
+      <DashboardHeader />
+
+      {/* Main Content - dengan padding yang lebih besar */}
+      <main className="flex-1 px-6 py-12 pb-20">
+        <div className="max-w-7xl mx-auto">{children}</div>
+      </main>
+
+      {/* Footer */}
+      <DashboardFooter />
     </div>
   );
 }
