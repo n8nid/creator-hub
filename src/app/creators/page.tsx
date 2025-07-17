@@ -33,22 +33,22 @@ export default function CreatorsPage() {
   const creatorsPerPage = 9;
   const supabase = createClientComponentClient();
 
-  const fetchCreators = async () => {
+    const fetchCreators = async () => {
     try {
       setLoading(true);
       const response = await fetch("/api/creators");
       if (response.ok) {
         const data = await response.json();
         setCreators(data);
-      } else {
+        } else {
         console.error("Failed to fetch creators");
-      }
+        }
     } catch (error) {
       console.error("Error fetching creators:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      } finally {
+        setLoading(false);
+      }
+    };
 
   useEffect(() => {
     fetchCreators();
@@ -231,7 +231,7 @@ export default function CreatorsPage() {
           {/* Mobile: Deskripsi dan Search */}
           <div className="md:hidden flex flex-col items-start w-full mt-6">
             <div
-              style={{
+        style={{
                 fontFamily: "Inter, Arial, sans-serif",
                 fontWeight: 400,
                 fontStyle: "normal",
@@ -327,7 +327,7 @@ export default function CreatorsPage() {
                     <Avatar className="h-16 w-16">
                       <AvatarImage
                         src={creator.profile_image || ""}
-                        alt={creator.name}
+                  alt={creator.name}
                       />
                       <AvatarFallback className="bg-gray-100 text-gray-600">
                         {creator.name
@@ -371,7 +371,7 @@ export default function CreatorsPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+              </div>
               </Link>
             ))
           )}
