@@ -379,7 +379,7 @@ export default function WorkflowDetailUserPage() {
             <Button
               type="submit"
               disabled={saving}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-purple-900 hover:bg-purple-800"
             >
               {saving ? (
                 <span className="flex items-center gap-2">

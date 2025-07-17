@@ -300,6 +300,15 @@ export default function WorkflowsSubPage() {
             >
               <CardContent className="p-4">
                 <div className="space-y-3">
+                  {/* Category */}
+                  {w.category && (
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-purple-900 text-white rounded-full">
+                        {w.category}
+                      </span>
+                    </div>
+                  )}
+
                   {/* Title */}
                   <h3 className="font-semibold text-gray-900">{w.title}</h3>
 

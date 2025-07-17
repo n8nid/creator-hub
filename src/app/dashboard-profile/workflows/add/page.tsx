@@ -343,7 +343,7 @@ export default function AddWorkflowPage() {
           <Button
             type="submit"
             disabled={submitting}
-            className="bg-purple-600 hover:bg-purple-700"
+            className="bg-purple-900 hover:bg-purple-800"
           >
             {submitting ? (
               <span className="flex items-center gap-2">
