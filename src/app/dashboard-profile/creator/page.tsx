@@ -234,25 +234,25 @@ export default function CreatorPage() {
   }
 
   return (
-    <div className="space-y-8 mt-4">
+    <div className="space-y-8 mt-4 overflow-x-hidden">
       {/* Header Section */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Creator Saya</h1>
-          <p className="text-gray-600 mt-2">
+      <div className="flex justify-between items-center px-2">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">Creator Saya</h1>
+          <p className="text-gray-600 mt-2 text-sm sm:text-base break-words">
             Kelola status creator dan portfolio Anda
           </p>
         </div>
       </div>
 
       {/* Profile Overview Card */}
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-start gap-6">
+      <Card className="mx-2 sm:mx-0">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
             {/* Avatar */}
-            <Avatar className="w-20 h-20">
+            <Avatar className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
               <AvatarImage src={profile?.profile_image} alt={profile?.name} />
-              <AvatarFallback className="text-xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
+              <AvatarFallback className="text-lg sm:text-xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
                 {profile?.name
                   ?.split(" ")
                   .map((n: string) => n[0])
@@ -261,52 +261,53 @@ export default function CreatorPage() {
             </Avatar>
 
             {/* Info */}
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-2xl font-bold text-gray-900">
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 break-words">
                   {profile?.name || "User"}
                 </h2>
-                <Button variant="outline" size="sm" asChild className="text-xs">
+                <Button variant="outline" size="sm" asChild className="text-xs w-full sm:w-auto">
                   <Link href="/dashboard-profile/profile/edit">
                     <Edit className="w-3 h-3 mr-1" />
-                    Lengkapi Profil
+                    <span className="hidden sm:inline">Lengkapi Profil</span>
+                    <span className="sm:hidden">Lengkapi</span>
                   </Link>
                 </Button>
               </div>
 
-              <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 mb-4">
                 <div className="flex items-center gap-1">
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-xs break-words">
                     {profile?.experience_level || "Beginner"}
                   </Badge>
                 </div>
                 {profile?.location && (
                   <div className="flex items-center gap-1">
-                    <MapPin className="w-3 h-3" />
-                    {profile.location}
+                    <MapPin className="w-3 h-3 flex-shrink-0" />
+                    <span className="break-words">{profile.location}</span>
                   </div>
                 )}
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900">
                     {stats.workflowCount}
                   </div>
-                  <div className="text-xs text-gray-600">Workflow</div>
+                  <div className="text-xs text-gray-600 break-words">Workflow</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900">
                     {stats.totalLikes}
                   </div>
-                  <div className="text-xs text-gray-600">Likes</div>
+                  <div className="text-xs text-gray-600 break-words">Likes</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900">
                     {stats.followerCount}
                   </div>
-                  <div className="text-xs text-gray-600">Followers</div>
+                  <div className="text-xs text-gray-600 break-words">Followers</div>
                 </div>
               </div>
             </div>
@@ -315,17 +316,17 @@ export default function CreatorPage() {
       </Card>
 
       {/* Application Status Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <UserCheck className="h-5 w-5 text-blue-600" />
-            Status Aplikasi Creator
+      <Card className="mx-2 sm:mx-0">
+        <CardHeader className="px-4 sm:px-6">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <UserCheck className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 flex-shrink-0" />
+            <span className="break-words">Status Aplikasi Creator</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-3">
+        <CardContent className="space-y-4 px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
             {getStatusBadge(creatorStatus?.status || "not_applied")}
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-gray-600 break-words">
               {creatorStatus?.status === "approved"
                 ? "Creator Aktif"
                 : creatorStatus?.status === "pending"
@@ -335,38 +336,40 @@ export default function CreatorPage() {
                 : "Belum Mengajukan"}
             </span>
           </div>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 break-words">
             {getStatusDescription(creatorStatus?.status || "not_applied")}
           </p>
 
           {creatorStatus?.alasan_penolakan && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <h4 className="font-medium text-red-800 mb-2">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4">
+              <h4 className="font-medium text-red-800 mb-2 break-words">
                 Alasan Penolakan:
               </h4>
-              <p className="text-sm text-red-700">
+              <p className="text-sm text-red-700 break-words">
                 {creatorStatus.alasan_penolakan}
               </p>
             </div>
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
             {!creatorStatus && (
               <Button
                 onClick={handleSubmitCreatorApplication}
                 disabled={submitting}
-                className="bg-purple-900 hover:bg-purple-800"
+                className="bg-purple-900 hover:bg-purple-800 w-full sm:w-auto"
               >
                 {submitting ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Mengirim Pengajuan...
+                    <span className="hidden sm:inline">Mengirim Pengajuan...</span>
+                    <span className="sm:hidden">Mengirim...</span>
                   </>
                 ) : (
                   <>
                     <Send className="h-4 w-4 mr-2" />
-                    Ajukan Sebagai Creator
+                    <span className="hidden sm:inline">Ajukan Sebagai Creator</span>
+                    <span className="sm:hidden">Ajukan Creator</span>
                   </>
                 )}
               </Button>
@@ -375,12 +378,13 @@ export default function CreatorPage() {
               <Button
                 onClick={handleSubmitCreatorApplication}
                 disabled={submitting}
-                className="bg-purple-900 hover:bg-purple-800"
+                className="bg-purple-900 hover:bg-purple-800 w-full sm:w-auto"
               >
                 {submitting ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Mengirim Pengajuan...
+                    <span className="hidden sm:inline">Mengirim Pengajuan...</span>
+                    <span className="sm:hidden">Mengirim...</span>
                   </>
                 ) : (
                   <>
@@ -391,17 +395,19 @@ export default function CreatorPage() {
               </Button>
             )}
             {creatorStatus?.status === "approved" && (
-              <Button asChild className="bg-purple-900 hover:bg-purple-800">
+              <Button asChild className="bg-purple-900 hover:bg-purple-800 w-full sm:w-auto">
                 <Link href="/dashboard-profile/workflows/add">
                   <Plus className="h-4 w-4 mr-2" />
-                  Mulai Bagikan Workflow
+                  <span className="hidden sm:inline">Mulai Bagikan Workflow</span>
+                  <span className="sm:hidden">Bagikan Workflow</span>
                 </Link>
               </Button>
             )}
             {creatorStatus?.status === "pending" && (
-              <Button variant="outline" disabled>
+              <Button variant="outline" disabled className="w-full sm:w-auto">
                 <Clock className="h-4 w-4 mr-2" />
-                Menunggu Review
+                <span className="hidden sm:inline">Menunggu Review</span>
+                <span className="sm:hidden">Menunggu</span>
               </Button>
             )}
           </div>
@@ -410,16 +416,16 @@ export default function CreatorPage() {
 
       {/* Creator Dashboard - Recent Activity */}
       {creatorStatus?.status === "approved" && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-green-600" />
-              Recent Activity
+        <Card className="mx-2 sm:mx-0">
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Activity className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 flex-shrink-0" />
+              <span className="break-words">Recent Activity</span>
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4 sm:px-6">
             {recentActivity.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {recentActivity.map((activity, index) => {
                   const Icon = activity.icon;
                   return (
@@ -427,14 +433,14 @@ export default function CreatorPage() {
                       key={index}
                       className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
                     >
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                         <Icon className="w-4 h-4 text-blue-600" />
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 break-words">
                           {activity.title}
                         </p>
-                        <p className="text-xs text-gray-600">
+                        <p className="text-xs text-gray-600 break-words">
                           {new Date(activity.date).toLocaleDateString("id-ID", {
                             day: "numeric",
                             month: "long",
@@ -447,9 +453,9 @@ export default function CreatorPage() {
                 })}
               </div>
             ) : (
-              <div className="text-center py-8">
+              <div className="text-center py-6 sm:py-8 px-4">
                 <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">
+                <p className="text-gray-600 text-sm sm:text-base break-words">
                   Belum ada aktivitas terbaru. Mulai dengan mengupload workflow
                   pertama Anda!
                 </p>

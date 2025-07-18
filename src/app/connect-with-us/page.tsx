@@ -739,10 +739,10 @@ const ConnectWithUsPage = () => {
               </div>
 
               {/* Text Content - Positioned to the left */}
-              <div className="w-full px-16 flex justify-start">
+              <div className="w-full px-4 sm:px-8 md:px-16 flex justify-start">
                 <div className="max-w-2xl relative" style={{ zIndex: 10 }}>
                   <div
-                    className="relative rounded-2xl border border-white/20 p-8 cursor-pointer overflow-hidden"
+                    className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer overflow-hidden"
                     style={{
                       width: "100%",
                       textAlign: "left",
@@ -767,25 +767,27 @@ const ConnectWithUsPage = () => {
                     {/* Content */}
                     <div className="relative z-10">
                       <h2
+                        className="whitespace-normal break-words"
                         style={{
                           fontFamily: "Albert Sans, Arial, sans-serif",
                           fontWeight: 250,
                           fontStyle: "thin",
-                          fontSize: "60px",
-                          lineHeight: "70px",
+                          fontSize: "clamp(2rem, 7vw, 48px)",
+                          lineHeight: "clamp(2.5rem, 8vw, 60px)",
                           letterSpacing: "-0.05em",
                           color: "#FFFBFB",
                           margin: "0 0 30px 0",
                         }}
                       >
-                        Platform ini hadir untuk menghubungkan Creator
+                        <span className="block md:inline">Platform ini hadir untuk</span>
+                        <span className="block md:inline"> menghubungkan Creator</span>
                       </h2>
                       <p
                         style={{
                           fontFamily: "Inter, Arial, sans-serif",
                           fontWeight: 300,
                           fontStyle: "light",
-                          fontSize: "18px",
+                          fontSize: "clamp(14px, 3.5vw, 18px)",
                           lineHeight: "150%",
                           letterSpacing: "-0.01em",
                           color: "#FFFFFF",
@@ -793,22 +795,16 @@ const ConnectWithUsPage = () => {
                           marginBottom: "32px",
                         }}
                       >
-                        dari berbagai bidang dengan para pengguna yang mencari
-                        inspirasi, ide, dan solusi melalui workflow yang
-                        praktis. Kami percaya, kolaborasi kreatif akan lebih
-                        mudah ketika prosesnya terbuka, sederhana, dan saling
-                        berbagi.
+                        dari berbagai bidang dengan para pengguna yang mencari inspirasi, ide, dan solusi melalui workflow yang praktis. Kami percaya, kolaborasi kreatif akan lebih mudah ketika prosesnya terbuka, sederhana, dan saling berbagi.
                         <br />
                         <br />
-                        Di sini, Anda bisa menemukan kreator berbakat,
-                        menjelajahi berbagai workflow, hingga membangun proses
-                        kerja yang lebih terarah dan efisien.
+                        Di sini, Anda bisa menemukan kreator berbakat, menjelajahi berbagai workflow, hingga membangun proses kerja yang lebih terarah dan efisien.
                       </p>
                       <div className="flex justify-start">
                         <a
                           href="/auth"
                           className="btn-jelajah flex items-center gap-3"
-                          style={{ fontSize: "18px" }}
+                          style={{ fontSize: "clamp(14px, 3.5vw, 18px)" }}
                         >
                           Connect With Us
                         </a>
@@ -892,13 +888,13 @@ const ConnectWithUsPage = () => {
                 lebih efektif.
               </p>
             </div>
-            <div className="flex flex-col gap-16 w-full">
+            <div className="flex flex-col gap-10 w-full">
               {/* Item 1 */}
               <div
-                className="flex items-start gap-4 relative"
-                style={{ marginLeft: "60px" }}
+                className="flex flex-col sm:flex-row items-start gap-2 sm:gap-4 relative"
+                style={{ marginLeft: "clamp(8px, 4vw, 40px)" }}
               >
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg">
+                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg mb-2 sm:mb-0">
                   <svg width="20" height="20" viewBox="0 0 20 20">
                     <circle cx="10" cy="10" r="10" fill="#C084FC" />
                     <path
@@ -911,22 +907,23 @@ const ConnectWithUsPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-xl text-white/90 font-normal mb-1">
+                  <div className="text-base sm:text-xl text-white/90 font-normal mb-1">
                     Share Your Workflow
                   </div>
-                  <div className="font-bold text-white text-lg leading-snug">
-                    Bagikan workflow Anda untuk membantu kreator lain
-                    <br />
-                    menemukan cara kerja yang lebih efisien dan terarah.
+                  <div
+                    className="font-bold text-white leading-snug"
+                    style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)", wordBreak: "break-word" }}
+                  >
+                    Bagikan workflow Anda untuk membantu kreator lain menemukan cara kerja yang lebih efisien dan terarah.
                   </div>
                 </div>
               </div>
               {/* Item 2 */}
               <div
-                className="flex items-start gap-4 relative"
-                style={{ marginLeft: "160px" }}
+                className="flex flex-col sm:flex-row items-start gap-2 sm:gap-4 relative"
+                style={{ marginLeft: "clamp(16px, 7vw, 80px)" }}
               >
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg">
+                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg mb-2 sm:mb-0">
                   <svg width="20" height="20" viewBox="0 0 20 20">
                     <circle cx="10" cy="10" r="10" fill="#C084FC" />
                     <path
@@ -939,22 +936,23 @@ const ConnectWithUsPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-xl text-white/90 font-normal mb-1">
+                  <div className="text-base sm:text-xl text-white/90 font-normal mb-1">
                     Access Ready-to-Use Workflows
                   </div>
-                  <div className="font-bold text-white text-lg leading-snug">
-                    Jelajahi berbagai workflow yang praktis dan dapat langsung
-                    <br />
-                    Anda terapkan dalam proses kerja Anda.
+                  <div
+                    className="font-bold text-white leading-snug"
+                    style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)", wordBreak: "break-word" }}
+                  >
+                    Jelajahi berbagai workflow yang praktis dan dapat langsung Anda terapkan dalam proses kerja Anda.
                   </div>
                 </div>
               </div>
               {/* Item 3 */}
               <div
-                className="flex items-start gap-4 relative"
-                style={{ marginLeft: "260px" }}
+                className="flex flex-col sm:flex-row items-start gap-2 sm:gap-4 relative"
+                style={{ marginLeft: "clamp(24px, 10vw, 120px)" }}
               >
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg">
+                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg mb-2 sm:mb-0">
                   <svg width="20" height="20" viewBox="0 0 20 20">
                     <circle cx="10" cy="10" r="10" fill="#C084FC" />
                     <path
@@ -967,13 +965,14 @@ const ConnectWithUsPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-xl text-white/90 font-normal mb-1">
+                  <div className="text-base sm:text-xl text-white/90 font-normal mb-1">
                     Connect & Collaborate
                   </div>
-                  <div className="font-bold text-white text-lg leading-snug">
-                    Bangun koneksi dan kolaborasi dengan kreator lain untuk
-                    <br />
-                    mengembangkan proyek yang lebih maksimal.
+                  <div
+                    className="font-bold text-white leading-snug"
+                    style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)", wordBreak: "break-word" }}
+                  >
+                    Bangun koneksi dan kolaborasi dengan kreator lain untuk mengembangkan proyek yang lebih maksimal.
                   </div>
                 </div>
               </div>
@@ -983,7 +982,7 @@ const ConnectWithUsPage = () => {
 
         {/* Call to Action Section */}
         <div
-          className="w-full mt-24 px-16 py-16 flex justify-center relative"
+          className="w-full mt-24 px-4 sm:px-8 md:px-16 py-10 flex justify-center relative"
           style={{
             background: "transparent",
             isolation: "isolate",
@@ -991,10 +990,8 @@ const ConnectWithUsPage = () => {
           }}
         >
           <div
-            className="relative rounded-2xl border border-white/20 p-8 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden"
+            className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer flex flex-col items-start md:items-center md:flex-row md:justify-between gap-6 md:gap-8 overflow-hidden w-full max-w-md md:max-w-2xl"
             style={{
-              maxWidth: "1000px",
-              width: "fit-content",
               background: "rgba(255, 255, 255, 0.05)",
               backdropFilter: "blur(10px)",
               zIndex: 30,
@@ -1022,32 +1019,20 @@ const ConnectWithUsPage = () => {
                   style={{
                     fontFamily: "Albert Sans, Arial, sans-serif",
                     fontWeight: 200,
-                    fontSize: "28px",
-                    lineHeight: "120%",
-                    color: "#CFC6E2",
+                    fontSize: "clamp(1.1rem, 4vw, 22px)",
+                    lineHeight: "130%",
+                    color: "#fff",
                     letterSpacing: "-0.01em",
-                    maxWidth: "500px",
                     textAlign: "left",
                   }}
                 >
-                  Sudah 300 orang bergabung.
-                  <br />
-                  Ayo, mulai perjalanan Anda hari ini!
+                  Sudah 300 orang bergabung.<br />Ayo, mulai perjalanan Anda hari ini!
                 </div>
               </div>
               <a
                 href="/auth"
-                className="rounded-full px-10 py-4 text-base font-semibold flex items-center gap-3 hover:scale-105"
-                style={{
-                  background: "linear-gradient(90deg, #D900FF, #9500FF 100%)",
-                  color: "#fff",
-                  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
-                  minWidth: "200px",
-                  justifyContent: "center",
-                  transition: "all 0.2s ease",
-                  backdropFilter: "none",
-                  WebkitBackdropFilter: "none",
-                }}
+                className="rounded-full mt-4 px-6 py-3 text-base font-semibold flex items-center justify-center gap-2 w-full md:w-auto btn-jelajah"
+                style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.1rem)", minHeight: "44px" }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.boxShadow =
                     "0 6px 20px rgba(0, 0, 0, 0.1)";
@@ -1066,12 +1051,12 @@ const ConnectWithUsPage = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
                   />
                 </svg>
               </a>

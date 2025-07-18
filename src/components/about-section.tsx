@@ -728,14 +728,12 @@ const AboutSection = () => {
           <div className="w-full px-16 flex justify-start">
             <div className="max-w-2xl relative" style={{ zIndex: 10 }}>
             <div
-              className="relative rounded-2xl border border-white/20 p-8 cursor-pointer overflow-hidden"
+              className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer overflow-hidden"
               style={{
+                maxWidth: "840px",
                 width: "100%",
-                  textAlign: "left",
-                position: "relative",
-                zIndex: 2,
-                  background: "rgba(255, 255, 255, 0.05)",
-                  backdropFilter: "blur(10px)",
+                background: "rgba(255, 255, 255, 0.05)",
+                backdropFilter: "blur(10px)",
               }}
               onMouseMove={handleMouseMove}
               onMouseEnter={handleMouseEnter}
@@ -757,8 +755,8 @@ const AboutSection = () => {
                     fontFamily: "Albert Sans, Arial, sans-serif",
                     fontWeight: 250,
                     fontStyle: "thin",
-                      fontSize: "60px",
-                      lineHeight: "70px",
+                      fontSize: "clamp(2rem, 6vw, 60px)",
+                      lineHeight: "clamp(2.5rem, 7vw, 70px)",
                     letterSpacing: "-0.05em",
                     color: "#FFFBFB",
                       margin: "0 0 30px 0",
@@ -771,7 +769,7 @@ const AboutSection = () => {
                     fontFamily: "Inter, Arial, sans-serif",
                     fontWeight: 300,
                     fontStyle: "light",
-                      fontSize: "18px",
+                      fontSize: "clamp(14px, 3.5vw, 18px)",
                     lineHeight: "150%",
                     letterSpacing: "-0.01em",
                     color: "#FFFFFF",
@@ -793,7 +791,7 @@ const AboutSection = () => {
                   <a
                     href="/connect"
                     className="btn-jelajah flex items-center gap-3"
-                      style={{ fontSize: "18px" }}
+                      style={{ fontSize: "clamp(14px, 3.5vw, 18px)" }}
                   >
                     Connect With Us
                   </a>
@@ -806,7 +804,7 @@ const AboutSection = () => {
 
         {/* Key Benefits Content */}
         <div
-          className="w-full mt-24 px-16 relative"
+          className="w-full mt-24 px-4 sm:px-8 md:px-16 relative"
           style={{ isolation: "isolate" }}
         >
           {/* SVG Ellipse tipis untuk menghubungkan icon centang - dipindah ke belakang */}
@@ -869,7 +867,7 @@ const AboutSection = () => {
               {/* Item 1 */}
               <div
                 className="flex items-start gap-4 relative"
-                style={{ marginLeft: "60px" }}
+                style={{ marginLeft: "clamp(20px, 5vw, 60px)" }}
               >
                 <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -897,7 +895,7 @@ const AboutSection = () => {
               {/* Item 2 */}
               <div
                 className="flex items-start gap-4 relative"
-                style={{ marginLeft: "160px" }}
+                style={{ marginLeft: "clamp(40px, 10vw, 160px)" }}
               >
                 <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -925,7 +923,7 @@ const AboutSection = () => {
               {/* Item 3 */}
               <div
                 className="flex items-start gap-4 relative"
-                style={{ marginLeft: "260px" }}
+                style={{ marginLeft: "clamp(60px, 15vw, 260px)" }}
               >
                 <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -956,11 +954,11 @@ const AboutSection = () => {
       </div>
       {/* Call to Action Section */}
       <div
-        className="w-full mt-24 px-16 py-16 flex justify-center relative"
+        className="w-full mt-24 px-4 sm:px-8 md:px-16 py-16 flex justify-center relative"
         style={{ background: "transparent", isolation: "isolate", zIndex: 20 }}
       >
         <div
-          className="relative rounded-2xl border border-white/20 p-8 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden"
+          className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden"
           style={{
             maxWidth: "1000px",
             width: "fit-content",
@@ -986,17 +984,17 @@ const AboutSection = () => {
             className="relative flex flex-col md:flex-row items-center justify-between gap-8 w-full"
             style={{ zIndex: 40 }}
           >
-            <div className="flex flex-col items-start justify-center">
+            <div className="flex flex-col items-start justify-center text-center md:text-left">
               <div
                 style={{
                   fontFamily: "Albert Sans, Arial, sans-serif",
                   fontWeight: 200,
-                  fontSize: "28px",
+                  fontSize: "clamp(1.25rem, 4vw, 28px)",
                   lineHeight: "120%",
                   color: "#CFC6E2",
                   letterSpacing: "-0.01em",
                   maxWidth: "500px",
-                  textAlign: "left",
+                  textAlign: "center",
                 }}
               >
                 Sudah 3.000+ orang bergabung.
@@ -1006,7 +1004,7 @@ const AboutSection = () => {
             </div>
             <a
               href="/auth"
-              className="rounded-full px-10 py-4 text-base font-semibold flex items-center gap-3 hover:scale-105"
+              className="rounded-full px-10 py-4 text-base font-semibold flex items-center gap-3 hover:scale-105 w-full md:w-auto justify-center"
               style={{
                 background: "linear-gradient(90deg, #D900FF 0%, #9500FF 100%)",
                 color: "#fff",

@@ -80,7 +80,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen text-white overflow-visible content-above-gradient">
-      <div className="w-full px-16 relative z-10">
+      <div className="w-full px-4 sm:px-8 md:px-16 relative z-10">
         {/* HERO HEADING & SUBHEADING */}
         <div className="w-full pt-12 md:pt-20 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col md:flex-row md:items-center w-full">
@@ -97,7 +97,7 @@ const HeroSection = () => {
                   fontFamily: "Inter, Arial, sans-serif",
                   fontWeight: 400,
                   fontStyle: "thin",
-                  fontSize: "20px",
+                  fontSize: "clamp(16px, 4vw, 20px)",
                   lineHeight: "150%",
                   letterSpacing: "-0.01em",
                   color: "#FFFFFF",
@@ -142,7 +142,7 @@ const HeroSection = () => {
             style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
             <div
-              className="relative rounded-2xl border border-white/20 p-8 cursor-pointer overflow-hidden"
+              className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer overflow-hidden"
               style={{
                 maxWidth: "840px",
                 width: "100%",
@@ -167,13 +167,13 @@ const HeroSection = () => {
                 <h2
                   style={{
                     fontFamily: "Albert Sans, Arial, sans-serif",
-                    fontSize: "48px",
+                    fontSize: "clamp(24px, 6vw, 48px)",
                     lineHeight: "120%",
                     letterSpacing: "-0.02em",
                     color: "#FFFBFB",
                     textAlign: "left",
                     margin: 0,
-                    marginBottom: "32px",
+                    marginBottom: "24px",
                   }}
                 >
                   <span
@@ -184,8 +184,7 @@ const HeroSection = () => {
                       color: "rgba(255, 255, 255, 0.8)",
                     }}
                   >
-                    Dapatkan insight, workflow siap pakai, dan dukungan dari
-                    komunitas yang aktif dan solutif.
+                    Dapatkan insight, workflow siap pakai, dan dukungan dari komunitas yang aktif dan solutif.
                   </span>
                   <br />
                   <span
@@ -198,9 +197,9 @@ const HeroSection = () => {
                     Workflow hebat dimulai dari sini.
                   </span>
                 </h2>
-                <div className="flex flex-row gap-4 md:gap-6">
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-6">
                   <a
-                    className="btn-jelajah flex items-center gap-3"
+                    className="btn-jelajah flex items-center justify-center gap-3 w-full sm:w-auto"
                     href="/workflows"
                   >
                     Jelajahi Workflow
@@ -220,7 +219,7 @@ const HeroSection = () => {
                     </svg>
                   </a>
                   <a
-                    className="btn-creator flex items-center gap-3"
+                    className="btn-creator flex items-center justify-center gap-3 w-full sm:w-auto"
                     href="/directory"
                   >
                     Temukan Creator
