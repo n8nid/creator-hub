@@ -1,11 +1,11 @@
-import { Suspense } from "react"
-import { TalentProfile } from "@/components/talent-profile"
-import { TalentProfileSkeleton } from "@/components/talent-profile-skeleton"
+import { Suspense } from "react";
+import { TalentProfile } from "@/components/talent-profile";
+import { TalentProfileSkeleton } from "@/components/talent-profile-skeleton";
 
 interface TalentProfilePageProps {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
 export default function TalentProfilePage({ params }: TalentProfilePageProps) {
@@ -15,5 +15,5 @@ export default function TalentProfilePage({ params }: TalentProfilePageProps) {
         <TalentProfile profileId={params.id} />
       </Suspense>
     </div>
-  )
+  );
 }

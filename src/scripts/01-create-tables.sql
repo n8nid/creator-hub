@@ -15,6 +15,7 @@ CREATE TABLE public.profiles (
   user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   bio TEXT,
+  about_markdown TEXT, -- Markdown content for detailed about section
   location TEXT,
   website TEXT,
   linkedin TEXT,

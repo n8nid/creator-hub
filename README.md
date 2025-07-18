@@ -12,7 +12,7 @@ Creator Hub is a dedicated platform for Indonesian n8n creators to share, collab
 - Best practices and tutorials for Indonesian creators
 - Collaboration opportunities with fellow n8n enthusiasts
 - Resource sharing and knowledge exchange
-- Showcase of Indonesian n8n success stories
+- Showcase of Indonesian n8n success stories.
 
 ## Getting Started
 

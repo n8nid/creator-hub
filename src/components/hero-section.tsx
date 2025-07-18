@@ -1,114 +1,246 @@
+"use client";
+
 import React from "react";
 import { ArrowRight, Zap, Users, ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { useAuth } from "@/lib/auth-context";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { useRouter, usePathname } from "next/navigation";
+
+function getInitials(nameOrEmail: string) {
+  if (!nameOrEmail) return "?";
+  const parts = nameOrEmail.split(" ");
+  if (parts.length === 1) return parts[0][0].toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
 
 const HeroSection = () => {
+  const { user, isAdmin, signOut } = useAuth();
+  const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
+  const [profile, setProfile] = useState<any>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const fetchRoleAndProfile = async () => {
+      if (user) {
+        setIsUserAdmin(await isAdmin(user.id));
+        // Ambil data profil user
+        const { data } = await supabase
+          .from("profiles")
+          .select("name, profile_image")
+          .eq("user_id", user.id)
+          .single();
+        setProfile(data);
+      }
+    };
+    fetchRoleAndProfile();
+  }, [user, isAdmin]);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/");
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Update posisi cursor secara langsung untuk responsivitas maksimal
+    setMousePosition({ x, y });
+  };
+
+  const handleMouseEnter = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setIsHovering(true);
+      setIsTransitioning(false);
+    }, 50);
+  };
+
+  const handleMouseLeave = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setIsHovering(false);
+      setIsTransitioning(false);
+    }, 50);
+  };
+
   return (
-    <section className="relative min-h-screen animated-gradient text-white overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="w-full h-full"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        ></div>
-      </div>
-
-      {/* Animated gradient orbs */}
-      <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float"></div>
-      <div className="absolute top-40 right-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float-delayed"></div>
-      <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float-slow"></div>
-      <div className="absolute top-1/2 left-1/4 w-48 h-48 bg-cyan-400 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-float-reverse"></div>
-      <div className="absolute bottom-1/3 right-1/4 w-56 h-56 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-float-delayed"></div>
-
-      <div className="relative z-10 mx-auto max-w-screen-xl px-4 py-10 lg:flex lg:items-center lg:min-h-screen">
-        <div className="mx-auto max-w-4xl text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-purple-300 px-6 py-3 rounded-full text-sm font-medium mb-8 hover:bg-white/15 transition-all duration-300">
-            <Zap className="w-4 h-4" />
-            Automation Community Indonesia
+    <section className="relative min-h-screen text-white overflow-visible content-above-gradient">
+      <div className="w-full px-16 relative z-10">
+        {/* HERO HEADING & SUBHEADING */}
+        <div className="w-full pt-12 md:pt-20 flex flex-col gap-6 md:gap-10">
+          <div className="flex flex-col md:flex-row md:items-center w-full">
+            {/* Kiri: Heading, Community, dan Deskripsi */}
+            <div className="flex flex-col items-start flex-1 min-w-0">
+              <h1 className="font-sans font-semibold text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-white mb-0 text-left">
+                N8N Indonesia
+              </h1>
+              <div className="font-sans font-thin text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white/80 mb-2 text-left">
+                Community
+              </div>
+              <div
+                style={{
+                  fontFamily: "Inter, Arial, sans-serif",
+                  fontWeight: 400,
+                  fontStyle: "thin",
+                  fontSize: "20px",
+                  lineHeight: "150%",
+                  letterSpacing: "-0.01em",
+                  color: "#FFFFFF",
+                  marginTop: "8px",
+                  marginBottom: "0",
+                  textAlign: "left",
+                }}
+              >
+                Temukan dan bagikan workflow automation yang powerful.
+              </div>
+            </div>
+            {/* Tengah: Garis Penghubung */}
+            <div className="hidden md:flex items-center justify-center px-8">
+              <div className="h-0.5 w-32 bg-white/40" />
+            </div>
+            {/* Kanan: Deskripsi */}
+            <div className="hidden md:flex flex-1 min-w-0">
+              <div
+                className="font-sans font-normal text-lg text-white/80 text-left"
+                style={{
+                  fontFamily: "Albert Sans, Arial, sans-serif",
+                  fontWeight: 400,
+                  fontStyle: "normal",
+                  fontSize: "28px", // sebelumnya 35px
+                  lineHeight: "107%",
+                  letterSpacing: "-0.01em",
+                  color: "#FFFFFF",
+                  maxWidth: "100%",
+                  whiteSpace: "normal",
+                  textAlign: "left",
+                }}
+              >
+                Bergabunglah dengan komunitas N8N Indonesia dan tingkatkan
+                produktivitas Anda.
+              </div>
+            </div>
           </div>
-
-          {/* Main heading with staggered animation */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-none">
-            <span className="block mb-2">
-              {'N8N Indonesia'.split('').map((char, index) => (
-                <span
-                  key={index}
-                  className="sparkle-letter inline-block bg-gradient-to-r from-green-300 via-blue-400 to-purple-500 bg-clip-text text-transparent relative"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+        </div>
+        {/* INSIGHT & BUTTONS */}
+        <div className="w-full py-20 md:py-32 flex flex-col items-center">
+          <div
+            style={{ width: "100%", display: "flex", justifyContent: "center" }}
+          >
+            <div
+              className="relative rounded-2xl border border-white/20 p-8 cursor-pointer overflow-hidden"
+              style={{
+                maxWidth: "840px",
+                width: "100%",
+                background: "rgba(255, 255, 255, 0.05)",
+                backdropFilter: "blur(10px)",
+              }}
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              {/* Gradient overlay yang mengikuti cursor */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.4) 0%, rgba(168, 85, 247, 0.3) 30%, rgba(236, 72, 153, 0.2) 60%, transparent 100%)`,
+                  opacity: isHovering ? 1 : 0,
+                  transition: "opacity 0.2s ease-in-out",
+                }}
+              />
+              {/* Content */}
+              <div className="relative z-10">
+                <h2
+                  style={{
+                    fontFamily: "Albert Sans, Arial, sans-serif",
+                    fontSize: "48px",
+                    lineHeight: "120%",
+                    letterSpacing: "-0.02em",
+                    color: "#FFFBFB",
+                    textAlign: "left",
+                    margin: 0,
+                    marginBottom: "32px",
+                  }}
                 >
-                  {char === ' ' ? '\u00A0' : char}
-                </span>
-              ))}
-            </span>
-            <span className="block text-white text-4xl md:text-5xl lg:text-6xl font-light hover:text-purple-200 transition-colors duration-300">
-              Community
-            </span>
-          </h1>
-
-          {/* Description */}
-          <p className="mx-auto mt-8 max-w-3xl text-xl md:text-2xl text-gray-300 leading-relaxed font-light">
-            Temukan dan bagikan workflow automation yang powerful.
-            <br className="hidden md:block" />
-            Bergabunglah dengan komunitas N8N Indonesia dan tingkatkan
-            produktivitas Anda.
-          </p>
-
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 mt-12 mb-12">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">500+</div>
-              <div className="text-gray-400 text-sm">Active Members</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">150+</div>
-              <div className="text-gray-400 text-sm">Workflows Shared</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-2">24/7</div>
-              <div className="text-gray-400 text-sm">Community Support</div>
-            </div>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="mt-12 flex flex-col sm:flex-row flex-wrap justify-center gap-6">
-            <a
-              className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 text-lg font-semibold text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden"
-              href="/workflows"
-            >
-              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
-              <Zap className="w-5 h-5 relative z-10" />
-              <span className="relative z-10">Jelajahi Workflow</span>
-              <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-            </a>
-
-            <a
-              className="group relative inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/15 px-8 py-4 text-lg font-semibold text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              href="/directory"
-            >
-              <Users className="w-5 h-5" />
-              <span>Temukan Creator</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
-
-            <a
-              className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-4 text-lg font-semibold text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden"
-              href="https://n8nid.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12"></div>
-              <Users className="w-5 h-5 relative z-10" />
-              <span className="relative z-10">Join Discord</span>
-              <ExternalLink className="w-4 h-4 relative z-10" />
-            </a>
-          </div>
-
-          {/* Scroll indicator */}
-          <div className="mt-20 animate-bounce">
-            <div className="w-6 h-10 border-2 border-white/30 rounded-full mx-auto">
-              <div className="w-1 h-3 bg-white/50 rounded-full mx-auto mt-2 animate-pulse"></div>
+                  <span
+                    style={{
+                      fontFamily: "Albert Sans, Arial, sans-serif",
+                      fontWeight: 100,
+                      fontStyle: "normal",
+                      color: "rgba(255, 255, 255, 0.8)",
+                    }}
+                  >
+                    Dapatkan insight, workflow siap pakai, dan dukungan dari
+                    komunitas yang aktif dan solutif.
+                  </span>
+                  <br />
+                  <span
+                    style={{
+                      fontWeight: 600,
+                      fontStyle: "normal",
+                      color: "#FFFBFB",
+                    }}
+                  >
+                    Workflow hebat dimulai dari sini.
+                  </span>
+                </h2>
+                <div className="flex flex-row gap-4 md:gap-6">
+                  <a
+                    className="btn-jelajah flex items-center gap-3"
+                    href="/workflows"
+                  >
+                    Jelajahi Workflow
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </a>
+                  <a
+                    className="btn-creator flex items-center gap-3"
+                    href="/directory"
+                  >
+                    Temukan Creator
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
