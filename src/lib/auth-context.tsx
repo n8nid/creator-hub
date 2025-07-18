@@ -5,9 +5,21 @@ import { User, Session } from "@supabase/supabase-js";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 
+type Profile = {
+  id: string;
+  user_id: string;
+  name: string;
+  profile_image: string | null;
+  status: string;
+  experience_level: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 type AuthContextType = {
   user: User | null;
   session: Session | null;
+  profile: Profile | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
@@ -20,10 +32,32 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Use the auth helpers client for better SSR support
   const supabase = createClientComponentClient();
+
+  // Fetch user profile
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", userId)
+        .single();
+
+      if (error) {
+        console.error("Error fetching profile:", error);
+        setProfile(null);
+      } else {
+        setProfile(data);
+      }
+    } catch (error) {
+      console.error("Error in fetchProfile:", error);
+      setProfile(null);
+    }
+  };
 
   useEffect(() => {
     // Check active sessions and sets the user
@@ -31,6 +65,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log("Initial session check:", !!session);
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      }
       setLoading(false);
     });
 
@@ -41,6 +78,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log("Auth state change:", event, !!session);
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      } else {
+        setProfile(null);
+      }
       setLoading(false);
     });
 
@@ -51,8 +93,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (user && session) {
       console.log("[Auth Debug] User:", user);
       console.log("[Auth Debug] Session:", session);
+      console.log("[Auth Debug] Profile:", profile);
     }
-  }, [user, session]);
+  }, [user, session, profile]);
 
   const signIn = async (email: string, password: string) => {
     console.log("SignIn called with email:", email);
@@ -122,6 +165,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) throw error;
     setSession(null);
     setUser(null);
+    setProfile(null);
   };
 
   const isAdmin = async (userId: string): Promise<boolean> => {
@@ -135,7 +179,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, signIn, signUp, signOut, isAdmin }}
+      value={{
+        user,
+        session,
+        profile,
+        loading,
+        signIn,
+        signUp,
+        signOut,
+        isAdmin,
+      }}
     >
       {children}
     </AuthContext.Provider>

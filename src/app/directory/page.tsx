@@ -47,10 +47,31 @@ export default function DirectoryPage() {
   const fetchCreators = async () => {
     try {
       setLoading(true);
+
+      // Ambil user_id yang sudah approved di creator_applications
+      const { data: approvedUsers, error: approvedUsersError } = await supabase
+        .from("creator_applications")
+        .select("user_id")
+        .eq("status", "approved");
+
+      if (approvedUsersError) {
+        console.error("Error fetching approved users:", approvedUsersError);
+        return;
+      }
+
+      if (!approvedUsers || approvedUsers.length === 0) {
+        console.log("No approved creators found");
+        setCreators([]);
+        return;
+      }
+
+      const approvedUserIds = approvedUsers.map((app) => app.user_id);
+
+      // Ambil profiles dari user yang sudah approved di creator_applications
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("status", "approved")
+        .in("user_id", approvedUserIds)
         .order("created_at", { ascending: false });
 
       if (error) {

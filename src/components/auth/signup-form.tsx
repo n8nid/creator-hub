@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 
 const formSchema = z
   .object({
@@ -50,7 +51,7 @@ export function SignUpForm() {
       await signUp(values.email, values.password);
       setShowVerifyDialog(true);
     } catch (error) {
-      alert("Failed to create account. Please try again.");
+      toast.error("Failed to create account. Please try again.");
     } finally {
       setIsLoading(false);
     }

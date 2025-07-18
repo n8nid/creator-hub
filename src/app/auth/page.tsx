@@ -8,6 +8,7 @@ import { SignUpForm } from "@/components/auth/signup-form";
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 import { useAuth } from "@/lib/auth-context";
 import { AuthHeader } from "@/components/auth/auth-header";
+import { AuthToaster } from "@/components/auth/auth-toaster";
 
 export default function AuthPage() {
   const { user, loading, isAdmin } = useAuth();
@@ -53,6 +54,7 @@ export default function AuthPage() {
         }}
       >
         <AuthHeader />
+        <AuthToaster />
         <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -74,6 +76,7 @@ export default function AuthPage() {
         }}
       >
         <AuthHeader />
+        <AuthToaster />
         <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -93,6 +96,7 @@ export default function AuthPage() {
       }}
     >
       <AuthHeader />
+      <AuthToaster />
       <div className="flex items-center justify-center h-[calc(100vh-4rem)] -mt-8">
         <div className="w-full max-w-md space-y-6 px-4">
           <div className="text-center">

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { Bell, ChevronDown, User } from "lucide-react";
+import { Bell, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,11 +11,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function DashboardHeader() {
   const pathname = usePathname();
-  const { user, signOut } = useAuth();
+  const router = useRouter();
+  const { user, profile, signOut } = useAuth();
 
   const navigation = [
     {
@@ -35,6 +36,8 @@ export function DashboardHeader() {
   const handleSignOut = async () => {
     try {
       await signOut();
+      // Redirect ke halaman auth login setelah logout
+      router.push("/auth");
     } catch (error) {
       console.error("Error signing out:", error);
     }
@@ -181,32 +184,33 @@ export function DashboardHeader() {
             </span>
           </Button>
 
-          {/* User Profile Dropdown */}
+          {/* User Profile Dropdown - Hanya Icon */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="flex items-center gap-2 text-gray-700 hover:text-gray-900"
+                size="icon"
+                className="h-10 w-10 rounded-full p-0 hover:bg-gray-100"
               >
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-gray-100 text-gray-600">
-                    {user?.email?.charAt(0).toUpperCase()}
+                <Avatar className="h-10 w-10">
+                  <AvatarImage
+                    src={profile?.profile_image || undefined}
+                    alt={profile?.name || user?.email || "User"}
+                  />
+                  <AvatarFallback className="bg-gray-100 text-gray-600 text-sm font-medium">
+                    {profile?.name?.charAt(0).toUpperCase() ||
+                      user?.email?.charAt(0).toUpperCase() ||
+                      "U"}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm font-medium">
-                  {user?.email?.split("@")[0]}
-                </span>
-                <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem asChild>
-                <Link href="/dashboard-profile/profile">
-                  <User className="mr-2 h-4 w-4" />
-                  Profile Settings
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleSignOut}>
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="text-black hover:text-black"
+              >
+                <LogOut className="mr-2 h-4 w-4" />
                 Sign Out
               </DropdownMenuItem>
             </DropdownMenuContent>

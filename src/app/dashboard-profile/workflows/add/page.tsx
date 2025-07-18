@@ -131,7 +131,7 @@ export default function AddWorkflowPage() {
           className="flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
-          Kembali ke Workflow Saya
+          Kembali
         </Button>
       </div>
 

@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Search, ChevronDown, Workflow } from "lucide-react";
 import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -19,7 +18,6 @@ import {
 export default function WorkflowsSubPage() {
   const { user } = useAuth();
   const supabase = createClientComponentClient();
-  const { toast } = useToast();
   const [profile, setProfile] = useState<any>(null);
   const [myWorkflows, setMyWorkflows] = useState<any[]>([]);
   const [filteredWorkflows, setFilteredWorkflows] = useState<any[]>([]);

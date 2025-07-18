@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { HeaderNav } from "@/components/header-nav";
 import MainFooter from "@/components/main-footer";
 import { DebugAuth } from "@/components/auth/debug-auth";
+import { GeneralToaster } from "@/components/ui/general-toaster";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -33,6 +34,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       <>
         {children}
         <DebugAuth />
+        <GeneralToaster />
       </>
     );
   }
@@ -43,6 +45,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       {children}
       <MainFooter />
       <DebugAuth />
+      <GeneralToaster />
     </>
   );
 }

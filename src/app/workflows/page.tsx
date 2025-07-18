@@ -39,56 +39,35 @@ export default function WorkflowsPage() {
 
   const fetchWorkflows = async (page = 1) => {
     setLoading(true);
-    const from = (page - 1) * workflowsPerPage;
-    const to = from + workflowsPerPage - 1;
-    // Fetch workflows for current page
-    const { data, error, count } = await supabase
-      .from("workflows")
-      .select("*, category")
-      .eq("status", "approved")
-      .order("created_at", { ascending: false })
-      .range(from, to);
-    // Ambil semua profile_id unik
-    const profileIds = [...new Set((data || []).map((w) => w.profile_id))];
-    let profilesMap: Record<string, { name: string; profile_image: string }> =
-      {};
-    if (profileIds.length > 0) {
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select("id, name, profile_image")
-        .in("id", profileIds);
-      profilesMap = (profiles || []).reduce(
-        (
-          acc: Record<string, { name: string; profile_image: string }>,
-          p: { id: string; name: string; profile_image: string }
-        ) => {
-          acc[p.id] = { name: p.name, profile_image: p.profile_image };
-          return acc;
-        },
-        {}
-      );
-    }
-    // Mapping nama profile ke workflow
-    const workflowsArr: any[] = data || [];
-    const workflowsWithName: WorkflowWithProfileName[] = workflowsArr.map(
-      (w: { profile_id: string }) => {
-        const id = String(w.profile_id);
-        const profileData = profilesMap[id];
-        return {
-          ...w,
-          profile_name: profileData?.name || "-",
-          profile_image: profileData?.profile_image || null,
-        };
+
+    try {
+      // Gunakan API endpoint yang sudah diperbaiki
+      const response = await fetch("/api/workflows");
+      if (response.ok) {
+        const data = await response.json();
+        const workflowsData = data.workflows || [];
+
+        // Mapping data untuk kompatibilitas
+        const workflowsWithName: WorkflowWithProfileName[] = workflowsData.map(
+          (w: any) => ({
+            ...w,
+            profile_name: w.profile_name || "-",
+            profile_image: w.profile_image || null,
+            profile_id: w.profile_id,
+          })
+        );
+
+        setWorkflows(workflowsWithName);
+      } else {
+        console.error("Failed to fetch workflows");
+        setWorkflows([]);
       }
-    );
-    if (!error) {
-      setWorkflows(workflowsWithName || []);
-      // Fetch total count for pagination
-      if (typeof count === "number") {
-        // setTotalPages(Math.ceil(count / workflowsPerPage)); // This line is removed
-      }
+    } catch (error) {
+      console.error("Error fetching workflows:", error);
+      setWorkflows([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const filteredWorkflows = workflows.filter((w) => {

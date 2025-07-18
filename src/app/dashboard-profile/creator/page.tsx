@@ -22,8 +22,10 @@ import {
   Heart,
   UserPlus,
   FileText,
+  Send,
 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function CreatorPage() {
   const { user } = useAuth();
@@ -37,6 +39,7 @@ export default function CreatorPage() {
   });
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchCreatorData = async () => {
@@ -125,6 +128,50 @@ export default function CreatorPage() {
     fetchCreatorData();
   }, [user, supabase]);
 
+  // Function to submit creator application
+  const handleSubmitCreatorApplication = async () => {
+    if (!user) {
+      toast.error("Anda harus login terlebih dahulu");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/creator-application", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.message === "Sudah pernah mengajukan") {
+          toast.info("Anda sudah pernah mengajukan sebagai creator");
+        } else {
+          toast.success("Pengajuan creator berhasil dikirim!");
+          // Refresh creator status
+          const { data: creatorAppData } = await supabase
+            .from("creator_applications")
+            .select("*")
+            .eq("user_id", user.id)
+            .order("tanggal_pengajuan", { ascending: false })
+            .limit(1)
+            .single();
+          setCreatorStatus(creatorAppData);
+        }
+      } else {
+        toast.error(data.error || "Gagal mengirim pengajuan");
+      }
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      toast.error("Terjadi kesalahan saat mengirim pengajuan");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "approved":
@@ -196,14 +243,6 @@ export default function CreatorPage() {
             Kelola status creator dan portfolio Anda
           </p>
         </div>
-        {(!creatorStatus || creatorStatus?.status === "rejected") && (
-          <Button asChild>
-            <Link href="/creator-application">
-              <Plus className="h-4 w-4 mr-2" />
-              Ajukan Sebagai Creator
-            </Link>
-          </Button>
-        )}
       </div>
 
       {/* Profile Overview Card */}
@@ -314,19 +353,41 @@ export default function CreatorPage() {
           {/* Action Buttons */}
           <div className="flex gap-3 pt-4">
             {!creatorStatus && (
-              <Button asChild>
-                <Link href="/creator-application">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Ajukan Sebagai Creator
-                </Link>
+              <Button
+                onClick={handleSubmitCreatorApplication}
+                disabled={submitting}
+                className="bg-purple-900 hover:bg-purple-800"
+              >
+                {submitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Mengirim Pengajuan...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4 mr-2" />
+                    Ajukan Sebagai Creator
+                  </>
+                )}
               </Button>
             )}
             {creatorStatus?.status === "rejected" && (
-              <Button asChild>
-                <Link href="/creator-application">
-                  <Edit className="h-4 w-4 mr-2" />
-                  Ajukan Ulang
-                </Link>
+              <Button
+                onClick={handleSubmitCreatorApplication}
+                disabled={submitting}
+                className="bg-purple-900 hover:bg-purple-800"
+              >
+                {submitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Mengirim Pengajuan...
+                  </>
+                ) : (
+                  <>
+                    <FileText className="h-4 w-4 mr-2" />
+                    Ajukan Ulang
+                  </>
+                )}
               </Button>
             )}
             {creatorStatus?.status === "approved" && (
@@ -338,8 +399,9 @@ export default function CreatorPage() {
               </Button>
             )}
             {creatorStatus?.status === "pending" && (
-              <Button variant="outline" asChild>
-                <Link href="/creator-application">Lihat Detail Aplikasi</Link>
+              <Button variant="outline" disabled>
+                <Clock className="h-4 w-4 mr-2" />
+                Menunggu Review
               </Button>
             )}
           </div>
@@ -393,28 +455,6 @@ export default function CreatorPage() {
                 </p>
               </div>
             )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Empty State for Not Applied */}
-      {!creatorStatus && (
-        <Card className="text-center py-16">
-          <CardContent>
-            <UserCheck className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Anda belum mengajukan diri sebagai creator
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Mulai perjalanan Anda sebagai creator n8n Indonesia dan bagikan
-              workflow automation Anda
-            </p>
-            <Button asChild>
-              <Link href="/creator-application">
-                <Plus className="h-4 w-4 mr-2" />
-                Ajukan Sebagai Creator
-              </Link>
-            </Button>
           </CardContent>
         </Card>
       )}
