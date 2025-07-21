@@ -1,0 +1,444 @@
+/* ========================================
+   TYPOGRAPHY SYSTEM - n8n Creator Hub
+   ======================================== */
+
+/* ========================================
+   FONT FAMILY DEFINITIONS
+   ======================================== */
+:root {
+  /* Primary Font Stack (Inter) */
+  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+
+  /* Secondary Font Stack (Albert Sans - for H1 & H2 only) */
+  --font-secondary: "Albert Sans", "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+
+  /* Monospace Font Stack */
+  --font-mono: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono",
+    "Source Code Pro", "Menlo", "Consolas", "DejaVu Sans Mono", monospace;
+}
+
+/* ========================================
+   BASE TYPOGRAPHY SETTINGS
+   ======================================== */
+body {
+  font-family: var(--font-primary);
+  font-size: 1rem; /* 16px on desktop, 12px on mobile */
+  line-height: 1.6;
+  font-weight: 400;
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ========================================
+   HEADING STYLES
+   ======================================== */
+
+/* H1 - Main Page Titles, Hero Headings (Albert Sans) */
+h1 {
+  font-family: var(--font-secondary);
+  font-size: 6.25rem; /* 100px on desktop, 75px on mobile */
+  font-weight: 400;
+  font-style: normal;
+  line-height: 134.4px;
+  letter-spacing: -0.05em;
+  color: hsl(var(--foreground));
+  margin-bottom: 1rem;
+}
+
+/* H2 - Section Headings (Albert Sans) */
+h2 {
+  font-family: var(--font-secondary);
+  font-size: 4rem; /* 64px on desktop, 48px on mobile */
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.75rem;
+}
+
+/* H3 - Subsection Headings, Card Titles (Inter) */
+h3 {
+  font-family: var(--font-primary);
+  font-size: 2.5rem; /* 40px on desktop, 30px on mobile */
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.5rem;
+}
+
+/* H4 - Small Headings (Inter) */
+h4 {
+  font-family: var(--font-primary);
+  font-size: 2rem; /* 32px on desktop, 24px on mobile */
+  font-weight: 600;
+  line-height: 1.3;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.5rem;
+}
+
+/* H5 - Very Small Headings (Inter) */
+h5 {
+  font-family: var(--font-primary);
+  font-size: 1.5rem; /* 24px on desktop, 18px on mobile */
+  font-weight: 600;
+  line-height: 1.4;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.25rem;
+}
+
+/* H6 - Smallest Headings (Inter) */
+h6 {
+  font-family: var(--font-primary);
+  font-size: 1.25rem; /* 20px on desktop, 15px on mobile */
+  font-weight: 600;
+  line-height: 1.4;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.25rem;
+}
+
+/* ========================================
+   BODY TEXT STYLES
+   ======================================== */
+
+/* Paragraph - Main Body Text (Inter) */
+p {
+  font-family: var(--font-primary);
+  font-size: 1rem; /* 16px on desktop, 12px on mobile */
+  font-weight: 400;
+  line-height: 1.6;
+  color: hsl(var(--foreground));
+  margin-bottom: 1rem;
+}
+
+/* Large Paragraph */
+p.large {
+  font-size: 1.125rem; /* 18px on desktop, 13.5px on mobile */
+  line-height: 1.7;
+}
+
+/* Small Paragraph */
+p.small {
+  font-size: 0.875rem; /* 14px on desktop, 10.5px on mobile */
+  line-height: 1.5;
+}
+
+/* ========================================
+   INLINE TEXT STYLES
+   ======================================== */
+
+/* Span - Inline Text (Inter) */
+span {
+  font-family: var(--font-primary);
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+/* Small Text */
+.text-small {
+  font-size: 0.875rem; /* 14px on desktop, 10.5px on mobile */
+  line-height: 1.5;
+}
+
+/* Large Text */
+.text-large {
+  font-size: 1.125rem; /* 18px on desktop, 13.5px on mobile */
+  line-height: 1.6;
+}
+
+/* ========================================
+   FORM ELEMENT STYLES
+   ======================================== */
+
+/* Label - Form Labels (Inter) */
+label {
+  font-family: var(--font-primary);
+  font-size: 1rem; /* 16px on desktop, 12px on mobile */
+  font-weight: 500;
+  line-height: 1.4;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Input Text (Inter) */
+input,
+textarea,
+select {
+  font-family: var(--font-primary);
+  font-size: 1rem; /* 16px on desktop, 12px on mobile */
+  font-weight: 400;
+  line-height: 1.5;
+  color: hsl(var(--foreground));
+}
+
+/* Placeholder Text */
+input::placeholder,
+textarea::placeholder {
+  color: hsl(var(--muted-foreground));
+  font-weight: 400;
+}
+
+/* ========================================
+   INTERACTIVE ELEMENT STYLES
+   ======================================== */
+
+/* Button Text (Inter) */
+button {
+  font-family: var(--font-primary);
+  font-size: 1rem; /* 16px on desktop, 12px on mobile */
+  font-weight: 500;
+  line-height: 1.4;
+  color: inherit;
+}
+
+/* Link Text (Inter) */
+a {
+  font-family: var(--font-primary);
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: hsl(var(--primary));
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: hsl(var(--primary) / 0.8);
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Font Weights */
+.font-light {
+  font-weight: 300;
+}
+.font-normal {
+  font-weight: 400;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.font-bold {
+  font-weight: 700;
+}
+.font-extrabold {
+  font-weight: 800;
+}
+
+/* Text Colors */
+.text-primary {
+  color: hsl(var(--foreground));
+}
+.text-secondary {
+  color: hsl(var(--muted-foreground));
+}
+.text-muted {
+  color: hsl(var(--muted-foreground));
+}
+.text-accent {
+  color: hsl(var(--accent-foreground));
+}
+
+/* Text Alignment */
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+}
+
+/* Text Transform */
+.uppercase {
+  text-transform: uppercase;
+}
+.lowercase {
+  text-transform: lowercase;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+
+/* Text Decoration */
+.underline {
+  text-decoration: underline;
+}
+.line-through {
+  text-decoration: line-through;
+}
+.no-underline {
+  text-decoration: none;
+}
+
+/* Letter Spacing */
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+.tracking-normal {
+  letter-spacing: 0em;
+}
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+/* Line Height */
+.leading-none {
+  line-height: 1;
+}
+.leading-tight {
+  line-height: 1.25;
+}
+.leading-normal {
+  line-height: 1.5;
+}
+.leading-relaxed {
+  line-height: 1.75;
+}
+.leading-loose {
+  line-height: 2;
+}
+
+/* ========================================
+   RESPONSIVE TYPOGRAPHY
+   ======================================== */
+
+/* Mobile Responsive (max-width: 768px) */
+@media (max-width: 768px) {
+  /* H1 adjustments for mobile */
+  h1 {
+    font-size: 4.5rem; /* 54px (12px * 4.5) */
+    line-height: 100%;
+    letter-spacing: -0.02em;
+  }
+
+  /* H2 adjustments for mobile */
+  h2 {
+    font-size: 3rem; /* 36px (12px * 3) */
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  /* H3 adjustments for mobile */
+  h3 {
+    font-size: 2.5rem; /* 30px (12px * 2.5) */
+    line-height: 1.1;
+  }
+
+  /* H4 adjustments for mobile */
+  h4 {
+    font-size: 2rem; /* 24px (12px * 2) */
+    line-height: 1.2;
+  }
+
+  /* H5 adjustments for mobile */
+  h5 {
+    font-size: 1.5rem; /* 18px (12px * 1.5) */
+    line-height: 1.3;
+  }
+
+  /* H6 adjustments for mobile */
+  h6 {
+    font-size: 1.25rem; /* 15px (12px * 1.25) */
+    line-height: 1.3;
+  }
+
+  /* Body text adjustments for mobile */
+  p {
+    font-size: 1rem; /* 12px (12px * 1) */
+    line-height: 1.5;
+  }
+
+  p.large {
+    font-size: 1.125rem; /* 13.5px (12px * 1.125) */
+    line-height: 1.6;
+  }
+
+  p.small {
+    font-size: 0.875rem; /* 10.5px (12px * 0.875) */
+    line-height: 1.4;
+  }
+
+  /* Form elements adjustments for mobile */
+  label,
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 1rem; /* 12px (12px * 1) */
+  }
+
+  /* Utility text adjustments for mobile */
+  .text-small {
+    font-size: 0.875rem; /* 10.5px (12px * 0.875) */
+  }
+
+  .text-large {
+    font-size: 1.125rem; /* 13.5px (12px * 1.125) */
+  }
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode specific adjustments if needed */
+  body {
+    color: hsl(var(--foreground));
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY IMPROVEMENTS
+   ======================================== */
+
+/* Focus styles for better accessibility */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --foreground: 0 0% 0%;
+    --muted-foreground: 0 0% 20%;
+  }
+
+  .dark {
+    --foreground: 0 0% 100%;
+    --muted-foreground: 0 0% 80%;
+  }
+}

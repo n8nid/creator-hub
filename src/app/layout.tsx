@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import { AuthProvider } from "@/lib/auth-context";
 import { AuthLayout } from "@/components/auth/auth-layout";
 import "@/styles/globals.css";
+import "@/styles/typography.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
