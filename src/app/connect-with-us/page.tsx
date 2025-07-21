@@ -780,8 +780,13 @@ const ConnectWithUsPage = () => {
                           margin: "0 0 30px 0",
                         }}
                       >
-                        <span className="block md:inline">Platform ini hadir untuk</span>
-                        <span className="block md:inline"> menghubungkan Creator</span>
+                        <span className="block md:inline">
+                          Platform ini hadir untuk
+                        </span>
+                        <span className="block md:inline">
+                          {" "}
+                          menghubungkan Creator
+                        </span>
                       </h2>
                       <p
                         style={{
@@ -796,10 +801,16 @@ const ConnectWithUsPage = () => {
                           marginBottom: "32px",
                         }}
                       >
-                        dari berbagai bidang dengan para pengguna yang mencari inspirasi, ide, dan solusi melalui workflow yang praktis. Kami percaya, kolaborasi kreatif akan lebih mudah ketika prosesnya terbuka, sederhana, dan saling berbagi.
+                        dari berbagai bidang dengan para pengguna yang mencari
+                        inspirasi, ide, dan solusi melalui workflow yang
+                        praktis. Kami percaya, kolaborasi kreatif akan lebih
+                        mudah ketika prosesnya terbuka, sederhana, dan saling
+                        berbagi.
                         <br />
                         <br />
-                        Di sini, Anda bisa menemukan kreator berbakat, menjelajahi berbagai workflow, hingga membangun proses kerja yang lebih terarah dan efisien.
+                        Di sini, Anda bisa menemukan kreator berbakat,
+                        menjelajahi berbagai workflow, hingga membangun proses
+                        kerja yang lebih terarah dan efisien.
                       </p>
                       <div className="flex justify-start">
                         <a
@@ -913,9 +924,13 @@ const ConnectWithUsPage = () => {
                   </div>
                   <div
                     className="font-bold text-white leading-snug"
-                    style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)", wordBreak: "break-word" }}
+                    style={{
+                      fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)",
+                      wordBreak: "break-word",
+                    }}
                   >
-                    Bagikan workflow Anda untuk membantu kreator lain menemukan cara kerja yang lebih efisien dan terarah.
+                    Bagikan workflow Anda untuk membantu kreator lain menemukan
+                    cara kerja yang lebih efisien dan terarah.
                   </div>
                 </div>
               </div>
@@ -942,9 +957,13 @@ const ConnectWithUsPage = () => {
                   </div>
                   <div
                     className="font-bold text-white leading-snug"
-                    style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)", wordBreak: "break-word" }}
+                    style={{
+                      fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)",
+                      wordBreak: "break-word",
+                    }}
                   >
-                    Jelajahi berbagai workflow yang praktis dan dapat langsung Anda terapkan dalam proses kerja Anda.
+                    Jelajahi berbagai workflow yang praktis dan dapat langsung
+                    Anda terapkan dalam proses kerja Anda.
                   </div>
                 </div>
               </div>
@@ -971,9 +990,13 @@ const ConnectWithUsPage = () => {
                   </div>
                   <div
                     className="font-bold text-white leading-snug"
-                    style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)", wordBreak: "break-word" }}
+                    style={{
+                      fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)",
+                      wordBreak: "break-word",
+                    }}
                   >
-                    Bangun koneksi dan kolaborasi dengan kreator lain untuk mengembangkan proyek yang lebih maksimal.
+                    Bangun koneksi dan kolaborasi dengan kreator lain untuk
+                    mengembangkan proyek yang lebih maksimal.
                   </div>
                 </div>
               </div>
@@ -1029,13 +1052,18 @@ const ConnectWithUsPage = () => {
                     textAlign: "left",
                   }}
                 >
-                  Sudah 300 orang bergabung.<br />Ayo, mulai perjalanan Anda hari ini!
+                  Sudah 300 orang bergabung.
+                  <br />
+                  Ayo, mulai perjalanan Anda hari ini!
                 </div>
               </div>
               <a
-                href="/creators"
+                href="/auth"
                 className="rounded-full mt-4 px-4 py-2.5 tablet:px-6 tablet:py-3 text-sm tablet:text-base font-semibold flex items-center justify-center gap-2 w-full md:w-auto btn-jelajah"
-                style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)", minHeight: "40px" }}
+                style={{
+                  fontSize: "clamp(0.875rem, 3vw, 1rem)",
+                  minHeight: "40px",
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.boxShadow =
                     "0 6px 20px rgba(0, 0, 0, 0.1)";

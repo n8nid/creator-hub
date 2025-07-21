@@ -740,61 +740,61 @@ const AboutSection = () => {
               onMouseLeave={handleMouseLeave}
             >
               {/* Gradient overlay yang mengikuti cursor */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.4) 0%, rgba(168, 85, 247, 0.3) 30%, rgba(236, 72, 153, 0.2) 60%, transparent 100%)`,
-                  opacity: isHovering ? 1 : 0,
-                  transition: "opacity 0.2s ease-in-out",
-                }}
-              />
-              {/* Content */}
-              <div className="relative z-10">
-                <h2
+                <div
+                  className="absolute inset-0 pointer-events-none"
                   style={{
-                    fontFamily: "Albert Sans, Arial, sans-serif",
-                    fontWeight: 250,
-                    fontStyle: "thin",
+                    background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.4) 0%, rgba(168, 85, 247, 0.3) 30%, rgba(236, 72, 153, 0.2) 60%, transparent 100%)`,
+                    opacity: isHovering ? 1 : 0,
+                    transition: "opacity 0.2s ease-in-out",
+                  }}
+                />
+                {/* Content */}
+                <div className="relative z-10">
+                  <h2
+                    style={{
+                      fontFamily: "Albert Sans, Arial, sans-serif",
+                      fontWeight: 250,
+                      fontStyle: "thin",
                       fontSize: "clamp(2rem, 6vw, 60px)",
                       lineHeight: "clamp(2.5rem, 7vw, 70px)",
-                    letterSpacing: "-0.05em",
-                    color: "#FFFBFB",
+                      letterSpacing: "-0.05em",
+                      color: "#FFFBFB",
                       margin: "0 0 30px 0",
-                  }}
-                >
+                    }}
+                  >
                     Platform ini hadir untuk menghubungkan Creator
-                </h2>
-                <p
-                  style={{
-                    fontFamily: "Inter, Arial, sans-serif",
-                    fontWeight: 300,
-                    fontStyle: "light",
+                  </h2>
+                  <p
+                    style={{
+                      fontFamily: "Inter, Arial, sans-serif",
+                      fontWeight: 300,
+                      fontStyle: "light",
                       fontSize: "clamp(14px, 3.5vw, 18px)",
-                    lineHeight: "150%",
-                    letterSpacing: "-0.01em",
-                    color: "#FFFFFF",
-                    background: "transparent",
-                    marginBottom: "32px",
-                  }}
-                >
-                  dari berbagai bidang dengan para pengguna yang mencari
+                      lineHeight: "150%",
+                      letterSpacing: "-0.01em",
+                      color: "#FFFFFF",
+                      background: "transparent",
+                      marginBottom: "32px",
+                    }}
+                  >
+                    dari berbagai bidang dengan para pengguna yang mencari
                     inspirasi, ide, dan solusi melalui workflow yang praktis.
                     Kami percaya, kolaborasi kreatif akan lebih mudah ketika
                     prosesnya terbuka, sederhana, dan saling berbagi.
-                  <br />
-                  <br />
-                  Di sini, Anda bisa menemukan kreator berbakat, menjelajahi
-                  berbagai workflow, hingga membangun proses kerja yang lebih
-                  terarah dan efisien.
-                </p>
+                    <br />
+                    <br />
+                    Di sini, Anda bisa menemukan kreator berbakat, menjelajahi
+                    berbagai workflow, hingga membangun proses kerja yang lebih
+                    terarah dan efisien.
+                  </p>
                   <div className="flex justify-start">
-                  <a
-                    href="/creators"
-                    className="btn-jelajah flex items-center gap-3"
+                    <a
+                      href="/creators"
+                      className="btn-jelajah flex items-center gap-3"
                       style={{ fontSize: "clamp(14px, 3.5vw, 18px)" }}
-                  >
-                    Connect With Us
-                  </a>
+                    >
+                      Connect With Us
+                    </a>
                   </div>
                 </div>
               </div>
@@ -812,37 +812,37 @@ const AboutSection = () => {
             className="absolute inset-0 pointer-events-none"
             style={{ zIndex: -10 }}
           >
-          <svg
-            width="900"
-            height="900"
-            viewBox="0 0 900 900"
-            fill="none"
-              className="absolute -left-[150px] top-[40px]"
-            style={{ pointerEvents: "none", opacity: 0.44 }}
-          >
-            <defs>
-              <linearGradient
-                id="ellipseStroke"
-                x1="0"
-                y1="0"
-                x2="900"
-                y2="900"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#9460CD" />
-                <stop offset="1" stopColor="#3D1654" />
-              </linearGradient>
-            </defs>
-            <ellipse
-              cx="450"
-              cy="450"
-              rx="440"
-              ry="440"
+            <svg
+              width="900"
+              height="900"
+              viewBox="0 0 900 900"
               fill="none"
-              stroke="url(#ellipseStroke)"
-              strokeWidth="2"
-            />
-          </svg>
+              className="absolute -left-[150px] top-[40px]"
+              style={{ pointerEvents: "none", opacity: 0.44 }}
+            >
+              <defs>
+                <linearGradient
+                  id="ellipseStroke"
+                  x1="0"
+                  y1="0"
+                  x2="900"
+                  y2="900"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#9460CD" />
+                  <stop offset="1" stopColor="#3D1654" />
+                </linearGradient>
+              </defs>
+              <ellipse
+                cx="450"
+                cy="450"
+                rx="440"
+                ry="440"
+                fill="none"
+                stroke="url(#ellipseStroke)"
+                strokeWidth="2"
+              />
+            </svg>
           </div>
 
           {/* Konten di atas SVG */}
@@ -1003,7 +1003,7 @@ const AboutSection = () => {
               </div>
             </div>
             <a
-              href="/creators"
+              href="/auth"
               className="rounded-full px-6 py-3 tablet:px-8 tablet:py-3 lg:px-10 lg:py-4 text-sm tablet:text-base font-semibold flex items-center gap-2 tablet:gap-3 hover:scale-105 w-full md:w-auto justify-center"
               style={{
                 background: "linear-gradient(90deg, #D900FF 0%, #9500FF 100%)",
