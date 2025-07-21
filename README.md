@@ -29,27 +29,33 @@ You can run this project either with traditional Node.js setup or using Docker c
 #### Quick Start with Docker
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/your-username/creator-hub.git
 cd creator-hub
 ```
 
 2. Set up environment variables:
+
 ```bash
 cp .env.example .env
 ```
+
 Edit `.env` file and update the configuration values, especially:
+
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `JWT_SECRET`
 - Database credentials
 
 3. Make the setup script executable:
+
 ```bash
 chmod +x docker-setup.sh
 ```
 
 4. Run the interactive setup script:
+
 ```bash
 ./docker-setup.sh
 ```
@@ -57,16 +63,19 @@ chmod +x docker-setup.sh
 Or manually run with Docker Compose:
 
 **For Development:**
+
 ```bash
 docker-compose -f docker-compose.dev.yml up --build
 ```
 
 **For Production:**
+
 ```bash
 docker-compose up --build -d
 ```
 
 **For Production with Nginx:**
+
 ```bash
 docker-compose --profile production up --build -d
 ```
@@ -120,40 +129,45 @@ docker-compose up --build app
 #### Prerequisites
 
 Before you begin, ensure you have the following installed:
+
 - [Node.js](https://nodejs.org/) (v18 or higher)
 - [Git](https://git-scm.com/)
-- [pnpm](https://pnpm.io/) (latest version recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
 - A code editor (VS Code recommended)
 - PostgreSQL database (local or remote)
 
 #### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/your-username/creator-hub.git
 cd creator-hub
 ```
 
 2. Install dependencies:
+
 ```bash
-pnpm install
+npm install
 ```
 
 3. Set up your environment:
+
    - Copy `.env.example` to `.env`
    - Update the environment variables with your configuration
 
 4. Start the development server:
+
 ```bash
-pnpm dev
+npm run dev
 ```
 
 5. Access the application at `http://localhost:3000`
 
-
 ## Usage
 
 Join our community to:
+
 - Share your n8n workflows
 - Learn from other Indonesian creators
 - Get feedback on your automation solutions
@@ -165,18 +179,21 @@ Join our community to:
 The following environment variables are required:
 
 ### Application Configuration
+
 ```bash
 NODE_ENV=production              # Environment mode
 PORT=3000                       # Application port
 ```
 
 ### Supabase Configuration
+
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=http://localhost:9999     # Supabase API URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key        # Supabase anonymous key
 ```
 
 ### Database Configuration (Docker)
+
 ```bash
 POSTGRES_DB=creator_hub         # Database name
 POSTGRES_USER=postgres          # Database user
@@ -184,11 +201,13 @@ POSTGRES_PASSWORD=postgres      # Database password
 ```
 
 ### Authentication
+
 ```bash
 JWT_SECRET=your-secret-key      # JWT signing secret (change in production)
 ```
 
 ### Email Configuration (Optional)
+
 ```bash
 SMTP_HOST=localhost             # SMTP host (use mailpit for development)
 SMTP_PORT=1025                  # SMTP port (mailpit default)
@@ -211,6 +230,7 @@ Mailpit is included in the Docker setup for email testing:
 ### Database Access
 
 #### Using Docker:
+
 ```bash
 # Connect to PostgreSQL
 docker exec -it creator-hub-supabase-db-1 psql -U postgres -d creator_hub
@@ -220,6 +240,7 @@ docker logs creator-hub-supabase-db-1
 ```
 
 #### Using external tools:
+
 - Host: localhost
 - Port: 5432
 - Database: creator_hub
@@ -229,6 +250,7 @@ docker logs creator-hub-supabase-db-1
 ### Debugging
 
 #### View application logs:
+
 ```bash
 # Development
 docker-compose -f docker-compose.dev.yml logs -f app-dev
@@ -238,6 +260,7 @@ docker-compose logs -f app
 ```
 
 #### Access container shell:
+
 ```bash
 # Development
 docker exec -it creator-hub-app-dev-1 sh
@@ -251,6 +274,7 @@ docker exec -it creator-hub-app-1 sh
 ### Production Deployment with Docker
 
 1. Set production environment variables in `.env`:
+
 ```bash
 NODE_ENV=production
 NEXT_PUBLIC_SUPABASE_URL=https://your-supabase-url.supabase.co
@@ -259,11 +283,13 @@ JWT_SECRET=your-secure-production-secret
 ```
 
 2. Deploy with Docker Compose:
+
 ```bash
 docker-compose up -d --build
 ```
 
 3. For HTTPS with Nginx:
+
 ```bash
 # Configure SSL certificates in nginx/ssl/
 docker-compose --profile production up -d --build
@@ -272,12 +298,14 @@ docker-compose --profile production up -d --build
 ### Environment-specific Configurations
 
 #### Development
+
 - Hot reload enabled
 - Source maps included
 - Verbose logging
 - Mailpit for email testing
 
 #### Production
+
 - Optimized build
 - Static file serving
 - Error tracking
@@ -288,6 +316,7 @@ docker-compose --profile production up -d --build
 ### Common Issues
 
 #### Port conflicts:
+
 ```bash
 # Check what's using the ports
 lsof -i :3000
@@ -299,6 +328,7 @@ docker-compose down
 ```
 
 #### Database connection issues:
+
 ```bash
 # Reset database
 docker-compose down -v
@@ -307,6 +337,7 @@ docker-compose up -d supabase-db
 ```
 
 #### Build failures:
+
 ```bash
 # Clean Docker cache
 docker system prune -a
@@ -314,6 +345,7 @@ docker-compose build --no-cache
 ```
 
 #### Permission issues:
+
 ```bash
 # Fix file permissions
 chmod +x docker-setup.sh
@@ -337,12 +369,14 @@ We welcome contributions from the Indonesian n8n community! Whether you're shari
 
 1. Fork the repository
 2. Clone your fork:
+
 ```bash
 git clone https://github.com/your-username/creator-hub.git
 cd creator-hub
 ```
 
 3. Set up development environment with Docker:
+
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
@@ -351,6 +385,7 @@ cp .env.example .env
 ```
 
 4. Make your changes and test:
+
 ```bash
 # View logs to ensure everything works
 docker-compose -f docker-compose.dev.yml logs -f app-dev

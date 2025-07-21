@@ -58,9 +58,9 @@ export default function AdminDashboard() {
       const { count: totalUsers } = await supabase
         .from("profiles")
         .select("user_id", { count: "exact", head: true });
-      // Active Creators
+      // Active Creators - mengambil dari creator_applications yang approved
       const { count: activeCreators } = await supabase
-        .from("profiles")
+        .from("creator_applications")
         .select("user_id", { count: "exact", head: true })
         .eq("status", "approved");
       // Published Workflows
@@ -68,10 +68,10 @@ export default function AdminDashboard() {
         .from("workflows")
         .select("id", { count: "exact", head: true })
         .eq("status", "approved");
-      // Pending Creator Applications
+      // Pending Creator Applications - mengambil dari creator_applications yang pending
       const { count: pendingCreatorApplications } = await supabase
-        .from("profiles")
-        .select("user_id", { count: "exact", head: true })
+        .from("creator_applications")
+        .select("id", { count: "exact", head: true })
         .eq("status", "pending");
       // Pending Workflows
       const { count: pendingWorkflows } = await supabase
@@ -380,41 +380,6 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-
-      {/* System Status */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Status Sistem</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">API Status</span>
-              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                Operational
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Database</span>
-              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                Healthy
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Last Backup</span>
-              <span className="text-sm text-muted-foreground">
-                2 jam yang lalu
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Security</span>
-              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                Secure
-              </span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
