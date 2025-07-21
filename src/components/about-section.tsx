@@ -789,7 +789,7 @@ const AboutSection = () => {
                 </p>
                   <div className="flex justify-start">
                   <a
-                    href="/connect"
+                    href="/creators"
                     className="btn-jelajah flex items-center gap-3"
                       style={{ fontSize: "clamp(14px, 3.5vw, 18px)" }}
                   >
@@ -1003,7 +1003,7 @@ const AboutSection = () => {
               </div>
             </div>
             <a
-              href="/auth"
+              href="/creators"
               className="rounded-full px-6 py-3 tablet:px-8 tablet:py-3 lg:px-10 lg:py-4 text-sm tablet:text-base font-semibold flex items-center gap-2 tablet:gap-3 hover:scale-105 w-full md:w-auto justify-center"
               style={{
                 background: "linear-gradient(90deg, #D900FF 0%, #9500FF 100%)",
