@@ -215,13 +215,13 @@ export default function CreatorDetailPage() {
           }}
         />
         <main className="flex-grow relative z-10">
-          <div className="w-full px-16">
+          <div className="w-full px-4 sm:px-8 md:px-16">
             <div className="animate-pulse">
-              <div className="h-64 bg-gray-700 rounded-lg mb-8"></div>
-              <div className="h-32 bg-gray-700 rounded-lg mb-8"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="h-48 sm:h-64 bg-gray-700 rounded-lg mb-6 sm:mb-8"></div>
+              <div className="h-24 sm:h-32 bg-gray-700 rounded-lg mb-6 sm:mb-8"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {[...Array(8)].map((_, i) => (
-                  <div key={i} className="h-48 bg-gray-700 rounded-lg"></div>
+                  <div key={i} className="h-36 sm:h-48 bg-gray-700 rounded-lg"></div>
                 ))}
               </div>
             </div>
@@ -244,12 +244,12 @@ export default function CreatorDetailPage() {
           }}
         />
         <main className="flex-grow relative z-10">
-          <div className="w-full px-16">
-            <div className="text-center py-12">
-              <h1 className="text-2xl font-bold text-white mb-4">
+          <div className="w-full px-4 sm:px-8 md:px-16">
+            <div className="text-center py-8 sm:py-12 px-2">
+              <h1 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 break-words">
                 Creator tidak ditemukan
               </h1>
-              <p className="text-gray-300">
+              <p className="text-gray-300 text-sm sm:text-base break-words">
                 Creator yang Anda cari tidak ditemukan atau telah dihapus.
               </p>
             </div>
@@ -271,26 +271,27 @@ export default function CreatorDetailPage() {
         }}
       />
       <main className="flex-grow relative z-10">
-        <div className="w-full px-16 pt-12">
+        <div className="w-full px-4 sm:px-8 md:px-16 pt-8 sm:pt-12">
           {/* Back Button */}
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <Button
               variant="ghost"
-              className="flex items-center gap-2 text-white hover:text-white/80 hover:bg-white/10 w-fit"
+              className="flex items-center gap-2 text-white hover:text-white/80 hover:bg-white/10 w-fit text-sm sm:text-base"
               onClick={() => window.history.back()}
             >
               <ArrowLeft className="w-4 h-4" />
-              Kembali ke Creator
+              <span className="hidden sm:inline">Kembali ke Creator</span>
+              <span className="sm:hidden">Kembali</span>
             </Button>
           </div>
 
           {/* Creator Profile Section */}
-          <div className="flex flex-col lg:flex-row items-center gap-8 mb-8">
+          <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* Left Side - Avatar */}
             <div className="flex-shrink-0">
-              <Avatar className="w-40 h-40">
+              <Avatar className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
                 <AvatarImage src={creator.avatar_url} alt={creator.name} />
-                <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-purple-500 to-purple-500">
+                <AvatarFallback className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-br from-purple-500 to-purple-500">
                   {creator.name
                     .split(" ")
                     .map((n) => n[0])
@@ -300,97 +301,97 @@ export default function CreatorDetailPage() {
             </div>
 
             {/* Center - Name, Experience, Search */}
-            <div className="flex-1">
-              <div className="mb-4">
-                <h1 className="text-3xl font-bold text-white">
+            <div className="flex-1 min-w-0">
+              <div className="mb-4 text-center lg:text-left">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white break-words">
                   {creator.name}
                 </h1>
                 <Badge
                   className={`w-fit mt-2 ${getExperienceColor(
                     creator.experience_level
-                  )}`}
+                  )} text-xs sm:text-sm`}
                 >
                   {creator.experience_level}
                 </Badge>
               </div>
 
               {/* Search Workflow */}
-              <div className="relative w-full max-w-sm">
+              <div className="relative w-full max-w-sm mx-auto lg:mx-0">
                 <input
                   type="text"
                   placeholder="Cari workflow..."
-                  className="w-full pl-4 pr-12 py-2 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-lg text-white placeholder-white/60"
+                  className="w-full pl-4 pr-12 py-2 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-base sm:text-lg text-white placeholder-white/60"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
+                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-4 h-4 sm:w-5 sm:h-5" />
               </div>
             </div>
 
             {/* Right Side - Bio and Social Links (With container) */}
-            <div className="flex-1">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+            <div className="flex-1 w-full lg:w-auto">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 sm:p-6 lg:p-8">
                 {/* About Creator */}
                 {creator.about_markdown && (
-                  <div className="mb-6">
-                    <div className="prose prose-invert prose-lg max-w-none text-gray-300 leading-relaxed">
+                  <div className="mb-4 sm:mb-6">
+                    <div className="prose prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none text-gray-300 leading-relaxed">
                       <ReactMarkdown
                         components={{
                           h1: ({ children }) => (
-                            <h1 className="text-2xl font-bold text-white mb-4">
+                            <h1 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 break-words">
                               {children}
                             </h1>
                           ),
                           h2: ({ children }) => (
-                            <h2 className="text-xl font-bold text-white mb-3">
+                            <h2 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3 break-words">
                               {children}
                             </h2>
                           ),
                           h3: ({ children }) => (
-                            <h3 className="text-lg font-bold text-white mb-2">
+                            <h3 className="text-base sm:text-lg font-bold text-white mb-2 break-words">
                               {children}
                             </h3>
                           ),
                           p: ({ children }) => (
-                            <p className="text-gray-300 mb-4 leading-relaxed">
+                            <p className="text-gray-300 mb-3 sm:mb-4 leading-relaxed break-words text-sm sm:text-base">
                               {children}
                             </p>
                           ),
                           ul: ({ children }) => (
-                            <ul className="list-disc list-outside text-gray-300 mb-4 space-y-1 ml-4">
+                            <ul className="list-disc list-outside text-gray-300 mb-3 sm:mb-4 space-y-1 ml-3 sm:ml-4 text-sm sm:text-base">
                               {children}
                             </ul>
                           ),
                           ol: ({ children }) => (
-                            <ol className="list-decimal list-outside text-gray-300 mb-4 space-y-1 ml-4">
+                            <ol className="list-decimal list-outside text-gray-300 mb-3 sm:mb-4 space-y-1 ml-3 sm:ml-4 text-sm sm:text-base">
                               {children}
                             </ol>
                           ),
                           li: ({ children }) => (
-                            <li className="text-gray-300">{children}</li>
+                            <li className="text-gray-300 break-words">{children}</li>
                           ),
                           strong: ({ children }) => (
-                            <strong className="font-bold text-white">
+                            <strong className="font-bold text-white break-words">
                               {children}
                             </strong>
                           ),
                           em: ({ children }) => (
-                            <em className="italic text-white/90">{children}</em>
+                            <em className="italic text-white/90 break-words">{children}</em>
                           ),
                           code: ({ children }) => (
-                            <code className="bg-white/10 text-white px-2 py-1 rounded text-sm font-mono">
+                            <code className="bg-white/10 text-white px-2 py-1 rounded text-xs sm:text-sm font-mono break-words">
                               {children}
                             </code>
                           ),
                           pre: ({ children }) => (
-                            <pre className="bg-white/10 text-white p-4 rounded-lg overflow-x-auto mb-4">
+                            <pre className="bg-white/10 text-white p-3 sm:p-4 rounded-lg overflow-x-auto mb-3 sm:mb-4 text-xs sm:text-sm">
                               {children}
                             </pre>
                           ),
                           a: ({ children, href }) => (
                             <a
                               href={href}
-                              className="text-purple-300 hover:text-purple-200 underline"
+                              className="text-purple-300 hover:text-purple-200 underline break-words"
                               target="_blank"
                               rel="noopener noreferrer"
                             >
@@ -398,7 +399,7 @@ export default function CreatorDetailPage() {
                             </a>
                           ),
                           blockquote: ({ children }) => (
-                            <blockquote className="border-l-4 border-purple-400 pl-4 italic text-white/70 mb-4">
+                            <blockquote className="border-l-4 border-purple-400 pl-3 sm:pl-4 italic text-white/70 mb-3 sm:mb-4 text-sm sm:text-base break-words">
                               {children}
                             </blockquote>
                           ),
@@ -411,15 +412,15 @@ export default function CreatorDetailPage() {
                 )}
 
                 {/* Social Links */}
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
                   {creator.linkedin_url && (
                     <a
                       href={creator.linkedin_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white hover:text-gray-300 transition-colors"
+                      className="text-white hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-white/10"
                     >
-                      <Linkedin className="w-6 h-6" />
+                      <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
                     </a>
                   )}
                   {creator.instagram_url && (
@@ -427,9 +428,9 @@ export default function CreatorDetailPage() {
                       href={creator.instagram_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white hover:text-gray-300 transition-colors"
+                      className="text-white hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-white/10"
                     >
-                      <Instagram className="w-6 h-6" />
+                      <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />
                     </a>
                   )}
                   {creator.github_url && (
@@ -437,9 +438,9 @@ export default function CreatorDetailPage() {
                       href={creator.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white hover:text-gray-300 transition-colors"
+                      className="text-white hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-white/10"
                     >
-                      <Github className="w-6 h-6" />
+                      <Github className="w-5 h-5 sm:w-6 sm:h-6" />
                     </a>
                   )}
                   {creator.website_url && (
@@ -447,9 +448,9 @@ export default function CreatorDetailPage() {
                       href={creator.website_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white hover:text-gray-300 transition-colors"
+                      className="text-white hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-white/10"
                     >
-                      <Globe className="w-6 h-6" />
+                      <Globe className="w-5 h-5 sm:w-6 sm:h-6" />
                     </a>
                   )}
                 </div>
@@ -458,16 +459,16 @@ export default function CreatorDetailPage() {
           </div>
 
           {/* Workflows Section */}
-          <div className="space-y-6 mt-16">
+          <div className="space-y-4 sm:space-y-6 mt-12 sm:mt-16">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-xl sm:text-2xl font-bold text-white break-words">
                 Workflow ({workflows.length})
               </h2>
             </div>
 
             {workflows.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-300 text-lg">
+              <div className="text-center py-8 sm:py-12 px-2">
+                <p className="text-gray-300 text-base sm:text-lg break-words">
                   {searchTerm
                     ? "Tidak ada workflow yang sesuai dengan pencarian."
                     : "Belum ada workflow yang dipublikasikan."}
@@ -475,7 +476,7 @@ export default function CreatorDetailPage() {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                   {workflows.map((workflow) => (
                     <Link
                       key={workflow.id}
@@ -483,7 +484,7 @@ export default function CreatorDetailPage() {
                       className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block"
                     >
                       {/* Content */}
-                      <div className="p-6">
+                      <div className="p-4 sm:p-6">
                         {/* Category Badge */}
                         <div className="flex justify-end mb-4">
                           <span className="inline-flex items-center px-3 py-1 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
@@ -491,38 +492,38 @@ export default function CreatorDetailPage() {
                           </span>
                         </div>
                         {/* Title */}
-                        <h3 className="text-lg font-bold text-purple-900 mb-2 line-clamp-2 group-hover:text-purple-700 transition-colors">
+                        <h3 className="text-base sm:text-lg font-bold text-purple-900 mb-2 line-clamp-2 group-hover:text-purple-700 transition-colors break-words">
                           {workflow.title}
                         </h3>
 
                         {/* Description */}
-                        <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                        <p className="text-xs sm:text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed break-words">
                           {workflow.description ||
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros."}
                         </p>
 
                         {/* Tags */}
-                        <div className="flex flex-wrap gap-2 mb-4">
+                        <div className="flex flex-wrap gap-1 sm:gap-2 mb-4">
                           {(workflow.tags || [])
                             .slice(0, 3)
                             .map((tag: string) => (
                               <span
                                 key={tag}
-                                className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium"
+                                className="px-2 sm:px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium break-words"
                               >
                                 {tag}
                               </span>
                             ))}
                           {(workflow.tags || []).length > 3 && (
-                            <span className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium">
+                            <span className="px-2 sm:px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium">
                               +{(workflow.tags || []).length - 3}
                             </span>
                           )}
                         </div>
 
                         {/* Stats */}
-                        <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                          <div className="w-8 h-8 rounded-full overflow-hidden">
+                        <div className="flex items-center gap-2 sm:gap-3 pt-4 border-t border-gray-100">
+                          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full overflow-hidden flex-shrink-0">
                             {creator?.avatar_url ? (
                               <img
                                 src={creator.avatar_url}
@@ -530,12 +531,12 @@ export default function CreatorDetailPage() {
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              <div className="w-full h-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
+                              <div className="w-full h-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs sm:text-sm font-bold">
                                 {creator?.name?.charAt?.(0) || "C"}
                               </div>
                             )}
                           </div>
-                          <span className="text-sm text-purple-900 font-medium">
+                          <span className="text-xs sm:text-sm text-purple-900 font-medium break-words">
                             {creator?.name || "Creator"}
                           </span>
                         </div>
@@ -545,40 +546,42 @@ export default function CreatorDetailPage() {
                 </div>
 
                 {/* Pagination Info */}
-                <div className="text-center mb-4">
-                  <p className="text-gray-300 text-sm">
+                <div className="text-center mb-4 px-2">
+                  <p className="text-gray-300 text-xs sm:text-sm break-words">
                     Showing page {currentPage} of {totalPages}
                   </p>
                 </div>
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2 mt-12">
+                  <div className="flex justify-center items-center gap-1 sm:gap-2 mt-8 sm:mt-12 px-2">
                     <button
-                      className="px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
+                      className="px-3 sm:px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 text-xs sm:text-sm"
                       onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
                     >
                       Prev
                     </button>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                      (page) => (
-                        <button
-                          key={page}
-                          className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow
-                          ${
-                            page === currentPage
-                              ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
-                              : "bg-white/10 text-white/80 hover:bg-white/20 text-white border border-white/20"
-                          }
-                        `}
-                          onClick={() => setCurrentPage(page)}
-                        >
-                          {page}
-                        </button>
-                      )
-                    )}
+                    <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                        (page) => (
+                          <button
+                            key={page}
+                            className={`px-3 sm:px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow text-xs sm:text-sm min-w-[32px] sm:min-w-[40px]
+                            ${
+                              page === currentPage
+                                ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
+                                : "bg-white/10 text-white/80 hover:bg-white/20 text-white border border-white/20"
+                            }
+                          `}
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </button>
+                        )
+                      )}
+                    </div>
                     <button
-                      className="px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
+                      className="px-3 sm:px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 text-xs sm:text-sm"
                       onClick={() =>
                         setCurrentPage((p) => Math.min(totalPages, p + 1))
                       }

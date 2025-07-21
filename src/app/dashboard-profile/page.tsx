@@ -237,45 +237,40 @@ export default function DashboardProfilePage() {
   }
 
   return (
-    <div className="space-y-8 mt-4">
+    <div className="space-y-4 sm:space-y-8 mt-4 w-full max-w-full overflow-hidden px-2 sm:px-0">
       {/* Main Content Grid - GitHub Style */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-8 w-full max-w-full">
         {/* Left Column - Profile Info */}
-        <div className="lg:col-span-1">
-          <Card className="p-6 min-w-[300px] max-w-[350px]">
-            <div className="text-center mb-6">
-              <Avatar className="h-40 w-40 mx-auto mb-4">
+        <div className="lg:col-span-1 w-full">
+          <Card className="p-3 sm:p-6 w-full max-w-xs mx-auto">
+            <div className="text-center mb-4 sm:mb-6">
+              <Avatar className="h-24 w-24 sm:h-40 sm:w-40 mx-auto mb-3 sm:mb-4">
                 <AvatarImage
-                  src={
-                    profileImage ? `${profileImage}?t=${Date.now()}` : undefined
-                  }
+                  src={profileImage ? `${profileImage}?t=${Date.now()}` : undefined}
                 />
-                <AvatarFallback className="text-3xl">
-                  {profile?.name
-                    ?.split(" ")
-                    .map((n: string) => n[0])
-                    .join("")}
+                <AvatarFallback className="text-xl sm:text-3xl">
+                  {profile?.name?.split(" ").map((n: string) => n[0]).join("")}
                 </AvatarFallback>
               </Avatar>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-lg sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2 break-words">
                 {profile?.name}
               </h2>
 
               {/* Experience Level */}
               {profile?.experience_level && (
-                <div className="mb-3">
-                  <Badge variant="secondary">{profile.experience_level}</Badge>
+                <div className="mb-2 sm:mb-3">
+                  <Badge variant="secondary" className="text-xs sm:text-sm">{profile.experience_level}</Badge>
                 </div>
               )}
 
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base break-words">
                 {profile?.bio || "Belum ada bio yang ditambahkan"}
               </p>
 
               {/* Edit Profile Button */}
               <Button
                 asChild
-                className="bg-purple-900 hover:bg-purple-800 text-white mb-6"
+                className="bg-purple-900 hover:bg-purple-800 text-white mb-4 sm:mb-6 w-full sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
               >
                 <Link href="/dashboard-profile/profile/edit">
                   <Pencil className="h-4 w-4 mr-2" />
@@ -285,11 +280,11 @@ export default function DashboardProfilePage() {
             </div>
 
             {/* Profile Info - Left Aligned */}
-            <div className="text-left space-y-4">
+            <div className="text-left space-y-3 sm:space-y-4">
               {/* Follower/Following Stats */}
-              <div className="flex gap-6">
+              <div className="flex gap-4 sm:gap-6 text-xs sm:text-base">
                 <div className="flex items-center gap-1">
-                  <User className="h-4 w-4 text-gray-600" />
+                  <User className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600" />
                   <span className="font-semibold">{stats.followers}</span>
                   <span className="text-gray-600">followers</span>
                 </div>
@@ -301,52 +296,32 @@ export default function DashboardProfilePage() {
 
               {/* Location */}
               {profile?.location && (
-                <div className="flex items-center text-gray-600">
-                  <MapPin className="h-4 w-4 mr-1" />
+                <div className="flex items-center text-gray-600 text-xs sm:text-base">
+                  <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                   {profile.location}
                 </div>
               )}
 
               {/* Social Links */}
-              <div className="flex gap-4">
+              <div className="flex gap-3 sm:gap-4">
                 {profile?.website && (
-                  <a
-                    href={profile.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Website"
-                  >
-                    <Globe className="h-5 w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                  <a href={profile.website} target="_blank" rel="noopener noreferrer" title="Website">
+                    <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
                 {profile?.linkedin && (
-                  <a
-                    href={profile.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="LinkedIn"
-                  >
-                    <Linkedin className="h-5 w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                  <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                    <Linkedin className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
                 {profile?.github && (
-                  <a
-                    href={profile.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="GitHub"
-                  >
-                    <Github className="h-5 w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                  <a href={profile.github} target="_blank" rel="noopener noreferrer" title="GitHub">
+                    <Github className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
                 {profile?.instagram && (
-                  <a
-                    href={profile.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Instagram"
-                  >
-                    <Instagram className="h-5 w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                  <a href={profile.instagram} target="_blank" rel="noopener noreferrer" title="Instagram">
+                    <Instagram className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
               </div>
@@ -355,15 +330,15 @@ export default function DashboardProfilePage() {
         </div>
 
         {/* Right Column - Content */}
-        <div className="lg:col-span-3 space-y-6">
+        <div className="lg:col-span-3 space-y-4 sm:space-y-6 w-full">
           {/* About Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Tentang Creator</CardTitle>
+          <Card className="w-full">
+            <CardHeader className="p-3 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">Tentang Creator</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 sm:p-6">
               {profile?.about_markdown ? (
-                <div className="prose prose-sm max-w-none">
+                <div className="prose prose-sm max-w-none w-full">
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     rehypePlugins={[rehypeRaw]}
@@ -372,7 +347,7 @@ export default function DashboardProfilePage() {
                   </ReactMarkdown>
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-6 sm:py-8 text-gray-500">
                   <p>Belum ada deskripsi yang ditambahkan</p>
                   <p className="text-sm">
                     Edit profil untuk menambahkan deskripsi tentang diri Anda
@@ -383,71 +358,71 @@ export default function DashboardProfilePage() {
           </Card>
 
           {/* Stats Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Statistik Kontribusi</CardTitle>
+          <Card className="w-full">
+            <CardHeader className="p-3 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">Statistik Kontribusi</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <CardContent className="p-3 sm:p-6">
+              <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4 w-full">
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
-                    <Workflow className="h-6 w-6 text-gray-700 mr-2" />
-                    <span className="text-2xl font-bold">
+                    <Workflow className="h-5 w-5 sm:h-6 sm:w-6 text-gray-700 mr-2" />
+                    <span className="text-xl sm:text-2xl font-bold">
                       {stats.totalWorkflows}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">Total Workflows</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Total Workflows</p>
                 </div>
 
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
-                    <TrendingUp className="h-6 w-6 text-gray-700 mr-2" />
-                    <span className="text-2xl font-bold">
+                    <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-gray-700 mr-2" />
+                    <span className="text-xl sm:text-2xl font-bold">
                       {stats.publishedWorkflows}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">Published</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Published</p>
                 </div>
 
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
-                    <Star className="h-6 w-6 text-gray-700 mr-2" />
-                    <span className="text-2xl font-bold">
+                    <Star className="h-5 w-5 sm:h-6 sm:w-6 text-gray-700 mr-2" />
+                    <span className="text-xl sm:text-2xl font-bold">
                       {stats.totalLikes}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">Total Likes</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Total Likes</p>
                 </div>
 
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
-                    <Calendar className="h-6 w-6 text-gray-700 mr-2" />
-                    <span className="text-2xl font-bold">
+                    <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-gray-700 mr-2" />
+                    <span className="text-xl sm:text-2xl font-bold">
                       {profile?.created_at
                         ? new Date(profile.created_at).getFullYear()
                         : "-"}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600">Member Since</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Member Since</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Recent Activities */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Aktivitas Terbaru</CardTitle>
+          <Card className="w-full">
+            <CardHeader className="p-3 sm:p-6">
+              <CardTitle className="text-base sm:text-lg">Aktivitas Terbaru</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-3 sm:p-6">
               {recentActivities.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4 w-full">
                   {recentActivities.map((activity) => {
                     const Icon = activity.icon;
                     return (
                       <div
                         key={activity.id}
-                        className="flex items-start gap-3 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors"
+                        className="flex items-start gap-3 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors w-full"
                       >
                         <div
                           className={`p-2 rounded-full bg-gray-100 ${activity.color}`}
@@ -455,7 +430,7 @@ export default function DashboardProfilePage() {
                           <Icon className="h-4 w-4" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-sm font-medium text-gray-900 break-words">
                             {activity.title}
                           </p>
                           <p className="text-xs text-gray-600 mt-1">
@@ -479,8 +454,8 @@ export default function DashboardProfilePage() {
                   })}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <Clock className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                <div className="text-center py-6 sm:py-8 text-gray-500">
+                  <Clock className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 text-gray-300" />
                   <p>Belum ada aktivitas terbaru</p>
                   <p className="text-sm">Aktivitas Anda akan muncul di sini</p>
                 </div>
