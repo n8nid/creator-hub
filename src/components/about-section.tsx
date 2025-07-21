@@ -727,19 +727,19 @@ const AboutSection = () => {
           {/* Text Content - Positioned to the left */}
           <div className="w-full px-4 sm:px-8 md:px-16 flex justify-center">
             <div className="w-full relative" style={{ zIndex: 10 }}>
-            <div
-              className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer overflow-hidden"
-              style={{
-                maxWidth: "840px",
-                width: "100%",
-                background: "rgba(255, 255, 255, 0.05)",
-                backdropFilter: "blur(10px)",
-              }}
-              onMouseMove={handleMouseMove}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              {/* Gradient overlay yang mengikuti cursor */}
+              <div
+                className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer overflow-hidden"
+                style={{
+                  maxWidth: "840px",
+                  width: "100%",
+                  background: "rgba(255, 255, 255, 0.05)",
+                  backdropFilter: "blur(10px)",
+                }}
+                onMouseMove={handleMouseMove}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                {/* Gradient overlay yang mengikuti cursor */}
                 <div
                   className="absolute inset-0 pointer-events-none"
                   style={{

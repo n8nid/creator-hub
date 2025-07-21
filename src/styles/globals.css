@@ -25,7 +25,7 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -570,7 +570,7 @@ body {
     box-shadow: 0 6px 20px 0 #ff00bb88;
     transform: translateY(-1px);
   }
-  
+
   /* Responsive button styling untuk tablet */
   @media (min-width: 768px) and (max-width: 1024px) {
     .btn-login {
@@ -596,7 +596,7 @@ body {
     box-shadow: 0 6px 20px 0 #9500ff88;
     transform: translateY(-1px);
   }
-  
+
   /* Responsive button styling untuk mobile */
   @media (max-width: 640px) {
     .btn-jelajah {
@@ -605,7 +605,7 @@ body {
       min-height: 44px;
     }
   }
-  
+
   .btn-creator {
     background: linear-gradient(90deg, #fbe5ff 0%, #ffffff 50%, #fae0ff 100%);
     color: #622a9a;
@@ -623,7 +623,7 @@ body {
     box-shadow: 0 6px 20px 0 #fbe5ff88;
     transform: translateY(-1px);
   }
-  
+
   /* Responsive button styling untuk mobile */
   @media (max-width: 640px) {
     .btn-creator {

@@ -94,7 +94,10 @@ const FeaturedCreators = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 tablet:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 tablet:gap-6 md:gap-12">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+              <div
+                key={i}
+                className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"
+              >
                 <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40">
                   <AvatarFallback className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
                     ?
@@ -104,7 +107,9 @@ const FeaturedCreators = () => {
                   <div className="font-bold text-white text-lg sm:text-xl mb-1 break-words line-clamp-2 overflow-hidden">
                     Loading...
                   </div>
-                  <div className="text-gray-300 text-sm sm:text-base break-words line-clamp-2 overflow-hidden">Loading...</div>
+                  <div className="text-gray-300 text-sm sm:text-base break-words line-clamp-2 overflow-hidden">
+                    Loading...
+                  </div>
                 </div>
               </div>
             ))}
@@ -148,7 +153,7 @@ const FeaturedCreators = () => {
             Temukan Creator
           </a>
         </div>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 tablet:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 tablet:gap-6 md:gap-12">
           {creators.length > 0
             ? creators.map((creator) => (
@@ -176,7 +181,10 @@ const FeaturedCreators = () => {
                 </div>
               ))
             : [...Array(3)].map((_, i) => (
-                <div key={i} className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
+                <div
+                  key={i}
+                  className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"
+                >
                   <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40">
                     <AvatarFallback className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
                       ?

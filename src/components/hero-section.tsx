@@ -184,7 +184,8 @@ const HeroSection = () => {
                       color: "rgba(255, 255, 255, 0.8)",
                     }}
                   >
-                    Dapatkan insight, workflow siap pakai, dan dukungan dari komunitas yang aktif dan solutif.
+                    Dapatkan insight, workflow siap pakai, dan dukungan dari
+                    komunitas yang aktif dan solutif.
                   </span>
                   <br />
                   <span
