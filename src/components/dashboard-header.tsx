@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { Bell, LogOut } from "lucide-react";
+import { Bell, LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,7 +13,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export function DashboardHeader() {
+interface DashboardHeaderProps {
+  sidebarOpen?: boolean;
+  toggleSidebar?: () => void;
+}
+
+export function DashboardHeader({ sidebarOpen = false, toggleSidebar }: DashboardHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, profile, signOut } = useAuth();
@@ -44,10 +49,10 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-300 px-2 sm:px-6 py-3 sm:py-4 shadow-sm w-full overflow-hidden">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-300 px-2 sm:px-4 tablet:px-6 py-3 sm:py-4 shadow-sm w-full overflow-hidden">
       <div className="flex items-center justify-between w-full">
         {/* Logo dan Brand */}
-        <div className="flex items-center gap-2 sm:gap-4 md:gap-8">
+        <div className="flex items-center gap-2 sm:gap-4 tablet:gap-6 lg:gap-8">
           <Link
             href="/"
             className="flex items-center gap-1 sm:gap-2 text-gray-900 hover:text-gray-700 transition-colors"
@@ -142,15 +147,15 @@ export function DashboardHeader() {
             <span className="text-sm sm:text-base md:text-lg font-semibold tracking-wide">n8n ID</span>
           </Link>
 
-          {/* Navigation Menu - Compact for mobile */}
-          <nav className="flex items-center gap-1 sm:gap-2 md:gap-4 lg:gap-6">
+          {/* Navigation Menu - Hidden on mobile, visible on tablet and desktop */}
+          <nav className="hidden sm:flex items-center gap-1 sm:gap-2 tablet:gap-3 lg:gap-6">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <div key={item.href} className="relative">
                   <Link
                     href={item.href}
-                    className={`text-xs sm:text-sm font-medium transition-colors pb-1 sm:pb-2 whitespace-nowrap ${
+                    className={`text-xs sm:text-sm tablet:text-sm font-medium transition-colors pb-1 sm:pb-2 whitespace-nowrap ${
                       isActive
                         ? "text-gray-900 font-semibold"
                         : "text-gray-600 hover:text-gray-900"
@@ -171,6 +176,21 @@ export function DashboardHeader() {
 
         {/* User Profile Section */}
         <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
+          {/* Sidebar Toggle Button - Visible only on mobile */}
+          {toggleSidebar && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="flex sm:hidden h-8 w-8 sm:h-10 sm:w-10 text-gray-600 hover:text-gray-900"
+            >
+              {sidebarOpen ? (
+                <X className="h-4 w-4 sm:h-5 sm:w-5" />
+              ) : (
+                <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
+              )}
+            </Button>
+          )}
           {/* Notification Bell */}
           <Button
             variant="ghost"

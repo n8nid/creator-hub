@@ -255,17 +255,17 @@ export function HeaderNav() {
           ) : (
             <Link 
               href="/auth" 
-              className="btn-login flex items-center gap-2 px-4 py-2 rounded-lg text-sm md:text-base"
+              className="btn-login flex items-center gap-2 px-3 py-1.5 tablet:px-4 tablet:py-2 rounded-lg text-xs tablet:text-sm lg:text-base"
             >
-              <span className="hidden sm:inline">Join Community</span>
-              <span className="sm:hidden">Join</span>
+              <span className="hidden sm:inline tablet:hidden lg:inline">Join Community</span>
+              <span className="sm:hidden tablet:inline lg:hidden">Join</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className="w-4 h-4 md:w-5 md:h-5"
+                className="w-3 h-3 tablet:w-4 tablet:h-4 lg:w-5 lg:h-5"
               >
                 <path
                   strokeLinecap="round"

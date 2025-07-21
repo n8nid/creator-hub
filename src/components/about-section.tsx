@@ -1004,12 +1004,12 @@ const AboutSection = () => {
             </div>
             <a
               href="/auth"
-              className="rounded-full px-10 py-4 text-base font-semibold flex items-center gap-3 hover:scale-105 w-full md:w-auto justify-center"
+              className="rounded-full px-6 py-3 tablet:px-8 tablet:py-3 lg:px-10 lg:py-4 text-sm tablet:text-base font-semibold flex items-center gap-2 tablet:gap-3 hover:scale-105 w-full md:w-auto justify-center"
               style={{
                 background: "linear-gradient(90deg, #D900FF 0%, #9500FF 100%)",
                 color: "#fff",
                 boxShadow: "0 4px 16px 0 #9500FF66",
-                minWidth: "200px",
+                minWidth: "160px",
                 justifyContent: "center",
                 transition: "all 0.2s ease",
                 backdropFilter: "none",
@@ -1031,7 +1031,7 @@ const AboutSection = () => {
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-4 h-4 tablet:w-5 tablet:h-5 lg:w-6 lg:h-6"
               >
                 <path
                   strokeLinecap="round"

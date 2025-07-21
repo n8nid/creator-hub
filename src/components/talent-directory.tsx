@@ -182,7 +182,7 @@ export function TalentDirectory() {
       </div>
 
       {/* Talent Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProfiles.map((profile) => (
           <Card key={profile.id} className="hover:shadow-lg transition-shadow">
             <CardHeader className="pb-4">
