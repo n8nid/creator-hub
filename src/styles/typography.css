@@ -145,6 +145,17 @@ h2.insight-text {
   margin-bottom: 1rem;
 }
 
+/* Explore Workflow Title (Albert Sans) */
+h2.explore-workflow-title {
+  font-family: var(--font-secondary);
+  font-size: 5rem; /* 80px on desktop, 60px on mobile */
+  font-weight: 300; /* Light */
+  line-height: 1.2; /* 120% */
+  letter-spacing: 0em; /* 0% */
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
 /* Small Paragraph */
 p.small {
   font-size: 0.875rem; /* 14px on desktop, 10.5px on mobile */
@@ -249,6 +260,70 @@ a.button-text {
   font-weight: 600; /* Semi Bold */
   line-height: 1.5; /* 150% */
   letter-spacing: -0.01em; /* -1% */
+}
+
+/* ========================================
+   WORKFLOW CARD TEXT STYLES
+   ======================================== */
+
+/* Workflow Category Text (Gambar 2) */
+.workflow-category-text {
+  font-family: var(--font-primary);
+  font-size: 1rem; /* 16px on desktop, 12px on mobile */
+  font-weight: 250; /* Thin */
+  line-height: 1.4; /* 140% */
+  letter-spacing: -0.01em; /* -1% */
+  color: #ffffff;
+}
+
+/* Workflow Title Text (Gambar 3) */
+.workflow-title-text {
+  font-family: var(--font-primary);
+  font-size: 1.125rem; /* 18px on desktop, 13.5px on mobile */
+  font-weight: 700; /* Bold */
+  line-height: 1.4; /* 140% */
+  letter-spacing: -0.01em; /* -1% */
+  color: #622a9a;
+}
+
+/* Workflow Description Text (Gambar 4) */
+.workflow-description-text {
+  font-family: var(--font-primary);
+  font-size: 0.875rem; /* 14px on desktop, 10.5px on mobile */
+  font-weight: 400; /* Regular */
+  line-height: 1.6; /* 160% */
+  letter-spacing: -0.01em; /* -1% */
+  color: #5c6063;
+}
+
+/* Workflow Tag Text (Gambar 5) */
+.workflow-tag-text {
+  font-family: var(--font-primary);
+  font-size: 0.875rem; /* 14px on desktop, 10.5px on mobile */
+  font-weight: 400; /* Regular */
+  line-height: 1.6; /* 160% */
+  letter-spacing: -0.01em; /* -1% */
+  color: #622a9a;
+}
+
+/* Workflow Creator Text (Gambar 6) */
+.workflow-creator-text {
+  font-family: var(--font-primary);
+  font-size: 0.875rem; /* 14px on desktop, 10.5px on mobile */
+  font-weight: 600; /* Semi Bold */
+  line-height: 1.6; /* 160% */
+  letter-spacing: -0.01em; /* -1% */
+  color: #622a9a;
+}
+
+/* Workflow Author Avatar Text */
+.workflow-author-avatar {
+  font-family: var(--font-primary);
+  font-size: 0.75rem; /* 12px on desktop, 9px on mobile */
+  font-weight: 600; /* Semi Bold */
+  line-height: 1;
+  letter-spacing: 0em;
+  color: #ffffff;
 }
 
 /* Font Weights */
@@ -420,11 +495,43 @@ a.button-text {
     letter-spacing: -0.05em;
   }
 
+  h2.explore-workflow-title {
+    font-size: 5rem; /* 60px (12px * 5) */
+    line-height: 1.2;
+    letter-spacing: 0em;
+  }
+
   button.button-text,
   a.button-text {
     font-size: 1.0625rem; /* 12.75px (12px * 1.0625) */
     line-height: 1.5;
     letter-spacing: -0.01em;
+  }
+
+  .workflow-category-text {
+    font-size: 0.75rem; /* 12px (12px * 0.75) */
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .workflow-title-text {
+    font-size: 1.125rem; /* 13.5px (12px * 1.125) */
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+
+  .workflow-description-text,
+  .workflow-tag-text,
+  .workflow-creator-text {
+    font-size: 0.875rem; /* 10.5px (12px * 0.875) */
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+
+  .workflow-author-avatar {
+    font-size: 0.5625rem; /* 9px (12px * 0.5625) */
+    line-height: 1;
+    letter-spacing: 0em;
   }
 
   p.small {

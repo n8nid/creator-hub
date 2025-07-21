@@ -48,30 +48,12 @@ const FeaturedWorkflows = () => {
       <div className="w-full px-4 sm:px-8 md:px-16 relative z-10">
         <div className="flex flex-col items-start justify-start mb-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-6">
-            <h2
-              style={{
-                fontFamily: "Albert Sans, Arial, sans-serif",
-                fontWeight: 300,
-                fontStyle: "normal",
-                fontSize: "clamp(2.5rem, 8vw, 80px)",
-                lineHeight: "120%",
-                letterSpacing: 0,
-                color: "#FFFFFF",
-                textAlign: "left",
-                margin: 0,
-                padding: 0,
-                flex: 1,
-                minWidth: 0,
-                whiteSpace: "normal",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
+            <h2 className="explore-workflow-title text-white flex-1 min-w-0">
               Explore Workflow
             </h2>
             <Link
               href="/workflows"
-              className="btn-jelajah flex items-center gap-3 w-full sm:w-auto justify-center"
+              className="btn-jelajah button-text flex items-center gap-3 w-full sm:w-auto justify-center"
               style={{ height: 60 }}
             >
               <svg
@@ -97,47 +79,44 @@ const FeaturedWorkflows = () => {
             <Link
               key={workflow.id}
               href={`/workflows/${workflow.id}`}
-              className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block w-full"
+              className="workflow-card block w-full"
             >
               {/* Content */}
               <div className="p-6">
                 {/* Category Badge */}
                 <div className="flex justify-end mb-4">
-                  <span className="inline-flex items-center px-3 py-1 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
+                  <span className="workflow-category-badge workflow-category-text">
                     {workflow.category || "General"}
                   </span>
                 </div>
                 {/* Title */}
-                <h3 className="text-lg font-bold text-purple-900 mb-2 line-clamp-2 group-hover:text-purple-700 transition-colors">
+                <h3 className="workflow-title-text mb-2 group-hover:text-purple-700 transition-colors break-words">
                   {workflow.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                <p className="workflow-description-text mb-4 line-clamp-3">
                   {workflow.description ||
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros."}
                 </p>
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="workflow-tags-container">
                   {(workflow.tags || []).slice(0, 3).map((tag: string) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium"
-                    >
+                    <span key={tag} className="workflow-tag workflow-tag-text">
                       {tag}
                     </span>
                   ))}
                   {(workflow.tags || []).length > 3 && (
-                    <span className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium">
+                    <span className="workflow-tag workflow-tag-text">
                       +{(workflow.tags || []).length - 3}
                     </span>
                   )}
                 </div>
 
                 {/* Author */}
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                  <div className="w-8 h-8 rounded-full overflow-hidden">
+                <div className="workflow-author-section">
+                  <div className="workflow-author-avatar">
                     {workflow.profile_image ? (
                       <img
                         src={workflow.profile_image}
@@ -145,12 +124,12 @@ const FeaturedWorkflows = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
+                      <span className="workflow-author-avatar">
                         {workflow.profile_name?.charAt?.(0) || "C"}
-                      </div>
+                      </span>
                     )}
                   </div>
-                  <span className="text-sm text-purple-900 font-medium">
+                  <span className="workflow-creator-text">
                     {workflow.profile_name || "Creator"}
                   </span>
                 </div>
