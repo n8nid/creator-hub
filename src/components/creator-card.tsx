@@ -35,7 +35,7 @@ export default function CreatorCard({
       case "expert":
         return "bg-purple-100 text-purple-800";
       case "advanced":
-        return "bg-blue-100 text-blue-800";
+        return "bg-purple-100 text-purple-800";
       case "intermediate":
         return "bg-green-100 text-green-800";
       case "beginner":
@@ -115,7 +115,7 @@ export default function CreatorCard({
               src={creator.profile_image || undefined}
               alt={creator.name}
             />
-            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">
+            <AvatarFallback className="bg-gradient-to-br from-purple-500 to-purple-600 text-white font-semibold">
               {getInitials(creator.name)}
             </AvatarFallback>
           </Avatar>
@@ -187,7 +187,7 @@ export default function CreatorCard({
               <span>4.8</span>
             </div>
             <div className="flex items-center gap-1">
-              <Users className="w-3 h-3 text-blue-500" />
+                              <Users className="w-3 h-3 text-gray-500" />
               <span>1.2k</span>
             </div>
             <div className="flex items-center gap-1">

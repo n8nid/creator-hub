@@ -32,6 +32,21 @@ body {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  /* Tablet-specific utilities */
+  .tablet-container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .tablet-sidebar-collapsed {
+    width: 4rem;
+  }
+
+  .tablet-sidebar-expanded {
+    width: 14rem;
+  }
 }
 
 @layer base {
@@ -554,6 +569,15 @@ body {
     filter: brightness(1.1);
     box-shadow: 0 6px 20px 0 #ff00bb88;
     transform: translateY(-1px);
+  }
+  
+  /* Responsive button styling untuk tablet */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .btn-login {
+      padding: 0.5rem 1.25rem;
+      font-size: 0.875rem;
+      min-height: 36px;
+    }
   }
   .btn-jelajah {
     background: linear-gradient(90deg, #d900ff 0%, #9500ff 100%);
