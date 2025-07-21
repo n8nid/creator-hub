@@ -750,33 +750,10 @@ const AboutSection = () => {
                 />
                 {/* Content */}
                 <div className="relative z-10">
-                  <h2
-                    style={{
-                      fontFamily: "Albert Sans, Arial, sans-serif",
-                      fontWeight: 250,
-                      fontStyle: "thin",
-                      fontSize: "clamp(2rem, 6vw, 60px)",
-                      lineHeight: "clamp(2.5rem, 7vw, 70px)",
-                      letterSpacing: "-0.05em",
-                      color: "#FFFBFB",
-                      margin: "0 0 30px 0",
-                    }}
-                  >
+                  <h2 className="platform-title-text mb-8">
                     Platform ini hadir untuk menghubungkan Creator
                   </h2>
-                  <p
-                    style={{
-                      fontFamily: "Inter, Arial, sans-serif",
-                      fontWeight: 300,
-                      fontStyle: "light",
-                      fontSize: "clamp(14px, 3.5vw, 18px)",
-                      lineHeight: "150%",
-                      letterSpacing: "-0.01em",
-                      color: "#FFFFFF",
-                      background: "transparent",
-                      marginBottom: "32px",
-                    }}
-                  >
+                  <p className="platform-description-text mb-8">
                     dari berbagai bidang dengan para pengguna yang mencari
                     inspirasi, ide, dan solusi melalui workflow yang praktis.
                     Kami percaya, kolaborasi kreatif akan lebih mudah ketika
@@ -790,8 +767,8 @@ const AboutSection = () => {
                   <div className="flex justify-start">
                     <a
                       href="/creators"
-                      className="btn-jelajah flex items-center gap-3"
-                      style={{ fontSize: "clamp(14px, 3.5vw, 18px)" }}
+                      className="btn-jelajah button-text flex items-center gap-3"
+                      style={{ height: 60 }}
                     >
                       Connect With Us
                     </a>
