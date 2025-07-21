@@ -828,13 +828,8 @@ const AboutSection = () => {
             style={{ zIndex: 10 }}
           >
             <div className="mb-12 w-full">
-              <h3
-                className="text-5xl font-thin text-white/80 mb-4"
-                style={{ fontFamily: "Albert Sans, Arial, sans-serif" }}
-              >
-                Key Benefits
-              </h3>
-              <p className="text-lg text-white/80 max-w-2xl">
+              <h3 className="key-benefits-title-text mb-4">Key Benefits</h3>
+              <p className="key-benefits-intro-text max-w-2xl">
                 Kami menghadirkan platform yang memudahkan Anda untuk menemukan
                 kreator, menjelajahi workflow, dan membangun proses kerja yang
                 lebih efektif.
@@ -842,6 +837,31 @@ const AboutSection = () => {
             </div>
             <div className="flex flex-col gap-16 w-full">
               {/* Item 1 */}
+              <div className="flex items-start gap-4 relative">
+                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <circle cx="10" cy="10" r="10" fill="#C084FC" />
+                    <path
+                      d="M6 10.5L9 13.5L14 8.5"
+                      stroke="#fff"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div className="key-benefits-intro-text mb-1">
+                    Share Your Workflow
+                  </div>
+                  <div className="key-benefits-point-title-text">
+                    Bagikan workflow Anda untuk membantu kreator lain
+                    <br />
+                    menemukan cara kerja yang lebih efisien dan terarah.
+                  </div>
+                </div>
+              </div>
+              {/* Item 2 */}
               <div
                 className="flex items-start gap-4 relative"
                 style={{ marginLeft: "clamp(20px, 5vw, 60px)" }}
@@ -859,38 +879,10 @@ const AboutSection = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-xl text-white/90 font-normal mb-1">
-                    Share Your Workflow
-                  </div>
-                  <div className="font-bold text-white text-lg leading-snug">
-                    Bagikan workflow Anda untuk membantu kreator lain
-                    <br />
-                    menemukan cara kerja yang lebih efisien dan terarah.
-                  </div>
-                </div>
-              </div>
-              {/* Item 2 */}
-              <div
-                className="flex items-start gap-4 relative"
-                style={{ marginLeft: "clamp(40px, 10vw, 160px)" }}
-              >
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <circle cx="10" cy="10" r="10" fill="#C084FC" />
-                    <path
-                      d="M6 10.5L9 13.5L14 8.5"
-                      stroke="#fff"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xl text-white/90 font-normal mb-1">
+                  <div className="key-benefits-intro-text mb-1">
                     Access Ready-to-Use Workflows
                   </div>
-                  <div className="font-bold text-white text-lg leading-snug">
+                  <div className="key-benefits-point-title-text">
                     Jelajahi berbagai workflow yang praktis dan dapat langsung
                     <br />
                     Anda terapkan dalam proses kerja Anda.
@@ -900,7 +892,7 @@ const AboutSection = () => {
               {/* Item 3 */}
               <div
                 className="flex items-start gap-4 relative"
-                style={{ marginLeft: "clamp(60px, 15vw, 260px)" }}
+                style={{ marginLeft: "clamp(40px, 10vw, 120px)" }}
               >
                 <div className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C084FC] flex items-center justify-center shadow-lg">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -915,10 +907,10 @@ const AboutSection = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-xl text-white/90 font-normal mb-1">
+                  <div className="key-benefits-intro-text mb-1">
                     Connect & Collaborate
                   </div>
-                  <div className="font-bold text-white text-lg leading-snug">
+                  <div className="key-benefits-point-title-text">
                     Bangun koneksi dan kolaborasi dengan kreator lain untuk
                     <br />
                     mengembangkan proyek yang lebih maksimal.
