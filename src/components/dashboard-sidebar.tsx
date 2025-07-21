@@ -2,7 +2,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { User, Workflow, Star } from "lucide-react";
 
-export function DashboardSidebar() {
+interface DashboardSidebarProps {
+  isCollapsed?: boolean;
+}
+
+export function DashboardSidebar({ isCollapsed = false }: DashboardSidebarProps) {
   const pathname = usePathname();
   const menu = [
     {
@@ -22,19 +26,26 @@ export function DashboardSidebar() {
     },
   ];
   return (
-    <nav className="flex flex-col gap-2 p-4 border-r bg-white min-h-screen w-56">
+    <nav className={`
+      flex flex-col gap-2 p-4 border-r bg-white min-h-screen transition-all duration-300 ease-in-out
+      ${isCollapsed ? 'w-16' : 'w-56'}
+    `}>
       {menu.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors text-base ${
-            pathname === item.href
-              ? "bg-blue-100 text-blue-700"
+          className={`
+            flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors text-base
+            ${isCollapsed ? 'justify-center' : ''}
+            ${pathname === item.href
+              ? "bg-gray-100 text-gray-700"
               : "text-gray-700 hover:bg-gray-100"
-          }`}
+            }
+          `}
+
         >
           {item.icon}
-          {item.label}
+          {!isCollapsed && <span>{item.label}</span>}
         </Link>
       ))}
     </nav>

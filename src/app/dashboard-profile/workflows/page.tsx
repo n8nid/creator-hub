@@ -274,7 +274,7 @@ export default function WorkflowsSubPage() {
 
       {/* List workflow user */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 px-2 sm:px-0">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 px-2 sm:px-0">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <Card key={i} className="animate-pulse">
               <CardContent className="p-3 sm:p-4">
@@ -299,7 +299,7 @@ export default function WorkflowsSubPage() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 px-2 sm:px-0">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 px-2 sm:px-0">
           {currentWorkflows.map((w) => (
             <Card
               key={w.id}

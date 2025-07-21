@@ -306,7 +306,7 @@ export default function CreatorsPage() {
         </div>
 
         {/* Creators Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-16">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-2 tablet:gap-4 mt-16">
           {loading ? (
             <div className="col-span-full text-center py-12 text-white/60">
               Loading...
@@ -322,8 +322,8 @@ export default function CreatorsPage() {
                 href={`/creators/${creator.id}`}
                 className="block group"
               >
-                <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-2 max-w-sm mx-auto w-full">
-                  <div className="flex items-center space-x-4">
+                <div className="bg-white rounded-2xl p-4 tablet:p-6 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-2 max-w-sm tablet:max-w-none mx-auto w-full">
+                  <div className="flex items-center space-x-4 tablet:space-x-6">
                     <Avatar className="h-16 w-16">
                       <AvatarImage
                         src={creator.profile_image || ""}
@@ -338,8 +338,8 @@ export default function CreatorsPage() {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-purple-900 font-semibold text-lg truncate group-hover:text-purple-700 transition-colors">
+                      <div className="flex items-center gap-2 tablet:gap-3">
+                        <h3 className="text-purple-900 font-semibold text-lg tablet:text-base break-words line-clamp-2 overflow-hidden group-hover:text-purple-700 transition-colors">
                           {creator.name}
                         </h3>
                         <div className="h-5 w-5 bg-gradient-to-r from-purple-500 to-purple-800 rounded-full flex items-center justify-center flex-shrink-0">
@@ -357,7 +357,7 @@ export default function CreatorsPage() {
                         </div>
                       </div>
                       <div className="flex items-center justify-between mt-1">
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-gray-500 text-sm break-words line-clamp-1 overflow-hidden">
                           {creator.workflow_count} workflow
                         </p>
                         <Badge

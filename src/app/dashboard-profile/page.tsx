@@ -230,61 +230,65 @@ export default function DashboardProfilePage() {
   if (loading) {
     return (
       <div className="text-center py-16">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600 mx-auto"></div>
         <p className="text-gray-600 mt-4">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 sm:space-y-8 mt-4 w-full max-w-full overflow-hidden px-2 sm:px-0">
-      {/* Main Content Grid - GitHub Style */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-8 w-full max-w-full">
+    <div className="space-y-4 sm:space-y-8 tablet:space-y-4 mt-4 tablet:mt-2 w-full max-w-full overflow-hidden px-2 sm:px-0">
+      {/* Main Content Grid - Responsive for tablet */}
+      <div className="grid grid-cols-1 tablet:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-8 tablet:gap-4 w-full max-w-full">
         {/* Left Column - Profile Info */}
-        <div className="lg:col-span-1 w-full">
-          <Card className="p-3 sm:p-6 w-full max-w-xs mx-auto">
-            <div className="text-center mb-4 sm:mb-6">
-              <Avatar className="h-24 w-24 sm:h-40 sm:w-40 mx-auto mb-3 sm:mb-4">
+        <div className="tablet:col-span-1 lg:col-span-1 w-full">
+          <Card className="p-3 sm:p-4 tablet:p-6 lg:p-6 w-full max-w-xs tablet:max-w-sm mx-auto">
+            <div className="text-center mb-4 sm:mb-5 tablet:mb-6 lg:mb-6">
+              <div className="tablet:flex tablet:justify-center">
+                <Avatar className="h-24 w-24 sm:h-32 tablet:h-36 lg:h-40 sm:w-32 tablet:w-36 lg:w-40 mx-auto mb-3 sm:mb-4">
                 <AvatarImage
                   src={profileImage ? `${profileImage}?t=${Date.now()}` : undefined}
                 />
-                <AvatarFallback className="text-xl sm:text-3xl">
+                <AvatarFallback className="text-xl sm:text-2xl tablet:text-2xl lg:text-3xl">
                   {profile?.name?.split(" ").map((n: string) => n[0]).join("")}
                 </AvatarFallback>
               </Avatar>
-              <h2 className="text-lg sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2 break-words">
+            </div>
+              <h2 className="text-lg sm:text-xl tablet:text-base lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2 break-words text-center">
                 {profile?.name}
               </h2>
 
               {/* Experience Level */}
               {profile?.experience_level && (
                 <div className="mb-2 sm:mb-3">
-                  <Badge variant="secondary" className="text-xs sm:text-sm">{profile.experience_level}</Badge>
+                  <Badge variant="secondary" className="text-xs sm:text-sm tablet:text-sm">{profile.experience_level}</Badge>
                 </div>
               )}
 
-              <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base break-words">
+              <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-sm tablet:text-sm lg:text-base break-words">
                 {profile?.bio || "Belum ada bio yang ditambahkan"}
               </p>
 
               {/* Edit Profile Button */}
-              <Button
-                asChild
-                className="bg-purple-900 hover:bg-purple-800 text-white mb-4 sm:mb-6 w-full sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
-              >
-                <Link href="/dashboard-profile/profile/edit">
-                  <Pencil className="h-4 w-4 mr-2" />
-                  Edit Profile
-                </Link>
-              </Button>
+              <div className="tablet:flex tablet:justify-center">
+                <Button
+                  asChild
+                  className="bg-purple-900 hover:bg-purple-800 text-white mb-4 sm:mb-6 w-full sm:w-auto text-sm sm:text-sm tablet:text-sm lg:text-base px-4 py-2 sm:px-4 tablet:px-6 lg:px-6 sm:py-2 tablet:py-3 lg:py-3"
+                >
+                  <Link href="/dashboard-profile/profile/edit">
+                    <Pencil className="h-4 w-4 sm:h-4 tablet:h-4 lg:h-4 mr-2" />
+                    Edit Profile
+                  </Link>
+                </Button>
+              </div>
             </div>
 
             {/* Profile Info - Left Aligned */}
-            <div className="text-left space-y-3 sm:space-y-4">
-              {/* Follower/Following Stats */}
-              <div className="flex gap-4 sm:gap-6 text-xs sm:text-base">
+            <div className="text-left space-y-3 sm:space-y-3 tablet:space-y-4 lg:space-y-4">
+              {/* Follower/Following Stats - Mobile & Desktop Layout */}
+              <div className="flex gap-4 sm:gap-6 text-xs sm:text-sm tablet:text-sm lg:text-base tablet:hidden lg:flex">
                 <div className="flex items-center gap-1">
-                  <User className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600" />
+                  <User className="h-3 w-3 sm:h-4 tablet:h-4 lg:h-4 sm:w-4 tablet:w-4 lg:w-4 text-gray-600" />
                   <span className="font-semibold">{stats.followers}</span>
                   <span className="text-gray-600">followers</span>
                 </div>
@@ -293,11 +297,24 @@ export default function DashboardProfilePage() {
                   <span className="text-gray-600">following</span>
                 </div>
               </div>
+              
+              {/* Follower/Following Stats - Tablet Layout */}
+              <div className="hidden tablet:block lg:hidden space-y-2 text-center">
+                <div className="flex items-center justify-center gap-1">
+                  <User className="h-4 w-4 text-gray-600" />
+                  <span className="font-semibold">{stats.followers}</span>
+                  <span className="text-gray-600">followers</span>
+                </div>
+                <div className="flex items-center justify-center gap-1">
+                  <span className="font-semibold">{stats.following}</span>
+                  <span className="text-gray-600">following</span>
+                </div>
+              </div>
 
               {/* Location */}
               {profile?.location && (
-                <div className="flex items-center text-gray-600 text-xs sm:text-base">
-                  <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                <div className="flex items-center text-gray-600 text-xs sm:text-sm tablet:text-sm lg:text-base">
+                  <MapPin className="h-3 w-3 sm:h-4 tablet:h-4 lg:h-4 sm:w-4 tablet:w-4 lg:w-4 mr-1" />
                   {profile.location}
                 </div>
               )}
@@ -306,22 +323,22 @@ export default function DashboardProfilePage() {
               <div className="flex gap-3 sm:gap-4">
                 {profile?.website && (
                   <a href={profile.website} target="_blank" rel="noopener noreferrer" title="Website">
-                    <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                    <Globe className="h-4 w-4 sm:h-4 tablet:h-5 lg:h-5 sm:w-4 tablet:w-5 lg:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
                 {profile?.linkedin && (
                   <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" title="LinkedIn">
-                    <Linkedin className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                    <Linkedin className="h-4 w-4 sm:h-4 tablet:h-5 lg:h-5 sm:w-4 tablet:w-5 lg:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
                 {profile?.github && (
                   <a href={profile.github} target="_blank" rel="noopener noreferrer" title="GitHub">
-                    <Github className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                    <Github className="h-4 w-4 sm:h-4 tablet:h-5 lg:h-5 sm:w-4 tablet:w-5 lg:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
                 {profile?.instagram && (
                   <a href={profile.instagram} target="_blank" rel="noopener noreferrer" title="Instagram">
-                    <Instagram className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                    <Instagram className="h-4 w-4 sm:h-4 tablet:h-5 lg:h-5 sm:w-4 tablet:w-5 lg:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
               </div>
@@ -330,7 +347,7 @@ export default function DashboardProfilePage() {
         </div>
 
         {/* Right Column - Content */}
-        <div className="lg:col-span-3 space-y-4 sm:space-y-6 w-full">
+        <div className="tablet:col-span-2 lg:col-span-3 space-y-4 sm:space-y-6 w-full">
           {/* About Section */}
           <Card className="w-full">
             <CardHeader className="p-3 sm:p-6">
@@ -363,7 +380,7 @@ export default function DashboardProfilePage() {
               <CardTitle className="text-base sm:text-lg">Statistik Kontribusi</CardTitle>
             </CardHeader>
             <CardContent className="p-3 sm:p-6">
-              <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4 w-full">
+              <div className="grid gap-4 sm:gap-6 tablet:grid-cols-2 lg:grid-cols-4 w-full">
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-2">
                     <Workflow className="h-5 w-5 sm:h-6 sm:w-6 text-gray-700 mr-2" />
