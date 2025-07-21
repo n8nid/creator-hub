@@ -594,7 +594,6 @@ body {
     background: linear-gradient(90deg, #d900ff 0%, #9500ff 100%);
     color: #fff;
     border-radius: 9999px;
-    font-weight: 600;
     padding: 0.75rem 2rem;
     border: none;
     box-shadow: 0 4px 16px 0 #9500ff66;
@@ -612,7 +611,6 @@ body {
   @media (max-width: 640px) {
     .btn-jelajah {
       padding: 0.875rem 1.5rem;
-      font-size: 0.875rem;
       min-height: 44px;
     }
   }
@@ -621,7 +619,6 @@ body {
     background: linear-gradient(90deg, #fbe5ff 0%, #ffffff 50%, #fae0ff 100%);
     color: #622a9a;
     border-radius: 9999px;
-    font-weight: 600;
     padding: 0.75rem 2rem;
     border: none;
     box-shadow: 0 4px 16px 0 #fbe5ff66;
@@ -639,7 +636,6 @@ body {
   @media (max-width: 640px) {
     .btn-creator {
       padding: 0.875rem 1.5rem;
-      font-size: 0.875rem;
       min-height: 44px;
     }
   }
@@ -832,6 +828,27 @@ body {
   .content-above-gradient {
     position: relative;
     z-index: 10;
+  }
+
+  /* Insight Container Styles */
+  .insight-container {
+    max-width: 1200px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+  }
+
+  @media (max-width: 768px) {
+    .insight-container {
+      padding: 0.75rem 1.5rem;
+    }
   }
 }
 

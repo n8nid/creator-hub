@@ -111,9 +111,10 @@ h6 {
 /* Paragraph - Main Body Text (Inter) */
 p {
   font-family: var(--font-primary);
-  font-size: 1rem; /* 16px on desktop, 12px on mobile */
+  font-size: 1.25rem; /* 20px on desktop, 15px on mobile */
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.5; /* 150% */
+  letter-spacing: -0.01em; /* -1% */
   color: hsl(var(--foreground));
   margin-bottom: 1rem;
 }
@@ -122,6 +123,26 @@ p {
 p.large {
   font-size: 1.125rem; /* 18px on desktop, 13.5px on mobile */
   line-height: 1.7;
+}
+
+/* Hero Description Paragraph (Albert Sans) */
+p.hero-description {
+  font-family: var(--font-secondary);
+  font-size: 2.1875rem; /* 35px on desktop, 26.25px on mobile */
+  font-weight: 400;
+  line-height: 1.07; /* 107% */
+  letter-spacing: -0.01em; /* -1% */
+  margin-bottom: 1rem;
+}
+
+/* Insight Text (Albert Sans) */
+h2.insight-text {
+  font-family: var(--font-secondary);
+  font-size: 5rem; /* 80px on desktop, 60px on mobile */
+  font-weight: 250; /* Thin */
+  line-height: 1.175; /* 94px / 80px */
+  letter-spacing: -0.05em; /* -5% */
+  margin-bottom: 1rem;
 }
 
 /* Small Paragraph */
@@ -220,7 +241,20 @@ a:hover {
    UTILITY CLASSES
    ======================================== */
 
+/* Button Text Styles */
+button.button-text,
+a.button-text {
+  font-family: var(--font-primary);
+  font-size: 1.0625rem; /* 17px on desktop, 12.75px on mobile */
+  font-weight: 600; /* Semi Bold */
+  line-height: 1.5; /* 150% */
+  letter-spacing: -0.01em; /* -1% */
+}
+
 /* Font Weights */
+.font-thin {
+  font-weight: 250;
+}
 .font-light {
   font-weight: 300;
 }
@@ -327,8 +361,8 @@ a:hover {
   /* H1 adjustments for mobile */
   h1 {
     font-size: 4.5rem; /* 54px (12px * 4.5) */
-    line-height: 100%;
-    letter-spacing: -0.02em;
+    line-height: 134.4px;
+    letter-spacing: -0.05em;
   }
 
   /* H2 adjustments for mobile */
@@ -364,13 +398,33 @@ a:hover {
 
   /* Body text adjustments for mobile */
   p {
-    font-size: 1rem; /* 12px (12px * 1) */
+    font-size: 1.25rem; /* 15px (12px * 1.25) */
     line-height: 1.5;
+    letter-spacing: -0.01em;
   }
 
   p.large {
     font-size: 1.125rem; /* 13.5px (12px * 1.125) */
     line-height: 1.6;
+  }
+
+  p.hero-description {
+    font-size: 2.1875rem; /* 26.25px (12px * 2.1875) */
+    line-height: 1.07;
+    letter-spacing: -0.01em;
+  }
+
+  h2.insight-text {
+    font-size: 5rem; /* 60px (12px * 5) */
+    line-height: 1.175;
+    letter-spacing: -0.05em;
+  }
+
+  button.button-text,
+  a.button-text {
+    font-size: 1.0625rem; /* 12.75px (12px * 1.0625) */
+    line-height: 1.5;
+    letter-spacing: -0.01em;
   }
 
   p.small {

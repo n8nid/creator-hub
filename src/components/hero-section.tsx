@@ -86,28 +86,13 @@ const HeroSection = () => {
           <div className="flex flex-col md:flex-row md:items-center w-full">
             {/* Kiri: Heading, Community, dan Deskripsi */}
             <div className="flex flex-col items-start flex-1 min-w-0">
-              <h1 className="font-sans font-semibold text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-white mb-0 text-left">
-                N8N Indonesia
-              </h1>
-              <div className="font-sans font-thin text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white/80 mb-2 text-left">
+              <h1 className="text-white mb-0 text-left">N8N Indonesia</h1>
+              <h1 className="text-white/80 mb-2 text-left font-thin">
                 Community
-              </div>
-              <div
-                style={{
-                  fontFamily: "Inter, Arial, sans-serif",
-                  fontWeight: 400,
-                  fontStyle: "thin",
-                  fontSize: "clamp(16px, 4vw, 20px)",
-                  lineHeight: "150%",
-                  letterSpacing: "-0.01em",
-                  color: "#FFFFFF",
-                  marginTop: "8px",
-                  marginBottom: "0",
-                  textAlign: "left",
-                }}
-              >
+              </h1>
+              <p className="text-white mt-2 mb-0 text-left">
                 Temukan dan bagikan workflow automation yang powerful.
-              </div>
+              </p>
             </div>
             {/* Tengah: Garis Penghubung */}
             <div className="hidden md:flex items-center justify-center px-8">
@@ -115,24 +100,10 @@ const HeroSection = () => {
             </div>
             {/* Kanan: Deskripsi */}
             <div className="hidden md:flex flex-1 min-w-0">
-              <div
-                className="font-sans font-normal text-lg text-white/80 text-left"
-                style={{
-                  fontFamily: "Albert Sans, Arial, sans-serif",
-                  fontWeight: 400,
-                  fontStyle: "normal",
-                  fontSize: "28px", // sebelumnya 35px
-                  lineHeight: "107%",
-                  letterSpacing: "-0.01em",
-                  color: "#FFFFFF",
-                  maxWidth: "100%",
-                  whiteSpace: "normal",
-                  textAlign: "left",
-                }}
-              >
+              <p className="hero-description text-white text-left">
                 Bergabunglah dengan komunitas N8N Indonesia dan tingkatkan
                 produktivitas Anda.
-              </div>
+              </p>
             </div>
           </div>
         </div>
@@ -142,13 +113,7 @@ const HeroSection = () => {
             style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
             <div
-              className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer overflow-hidden"
-              style={{
-                maxWidth: "840px",
-                width: "100%",
-                background: "rgba(255, 255, 255, 0.05)",
-                backdropFilter: "blur(10px)",
-              }}
+              className="insight-container"
               onMouseMove={handleMouseMove}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
@@ -164,43 +129,14 @@ const HeroSection = () => {
               />
               {/* Content */}
               <div className="relative z-10">
-                <h2
-                  style={{
-                    fontFamily: "Albert Sans, Arial, sans-serif",
-                    fontSize: "clamp(24px, 6vw, 48px)",
-                    lineHeight: "120%",
-                    letterSpacing: "-0.02em",
-                    color: "#FFFBFB",
-                    textAlign: "left",
-                    margin: 0,
-                    marginBottom: "24px",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: "Albert Sans, Arial, sans-serif",
-                      fontWeight: 100,
-                      fontStyle: "normal",
-                      color: "rgba(255, 255, 255, 0.8)",
-                    }}
-                  >
-                    Dapatkan insight, workflow siap pakai, dan dukungan dari
-                    komunitas yang aktif dan solutif.
-                  </span>
-                  <br />
-                  <span
-                    style={{
-                      fontWeight: 600,
-                      fontStyle: "normal",
-                      color: "#FFFBFB",
-                    }}
-                  >
-                    Workflow hebat dimulai dari sini.
-                  </span>
+                <h2 className="insight-text text-white text-left mb-6">
+                  Dapatkan insight, workflow siap pakai, dan dukungan dari
+                  komunitas yang aktif dan solutif. Workflow hebat dimulai dari
+                  sini.
                 </h2>
                 <div className="flex flex-col sm:flex-row gap-3 md:gap-6">
                   <a
-                    className="btn-jelajah flex items-center justify-center gap-3 w-full sm:w-auto"
+                    className="btn-jelajah button-text flex items-center justify-center gap-3 w-full sm:w-auto"
                     href="/workflows"
                   >
                     Jelajahi Workflow
@@ -220,7 +156,7 @@ const HeroSection = () => {
                     </svg>
                   </a>
                   <a
-                    className="btn-creator flex items-center justify-center gap-3 w-full sm:w-auto"
+                    className="btn-creator button-text flex items-center justify-center gap-3 w-full sm:w-auto"
                     href="/directory"
                   >
                     Temukan Creator
