@@ -55,7 +55,7 @@ interface User {
   bio?: string;
   location?: string;
   status: "draft" | "pending" | "approved" | "rejected";
-  is_creator: boolean;
+  role: "user" | "creator" | "admin";
   created_at: string;
   updated_at: string;
 }
@@ -83,77 +83,317 @@ export default function UsersPage() {
 
   const { toast } = useToast();
 
+  // Process profile data
+  const processProfile = (
+    profile: any,
+    usersMap: Map<string, any>,
+    joinedUser?: any,
+    creatorMap?: Map<string, string>,
+    adminMap?: Set<string>
+  ) => {
+    // Determine role based on logic
+    let role: "user" | "creator" | "admin" = "user";
+
+    if (adminMap?.has(profile.user_id)) {
+      role = "admin";
+    } else if (creatorMap?.get(profile.user_id) === "approved") {
+      role = "creator";
+    }
+
+    // Get user data from joined data or map
+    const userData = joinedUser || usersMap.get(profile.user_id);
+
+    console.log(`🔍 Processing profile: ${profile.name}`);
+    console.log(`   Profile user_id: ${profile.user_id}`);
+    console.log(`   User data found: ${!!userData}`);
+    console.log(`   User data:`, userData);
+    console.log(`   Email from user data: ${userData?.email}`);
+
+    // Fallback: If no user data, try to extract email from profile name
+    let finalEmail = userData?.email || "Email tidak tersedia";
+    let finalCreatedAt = userData?.created_at || profile.created_at || "";
+
+    // If no user data and profile name looks like an email, use it
+    if (!userData && profile.name && profile.name.includes("@")) {
+      finalEmail = profile.name;
+      console.log(`   Using email from profile name: ${finalEmail}`);
+    }
+
+    console.log(`   Final email: ${finalEmail}`);
+    console.log(`   Final created_at: ${finalCreatedAt}`);
+
+    return {
+      id: profile.user_id,
+      email: finalEmail,
+      full_name: profile.name,
+      avatar_url: profile.profile_image,
+      bio: profile.bio,
+      location: profile.location,
+      status: profile.status,
+      role,
+      created_at: finalCreatedAt,
+      updated_at: profile.updated_at,
+    };
+  };
+
+  // Calculate stats
+  const calculateStats = async (transformedUsers: User[]) => {
+    const totalUsers = transformedUsers.length;
+    const activeUsers = transformedUsers.filter(
+      (u) => u.status !== "rejected"
+    ).length;
+
+    // Get creators count from creator_applications table
+    const { count: creators } = await supabase
+      .from("creator_applications")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "approved");
+
+    const bannedUsers = transformedUsers.filter(
+      (u) => u.status === "rejected"
+    ).length;
+
+    setStats({
+      total_users: totalUsers,
+      active_users: activeUsers,
+      creators: creators ?? 0,
+      banned_users: bannedUsers,
+    });
+  };
+
   // Fetch users data
   const fetchUsers = async () => {
+    console.log("🚀 fetchUsers function called");
+
     try {
       setLoading(true);
+      console.log("✅ setLoading(true) called");
 
-      // Fetch profiles with user data (join)
-      const { data: profiles, error } = await supabase
+      console.log("=== STARTING FETCH USERS ===");
+
+      // Create users lookup map
+      const usersMap = new Map<string, any>();
+
+      // SOLUSI ALTERNATIF: Try multiple approaches to get users data
+      console.log("🔍 Trying multiple approaches to get users data...");
+
+      // Approach 1: Direct query with service role
+      console.log("🔍 Approach 1: Direct query...");
+      const { data: usersData, error: usersError } = await supabase
+        .from("users")
+        .select("id, email, created_at");
+
+      console.log("=== APPROACH 1 RESULT ===");
+      console.log("Users data:", usersData);
+      console.log("Users error:", usersError);
+      console.log("Users count:", usersData?.length);
+
+      // Approach 2: Try with auth context
+      if (usersError || !usersData || usersData.length === 0) {
+        console.log("❌ Approach 1 failed, trying Approach 2...");
+
+        // Try to get current user first to test connection
+        const {
+          data: { user: currentUser },
+          error: currentUserError,
+        } = await supabase.auth.getUser();
+        console.log("Current user:", currentUser);
+        console.log("Current user error:", currentUserError);
+
+        // Try different query pattern
+        const { data: altUsers, error: altError } = await supabase
+          .from("users")
+          .select("*")
+          .limit(10);
+
+        console.log("=== APPROACH 2 RESULT ===");
+        console.log("Alternative users data:", altUsers);
+        console.log("Alternative error:", altError);
+        console.log("Alternative count:", altUsers?.length);
+
+        if (altUsers && altUsers.length > 0) {
+          altUsers.forEach((user: any) => {
+            usersMap.set(user.id, user);
+            console.log(`✅ Added user to map: ${user.id} -> ${user.email}`);
+          });
+        }
+
+        // Approach 3: Try API endpoint
+        if (!altUsers || altUsers.length === 0) {
+          console.log(
+            "❌ Approach 2 failed, trying Approach 3 (API endpoint)..."
+          );
+
+          try {
+            const response = await fetch("/api/admin/users");
+            if (response.ok) {
+              const { users: apiUsers } = await response.json();
+              console.log("=== APPROACH 3 RESULT (API) ===");
+              console.log("API users data:", apiUsers);
+              console.log("API users count:", apiUsers?.length);
+
+              if (apiUsers && apiUsers.length > 0) {
+                apiUsers.forEach((user: any) => {
+                  usersMap.set(user.id, user);
+                  console.log(
+                    `✅ Added user to map via API: ${user.id} -> ${user.email}`
+                  );
+                });
+              }
+            } else {
+              console.log(
+                "❌ API endpoint failed:",
+                response.status,
+                response.statusText
+              );
+            }
+          } catch (apiError) {
+            console.log("❌ API endpoint error:", apiError);
+          }
+        }
+      } else {
+        // Approach 1 successful
+        usersData.forEach((user: any) => {
+          usersMap.set(user.id, user);
+          console.log(`✅ Added user to map: ${user.id} -> ${user.email}`);
+        });
+      }
+
+      // Approach 3: If both failed, try to get users from profiles with email-like names
+      if (usersMap.size === 0) {
+        console.log(
+          "❌ Both approaches failed, using email extraction from profiles..."
+        );
+      }
+
+      console.log("=== USERS MAP STATUS ===");
+      console.log("Users map size:", usersMap.size);
+      console.log("Users map keys:", Array.from(usersMap.keys()));
+
+      // Fetch profiles
+      console.log("🔍 Fetching profiles...");
+      const { data: profilesData, error: profilesError } = await supabase
         .from("profiles")
-        .select(
-          `
-          id,
-          user_id,
-          name,
-          bio,
-          location,
-          profile_image,
-          status,
-          created_at,
-          updated_at,
-          users (
-            id,
-            email,
-            created_at
-          )
-        `
-        )
+        .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching users:", error);
+      console.log("=== PROFILES TABLE QUERY ===");
+      console.log("Profiles data:", profilesData);
+      console.log("Profiles error:", profilesError);
+      console.log("Profiles count:", profilesData?.length);
+
+      if (profilesError) {
+        console.error("Error fetching profiles:", profilesError);
         return;
       }
 
-      // Transform data to match our interface
+      // Get creator and admin data
+      console.log("🔍 Fetching creator and admin data...");
+      const { data: creatorApps } = await supabase
+        .from("creator_applications")
+        .select("user_id, status");
+
+      const { data: adminUsers } = await supabase
+        .from("admin_users")
+        .select("user_id");
+
+      // Create lookup maps
+      const creatorMap = new Map<string, string>();
+      creatorApps?.forEach((app: any) => {
+        creatorMap.set(app.user_id, app.status);
+      });
+
+      const adminMap = new Set<string>();
+      adminUsers?.forEach((admin: any) => {
+        adminMap.add(admin.user_id as string);
+      });
+
+      // Process profiles with enhanced email detection
+      console.log("🔍 Processing profiles with enhanced email detection...");
       const transformedUsers: User[] =
-        profiles?.map((profile: any) => ({
-          id: profile.user_id,
-          email: profile.users?.email ?? "",
-          full_name: profile.name,
-          avatar_url: profile.profile_image,
-          bio: profile.bio,
-          location: profile.location,
-          status: profile.status,
-          is_creator: profile.status === "approved",
-          created_at: profile.users?.created_at ?? "",
-          updated_at: profile.updated_at,
-        })) || [];
+        profilesData?.map((profile: any) => {
+          // Get user data from map
+          const userData = usersMap.get(profile.user_id);
+
+          console.log(`🔍 Processing profile: ${profile.name}`);
+          console.log(`   Profile user_id: ${profile.user_id}`);
+          console.log(`   User data found: ${!!userData}`);
+          console.log(`   User data:`, userData);
+          console.log(`   Email from user data: ${userData?.email}`);
+
+          // Determine role
+          let role: "user" | "creator" | "admin" = "user";
+          if (adminMap.has(profile.user_id)) {
+            role = "admin";
+          } else if (creatorMap.get(profile.user_id) === "approved") {
+            role = "creator";
+          }
+
+          // Enhanced email detection
+          let finalEmail = "Email tidak tersedia";
+          let finalCreatedAt = profile.created_at || "";
+
+          // Priority 1: Use email from users table
+          if (userData && userData.email) {
+            finalEmail = userData.email;
+            finalCreatedAt = userData.created_at || profile.created_at || "";
+            console.log(`   ✅ Using email from users table: ${finalEmail}`);
+          }
+          // Priority 2: Use profile name if it looks like email
+          else if (
+            profile.name &&
+            profile.name.includes("@") &&
+            profile.name.includes(".")
+          ) {
+            finalEmail = profile.name;
+            console.log(`   ✅ Using email from profile name: ${finalEmail}`);
+          }
+          // Priority 3: Try to construct email from profile name
+          else if (profile.name && !profile.name.includes(" ")) {
+            // If name is single word, might be username
+            finalEmail = `${profile.name}@example.com`;
+            console.log(`   ⚠️ Constructed email from username: ${finalEmail}`);
+          }
+          // Priority 4: Use created_at from users table if available
+          else if (userData && userData.created_at) {
+            finalCreatedAt = userData.created_at;
+            console.log(
+              `   ⚠️ Using created_at from users table: ${finalCreatedAt}`
+            );
+          }
+
+          console.log(`   Final email: ${finalEmail}`);
+          console.log(`   Final created_at: ${finalCreatedAt}`);
+
+          return {
+            id: profile.user_id,
+            email: finalEmail,
+            full_name: profile.name,
+            avatar_url: profile.profile_image,
+            bio: profile.bio,
+            location: profile.location,
+            status: profile.status,
+            role,
+            created_at: finalCreatedAt,
+            updated_at: profile.updated_at,
+          };
+        }) || [];
+
+      console.log("=== FINAL TRANSFORMED USERS ===");
+      console.log("Transformed users:", transformedUsers);
+      console.log("Transformed users count:", transformedUsers.length);
 
       setUsers(transformedUsers);
-
-      // Calculate stats
-      const totalUsers = transformedUsers.length;
-      const activeUsers = transformedUsers.filter(
-        (u) => u.status !== "rejected"
-      ).length;
-      const creators = transformedUsers.filter(
-        (u) => u.status === "approved"
-      ).length;
-      const bannedUsers = transformedUsers.filter(
-        (u) => u.status === "rejected"
-      ).length;
-
-      setStats({
-        total_users: totalUsers,
-        active_users: activeUsers,
-        creators,
-        banned_users: bannedUsers,
-      });
+      calculateStats(transformedUsers);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("❌ Error in fetchUsers:", error);
+      console.error("❌ Error details:", {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        name: error instanceof Error ? error.name : "Unknown",
+      });
     } finally {
+      console.log("🏁 fetchUsers finally block - setting loading to false");
       setLoading(false);
     }
   };
@@ -179,7 +419,7 @@ export default function UsersPage() {
             ? {
                 ...user,
                 status: newStatus as any,
-                is_creator: newStatus === "approved",
+                role: newStatus === "approved" ? "creator" : "user",
               }
             : user
         )
@@ -194,9 +434,11 @@ export default function UsersPage() {
       });
     } catch (error) {
       console.error("Error updating user status:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error",
-        description: "Gagal mengupdate status user",
+        description: `Gagal mengupdate status user: ${errorMessage}`,
         variant: "destructive",
       });
     } finally {
@@ -205,6 +447,7 @@ export default function UsersPage() {
   };
 
   useEffect(() => {
+    console.log("🔄 useEffect triggered - calling fetchUsers");
     fetchUsers();
   }, []);
 
@@ -238,26 +481,46 @@ export default function UsersPage() {
     );
   };
 
-  const getRoleBadge = (isCreator: boolean) => {
+  const getRoleBadge = (role: string) => {
+    const roleConfig = {
+      user: { label: "User", className: "bg-gray-100 text-gray-800" },
+      creator: { label: "Creator", className: "bg-purple-100 text-purple-800" },
+      admin: { label: "Admin", className: "bg-blue-100 text-blue-800" },
+    };
+
+    const config =
+      roleConfig[role as keyof typeof roleConfig] || roleConfig.user;
+
     return (
       <span
-        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-          isCreator
-            ? "bg-purple-100 text-purple-800"
-            : "bg-gray-100 text-gray-800"
-        }`}
+        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${config.className}`}
       >
-        {isCreator ? "Creator" : "User"}
+        {config.label}
       </span>
     );
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("id-ID", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+    console.log("formatDate input:", dateString); // Debug log
+
+    if (!dateString || dateString === "" || dateString === "Invalid Date") {
+      return "-";
+    }
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        console.log("Invalid date:", dateString);
+        return "-";
+      }
+      return date.toLocaleDateString("id-ID", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    } catch (error) {
+      console.error("Error formatting date:", error, dateString);
+      return "-";
+    }
   };
 
   const formatDateTime = (dateString: string) => {
@@ -422,17 +685,12 @@ export default function UsersPage() {
                               <div className="font-medium">
                                 {user.full_name}
                               </div>
-                              {user.location && (
-                                <div className="text-sm text-muted-foreground">
-                                  {user.location}
-                                </div>
-                              )}
                             </div>
                           </div>
                         </td>
                         <td className="p-4 align-middle">{user.email}</td>
                         <td className="p-4 align-middle">
-                          {getRoleBadge(user.is_creator)}
+                          {getRoleBadge(user.role)}
                         </td>
                         <td className="p-4 align-middle">
                           {getStatusBadge(user.status)}
@@ -484,9 +742,7 @@ export default function UsersPage() {
                                           {selectedUser.email}
                                         </p>
                                         <div className="flex items-center space-x-2 mt-2">
-                                          {getRoleBadge(
-                                            selectedUser.is_creator
-                                          )}
+                                          {getRoleBadge(selectedUser.role)}
                                           {getStatusBadge(selectedUser.status)}
                                         </div>
                                       </div>
@@ -522,102 +778,12 @@ export default function UsersPage() {
                                         )}
                                       </div>
                                     </div>
-
-                                    {/* Actions */}
-                                    <div className="flex items-center justify-end space-x-2 pt-4 border-t">
-                                      {selectedUser.status === "pending" && (
-                                        <>
-                                          <Button
-                                            onClick={() =>
-                                              updateUserStatus(
-                                                selectedUser.id,
-                                                "approved"
-                                              )
-                                            }
-                                            disabled={
-                                              actionLoading === selectedUser.id
-                                            }
-                                            className="bg-green-600 hover:bg-green-700"
-                                          >
-                                            {actionLoading ===
-                                            selectedUser.id ? (
-                                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                                            ) : (
-                                              <Check className="h-4 w-4 mr-2" />
-                                            )}
-                                            Approve
-                                          </Button>
-                                          <Button
-                                            onClick={() =>
-                                              updateUserStatus(
-                                                selectedUser.id,
-                                                "rejected"
-                                              )
-                                            }
-                                            disabled={
-                                              actionLoading === selectedUser.id
-                                            }
-                                            variant="destructive"
-                                          >
-                                            {actionLoading ===
-                                            selectedUser.id ? (
-                                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                                            ) : (
-                                              <X className="h-4 w-4 mr-2" />
-                                            )}
-                                            Reject
-                                          </Button>
-                                        </>
-                                      )}
-                                      {selectedUser.status === "approved" && (
-                                        <AlertDialog>
-                                          <AlertDialogTrigger asChild>
-                                            <Button variant="destructive">
-                                              <Ban className="h-4 w-4 mr-2" />
-                                              Revoke Creator
-                                            </Button>
-                                          </AlertDialogTrigger>
-                                          <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                              <AlertDialogTitle>
-                                                Revoke Creator Status
-                                              </AlertDialogTitle>
-                                              <AlertDialogDescription>
-                                                Apakah Anda yakin ingin mencabut
-                                                status creator dari user ini?
-                                                User akan kembali menjadi user
-                                                biasa.
-                                              </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                              <AlertDialogCancel>
-                                                Cancel
-                                              </AlertDialogCancel>
-                                              <AlertDialogAction
-                                                onClick={() =>
-                                                  updateUserStatus(
-                                                    selectedUser.id,
-                                                    "draft"
-                                                  )
-                                                }
-                                                className="bg-red-600 hover:bg-red-700"
-                                              >
-                                                Revoke
-                                              </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                          </AlertDialogContent>
-                                        </AlertDialog>
-                                      )}
-                                    </div>
                                   </div>
                                 )}
                               </DialogContent>
                             </Dialog>
 
-                            {/* Quick Actions */}
-                            <Button variant="ghost" size="sm">
-                              <Edit className="h-4 w-4" />
-                            </Button>
+                            {/* Reject User */}
                             {user.status !== "rejected" && (
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
@@ -625,8 +791,13 @@ export default function UsersPage() {
                                     variant="ghost"
                                     size="sm"
                                     className="text-red-600 hover:text-red-700"
+                                    disabled={actionLoading === user.id}
                                   >
-                                    <Ban className="h-4 w-4" />
+                                    {actionLoading === user.id ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      <Ban className="h-4 w-4" />
+                                    )}
                                   </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
@@ -637,7 +808,8 @@ export default function UsersPage() {
                                     <AlertDialogDescription>
                                       Apakah Anda yakin ingin menolak user ini?
                                       User tidak akan bisa mengakses fitur
-                                      creator.
+                                      creator dan statusnya akan berubah menjadi
+                                      rejected.
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
@@ -649,8 +821,14 @@ export default function UsersPage() {
                                         updateUserStatus(user.id, "rejected")
                                       }
                                       className="bg-red-600 hover:bg-red-700"
+                                      disabled={actionLoading === user.id}
                                     >
-                                      Reject
+                                      {actionLoading === user.id ? (
+                                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                      ) : (
+                                        <X className="h-4 w-4 mr-2" />
+                                      )}
+                                      Reject User
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -665,24 +843,6 @@ export default function UsersPage() {
               </table>
             </div>
           )}
-        </CardContent>
-      </Card>
-
-      {/* Coming Soon */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Fitur Lanjutan</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-4">
-            <div className="mx-auto h-8 w-8 text-gray-400 mb-2">
-              <AlertCircle className="h-8 w-8" />
-            </div>
-            <p className="text-sm text-gray-600">
-              Fitur lanjutan seperti bulk actions, filter advanced, dan export
-              data akan segera tersedia.
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>
