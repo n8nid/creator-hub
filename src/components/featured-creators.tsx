@@ -37,19 +37,41 @@ const FeaturedCreators = () => {
   const fetchFeaturedCreators = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+
+      // Ambil user_id yang sudah approved di creator_applications
+      const { data: approvedUsers, error: approvedUsersError } = await supabase
+        .from("creator_applications")
+        .select("user_id")
+        .eq("status", "approved");
+
+      if (approvedUsersError) {
+        console.error("Error fetching approved users:", approvedUsersError);
+        return;
+      }
+
+      if (!approvedUsers || approvedUsers.length === 0) {
+        console.log("No approved creators found");
+        setCreators([]);
+        return;
+      }
+
+      const approvedUserIds = approvedUsers.map((app) => app.user_id);
+
+      // Ambil profiles dari user yang sudah approved di creator_applications
+      const { data: creators, error: creatorsError } = await supabase
         .from("profiles")
         .select("*")
+        .in("user_id", approvedUserIds)
         .eq("status", "approved")
         .order("created_at", { ascending: false })
         .limit(3);
 
-      if (error) {
-        console.error("Error fetching featured creators:", error);
+      if (creatorsError) {
+        console.error("Error fetching creators:", creatorsError);
         return;
       }
 
-      setCreators(data || []);
+      setCreators(creators || []);
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -61,19 +83,70 @@ const FeaturedCreators = () => {
     return (
       <section className="py-12 sm:py-16 md:py-20 content-above-gradient">
         <div className="w-full px-4 sm:px-8 md:px-16">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
-            <h2
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light leading-tight text-white text-left"
-              style={{
-                fontFamily: "Albert Sans, Arial, sans-serif",
-                letterSpacing: 0,
-              }}
-            >
+          <div className="flex flex-col items-start justify-start mb-12">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-6">
+              <h2 className="explore-workflow-title text-white flex-1 min-w-0">
+                Meet the Creators
+              </h2>
+              <a
+                href="/directory"
+                className="btn-jelajah button-text flex items-center gap-3 w-full sm:w-auto justify-center"
+                style={{ height: 60 }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+                Temukan Creator
+              </a>
+            </div>
+          </div>
+          <div className="flex flex-row gap-8 justify-center">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="flex flex-row items-center gap-6">
+                <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 flex-shrink-0">
+                  <AvatarFallback className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
+                    ?
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <div className="creator-name-text mb-2 break-words">
+                    Loading...
+                  </div>
+                  <div className="creator-description-text break-words">
+                    Loading...
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-12 sm:py-16 md:py-20 content-above-gradient">
+      <div className="w-full px-4 sm:px-8 md:px-16 relative z-10">
+        <div className="flex flex-col items-start justify-start mb-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-6">
+            <h2 className="explore-workflow-title text-white flex-1 min-w-0">
               Meet the Creators
             </h2>
             <a
               href="/directory"
-              className="btn-jelajah flex items-center justify-center gap-3 px-6 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg transition-all duration-200 w-full sm:w-auto"
+              className="btn-jelajah button-text flex items-center gap-3 w-full sm:w-auto justify-center"
+              style={{ height: 60 }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -92,76 +165,16 @@ const FeaturedCreators = () => {
               Temukan Creator
             </a>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 tablet:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 tablet:gap-6 md:gap-12">
-            {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"
-              >
-                <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40">
-                  <AvatarFallback className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
-                    ?
-                  </AvatarFallback>
-                </Avatar>
-                <div className="text-center sm:text-left flex-1 min-w-0">
-                  <div className="font-bold text-white text-lg sm:text-xl mb-1 break-words line-clamp-2 overflow-hidden">
-                    Loading...
-                  </div>
-                  <div className="text-gray-300 text-sm sm:text-base break-words line-clamp-2 overflow-hidden">
-                    Loading...
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section className="py-12 sm:py-16 md:py-20 content-above-gradient">
-      <div className="w-full px-4 sm:px-8 md:px-16 relative z-10">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
-          <h2
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light leading-tight text-white text-left"
-            style={{
-              fontFamily: "Albert Sans, Arial, sans-serif",
-              letterSpacing: 0,
-            }}
-          >
-            Meet the Creators
-          </h2>
-          <a
-            href="/directory"
-            className="btn-jelajah flex items-center justify-center gap-3 px-6 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg transition-all duration-200 w-full sm:w-auto"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-            Temukan Creator
-          </a>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 tablet:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 tablet:gap-6 md:gap-12">
+        <div className="flex flex-row gap-8 justify-center">
           {creators.length > 0
             ? creators.map((creator) => (
                 <div
                   key={creator.id}
-                  className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"
+                  className="flex flex-row items-center gap-6"
                 >
-                  <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40">
+                  <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 flex-shrink-0">
                     <AvatarImage
                       src={creator.profile_image || undefined}
                       alt={creator.name}
@@ -170,31 +183,28 @@ const FeaturedCreators = () => {
                       {getInitials(creator.name)}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="text-center sm:text-left flex-1 min-w-0">
-                    <div className="font-bold text-white text-lg sm:text-xl tablet:text-lg mb-1 break-words line-clamp-2 overflow-hidden">
+                  <div className="flex flex-col">
+                    <div className="creator-name-text mb-2 break-words">
                       {creator.name}
                     </div>
-                    <div className="text-gray-300 text-sm sm:text-base break-words line-clamp-2 overflow-hidden">
+                    <div className="creator-description-text break-words">
                       {creator.bio || "Lead Developer, CEO"}
                     </div>
                   </div>
                 </div>
               ))
             : [...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"
-                >
-                  <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40">
+                <div key={i} className="flex flex-row items-center gap-6">
+                  <Avatar className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 flex-shrink-0">
                     <AvatarFallback className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-br from-purple-500 to-pink-500">
                       ?
                     </AvatarFallback>
                   </Avatar>
-                  <div className="text-center sm:text-left flex-1 min-w-0">
-                    <div className="font-bold text-white text-lg sm:text-xl mb-1 break-words line-clamp-2 overflow-hidden">
+                  <div className="flex flex-col">
+                    <div className="creator-name-text mb-2 break-words">
                       No Creators Found
                     </div>
-                    <div className="text-gray-300 text-sm sm:text-base break-words line-clamp-2 overflow-hidden">
+                    <div className="creator-description-text break-words">
                       No creators available
                     </div>
                   </div>

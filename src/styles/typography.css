@@ -326,6 +326,26 @@ a.button-text {
   color: #ffffff;
 }
 
+/* Creator Name Text (Gambar 3) */
+.creator-name-text {
+  font-family: var(--font-secondary); /* Albert Sans */
+  font-size: 1.375rem; /* 22px on desktop, 16.5px on mobile */
+  font-weight: 700; /* Bold */
+  line-height: 0.96; /* 96% */
+  letter-spacing: 0em; /* 0% */
+  color: #ffffff;
+}
+
+/* Creator Description Text (Gambar 4) */
+.creator-description-text {
+  font-family: var(--font-secondary); /* Albert Sans */
+  font-size: 1.125rem; /* 18px on desktop, 13.5px on mobile */
+  font-weight: 400; /* Regular */
+  line-height: 1.19; /* 119% */
+  letter-spacing: 0em; /* 0% */
+  color: #9ca3af; /* gray-400 */
+}
+
 /* Font Weights */
 .font-thin {
   font-weight: 250;
@@ -531,6 +551,18 @@ a.button-text {
   .workflow-author-avatar {
     font-size: 0.5625rem; /* 9px (12px * 0.5625) */
     line-height: 1;
+    letter-spacing: 0em;
+  }
+
+  .creator-name-text {
+    font-size: 1.03125rem; /* 16.5px (12px * 1.03125) */
+    line-height: 0.96;
+    letter-spacing: 0em;
+  }
+
+  .creator-description-text {
+    font-size: 0.84375rem; /* 13.5px (12px * 0.84375) */
+    line-height: 1.19;
     letter-spacing: 0em;
   }
 
