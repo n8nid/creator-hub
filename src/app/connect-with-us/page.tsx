@@ -802,7 +802,7 @@ const ConnectWithUsPage = () => {
                       </p>
                       <div className="flex justify-start">
                         <a
-                          href="/auth"
+                          href="/creators"
                           className="btn-jelajah flex items-center gap-3"
                           style={{ fontSize: "clamp(14px, 3.5vw, 18px)" }}
                         >
@@ -1030,7 +1030,7 @@ const ConnectWithUsPage = () => {
                 </div>
               </div>
               <a
-                href="/auth"
+                href="/creators"
                 className="rounded-full mt-4 px-4 py-2.5 tablet:px-6 tablet:py-3 text-sm tablet:text-base font-semibold flex items-center justify-center gap-2 w-full md:w-auto btn-jelajah"
                 style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)", minHeight: "40px" }}
                 onMouseEnter={(e) => {

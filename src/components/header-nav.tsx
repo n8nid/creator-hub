@@ -254,7 +254,7 @@ export function HeaderNav() {
             </DropdownMenu>
           ) : (
             <Link 
-              href="/auth" 
+              href="/creators" 
               className="btn-login flex items-center gap-2 px-3 py-1.5 tablet:px-4 tablet:py-2 rounded-lg text-xs tablet:text-sm lg:text-base"
             >
               <span className="hidden sm:inline tablet:hidden lg:inline">Join Community</span>
