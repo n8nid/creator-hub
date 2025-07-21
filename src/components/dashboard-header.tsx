@@ -44,16 +44,16 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-300 px-6 py-4 shadow-sm">
-      <div className="flex items-center justify-between">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-300 px-2 sm:px-6 py-3 sm:py-4 shadow-sm w-full overflow-hidden">
+      <div className="flex items-center justify-between w-full">
         {/* Logo dan Brand */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-2 sm:gap-4 md:gap-8">
           <Link
             href="/"
-            className="flex items-center gap-2 text-gray-900 hover:text-gray-700 transition-colors"
+            className="flex items-center gap-1 sm:gap-2 text-gray-900 hover:text-gray-700 transition-colors"
           >
             {/* N8N Logo - Node yang saling terhubung */}
-            <div className="w-8 h-8 flex items-center justify-center">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center">
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -139,18 +139,18 @@ export function DashboardHeader() {
                 />
               </svg>
             </div>
-            <span className="text-lg font-semibold tracking-wide">n8n ID</span>
+            <span className="text-sm sm:text-base md:text-lg font-semibold tracking-wide">n8n ID</span>
           </Link>
 
-          {/* Navigation Menu */}
-          <nav className="flex items-center gap-6">
+          {/* Navigation Menu - Compact for mobile */}
+          <nav className="flex items-center gap-1 sm:gap-2 md:gap-4 lg:gap-6">
             {navigation.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <div key={item.href} className="relative">
                   <Link
                     href={item.href}
-                    className={`text-sm font-medium transition-colors pb-2 ${
+                    className={`text-xs sm:text-sm font-medium transition-colors pb-1 sm:pb-2 whitespace-nowrap ${
                       isActive
                         ? "text-gray-900 font-semibold"
                         : "text-gray-600 hover:text-gray-900"
@@ -160,8 +160,7 @@ export function DashboardHeader() {
                   </Link>
                   {isActive && (
                     <div
-                      className="absolute -bottom-4 left-0 right-0 h-0.5 bg-purple-600 z-10"
-                      style={{ bottom: "-16px" }}
+                      className="absolute -bottom-3 sm:-bottom-4 left-0 right-0 h-0.5 bg-purple-600 z-10"
                     ></div>
                   )}
                 </div>
@@ -171,15 +170,15 @@ export function DashboardHeader() {
         </div>
 
         {/* User Profile Section */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
           {/* Notification Bell */}
           <Button
             variant="ghost"
             size="icon"
-            className="relative text-gray-600 hover:text-gray-900"
+            className="relative text-gray-600 hover:text-gray-900 h-8 w-8 sm:h-10 sm:w-10"
           >
-            <Bell className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
+            <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="absolute -top-1 -right-1 h-2 w-2 sm:h-3 sm:w-3 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
               1
             </span>
           </Button>
@@ -190,14 +189,14 @@ export function DashboardHeader() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-10 w-10 rounded-full p-0 hover:bg-gray-100"
+                className="h-8 w-8 sm:h-10 sm:w-10 rounded-full p-0 hover:bg-gray-100"
               >
-                <Avatar className="h-10 w-10">
+                <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
                   <AvatarImage
                     src={profile?.profile_image || undefined}
                     alt={profile?.name || user?.email || "User"}
                   />
-                  <AvatarFallback className="bg-gray-100 text-gray-600 text-sm font-medium">
+                  <AvatarFallback className="bg-gray-100 text-gray-600 text-xs sm:text-sm font-medium">
                     {profile?.name?.charAt(0).toUpperCase() ||
                       user?.email?.charAt(0).toUpperCase() ||
                       "U"}

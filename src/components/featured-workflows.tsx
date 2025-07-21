@@ -45,15 +45,15 @@ const FeaturedWorkflows = () => {
 
   return (
     <section className="py-16 content-above-gradient">
-      <div className="w-full px-16 relative z-10">
+      <div className="w-full px-4 sm:px-8 md:px-16 relative z-10">
         <div className="flex flex-col items-start justify-start mb-12">
-          <div className="flex flex-row items-center justify-between w-full gap-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-6">
             <h2
               style={{
                 fontFamily: "Albert Sans, Arial, sans-serif",
                 fontWeight: 300,
                 fontStyle: "normal",
-                fontSize: 80,
+                fontSize: "clamp(2.5rem, 8vw, 80px)",
                 lineHeight: "120%",
                 letterSpacing: 0,
                 color: "#FFFFFF",
@@ -62,7 +62,7 @@ const FeaturedWorkflows = () => {
                 padding: 0,
                 flex: 1,
                 minWidth: 0,
-                whiteSpace: "nowrap",
+                whiteSpace: "normal",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
               }}
@@ -71,7 +71,7 @@ const FeaturedWorkflows = () => {
             </h2>
             <Link
               href="/workflows"
-              className="btn-jelajah flex items-center gap-3"
+              className="btn-jelajah flex items-center gap-3 w-full sm:w-auto justify-center"
               style={{ height: 60 }}
             >
               <svg

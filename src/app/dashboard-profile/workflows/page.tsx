@@ -162,17 +162,17 @@ export default function WorkflowsSubPage() {
   }
 
   return (
-    <div className="space-y-8 mt-4">
+    <div className="space-y-8 mt-4 overflow-x-hidden">
       {/* Header Section */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Workflow Saya</h1>
-        <p className="text-gray-600 mt-2">Kelola workflow Anda</p>
+      <div className="px-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">Workflow Saya</h1>
+        <p className="text-gray-600 mt-2 text-sm sm:text-base break-words">Kelola workflow Anda</p>
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+      <div className="space-y-4 mb-6 p-2 sm:p-4 bg-gray-50 rounded-lg mx-2 sm:mx-0">
         {/* Search Bar */}
-        <div className="flex-1 relative">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
             placeholder="Cari workflow..."
@@ -182,96 +182,102 @@ export default function WorkflowsSubPage() {
           />
         </div>
 
-        {/* Category Filter */}
-        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-          <SelectTrigger className="w-40 bg-white border-gray-200 text-sm">
-            <SelectValue placeholder="Kategori" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all" className="text-sm">
-              Semua Kategori
-            </SelectItem>
-            <SelectItem value="e-commerce" className="text-sm">
-              E-commerce
-            </SelectItem>
-            <SelectItem value="communication" className="text-sm">
-              Communication
-            </SelectItem>
-            <SelectItem value="data-management" className="text-sm">
-              Data Management
-            </SelectItem>
-            <SelectItem value="analytics" className="text-sm">
-              Analytics
-            </SelectItem>
-            <SelectItem value="finance" className="text-sm">
-              Finance
-            </SelectItem>
-            <SelectItem value="marketing" className="text-sm">
-              Marketing
-            </SelectItem>
-            <SelectItem value="operations" className="text-sm">
-              Operations
-            </SelectItem>
-            <SelectItem value="hr" className="text-sm">
-              HR
-            </SelectItem>
-            <SelectItem value="content" className="text-sm">
-              Content
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        {/* Filters and Button Row */}
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
+          {/* Category Filter */}
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="w-full sm:w-40 bg-white border-gray-200 text-sm min-w-0">
+              <SelectValue placeholder="Kategori" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" className="text-sm">
+                Semua Kategori
+              </SelectItem>
+              <SelectItem value="e-commerce" className="text-sm">
+                E-commerce
+              </SelectItem>
+              <SelectItem value="communication" className="text-sm">
+                Communication
+              </SelectItem>
+              <SelectItem value="data-management" className="text-sm">
+                Data Management
+              </SelectItem>
+              <SelectItem value="analytics" className="text-sm">
+                Analytics
+              </SelectItem>
+              <SelectItem value="finance" className="text-sm">
+                Finance
+              </SelectItem>
+              <SelectItem value="marketing" className="text-sm">
+                Marketing
+              </SelectItem>
+              <SelectItem value="operations" className="text-sm">
+                Operations
+              </SelectItem>
+              <SelectItem value="hr" className="text-sm">
+                HR
+              </SelectItem>
+              <SelectItem value="content" className="text-sm">
+                Content
+              </SelectItem>
+            </SelectContent>
+          </Select>
 
-        {/* Status Filter */}
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-40 bg-white border-gray-200 text-sm">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all" className="text-sm">
-              Semua Status
-            </SelectItem>
-            <SelectItem value="draft" className="text-sm">
-              Draft
-            </SelectItem>
-            <SelectItem value="pending" className="text-sm">
-              Pending
-            </SelectItem>
-            <SelectItem value="approved" className="text-sm">
-              Approved
-            </SelectItem>
-            <SelectItem value="rejected" className="text-sm">
-              Rejected
-            </SelectItem>
-          </SelectContent>
-        </Select>
+          {/* Status Filter */}
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-full sm:w-40 bg-white border-gray-200 text-sm min-w-0">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" className="text-sm">
+                Semua Status
+              </SelectItem>
+              <SelectItem value="draft" className="text-sm">
+                Draft
+              </SelectItem>
+              <SelectItem value="pending" className="text-sm">
+                Pending
+              </SelectItem>
+              <SelectItem value="approved" className="text-sm">
+                Approved
+              </SelectItem>
+              <SelectItem value="rejected" className="text-sm">
+                Rejected
+              </SelectItem>
+            </SelectContent>
+          </Select>
 
-        {/* Add Workflow Button */}
-        <Button
-          asChild
-          className="bg-purple-900 hover:bg-purple-800 text-white text-sm"
-        >
-          <Link href="/dashboard-profile/workflows/add">
-            <Plus className="w-4 h-4 mr-2" />
-            Tambah Workflow
-          </Link>
-        </Button>
+          {/* Add Workflow Button */}
+          <Button
+            asChild
+            className="w-full sm:w-auto bg-purple-900 hover:bg-purple-800 text-white text-sm flex-shrink-0"
+          >
+            <Link href="/dashboard-profile/workflows/add">
+              <Plus className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Tambah Workflow</span>
+              <span className="sm:hidden">Tambah</span>
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Pagination Info */}
       {!loading && filteredWorkflows.length > 0 && (
-        <div className="text-sm text-gray-600 mb-4 text-center">
-          Menampilkan {startIndex + 1}-
-          {Math.min(endIndex, filteredWorkflows.length)} dari{" "}
-          {filteredWorkflows.length} workflow
+        <div className="text-sm text-gray-600 mb-4 text-center px-4">
+          <span className="break-words">
+            Menampilkan {startIndex + 1}-
+            {Math.min(endIndex, filteredWorkflows.length)} dari{" "}
+            {filteredWorkflows.length} workflow
+          </span>
         </div>
       )}
 
       {/* List workflow user */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 px-2 sm:px-0">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <Card key={i} className="animate-pulse">
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="space-y-3">
                   <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                   <div className="flex gap-2">
@@ -293,7 +299,7 @@ export default function WorkflowsSubPage() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 px-2 sm:px-0">
           {currentWorkflows.map((w) => (
             <Card
               key={w.id}
@@ -302,27 +308,27 @@ export default function WorkflowsSubPage() {
                 (window.location.href = `/dashboard-profile/workflows/${w.id}`)
               }
             >
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="space-y-3">
                   {/* Category */}
                   {w.category && (
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-purple-900 text-white rounded-full">
+                      <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-purple-900 text-white rounded-full break-words">
                         {w.category}
                       </span>
                     </div>
                   )}
 
                   {/* Title */}
-                  <h3 className="font-semibold text-gray-900">{w.title}</h3>
+                  <h3 className="font-semibold text-gray-900 text-sm sm:text-base break-words line-clamp-2">{w.title}</h3>
 
                   {/* Badges */}
-                  <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full break-words">
                       {w.complexity || "-"}
                     </span>
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full ${
+                      className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full break-words ${
                         w.status === "approved"
                           ? "bg-green-100 text-green-800"
                           : w.status === "pending"
@@ -341,7 +347,7 @@ export default function WorkflowsSubPage() {
                     {(w.tags || []).slice(0, 3).map((tag: string) => (
                       <span
                         key={tag}
-                        className="px-2 py-0.5 text-xs bg-gray-50 border border-gray-200 text-gray-600 rounded-full"
+                        className="px-2 py-0.5 text-xs bg-gray-50 border border-gray-200 text-gray-600 rounded-full break-words"
                       >
                         {tag}
                       </span>
@@ -355,8 +361,8 @@ export default function WorkflowsSubPage() {
 
                   {/* Footer Info */}
                   <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100">
-                    <span>Updated: {w.updated_at?.slice(0, 10)}</span>
-                    <span className="flex items-center gap-1">
+                    <span className="break-words">Updated: {w.updated_at?.slice(0, 10)}</span>
+                    <span className="flex items-center gap-1 flex-shrink-0">
                       <span>❤️</span>
                       <span>0</span>
                     </span>
@@ -366,16 +372,16 @@ export default function WorkflowsSubPage() {
             </Card>
           ))}
           {filteredWorkflows.length === 0 && (
-            <div className="text-gray-500 text-center col-span-full py-12">
+            <div className="text-gray-500 text-center col-span-full py-8 sm:py-12 px-4">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Workflow className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2 break-words">
                 {myWorkflows.length === 0
                   ? "Belum ada workflow"
                   : "Tidak ada workflow yang cocok"}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 mb-6 text-sm sm:text-base break-words px-2">
                 {myWorkflows.length === 0
                   ? "Mulai dengan menambahkan workflow pertama Anda"
                   : "Coba ubah filter atau kata kunci pencarian Anda"}
@@ -383,11 +389,12 @@ export default function WorkflowsSubPage() {
               {myWorkflows.length === 0 && (
                 <Button
                   asChild
-                  className="bg-purple-900 hover:bg-purple-800 text-white"
+                  className="bg-purple-900 hover:bg-purple-800 text-white w-full sm:w-auto"
                 >
                   <Link href="/dashboard-profile/workflows/add">
                     <Plus className="w-4 h-4 mr-2" />
-                    Tambah Workflow Pertama
+                    <span className="hidden sm:inline">Tambah Workflow Pertama</span>
+                    <span className="sm:hidden">Tambah Workflow</span>
                   </Link>
                 </Button>
               )}
@@ -398,39 +405,42 @@ export default function WorkflowsSubPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-8">
+        <div className="flex items-center justify-center gap-1 sm:gap-2 mt-8 px-4">
           {/* Previous Button */}
           <Button
             variant="outline"
             size="sm"
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className="border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white disabled:opacity-50"
+            className="border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white disabled:opacity-50 text-xs sm:text-sm"
           >
-            Previous
+            <span className="hidden sm:inline">Previous</span>
+            <span className="sm:hidden">Prev</span>
           </Button>
 
           {/* Page Numbers */}
-          {getPageNumbers().map((page, index) => (
-            <div key={index}>
-              {page === "..." ? (
-                <span className="px-3 py-2 text-gray-500">...</span>
-              ) : (
-                <Button
-                  variant={currentPage === page ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrentPage(page as number)}
-                  className={
-                    currentPage === page
-                      ? "bg-purple-900 hover:bg-purple-800 text-white"
-                      : "border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white"
-                  }
-                >
-                  {page}
-                </Button>
-              )}
-            </div>
-          ))}
+          <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center">
+            {getPageNumbers().map((page, index) => (
+              <div key={index}>
+                {page === "..." ? (
+                  <span className="px-2 sm:px-3 py-2 text-gray-500 text-xs sm:text-sm">...</span>
+                ) : (
+                  <Button
+                    variant={currentPage === page ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentPage(page as number)}
+                    className={
+                      currentPage === page
+                        ? "bg-purple-900 hover:bg-purple-800 text-white text-xs sm:text-sm min-w-[32px] sm:min-w-[40px]"
+                        : "border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white text-xs sm:text-sm min-w-[32px] sm:min-w-[40px]"
+                    }
+                  >
+                    {page}
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
 
           {/* Next Button */}
           <Button
@@ -440,7 +450,7 @@ export default function WorkflowsSubPage() {
               setCurrentPage(Math.min(totalPages, currentPage + 1))
             }
             disabled={currentPage === totalPages}
-            className="border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white disabled:opacity-50"
+            className="border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white disabled:opacity-50 text-xs sm:text-sm"
           >
             Next
           </Button>
