@@ -253,11 +253,13 @@ export function HeaderNav() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Link 
-              href="/creators" 
+            <Link
+              href="/auth"
               className="btn-login flex items-center gap-2 px-3 py-1.5 tablet:px-4 tablet:py-2 rounded-lg text-xs tablet:text-sm lg:text-base"
             >
-              <span className="hidden sm:inline tablet:hidden lg:inline">Join Community</span>
+              <span className="hidden sm:inline tablet:hidden lg:inline">
+                Join Community
+              </span>
               <span className="sm:hidden tablet:inline lg:hidden">Join</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -294,7 +296,7 @@ export function HeaderNav() {
                   <X className="w-6 h-6" />
                 </button>
               </div>
-              
+
               {/* Mobile Navigation Items */}
               <nav className="space-y-2 mb-6">
                 {navItems.map((item) => {
@@ -303,7 +305,8 @@ export function HeaderNav() {
                     isActive = pathname === "/";
                   } else if (item.href === "/workflows") {
                     isActive =
-                      pathname === "/workflows" || pathname.startsWith("/workflows/");
+                      pathname === "/workflows" ||
+                      pathname.startsWith("/workflows/");
                   } else if (item.href === "/creators") {
                     isActive =
                       pathname === "/creators" ||
@@ -330,7 +333,9 @@ export function HeaderNav() {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <Icon className="w-5 h-5 flex-shrink-0" />
-                      <span className="break-words overflow-hidden text-ellipsis">{item.label}</span>
+                      <span className="break-words overflow-hidden text-ellipsis">
+                        {item.label}
+                      </span>
                     </Link>
                   );
                 })}
