@@ -725,8 +725,8 @@ const AboutSection = () => {
           </div>
 
           {/* Text Content - Positioned to the left */}
-          <div className="w-full px-16 flex justify-start">
-            <div className="max-w-2xl relative" style={{ zIndex: 10 }}>
+          <div className="w-full px-4 sm:px-8 md:px-16 flex justify-center">
+            <div className="w-full relative" style={{ zIndex: 10 }}>
             <div
               className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer overflow-hidden"
               style={{
@@ -960,8 +960,8 @@ const AboutSection = () => {
         <div
           className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden"
           style={{
-            maxWidth: "1000px",
-            width: "fit-content",
+            maxWidth: "840px",
+            width: "100%",
             background: "rgba(255, 255, 255, 0.05)",
             backdropFilter: "blur(10px)",
             zIndex: 30,
