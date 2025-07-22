@@ -80,124 +80,62 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen text-white overflow-visible content-above-gradient">
-      <div className="w-full container-box relative z-10">
+      <div className="w-full container-box relative z-10 mt-40 2xl:mt-mt-custom-14">
         {/* HERO HEADING & SUBHEADING */}
-        <div className="w-full pt-12 md:pt-20 flex flex-col gap-6 md:gap-10">
-          <div className="flex flex-col md:flex-row md:items-center w-full">
+        <div className="w-full pt-0 2xl:pt-20 flex flex-col gap-6 md:gap-10">
+          <div className="flex flex-col lg:flex-row lg:items-center w-full">
             {/* Kiri: Heading, Community, dan Deskripsi */}
-            <div className="flex flex-col items-start flex-1 min-w-0">
+            <div className="flex flex-col items-start flex-1">
               <h1>
                 N8N Indonesia
               </h1>
               <div className="h1-large">
                 Community
               </div>
-              <div
-                style={{
-                  fontFamily: "Inter, Arial, sans-serif",
-                  fontWeight: 400,
-                  fontStyle: "thin",
-                  fontSize: "clamp(16px, 4vw, 20px)",
-                  lineHeight: "150%",
-                  letterSpacing: "-0.01em",
-                  color: "#FFFFFF",
-                  marginTop: "8px",
-                  marginBottom: "0",
-                  textAlign: "left",
-                }}
-              >
+              <p className="paragraph-17-reguler">
                 Temukan dan bagikan workflow automation yang powerful.
-              </div>
+              </p>
             </div>
             {/* Tengah: Garis Penghubung */}
-            <div className="hidden md:flex items-center justify-center px-8">
-              <div className="h-0.5 w-32 bg-white/40" />
+            <div className="hidden lg:flex items-center justify-center px-8">
+              <div className="h-0.5 w-[10rem] 2xl:w-52 bg-white/40" />
             </div>
             {/* Kanan: Deskripsi */}
             <div className="hidden md:flex flex-1 min-w-0">
-              <div
-                className="font-sans font-normal text-lg text-white/80 text-left"
-                style={{
-                  fontFamily: "Albert Sans, Arial, sans-serif",
-                  fontWeight: 400,
-                  fontStyle: "normal",
-                  fontSize: "28px", // sebelumnya 35px
-                  lineHeight: "107%",
-                  letterSpacing: "-0.01em",
-                  color: "#FFFFFF",
-                  maxWidth: "100%",
-                  whiteSpace: "normal",
-                  textAlign: "left",
-                }}
-              >
+              <p className="desc-hero-screen lg:mt-0 mt-[5rem]">
                 Bergabunglah dengan komunitas N8N Indonesia dan tingkatkan
                 produktivitas Anda.
-              </div>
+              </p>
             </div>
           </div>
         </div>
         {/* INSIGHT & BUTTONS */}
-        <div className="w-full py-20 md:py-32 flex flex-col items-center">
+        <div className="w-full pt-[10rem] 2xl:pt-[15.625rem] flex flex-col items-center">
           <div
             style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
             <div
-              className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer overflow-hidden"
-              style={{
-                maxWidth: "840px",
-                width: "100%",
-                background: "rgba(255, 255, 255, 0.05)",
-                backdropFilter: "blur(10px)",
-              }}
-              onMouseMove={handleMouseMove}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              className="2xl:px-[20rem]"
             >
               {/* Gradient overlay yang mengikuti cursor */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.4) 0%, rgba(168, 85, 247, 0.3) 30%, rgba(236, 72, 153, 0.2) 60%, transparent 100%)`,
-                  opacity: isHovering ? 1 : 0,
-                  transition: "opacity 0.2s ease-in-out",
-                }}
-              />
+              <div />
               {/* Content */}
               <div className="relative z-10">
-                <h2
-                  style={{
-                    fontFamily: "Albert Sans, Arial, sans-serif",
-                    fontSize: "clamp(24px, 6vw, 48px)",
-                    lineHeight: "120%",
-                    letterSpacing: "-0.02em",
-                    color: "#FFFBFB",
-                    textAlign: "left",
-                    margin: 0,
-                    marginBottom: "24px",
-                  }}
-                >
+                <h2 className="lg:text-start text-center">
                   <span
+                    className="text-[5rem]"
                     style={{
-                      fontFamily: "Albert Sans, Arial, sans-serif",
-                      fontWeight: 100,
-                      fontStyle: "normal",
-                      color: "rgba(255, 255, 255, 0.8)",
+                      fontFamily: "Albert Sans",
+                      fontWeight: 250,
+                      fontStyle: "thin",
+                      lineHeight: "5.875rem",
+                      letterSpacing: "-5%",
                     }}
                   >
-                    Dapatkan insight, workflow siap pakai, dan dukungan dari komunitas yang aktif dan solutif.
-                  </span>
-                  <br />
-                  <span
-                    style={{
-                      fontWeight: 600,
-                      fontStyle: "normal",
-                      color: "#FFFBFB",
-                    }}
-                  >
-                    Workflow hebat dimulai dari sini.
+                    Dapatkan insight, workflow siap pakai, dan dukungan dari komunitas yang aktif dan solutif. Workflow Hebat Dimulai dari Sini.
                   </span>
                 </h2>
-                <div className="flex flex-col sm:flex-row gap-3 md:gap-6">
+                <div className="mt-[2.5rem] flex flex-col sm:flex-row gap-3 md:gap-6">
                   <a
                     className="btn-jelajah flex items-center justify-center gap-3 w-full sm:w-auto"
                     href="/workflows"

@@ -878,7 +878,14 @@ const ConnectWithUsPage = () => {
             <div className="mb-12 w-full">
               <h3
                 className="text-5xl font-thin text-white/80 mb-4"
-                style={{ fontFamily: "Albert Sans, Arial, sans-serif" }}
+                style={{
+                  fontFamily: "Albert Sans, Arial, sans-serif",
+                  fontWeight: 250,
+                  fontStyle: "thin",
+                  fontSize: "2.813rem",
+                  lineHeight: "120%",
+                  letterSpacing: "0%",
+                }}
               >
                 Key Benefits
               </h3>
