@@ -462,7 +462,7 @@ a.button-text {
 .footer-brand-subtitle {
   font-family: var(--font-secondary); /* Albert Sans */
   font-size: 2.8125rem; /* 45px on desktop, 33.75px on mobile */
-  font-weight: 400; /* Regular - lebih tipis dari N8N Indonesia */
+  font-weight: 200; /* Thin - lebih tipis dari sebelumnya */
   line-height: 1.2; /* 120% */
   letter-spacing: 0em; /* 0% */
   color: #ffffff;
@@ -471,8 +471,8 @@ a.button-text {
 /* Footer Description */
 .footer-description {
   font-family: var(--font-primary); /* Inter */
-  font-size: 0.875rem; /* 14px on desktop, 10.5px on mobile */
-  font-weight: 400; /* Regular */
+  font-size: 1.125rem; /* 18px on desktop, 13.5px on mobile */
+  font-weight: 200; /* Thin - lebih tipis lagi */
   line-height: 1.5; /* 150% */
   letter-spacing: 0em; /* 0% */
   color: #ffffff;
@@ -491,8 +491,8 @@ a.button-text {
 /* Footer Link */
 .footer-link {
   font-family: var(--font-primary); /* Inter */
-  font-size: 0.875rem; /* 14px on desktop, 10.5px on mobile */
-  font-weight: 400; /* Regular */
+  font-size: 1.125rem; /* 18px on desktop, 13.5px on mobile */
+  font-weight: 200; /* Thin - lebih tipis dari sebelumnya */
   line-height: 1.5; /* 150% */
   letter-spacing: 0em; /* 0% */
   color: #ffffff;
@@ -782,7 +782,7 @@ a.button-text {
 
   .footer-description,
   .footer-link {
-    font-size: 0.65625rem; /* 10.5px (12px * 0.65625) */
+    font-size: 0.84375rem; /* 13.5px (12px * 0.84375) */
     line-height: 1.5;
     letter-spacing: 0em;
   }

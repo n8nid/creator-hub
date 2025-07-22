@@ -8,7 +8,7 @@ const MainFooter = () => {
         {/* Konten utama */}
         <div className="flex flex-col md:flex-row md:items-start gap-8 md:justify-between">
           {/* Kolom 1 & 2: Brand + Deskripsi (didekatkan) */}
-          <div className="flex flex-col md:flex-row md:items-start gap-8 md:gap-24">
+          <div className="flex flex-col md:flex-row md:items-start gap-8 md:gap-32">
             {/* Kolom 1: Brand */}
             <div>
               <h2 className="footer-brand-title mb-2">
@@ -18,15 +18,15 @@ const MainFooter = () => {
               </h2>
             </div>
             {/* Kolom 2: Deskripsi */}
-            <div>
-              <p className="footer-description max-w-md">
+            <div className="md:pt-2">
+              <p className="footer-description max-w-sm">
                 Komunitas automation terbesar di Indonesia. Bergabunglah dengan
                 ribuan developer yang membangun workflow powerful.
               </p>
             </div>
           </div>
           {/* Kolom 3: Menu */}
-          <div className="flex flex-row gap-16 md:gap-24">
+          <div className="flex flex-row gap-16 md:gap-24 md:pt-2">
             <div>
               <h4 className="footer-section-title mb-3">Explore</h4>
               <ul className="space-y-2">
