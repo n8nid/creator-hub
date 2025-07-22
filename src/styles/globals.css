@@ -964,6 +964,55 @@ body {
   }
 }
 
+/* Footer Container */
+.footer-container {
+  background: transparent;
+  padding: 2rem 1rem 0.5rem 1rem;
+}
+
+/* Footer Separator */
+.footer-separator {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 2rem 0;
+  width: 100%;
+}
+
+/* Footer Social Icon */
+.footer-social-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #ffffff;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.footer-social-icon:hover {
+  opacity: 0.8;
+}
+
+@media (min-width: 640px) {
+  .footer-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-container {
+    padding: 3rem 4rem 1rem 4rem;
+  }
+
+  .footer-separator {
+    margin: 3rem 0;
+  }
+
+  .footer-social-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}
+
 .workflow-author-avatar {
   width: 2rem;
   height: 2rem;
