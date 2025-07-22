@@ -846,6 +846,181 @@ body {
   }
 }
 
+/* Workflow Page Styles */
+.workflow-card {
+  width: 399.79px;
+  height: 630px;
+  min-width: 399.79px;
+  min-height: 630px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 399.79px);
+  gap: 24px 32px;
+  justify-content: start;
+  align-items: start;
+}
+
+@media (max-width: 1800px) {
+  .workflow-grid {
+    grid-template-columns: repeat(4, 399.79px);
+    gap: 20px 28px;
+  }
+}
+
+@media (max-width: 1600px) {
+  .workflow-grid {
+    grid-template-columns: repeat(3, 399.79px);
+    gap: 18px 24px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .workflow-grid {
+    grid-template-columns: repeat(2, 399.79px);
+    gap: 16px 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .workflow-grid {
+    grid-template-columns: repeat(1, 399.79px);
+    gap: 16px;
+    justify-content: center;
+  }
+}
+
+.workflow-preview-container {
+  width: 100%;
+  height: 265.4529113769531px;
+  border: 0px;
+  border-radius: 0px;
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.workflow-preview-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Remove padding from embedded workflow frame */
+.embedded_workflow.frame {
+  padding: 0 !important;
+  background-color: var(--n8n-frame-background-color, hsl(260, 11%, 95%));
+}
+
+/* Additional n8n-demo styling to ensure no padding */
+n8n-demo {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.workflow-preview-content n8n-demo {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Force remove all padding from n8n components */
+.workflow-preview-content * {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.workflow-preview-content iframe {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* Override any n8n internal styling */
+.embedded_workflow.frame,
+.embedded_workflow.frame *,
+.embedded_workflow.frame iframe {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.workflow-preview-header {
+  padding: 8px 0 0 0;
+}
+
+.workflow-preview-header-content {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* Workflow Page Layout Styles */
+.workflow-title-main {
+  color: #FFFFFF;
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.workflow-title-sub {
+  color: #FFFFFF;
+  margin-bottom: 0;
+  text-align: left;
+}
+
+/* Workflow Card Title Layout Styles */
+.workflow-card-title {
+  color: #622A9A;
+  margin-bottom: 8px;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Workflow Card Description Layout Styles */
+.workflow-card-description {
+  color: #5C6063;
+  margin-bottom: 16px;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Workflow Description Layout Styles */
+.workflow-description-text {
+  color: #FFFFFF;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.workflow-description-text-mobile {
+  color: #FFFFFF;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* Workflow Page Connector Line */
+.workflow-connector-line {
+  width: 579px;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 1);
+  border: none;
+}
+
 /* Custom Sonner Toast Dark Theme for Auth Pages */
 [data-sonner-toaster][data-theme="dark"] {
   --normal-bg: rgba(0, 0, 0, 0.95);

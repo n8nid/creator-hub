@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
         complexity, 
         status, 
         created_at,
+        json_n8n,
         profiles (
           id,
           name,
