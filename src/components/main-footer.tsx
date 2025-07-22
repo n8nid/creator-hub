@@ -3,18 +3,18 @@ import { MessageCircle, Instagram, Github } from "lucide-react";
 
 const MainFooter = () => {
   return (
-    <footer className="footer-transparent relative w-full text-white overflow-hidden">
-      <div className="relative z-10 w-full px-4 sm:px-8 md:px-16 pt-8 pb-12 flex flex-col min-h-[320px]">
+    <footer className="footer-transparent container-box relative w-full text-white overflow-hidden mt-[15rem]">
+      <div className="relative z-10 w-full pt-8 pb-12 flex flex-col">
         {/* Konten utama */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 md:gap-0">
           {/* Kiri: Judul & Deskripsi */}
-          <div className="flex-1 min-w-[260px]">
-            <h2 className="text-4xl md:text-5xl font-semibold leading-tight mb-2">
+          <div className="flex items-start">
+            <h2 className="text-4xl md:text-5xl font-semibold leading-tight pr-[7.813rem]">
               N8N Indonesia
               <br />
               <span className="font-light">Community</span>
             </h2>
-            <p className="text-base md:text-lg text-white/80 max-w-md mt-4">
+            <p className="paragraph-17-regulertext-white/80 max-w-md">
               Komunitas automation terbesar di Indonesia. Bergabunglah dengan
               ribuan developer yang membangun workflow powerful.
             </p>

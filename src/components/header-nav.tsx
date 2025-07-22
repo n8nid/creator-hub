@@ -114,7 +114,7 @@ export function HeaderNav() {
     >
       <div
         className={`${
-          isScrolled ? "w-full container-box py-4" : "w-full py-4 container-box bg-transparent"
+          isScrolled ? "w-full container-box pt-[4rem]" : "w-full pt-[4rem] container-box bg-transparent"
         } flex items-center justify-between`}
       >
         {/* Logo/Brand - Mobile */}

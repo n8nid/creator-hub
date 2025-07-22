@@ -11,7 +11,12 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
-        'tablet': {'min': '768px', 'max': '1024px'},
+        'tablet': { 'min': '768px', 'max': '1024px' },
+      },
+      spacing: {
+        'custom-left': '10.063rem',
+        'custom-right': '5.875rem',
+        'mt-custom-14': '14.688rem',
       },
       colors: {
         background: "hsl(var(--background))",

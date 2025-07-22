@@ -21,24 +21,30 @@ export default function Page() {
       />
 
       {/* Circle Gradient 2: ditengah, di antara workflow dan meet creator */}
-      <GradientCircle
-        type="about"
-        style={{
-          top: "2000px",
-          left: "70%",
-          transform: "translateX(-50%)",
-          zIndex: -1,
-        }}
-      />
 
       {/* Circle Gradient 3: di bawah, di key benefit agak bawah */}
       <GradientCircle
         type="footer"
         style={{
-          top: "3100px",
-          left: "25%",
-          transform: "translateX(-50%)",
-          zIndex: -1,
+          top: "3000px",
+          left: "70%",
+          transform: "translateX(-80%)",
+          zIndex: 1,
+          width: "40rem",
+          height: "40rem",
+          opacity: "0.3",
+        }}
+      />
+      <GradientCircle
+        type="footer"
+        style={{
+          top: "4100px",
+          left: "20%",
+          transform: "translateX(-80%)",
+          zIndex: 1,
+          width: "40rem",
+          height: "40rem",
+          opacity: "0.3%",
         }}
       />
 
