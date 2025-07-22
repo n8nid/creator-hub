@@ -109,9 +109,7 @@ const HeroSection = () => {
         </div>
         {/* INSIGHT & BUTTONS */}
         <div className="w-full py-20 md:py-32 flex flex-col items-center">
-          <div
-            style={{ width: "100%", display: "flex", justifyContent: "center" }}
-          >
+          <div className="insight-container-wrapper">
             <div
               className="insight-container"
               onMouseMove={handleMouseMove}

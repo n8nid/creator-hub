@@ -99,22 +99,13 @@ export function HeaderNav() {
     <header
       className={`${
         isScrolled ? "header-transparent" : "header-completely-transparent"
-      } sticky top-0 z-50 transition-all duration-300`}
-      style={{
-        background: isScrolled ? "rgba(32, 26, 44, 0.98)" : "transparent",
-        backdropFilter: isScrolled ? "blur(40px)" : "none",
-        WebkitBackdropFilter: isScrolled ? "blur(40px)" : "none",
-        borderBottom: isScrolled
-          ? "1px solid rgba(255, 255, 255, 0.15)"
-          : "none",
-        boxShadow: isScrolled ? "0 10px 40px rgba(0, 0, 0, 0.4)" : "none",
-        isolation: "isolate",
-        transform: "translateZ(0)",
-      }}
+      } fixed top-0 left-0 right-0 z-40 transition-all duration-300`}
     >
       <div
         className={`${
-          isScrolled ? "w-full px-4 py-4" : "w-full px-4 py-4 bg-transparent"
+          isScrolled
+            ? "w-full px-4 sm:px-8 md:px-16 py-4"
+            : "w-full px-4 sm:px-8 md:px-16 py-4 bg-transparent"
         } flex items-center justify-between`}
       >
         {/* Logo/Brand - Mobile */}
