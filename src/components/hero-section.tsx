@@ -80,16 +80,16 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen text-white overflow-visible content-above-gradient">
-      <div className="w-full px-4 sm:px-8 md:px-16 relative z-10">
+      <div className="w-full container-box relative z-10">
         {/* HERO HEADING & SUBHEADING */}
         <div className="w-full pt-12 md:pt-20 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col md:flex-row md:items-center w-full">
             {/* Kiri: Heading, Community, dan Deskripsi */}
             <div className="flex flex-col items-start flex-1 min-w-0">
-              <h1 className="font-sans font-semibold text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-white mb-0 text-left">
+              <h1>
                 N8N Indonesia
               </h1>
-              <div className="font-sans font-thin text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white/80 mb-2 text-left">
+              <div className="h1-large">
                 Community
               </div>
               <div
