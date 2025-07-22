@@ -119,16 +119,8 @@ const FeaturedCreators = () => {
       <div className="w-full container-box relative z-10">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
           <h2
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light leading-tight text-white text-left"
-            style={{
-              fontFamily: "Albert Sans",
-              fontWeight: 300,
-              fontStyle: "light",
-              fontSize: "6.25rem",
-              lineHeight: "120%",
-              letterSpacing: "0%",
-              color: "#FFFFFF"
-            }}
+            className="h2-title md:text-start text-center w-full"
+            
           >
             Meet the Creators
           </h2>

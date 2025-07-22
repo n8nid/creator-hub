@@ -123,7 +123,7 @@ const HeroSection = () => {
               <div className="relative z-10">
                 <h2 className="lg:text-start text-center">
                   <span
-                    className="text-[5rem]"
+                    className="md:text-[5rem] text-[4rem]"
                     style={{
                       fontFamily: "Albert Sans",
                       fontWeight: 250,

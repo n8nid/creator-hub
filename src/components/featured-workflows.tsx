@@ -48,17 +48,7 @@ const FeaturedWorkflows = () => {
       <div className="w-full container-box relative z-10">
         <div className="flex flex-col items-start justify-start mb-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-6">
-            <h2
-              style={{
-                fontFamily: "Albert Sans",
-                fontWeight: 300,
-                fontStyle: "light",
-                fontSize: "6.25rem",
-                lineHeight: "120%",
-                letterSpacing: "0%",
-                color: "#FFFFFF"
-              }}
-            >
+            <h2 className="h2-title md:text-start text-center w-full">
               Explore Workflow
             </h2>
             <Link

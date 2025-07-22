@@ -127,8 +127,18 @@ export default function WorkflowDetailPublicPage() {
     return `${Math.floor(diffDays / 365)} years ago`;
   };
 
+  const formatPublishedDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = { 
+      day: 'numeric', 
+      month: 'long', 
+      year: 'numeric' 
+    };
+    return date.toLocaleDateString('id-ID', options);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col relative">
+    <div className="min-h-screen flex flex-col relative mt-[7.813rem]">
       {/* Circle Gradient di atas */}
       <GradientCircle
         type="hero"
@@ -141,32 +151,24 @@ export default function WorkflowDetailPublicPage() {
       />
 
       <main className="flex-grow relative z-10">
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="container-box">
           {/* Bagian 1: Judul + Workflow Canvas */}
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-12">
+          <div className="flex xl:flex-row flex-col gap-8 mb-12 h-[60rem] md:h-[45rem] lg:h-[27rem]">
             {/* Kiri - Judul */}
-            <div className="flex flex-col justify-center lg:col-span-2">
+            <div className="flex flex-col justify-start lg:col-span-2 w-full xl:w-[50%]">
               {/* Back to Workflows Button */}
-              <Button
-                variant="ghost"
-                className="mb-6 flex items-center gap-2 text-white hover:text-white/80 hover:bg-white/10 w-fit"
-                onClick={() => router.push("/workflows")}
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Workflows
-              </Button>
 
               {/* Workflow Title */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white/90 leading-tight mb-8">
+              <h3 className="h3 text-white">
                 {workflow.title}
-              </h1>
+              </h3>
 
               {/* Garis Pendek */}
-              <div className="w-16 h-0.5 bg-white/40 mb-8"></div>
+              <div className="w-[10.063rem] h-0.5 mt-[3.438rem] bg-white/40 mb-8"></div>
             </div>
 
             {/* Kanan - Workflow Canvas */}
-            <div className="lg:col-span-3 bg-white rounded-2xl overflow-hidden shadow-lg">
+            <div className="rounded-2xl w-full xl:w-[50%]">
               {workflow.screenshot_url ? (
                 <img
                   src={workflow.screenshot_url}
@@ -179,7 +181,7 @@ export default function WorkflowDetailPublicPage() {
                   style={{ aspectRatio: "16/8" }}
                 >
                   <div
-                    className="absolute inset-0"
+                    className=" w-full h-full inset-0"
                     dangerouslySetInnerHTML={{
                       __html: `<n8n-demo workflow='${workflow.json_n8n.replace(
                         /'/g,
@@ -203,100 +205,26 @@ export default function WorkflowDetailPublicPage() {
           </div>
 
           {/* Bagian 2: Info Creator + Deskripsi */}
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          <div className="flex xl:flex-row flex-col gap-8 mb-12 ">
             {/* Kiri - Info Creator, Last Update, Categories */}
-            <div className="lg:col-span-2 space-y-4">
-              {/* Creator Profile Section */}
-              {creator ? (
-                <div>
-                  <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-3">
-                    Created by
-                  </h3>
-                  <div className="flex items-center gap-3 p-3 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm w-fit">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage
-                        src={creator.profile_image || undefined}
-                        alt={creator.name || "Creator"}
-                      />
-                      <AvatarFallback className="text-sm font-bold bg-gradient-to-br from-purple-500 to-pink-500">
-                        {getInitials(creator.name || "Creator")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <button
-                      onClick={() =>
-                        router.push(`/talent/${workflow.profile_id}`)
-                      }
-                      className="text-base font-semibold text-white hover:text-white/80 transition-colors cursor-pointer"
-                    >
-                      {creator.name || "Unknown Creator"}
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-3">
-                    Created by
-                  </h3>
-                  <div className="flex items-center gap-3 p-3 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm w-fit">
-                    <Avatar className="h-10 w-10">
-                      <AvatarFallback className="text-sm font-bold bg-gradient-to-br from-purple-500 to-pink-500">
-                        ?
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-base font-semibold text-white">
-                      Unknown Creator
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* Last Update */}
-              <div>
-                <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-2">
-                  Last Update
-                </h3>
-                <p className="text-white">
-                  Last update{" "}
-                  {formatDate(workflow.updated_at || workflow.created_at)}
-                </p>
-              </div>
-
-              {/* Categories */}
-              <div>
-                <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-2">
-                  Categories
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {workflow.category ? (
-                    <span className="px-3 py-1 text-sm bg-white/10 border border-white/20 text-white rounded-lg">
-                      {workflow.category}
-                    </span>
-                  ) : (
-                    <span className="px-3 py-1 text-sm bg-white/10 border border-white/20 text-white rounded-lg">
-                      General
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
 
             {/* Kanan - Deskripsi Workflow */}
-            <div className="lg:col-span-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl p-6">
+            <div className="p-6 w-full xl:w-[50%]">
               <div className="prose prose-invert prose-lg max-w-none text-white/80 leading-relaxed">
                 <ReactMarkdown
                   components={{
                     h1: ({ children }) => (
-                      <h1 className="text-2xl font-bold text-white mb-4">
+                      <h1 className="font-bold text-white mb-4  workflow-h1">
                         {children}
                       </h1>
                     ),
                     h2: ({ children }) => (
-                      <h2 className="text-xl font-bold text-white mb-3">
+                      <h2 className="font-bold text-white mb-3 workflow-h2">
                         {children}
                       </h2>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="text-lg font-bold text-white mb-2">
+                      <h3 className="font-bold text-white mb-2 workflow-h3">
                         {children}
                       </h3>
                     ),
@@ -357,6 +285,157 @@ export default function WorkflowDetailPublicPage() {
                     "Tidak ada deskripsi yang tersedia untuk workflow ini."}
                 </ReactMarkdown>
               </div>
+            </div>
+            <div className="w-[50%]">
+            <div >
+              {/* Creator Profile Section */}
+              {creator ? (
+                <div>
+                  {/* <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-3">
+                    Created by
+                  </h3> */}
+                  <div className="flex items-center gap-3 p-3 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm w-fit">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage
+                        src={creator.profile_image || undefined}
+                        alt={creator.name || "Creator"}
+                      />
+                      <AvatarFallback className="text-sm font-bold bg-gradient-to-br from-purple-500 to-pink-500">
+                        {getInitials(creator.name || "Creator")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <button
+                      onClick={() =>
+                        router.push(`/talent/${workflow.profile_id}`)
+                      }
+                      className="text-base font-semibold text-white hover:text-white/80 transition-colors cursor-pointer"
+                    >
+                      {creator.name || "Unknown Creator"}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-3">
+                    Created by
+                  </h3>
+                  <div className="flex items-center gap-3 p-3 rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm w-fit">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="text-sm font-bold bg-gradient-to-br from-purple-500 to-pink-500">
+                        ?
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-base font-semibold text-white">
+                      Unknown Creator
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Last Update */}
+              {/* <div>
+                <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-2">
+                  Last Update
+                </h3>
+                <p className="text-white">
+                  Last update{" "}
+                  {formatDate(workflow.updated_at || workflow.created_at)}
+                </p>
+              </div> */}
+
+              {/* Categories */}
+              {/* <div>
+                <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-2">
+                  Categories
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {workflow.category ? (
+                    <span className="px-3 py-1 text-sm bg-white/10 border border-white/20 text-white rounded-lg">
+                      {workflow.category}
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 text-sm bg-white/10 border border-white/20 text-white rounded-lg">
+                      General
+                    </span>
+                  )}
+                </div>
+              </div> */}
+            </div>
+            <p className="text-white/80 mt-[2.875rem]">dipublish pada {formatPublishedDate(workflow.created_at)}</p>
+            
+            {/* Lihat Profile Button */}
+            <button
+              className="btn-jelajah w-full flex items-center justify-center gap-3 sm:w-fit rounded-full mt-[23px] min-w-[200px]"
+              onClick={() => router.push(`/talent/${workflow.profile_id}`)}
+            >
+              Lihat Profile
+                             <svg
+     xmlns="http://www.w3.org/2000/svg"
+     width="20"
+     height="20"
+     fill="none"
+     viewBox="0 0 20 20"
+   >
+     <path
+       stroke="#fff"
+       strokeLinecap="round"
+       strokeLinejoin="round"
+       strokeWidth="2"
+       d="M11.889 13.454V8.11m0 0H6.546m5.343 0-7.9 7.9m4.352 2.326a8.5 8.5 0 1 0-6.678-6.678"
+     ></path>
+     <path
+       stroke="#fff"
+       strokeLinecap="round"
+       strokeLinejoin="round"
+       strokeOpacity="0.05"
+       strokeWidth="2"
+       d="M11.889 13.454V8.11m0 0H6.546m5.343 0-7.9 7.9m4.352 2.326a8.5 8.5 0 1 0-6.678-6.678"
+     ></path>
+   </svg>
+             </button>
+             
+             {/* Download Workflow Button */}
+             <button
+               className="btn-jelajah-workflow w-full flex items-center justify-center gap-3 sm:w-fit rounded-full mt-[23px] min-w-[200px]"
+               onClick={() => {
+                 if (workflow.json_n8n) {
+                   const blob = new Blob([workflow.json_n8n], { type: 'application/json' });
+                   const url = URL.createObjectURL(blob);
+                   const a = document.createElement('a');
+                   a.href = url;
+                   a.download = `${workflow.title || 'workflow'}.json`;
+                   document.body.appendChild(a);
+                   a.click();
+                   document.body.removeChild(a);
+                   URL.revokeObjectURL(url);
+                 }
+               }}
+               disabled={!workflow.json_n8n}
+             >
+               Download Workflow
+               <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                 width="20"
+                 height="20"
+                 fill="none"
+                 viewBox="0 0 20 20"
+               >
+                 <path
+                   stroke="#622a9a"
+                   strokeLinecap="round"
+                   strokeLinejoin="round"
+                   strokeWidth="2"
+                   d="M10 2.5v10.833m0 0L6.667 10m3.333 3.333L13.333 10"
+                 />
+                 <path
+                   stroke="#622a9a"
+                   strokeLinecap="round"
+                   strokeLinejoin="round"
+                   strokeWidth="2"
+                   d="M17.5 10c0 4.142-3.358 7.5-7.5 7.5s-7.5-3.358-7.5-7.5 3.358-7.5 7.5-7.5 7.5 3.358 7.5 7.5z"
+                 />
+               </svg>
+             </button>
             </div>
           </div>
         </div>
