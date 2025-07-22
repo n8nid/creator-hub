@@ -406,6 +406,28 @@ a.button-text {
   color: #ffffff;
 }
 
+/* Call to Action Text (Gambar 3) */
+.cta-text {
+  font-family: var(--font-secondary); /* Albert Sans */
+  font-size: clamp(1.25rem, 4vw, 1.75rem); /* 20px-28px responsive */
+  font-weight: 200; /* Thin */
+  line-height: 1.2; /* 120% */
+  letter-spacing: -0.01em; /* -1% */
+  color: #cfc6e2;
+  max-width: 500px;
+  text-align: center;
+}
+
+/* Call to Action Button Text */
+.cta-button-text {
+  font-family: var(--font-primary); /* Inter */
+  font-size: 1.0625rem; /* 17px on desktop, 15.9375px on mobile */
+  font-weight: 600; /* Semi Bold */
+  line-height: 1.5; /* 150% */
+  letter-spacing: -0.01em; /* -1% */
+  color: #ffffff;
+}
+
 /* Font Weights */
 .font-thin {
   font-weight: 250;
@@ -648,6 +670,12 @@ a.button-text {
   .key-benefits-point-title-text,
   .key-benefits-point-description-text {
     font-size: 0.9375rem; /* 15px (12px * 0.9375) */
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  .cta-button-text {
+    font-size: 0.99609375rem; /* 15.9375px (12px * 0.99609375) */
     line-height: 1.5;
     letter-spacing: -0.01em;
   }

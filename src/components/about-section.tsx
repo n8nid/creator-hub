@@ -927,14 +927,7 @@ const AboutSection = () => {
         style={{ background: "transparent", isolation: "isolate", zIndex: 20 }}
       >
         <div
-          className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden"
-          style={{
-            maxWidth: "840px",
-            width: "100%",
-            background: "rgba(255, 255, 255, 0.05)",
-            backdropFilter: "blur(10px)",
-            zIndex: 30,
-          }}
+          className="cta-container flex flex-col md:flex-row items-center justify-between gap-8"
           onMouseMove={handleCtaMouseMove}
           onMouseEnter={handleCtaMouseEnter}
           onMouseLeave={handleCtaMouseLeave}
@@ -949,23 +942,9 @@ const AboutSection = () => {
             }}
           />
           {/* Content */}
-          <div
-            className="relative flex flex-col md:flex-row items-center justify-between gap-8 w-full"
-            style={{ zIndex: 40 }}
-          >
+          <div className="relative flex flex-col md:flex-row items-center justify-between gap-8 w-full">
             <div className="flex flex-col items-start justify-center text-center md:text-left">
-              <div
-                style={{
-                  fontFamily: "Albert Sans, Arial, sans-serif",
-                  fontWeight: 200,
-                  fontSize: "clamp(1.25rem, 4vw, 28px)",
-                  lineHeight: "120%",
-                  color: "#CFC6E2",
-                  letterSpacing: "-0.01em",
-                  maxWidth: "500px",
-                  textAlign: "center",
-                }}
-              >
+              <div className="cta-text">
                 Sudah 3.000+ orang bergabung.
                 <br />
                 Ayo, mulai perjalanan Anda hari ini!
@@ -973,25 +952,7 @@ const AboutSection = () => {
             </div>
             <a
               href="/auth"
-              className="rounded-full px-6 py-3 tablet:px-8 tablet:py-3 lg:px-10 lg:py-4 text-sm tablet:text-base font-semibold flex items-center gap-2 tablet:gap-3 hover:scale-105 w-full md:w-auto justify-center"
-              style={{
-                background: "linear-gradient(90deg, #D900FF 0%, #9500FF 100%)",
-                color: "#fff",
-                boxShadow: "0 4px 16px 0 #9500FF66",
-                minWidth: "160px",
-                justifyContent: "center",
-                transition: "all 0.2s ease",
-                backdropFilter: "none",
-                WebkitBackdropFilter: "none",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = "0 6px 20px 0 #9500FF88";
-                e.currentTarget.style.transform = "translateY(-1px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "0 4px 16px 0 #9500FF66";
-                e.currentTarget.style.transform = "translateY(0)";
-              }}
+              className="cta-button cta-button-text w-full md:w-auto"
             >
               Join Community
               <svg
