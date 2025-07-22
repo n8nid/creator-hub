@@ -158,12 +158,8 @@ export default function WorkflowsPage() {
           <div className="flex flex-col md:flex-row md:items-center w-full">
             {/* Kiri: Heading */}
             <div className="flex flex-col items-start flex-1 min-w-0">
-              <h1 className="font-sans font-semibold text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-white mb-0 text-left">
-                Explore
-              </h1>
-              <h2 className="font-sans font-thin text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white mb-0 text-left">
-                Workflows
-              </h2>
+              <h1 className="hero-title-main">Explore</h1>
+              <h2 className="hero-title-sub">Workflows</h2>
             </div>
 
             {/* Garis Penyambung */}
@@ -173,19 +169,7 @@ export default function WorkflowsPage() {
 
             {/* Kanan: Deskripsi dan Search */}
             <div className="hidden md:flex flex-col items-start flex-1 min-w-0">
-              <div
-                style={{
-                  fontFamily: "Inter, Arial, sans-serif",
-                  fontWeight: 400,
-                  fontStyle: "normal",
-                  fontSize: "18px",
-                  lineHeight: "150%",
-                  letterSpacing: "-0.01em",
-                  color: "#FFFFFF",
-                  marginBottom: "24px",
-                  textAlign: "left",
-                }}
-              >
+              <div className="hero-description">
                 Temukan workflow automation yang powerful dan siap pakai.
                 Tingkatkan produktivitas dengan solusi yang sudah teruji.
               </div>
@@ -205,20 +189,7 @@ export default function WorkflowsPage() {
 
           {/* Mobile: Deskripsi dan Search */}
           <div className="md:hidden flex flex-col items-start w-full mt-6">
-            <div
-              style={{
-                fontFamily: "Inter, Arial, sans-serif",
-                fontWeight: 400,
-                fontStyle: "normal",
-                fontSize: "16px",
-                lineHeight: "150%",
-                letterSpacing: "-0.01em",
-                color: "#FFFFFF",
-                marginBottom: "20px",
-                textAlign: "left",
-              }}
-              className="break-words"
-            >
+            <div className="hero-description break-words">
               Temukan workflow automation yang powerful dan siap pakai.
               Tingkatkan produktivitas dengan solusi yang sudah teruji.
             </div>

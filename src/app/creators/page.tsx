@@ -2,18 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Search, CheckCircle, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import GradientCircle from "@/components/GradientCircle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface Creator {
   id: string;
@@ -28,23 +20,190 @@ export default function CreatorsPage() {
   const [creators, setCreators] = useState<Creator[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [experienceFilter, setExperienceFilter] = useState<string>("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const creatorsPerPage = 9;
+  const [displayedCreators, setDisplayedCreators] = useState(9);
+  const [hasMore, setHasMore] = useState(false);
   const supabase = createClientComponentClient();
+
+  // Data dummy untuk testing (tanpa Bagus dan Okky)
+  const dummyCreators: Creator[] = [
+    {
+      id: "dummy-1",
+      name: "John Hopkins",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 5,
+      experience_level: "expert",
+    },
+    {
+      id: "dummy-2",
+      name: "Sarah Johnson",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 2,
+      experience_level: "beginner",
+    },
+    {
+      id: "dummy-3",
+      name: "Ahmad Fauzi",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 4,
+      experience_level: "intermediate",
+    },
+    {
+      id: "dummy-4",
+      name: "Maria Garcia",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 6,
+      experience_level: "advanced",
+    },
+    {
+      id: "dummy-5",
+      name: "David Chen",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 1,
+      experience_level: "beginner",
+    },
+    {
+      id: "dummy-6",
+      name: "Lisa Anderson",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 8,
+      experience_level: "expert",
+    },
+    {
+      id: "dummy-7",
+      name: "Rizki Pratama",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 3,
+      experience_level: "intermediate",
+    },
+    {
+      id: "dummy-8",
+      name: "Emma Wilson",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 4,
+      experience_level: "advanced",
+    },
+    {
+      id: "dummy-9",
+      name: "Budi Santoso",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 2,
+      experience_level: "beginner",
+    },
+    {
+      id: "dummy-10",
+      name: "Jennifer Lee",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 6,
+      experience_level: "expert",
+    },
+    {
+      id: "dummy-11",
+      name: "Michael Brown",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 3,
+      experience_level: "intermediate",
+    },
+    {
+      id: "dummy-12",
+      name: "Siti Nurhaliza",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 5,
+      experience_level: "advanced",
+    },
+    {
+      id: "dummy-13",
+      name: "Robert Taylor",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 2,
+      experience_level: "beginner",
+    },
+    {
+      id: "dummy-14",
+      name: "Dewi Sartika",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 7,
+      experience_level: "expert",
+    },
+    {
+      id: "dummy-15",
+      name: "James Wilson",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 4,
+      experience_level: "intermediate",
+    },
+    {
+      id: "dummy-16",
+      name: "Nina Kartika",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 1,
+      experience_level: "beginner",
+    },
+    {
+      id: "dummy-17",
+      name: "Christopher Davis",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 8,
+      experience_level: "expert",
+    },
+    {
+      id: "dummy-18",
+      name: "Rina Marlina",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 3,
+      experience_level: "intermediate",
+    },
+    {
+      id: "dummy-19",
+      name: "Daniel Martinez",
+      profile_image: null,
+      status: "approved",
+      workflow_count: 6,
+      experience_level: "advanced",
+    },
+  ];
 
   const fetchCreators = async () => {
     try {
       setLoading(true);
+
+      // Ambil data dari API
       const response = await fetch("/api/creators");
+      let apiCreators = [];
+
       if (response.ok) {
-        const data = await response.json();
-        setCreators(data);
+        apiCreators = await response.json();
+        console.log("API creators loaded:", apiCreators.length);
       } else {
-        console.error("Failed to fetch creators");
+        console.error("Failed to fetch creators from API");
       }
+
+      // Gabungkan data API + dummy data
+      const combinedCreators = [...apiCreators, ...dummyCreators];
+      setCreators(combinedCreators);
+      console.log("Total creators (API + Dummy):", combinedCreators.length);
     } catch (error) {
       console.error("Error fetching creators:", error);
+      // Fallback ke dummy data saja jika error
+      setCreators(dummyCreators);
+      console.log("Using dummy data only:", dummyCreators.length);
     } finally {
       setLoading(false);
     }
@@ -54,44 +213,26 @@ export default function CreatorsPage() {
     fetchCreators();
   }, []);
 
-  // Filter creators based on search term and experience level
+  // Filter creators based on search term
   const filteredCreators = creators.filter((creator) => {
     const matchesSearch = creator.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
-    const matchesExperience =
-      experienceFilter === "all" ||
-      creator.experience_level === experienceFilter;
-    return matchesSearch && matchesExperience;
+    return matchesSearch;
   });
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredCreators.length / creatorsPerPage);
-  const startIndex = (currentPage - 1) * creatorsPerPage;
-  const endIndex = startIndex + creatorsPerPage;
-  const paginatedCreators = filteredCreators.slice(startIndex, endIndex);
+  // Get visible creators based on displayed count
+  const visibleCreators = filteredCreators.slice(0, displayedCreators);
 
-  // Reset to first page if current page is out of bounds
+  // Check if there are more creators to show
   useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(1);
-    }
-  }, [totalPages, currentPage]);
+    const filteredCount = filteredCreators.length;
+    setHasMore(filteredCount > displayedCreators);
+  }, [filteredCreators, displayedCreators]);
 
-  // Helper function to get experience level badge styling
-  const getExperienceBadgeStyle = (level: string) => {
-    switch (level) {
-      case "beginner":
-        return "bg-green-100 text-green-700 border-green-200";
-      case "intermediate":
-        return "bg-blue-100 text-blue-700 border-blue-200";
-      case "advanced":
-        return "bg-purple-100 text-purple-700 border-purple-200";
-      case "expert":
-        return "bg-orange-100 text-orange-700 border-orange-200";
-      default:
-        return "bg-gray-100 text-gray-700 border-gray-200";
-    }
+  // Handle load more
+  const handleLoadMore = () => {
+    setDisplayedCreators((prev) => prev + 9);
   };
 
   // Helper function to format experience level text
@@ -110,84 +251,38 @@ export default function CreatorsPage() {
     }
   };
 
-  // Helper function to get filter display text
-  const getFilterDisplayText = () => {
-    switch (experienceFilter) {
-      case "all":
-        return "All Experience Levels";
-      case "beginner":
-        return "Beginner";
-      case "intermediate":
-        return "Intermediate";
-      case "advanced":
-        return "Advanced";
-      case "expert":
-        return "Expert";
-      default:
-        return "All Experience Levels";
-    }
-  };
-
-  // Pagination component
-  const Pagination = () => (
-    <div className="flex justify-center items-center gap-2 mt-12">
-      <button
-        className="px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
-        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-        disabled={currentPage === 1}
-      >
-        Prev
-      </button>
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-        <button
-          key={page}
-          className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow
-            ${
-              page === currentPage
-                ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
-                : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20"
-            }
-          `}
-          onClick={() => setCurrentPage(page)}
-        >
-          {page}
-        </button>
-      ))}
-      <button
-        className="px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50"
-        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-        disabled={currentPage === totalPages}
-      >
-        Next
-      </button>
-    </div>
-  );
-
   return (
     <div className="text-white content-above-gradient relative">
       {/* Gradient circle langsung di halaman */}
       <GradientCircle
         type="hero"
         style={{
-          top: "20vh",
+          top: "10vh",
           left: "25vw",
           transform: "translateX(-50%)",
           zIndex: -1,
         }}
       />
 
-      <div className="w-full px-16 relative z-10">
+      {/* Gradient circle kedua di area kanan */}
+      <GradientCircle
+        type="hero"
+        style={{
+          top: "75vh",
+          left: "80vw",
+          transform: "translateX(50%)",
+          zIndex: -1,
+        }}
+      />
+
+      <div className="w-full container-box px-16 relative z-10 mb-32">
         {/* HERO HEADING & SUBHEADING */}
-        <div className="w-full pt-8 md:pt-16 flex flex-col gap-6 md:gap-10">
+        <div className="w-full pt-56 md:pt-64 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col md:flex-row md:items-center w-full">
             {/* Kiri: Heading */}
             <div className="flex flex-col items-start flex-1 min-w-0">
-              <h1 className="font-sans font-semibold text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-white mb-0 text-left">
-                Explore
-              </h1>
-              <h2 className="font-sans font-thin text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white mb-0 text-left">
-                Creator
-              </h2>
+              <h1 className="hero-title-main">Explore</h1>
+              <h2 className="hero-title-sub">Creator</h2>
             </div>
 
             {/* Garis Penyambung */}
@@ -197,19 +292,7 @@ export default function CreatorsPage() {
 
             {/* Kanan: Deskripsi dan Search */}
             <div className="hidden md:flex flex-col items-start flex-1 min-w-0">
-              <div
-                style={{
-                  fontFamily: "Inter, Arial, sans-serif",
-                  fontWeight: 400,
-                  fontStyle: "normal",
-                  fontSize: "18px",
-                  lineHeight: "150%",
-                  letterSpacing: "-0.01em",
-                  color: "#FFFFFF",
-                  marginBottom: "24px",
-                  textAlign: "left",
-                }}
-              >
+              <div className="hero-description max-w-3xl">
                 Kenalan dengan kreator N8N Indonesia yang rutin berbagi
                 workflow, tips, dan ide automasi. Temukan inspirasi untuk
                 project automasimu!
@@ -230,19 +313,7 @@ export default function CreatorsPage() {
 
           {/* Mobile: Deskripsi dan Search */}
           <div className="md:hidden flex flex-col items-start w-full mt-6">
-            <div
-              style={{
-                fontFamily: "Inter, Arial, sans-serif",
-                fontWeight: 400,
-                fontStyle: "normal",
-                fontSize: "16px",
-                lineHeight: "150%",
-                letterSpacing: "-0.01em",
-                color: "#FFFFFF",
-                marginBottom: "20px",
-                textAlign: "left",
-              }}
-            >
+            <div className="hero-description max-w-3xl">
               Kenalan dengan kreator N8N Indonesia yang rutin berbagi workflow,
               tips, dan ide automasi. Temukan inspirasi untuk project
               automasimu!
@@ -261,75 +332,31 @@ export default function CreatorsPage() {
           </div>
         </div>
 
-        {/* Filter Section */}
-        <div className="flex flex-col items-center justify-center mt-12 mb-8 gap-2">
-          <div className="flex flex-row items-center gap-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-                >
-                  <Filter className="w-4 h-4 mr-2" />
-                  {getFilterDisplayText()}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-white border-gray-200">
-                <DropdownMenuItem onClick={() => setExperienceFilter("all")}>
-                  All Experience Levels
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => setExperienceFilter("beginner")}
-                >
-                  Beginner
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => setExperienceFilter("intermediate")}
-                >
-                  Intermediate
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => setExperienceFilter("advanced")}
-                >
-                  Advanced
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setExperienceFilter("expert")}>
-                  Expert
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="text-white/60 text-sm text-center">
-            {filteredCreators.length} creator
-            {filteredCreators.length !== 1 ? "s" : ""} found
-          </div>
-        </div>
-
-        {/* Creators Grid */}
-        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-2 tablet:gap-4 mt-16">
+        {/* Creators Grid - New Layout */}
+        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6 mt-48 md:mt-56">
           {loading ? (
             <div className="col-span-full text-center py-12 text-white/60">
               Loading...
             </div>
-          ) : paginatedCreators.length === 0 ? (
+          ) : visibleCreators.length === 0 ? (
             <div className="col-span-full text-center py-12 text-white/60">
               Tidak ada creator ditemukan.
             </div>
           ) : (
-            paginatedCreators.map((creator) => (
+            visibleCreators.map((creator) => (
               <Link
                 key={creator.id}
                 href={`/creators/${creator.id}`}
                 className="block group"
               >
-                <div className="bg-white rounded-2xl p-4 tablet:p-6 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 transform hover:-translate-y-2 max-w-sm tablet:max-w-none mx-auto w-full">
-                  <div className="flex items-center space-x-4 tablet:space-x-6">
-                    <Avatar className="h-16 w-16">
+                <div className="creator-item">
+                  <div className="creator-avatar">
+                    <Avatar className="creator-avatar-image">
                       <AvatarImage
                         src={creator.profile_image || ""}
                         alt={creator.name}
                       />
-                      <AvatarFallback className="bg-gray-100 text-gray-600">
+                      <AvatarFallback className="creator-avatar-fallback">
                         {creator.name
                           .split(" ")
                           .map((n) => n[0])
@@ -337,39 +364,12 @@ export default function CreatorsPage() {
                           .toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 tablet:gap-3">
-                        <h3 className="text-purple-900 font-semibold text-lg tablet:text-base break-words line-clamp-2 overflow-hidden group-hover:text-purple-700 transition-colors">
-                          {creator.name}
-                        </h3>
-                        <div className="h-5 w-5 bg-gradient-to-r from-purple-500 to-purple-800 rounded-full flex items-center justify-center flex-shrink-0">
-                          <svg
-                            className="h-3 w-3 text-white"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between mt-1">
-                        <p className="text-gray-500 text-sm break-words line-clamp-1 overflow-hidden">
-                          {creator.workflow_count} workflow
-                        </p>
-                        <Badge
-                          variant="outline"
-                          className={`text-xs px-2 py-1 ${getExperienceBadgeStyle(
-                            creator.experience_level
-                          )}`}
-                        >
-                          {formatExperienceLevel(creator.experience_level)}
-                        </Badge>
-                      </div>
-                    </div>
+                  </div>
+                  <div className="creator-info">
+                    <h3 className="creator-name">{creator.name}</h3>
+                    <p className="creator-experience">
+                      {formatExperienceLevel(creator.experience_level)}
+                    </p>
                   </div>
                 </div>
               </Link>
@@ -377,11 +377,30 @@ export default function CreatorsPage() {
           )}
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && <Pagination />}
-        <p className="text-white/60 text-sm mt-8 text-center">
-          Showing page {currentPage} of {totalPages}
-        </p>
+        {/* Load More Button */}
+        {hasMore && (
+          <div className="flex justify-center mt-12">
+            <button
+              onClick={handleLoadMore}
+              className="px-10 py-4 rounded-full font-medium bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-3"
+            >
+              <span>Load more</span>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 17l9.2-9.2M17 17V7H7"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

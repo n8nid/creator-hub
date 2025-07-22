@@ -1,30 +1,118 @@
-@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&display=swap");
 
-  
 h1 {
-    font-family: 'Albert Sans', sans-serif;
-    font-size: 6.25rem !important;
-font-weight: 400;
-font-style: Regular;
-leading-trim: NONE;
-line-height: 134.4px;
-letter-spacing: -5%;
-text-align: center;
-
+  font-family: "Albert Sans", sans-serif;
+  font-size: 6.25rem !important;
+  font-weight: 400;
+  font-style: Regular;
+  leading-trim: NONE;
+  line-height: 134.4px;
+  letter-spacing: -5%;
+  text-align: center;
 }
-
 
 .h1-large {
-    font-family: 'Albert Sans', sans-serif;
-font-weight: 250;
-font-style: Thin;
- font-size: 6.25rem !important;
-leading-trim: NONE;
-line-height: 134.4px;
-letter-spacing: -5%;
-
+  font-family: "Albert Sans", sans-serif;
+  font-weight: 250;
+  font-style: Thin;
+  font-size: 6.25rem !important;
+  leading-trim: NONE;
+  line-height: 134.4px;
+  letter-spacing: -5%;
 }
 
+.hero-title-main {
+  font-family: "Albert Sans", sans-serif;
+  font-size: 6.25rem !important;
+  font-weight: 400;
+  font-style: Regular;
+  line-height: 135px;
+  letter-spacing: -5%;
+  text-align: left;
+  color: #ffffff;
+  margin: 0;
+}
+
+.hero-title-sub {
+  font-family: "Albert Sans", sans-serif;
+  font-size: 6.25rem !important;
+  font-weight: 100;
+  font-style: Thin;
+  line-height: 60px;
+  letter-spacing: -5%;
+  text-align: left;
+  color: #ffffff;
+  margin: 0;
+}
+
+.hero-description {
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: -1%;
+  color: #ffffff;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .hero-title-main,
+  .hero-title-sub {
+    font-size: 4rem !important;
+    line-height: 86px;
+  }
+
+  .hero-description {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+}
+
+.creator-name {
+  font-family: "Albert Sans", sans-serif;
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 96%;
+  letter-spacing: 0%;
+  color: white;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.creator-experience {
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: -1%;
+  color: white;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .creator-name {
+    font-size: 20px;
+  }
+
+  .creator-experience {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .creator-name {
+    font-size: 18px;
+  }
+
+  .creator-experience {
+    font-size: 14px;
+  }
+}
 
 /* html {
     font-size: 16px;
@@ -34,4 +122,69 @@ letter-spacing: -5%;
     html {
       font-size: 16px;
     } */
-  /* } */
+/* } */
+
+/* Creator Detail Typography */
+.creator-detail-name {
+  font-family: "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 36px !important;
+  line-height: 120% !important;
+  letter-spacing: 0% !important;
+  color: white !important;
+  margin: 0 !important;
+}
+
+.creator-detail-experience {
+  font-family: "Inter", sans-serif;
+  font-weight: 200;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: -1%;
+  color: white;
+  margin: 0;
+}
+
+/* Responsive font sizing for creator detail */
+@media (max-width: 768px) {
+  .creator-detail-name {
+    font-size: 28px !important;
+  }
+
+  .creator-detail-experience {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .creator-detail-name {
+    font-size: 24px !important;
+  }
+
+  .creator-detail-experience {
+    font-size: 16px;
+  }
+}
+
+/* Override any conflicting styles */
+h1.creator-detail-name {
+  font-family: "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 36px !important;
+  line-height: 120% !important;
+  letter-spacing: 0% !important;
+  color: white !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  h1.creator-detail-name {
+    font-size: 28px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  h1.creator-detail-name {
+    font-size: 24px !important;
+  }
+}

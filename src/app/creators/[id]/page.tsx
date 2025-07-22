@@ -22,7 +22,7 @@ import {
   Instagram,
   Github,
   Globe,
-  ArrowLeft,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
@@ -56,6 +56,8 @@ interface Workflow {
     name: string;
   };
   tags?: string[];
+  complexity?: string;
+  status?: string;
 }
 
 export default function CreatorDetailPage() {
@@ -63,10 +65,9 @@ export default function CreatorDetailPage() {
   const creatorId = params.id as string;
   const [creator, setCreator] = useState<Creator | null>(null);
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
+  const [displayedWorkflows, setDisplayedWorkflows] = useState<Workflow[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const workflowsPerPage = 8;
 
   useEffect(() => {
@@ -87,8 +88,15 @@ export default function CreatorDetailPage() {
   }, [creator]);
 
   useEffect(() => {
-    fetchWorkflows();
-  }, [creatorId, searchTerm, currentPage]);
+    if (creator) {
+      fetchWorkflows();
+    }
+  }, [creatorId, searchTerm, creator]);
+
+  // Initialize displayed workflows when workflows change
+  useEffect(() => {
+    setDisplayedWorkflows(workflows.slice(0, workflowsPerPage));
+  }, [workflows]);
 
   const fetchCreatorData = async () => {
     try {
@@ -100,32 +108,38 @@ export default function CreatorDetailPage() {
         .single();
 
       if (profileError) {
-        console.error("Profile error:", profileError);
-        setCreator(null);
+        console.error("Error fetching profile:", profileError);
+        setLoading(false);
         return;
       }
 
-      // Use profile data
-      const combinedCreator: Creator = {
+      // Debug log untuk melihat data profile
+      console.log("Profile data:", profileData);
+      console.log("Profile image:", profileData.profile_image);
+
+      // Transform profile data to match Creator interface
+      const creatorData: Creator = {
         id: profileData.id,
-        name: profileData.name,
-        experience_level: profileData.experience_level || "Unknown",
+        name: profileData.name || "Unknown Creator",
+        experience_level: profileData.experience_level || "beginner",
         hourly_rate: profileData.hourly_rate || 0,
-        location: profileData.location || "",
+        location: profileData.location || "Unknown",
         bio: profileData.bio || "",
         about_markdown: profileData.about_markdown || "",
-        linkedin_url: profileData.linkedin,
-        instagram_url: profileData.twitter,
-        github_url: profileData.github,
-        website_url: profileData.website,
-        avatar_url: profileData.profile_image,
+        linkedin_url: profileData.linkedin || "",
+        instagram_url: profileData.instagram || "",
+        github_url: profileData.github || "",
+        website_url: profileData.website || "",
+        avatar_url: profileData.profile_image || "",
       };
 
-      setCreator(combinedCreator);
+      console.log("Creator data:", creatorData);
+      console.log("Avatar URL:", creatorData.avatar_url);
+
+      setCreator(creatorData);
+      setLoading(false);
     } catch (error) {
-      console.error("Error fetching creator data:", error);
-      setCreator(null);
-    } finally {
+      console.error("Error in fetchCreatorData:", error);
       setLoading(false);
     }
   };
@@ -135,38 +149,46 @@ export default function CreatorDetailPage() {
       let query = supabase
         .from("workflows")
         .select("*")
-        .eq("profile_id", creatorId);
+        .eq("profile_id", creatorId)
+        .eq("status", "approved")
+        .order("created_at", { ascending: false });
 
-      // Add search filter if search term exists
+      // Add search filter if searchTerm exists
       if (searchTerm.trim()) {
         query = query.or(
           `title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`
         );
       }
 
-      // Get total count for pagination
-      const { count } = await query;
-      const total = count || 0;
-      setTotalPages(Math.ceil(total / workflowsPerPage));
-
-      // Get paginated results
-      const { data, error } = await query
-        .range(
-          (currentPage - 1) * workflowsPerPage,
-          currentPage * workflowsPerPage - 1
-        )
-        .order("created_at", { ascending: false });
+      const { data, error } = await query;
 
       if (error) {
-        console.error("Workflow fetch error:", error);
-        setWorkflows([]);
+        console.error("Error fetching workflows:", error);
         return;
       }
 
-      setWorkflows(data || []);
+      // Transform data to match our interface
+      const transformedWorkflows = (data || []).map((workflow: any) => ({
+        id: workflow.id,
+        title: workflow.title,
+        description: workflow.description,
+        category: workflow.complexity || "General", // Use complexity as category
+        creator_id: workflow.profile_id,
+        created_at: workflow.created_at,
+        updated_at: workflow.updated_at,
+        downloads: 0, // Default value since not in schema
+        stars: 0, // Default value since not in schema
+        creator: {
+          name: creator?.name || "Unknown Creator",
+        },
+        tags: workflow.tags || [],
+        complexity: workflow.complexity,
+        status: workflow.status,
+      }));
+
+      setWorkflows(transformedWorkflows);
     } catch (error) {
-      console.error("Error fetching workflows:", error);
-      setWorkflows([]);
+      console.error("Error in fetchWorkflows:", error);
     }
   };
 
@@ -177,9 +199,9 @@ export default function CreatorDetailPage() {
       case "intermediate":
         return "bg-yellow-100 text-yellow-800";
       case "advanced":
-        return "bg-red-100 text-red-800";
+        return "bg-orange-100 text-orange-800";
       case "expert":
-        return "bg-purple-100 text-purple-800";
+        return "bg-red-100 text-red-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -190,16 +212,24 @@ export default function CreatorDetailPage() {
       case "automation":
         return "bg-blue-100 text-blue-800";
       case "integration":
-        return "bg-green-100 text-green-800";
-      case "data processing":
         return "bg-purple-100 text-purple-800";
-      case "notification":
-        return "bg-orange-100 text-orange-800";
-      case "scheduling":
+      case "data":
+        return "bg-green-100 text-green-800";
+      case "marketing":
         return "bg-pink-100 text-pink-800";
+      case "productivity":
+        return "bg-yellow-100 text-yellow-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
+  };
+
+  const handleLoadMore = () => {
+    const nextBatch = workflows.slice(
+      displayedWorkflows.length,
+      displayedWorkflows.length + workflowsPerPage
+    );
+    setDisplayedWorkflows([...displayedWorkflows, ...nextBatch]);
   };
 
   if (loading) {
@@ -215,13 +245,16 @@ export default function CreatorDetailPage() {
           }}
         />
         <main className="flex-grow relative z-10">
-          <div className="w-full px-4 sm:px-8 md:px-16">
+          <div className="w-full container-box">
             <div className="animate-pulse">
               <div className="h-48 sm:h-64 bg-gray-700 rounded-lg mb-6 sm:mb-8"></div>
               <div className="h-24 sm:h-32 bg-gray-700 rounded-lg mb-6 sm:mb-8"></div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {[...Array(8)].map((_, i) => (
-                  <div key={i} className="h-36 sm:h-48 bg-gray-700 rounded-lg"></div>
+                  <div
+                    key={i}
+                    className="h-36 sm:h-48 bg-gray-700 rounded-lg"
+                  ></div>
                 ))}
               </div>
             </div>
@@ -244,7 +277,7 @@ export default function CreatorDetailPage() {
           }}
         />
         <main className="flex-grow relative z-10">
-          <div className="w-full px-4 sm:px-8 md:px-16">
+          <div className="w-full container-box">
             <div className="text-center py-8 sm:py-12 px-2">
               <h1 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 break-words">
                 Creator tidak ditemukan
@@ -264,33 +297,30 @@ export default function CreatorDetailPage() {
       <GradientCircle
         type="hero"
         style={{
-          top: "20vh",
+          top: "10vh",
           left: "25vw",
           transform: "translateX(-50%)",
           zIndex: -1,
         }}
       />
       <main className="flex-grow relative z-10">
-        <div className="w-full px-4 sm:px-8 md:px-16 pt-8 sm:pt-12">
-          {/* Back Button */}
-          <div className="mb-4 sm:mb-6">
-            <Button
-              variant="ghost"
-              className="flex items-center gap-2 text-white hover:text-white/80 hover:bg-white/10 w-fit text-sm sm:text-base"
-              onClick={() => window.history.back()}
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">Kembali ke Creator</span>
-              <span className="sm:hidden">Kembali</span>
-            </Button>
-          </div>
-
+        <div className="w-full container-box pt-40 sm:pt-48 pb-24 sm:pb-32">
           {/* Creator Profile Section */}
-          <div className="flex flex-col lg:flex-row items-center gap-6 sm:gap-8 mb-6 sm:mb-8">
+          <div className="creator-detail-profile-section mb-6 sm:mb-8">
             {/* Left Side - Avatar */}
             <div className="flex-shrink-0">
-              <Avatar className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
-                <AvatarImage src={creator.avatar_url} alt={creator.name} />
+              <Avatar className="creator-detail-avatar">
+                <AvatarImage
+                  src={creator.avatar_url}
+                  alt={creator.name}
+                  onError={(e) => {
+                    console.log(
+                      "Avatar image failed to load:",
+                      creator.avatar_url
+                    );
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
                 <AvatarFallback className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-br from-purple-500 to-purple-500">
                   {creator.name
                     .split(" ")
@@ -301,171 +331,163 @@ export default function CreatorDetailPage() {
             </div>
 
             {/* Center - Name, Experience, Search */}
-            <div className="flex-1 min-w-0">
-              <div className="mb-4 text-center lg:text-left">
-                <h1 className="text-2xl sm:text-3xl font-bold text-white break-words">
+            <div className="flex-1 min-w-0 creator-detail-content">
+              <div className="text-left">
+                <h1 className="creator-detail-name break-words">
                   {creator.name}
                 </h1>
-                <Badge
-                  className={`w-fit mt-2 ${getExperienceColor(
-                    creator.experience_level
-                  )} text-xs sm:text-sm`}
-                >
+                <div className="creator-detail-experience mt-2">
                   {creator.experience_level}
-                </Badge>
+                </div>
               </div>
 
               {/* Search Workflow */}
-              <div className="relative w-full max-w-sm mx-auto lg:mx-0">
+              <div className="creator-detail-search-container">
                 <input
                   type="text"
                   placeholder="Cari workflow..."
-                  className="w-full pl-4 pr-12 py-2 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-base sm:text-lg text-white placeholder-white/60"
+                  className="creator-detail-search-input"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-4 h-4 sm:w-5 sm:h-5" />
+                <Search className="creator-detail-search-icon" />
               </div>
             </div>
 
-            {/* Right Side - Bio and Social Links (With container) */}
+            {/* Right Side - Bio and Social Links (Without container) */}
             <div className="flex-1 w-full lg:w-auto">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 sm:p-6 lg:p-8">
-                {/* About Creator */}
-                {creator.about_markdown && (
-                  <div className="mb-4 sm:mb-6">
-                    <div className="prose prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none text-gray-300 leading-relaxed">
-                      <ReactMarkdown
-                        components={{
-                          h1: ({ children }) => (
-                            <h1 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 break-words">
-                              {children}
-                            </h1>
-                          ),
-                          h2: ({ children }) => (
-                            <h2 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3 break-words">
-                              {children}
-                            </h2>
-                          ),
-                          h3: ({ children }) => (
-                            <h3 className="text-base sm:text-lg font-bold text-white mb-2 break-words">
-                              {children}
-                            </h3>
-                          ),
-                          p: ({ children }) => (
-                            <p className="text-gray-300 mb-3 sm:mb-4 leading-relaxed break-words text-sm sm:text-base">
-                              {children}
-                            </p>
-                          ),
-                          ul: ({ children }) => (
-                            <ul className="list-disc list-outside text-gray-300 mb-3 sm:mb-4 space-y-1 ml-3 sm:ml-4 text-sm sm:text-base">
-                              {children}
-                            </ul>
-                          ),
-                          ol: ({ children }) => (
-                            <ol className="list-decimal list-outside text-gray-300 mb-3 sm:mb-4 space-y-1 ml-3 sm:ml-4 text-sm sm:text-base">
-                              {children}
-                            </ol>
-                          ),
-                          li: ({ children }) => (
-                            <li className="text-gray-300 break-words">{children}</li>
-                          ),
-                          strong: ({ children }) => (
-                            <strong className="font-bold text-white break-words">
-                              {children}
-                            </strong>
-                          ),
-                          em: ({ children }) => (
-                            <em className="italic text-white/90 break-words">{children}</em>
-                          ),
-                          code: ({ children }) => (
-                            <code className="bg-white/10 text-white px-2 py-1 rounded text-xs sm:text-sm font-mono break-words">
-                              {children}
-                            </code>
-                          ),
-                          pre: ({ children }) => (
-                            <pre className="bg-white/10 text-white p-3 sm:p-4 rounded-lg overflow-x-auto mb-3 sm:mb-4 text-xs sm:text-sm">
-                              {children}
-                            </pre>
-                          ),
-                          a: ({ children, href }) => (
-                            <a
-                              href={href}
-                              className="text-purple-300 hover:text-purple-200 underline break-words"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {children}
-                            </a>
-                          ),
-                          blockquote: ({ children }) => (
-                            <blockquote className="border-l-4 border-purple-400 pl-3 sm:pl-4 italic text-white/70 mb-3 sm:mb-4 text-sm sm:text-base break-words">
-                              {children}
-                            </blockquote>
-                          ),
-                        }}
-                      >
-                        {creator.about_markdown}
-                      </ReactMarkdown>
-                    </div>
+              {/* About Creator */}
+              {creator.about_markdown && (
+                <div className="mb-4 sm:mb-6">
+                  <div className="hero-description">
+                    <ReactMarkdown
+                      components={{
+                        h1: ({ children }) => (
+                          <h1 className="hero-description font-bold mb-3 sm:mb-4 break-words">
+                            {children}
+                          </h1>
+                        ),
+                        h2: ({ children }) => (
+                          <h2 className="hero-description font-bold mb-2 sm:mb-3 break-words">
+                            {children}
+                          </h2>
+                        ),
+                        h3: ({ children }) => (
+                          <h3 className="hero-description font-bold mb-2 break-words">
+                            {children}
+                          </h3>
+                        ),
+                        p: ({ children }) => (
+                          <p className="hero-description mb-3 sm:mb-4 break-words">
+                            {children}
+                          </p>
+                        ),
+                        ul: ({ children }) => (
+                          <ul className="hero-description list-disc list-outside mb-3 sm:mb-4 space-y-1 ml-3 sm:ml-4">
+                            {children}
+                          </ul>
+                        ),
+                        ol: ({ children }) => (
+                          <ol className="hero-description list-decimal list-outside mb-3 sm:mb-4 space-y-1 ml-3 sm:ml-4">
+                            {children}
+                          </ol>
+                        ),
+                        li: ({ children }) => (
+                          <li className="hero-description break-words">
+                            {children}
+                          </li>
+                        ),
+                        strong: ({ children }) => (
+                          <strong className="hero-description font-bold break-words">
+                            {children}
+                          </strong>
+                        ),
+                        em: ({ children }) => (
+                          <em className="hero-description italic break-words">
+                            {children}
+                          </em>
+                        ),
+                        code: ({ children }) => (
+                          <code className="hero-description bg-white/10 px-2 py-1 rounded font-mono break-words">
+                            {children}
+                          </code>
+                        ),
+                        pre: ({ children }) => (
+                          <pre className="hero-description bg-white/10 p-3 sm:p-4 rounded-lg overflow-x-auto mb-3 sm:mb-4">
+                            {children}
+                          </pre>
+                        ),
+                        a: ({ children, href }) => (
+                          <a
+                            href={href}
+                            className="hero-description text-purple-300 hover:text-purple-200 underline break-words"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {children}
+                          </a>
+                        ),
+                        blockquote: ({ children }) => (
+                          <blockquote className="hero-description border-l-4 border-purple-400 pl-3 sm:pl-4 italic mb-3 sm:mb-4 break-words">
+                            {children}
+                          </blockquote>
+                        ),
+                      }}
+                    >
+                      {creator.about_markdown}
+                    </ReactMarkdown>
                   </div>
-                )}
-
-                {/* Social Links */}
-                <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
-                  {creator.linkedin_url && (
-                    <a
-                      href={creator.linkedin_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-white/10"
-                    >
-                      <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
-                    </a>
-                  )}
-                  {creator.instagram_url && (
-                    <a
-                      href={creator.instagram_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-white/10"
-                    >
-                      <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />
-                    </a>
-                  )}
-                  {creator.github_url && (
-                    <a
-                      href={creator.github_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-white/10"
-                    >
-                      <Github className="w-5 h-5 sm:w-6 sm:h-6" />
-                    </a>
-                  )}
-                  {creator.website_url && (
-                    <a
-                      href={creator.website_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-white/10"
-                    >
-                      <Globe className="w-5 h-5 sm:w-6 sm:h-6" />
-                    </a>
-                  )}
                 </div>
+              )}
+
+              {/* Social Links */}
+              <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
+                {creator.linkedin_url && (
+                  <a
+                    href={creator.linkedin_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-gray-300 transition-colors"
+                  >
+                    <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </a>
+                )}
+                {creator.instagram_url && (
+                  <a
+                    href={creator.instagram_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-gray-300 transition-colors"
+                  >
+                    <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </a>
+                )}
+                {creator.github_url && (
+                  <a
+                    href={creator.github_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-gray-300 transition-colors"
+                  >
+                    <Github className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </a>
+                )}
+                {creator.website_url && (
+                  <a
+                    href={creator.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-gray-300 transition-colors"
+                  >
+                    <Globe className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </a>
+                )}
               </div>
             </div>
           </div>
 
           {/* Workflows Section */}
-          <div className="space-y-4 sm:space-y-6 mt-12 sm:mt-16">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl sm:text-2xl font-bold text-white break-words">
-                Workflow ({workflows.length})
-              </h2>
-            </div>
-
+          <div className="space-y-4 sm:space-y-6 mt-28 sm:mt-32">
             {workflows.length === 0 ? (
               <div className="text-center py-8 sm:py-12 px-2">
                 <p className="text-gray-300 text-base sm:text-lg break-words">
@@ -477,7 +499,7 @@ export default function CreatorDetailPage() {
             ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                  {workflows.map((workflow) => (
+                  {displayedWorkflows.map((workflow) => (
                     <Link
                       key={workflow.id}
                       href={`/workflows/${workflow.id}`}
@@ -545,49 +567,15 @@ export default function CreatorDetailPage() {
                   ))}
                 </div>
 
-                {/* Pagination Info */}
-                <div className="text-center mb-4 px-2">
-                  <p className="text-gray-300 text-xs sm:text-sm break-words">
-                    Showing page {currentPage} of {totalPages}
-                  </p>
-                </div>
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-1 sm:gap-2 mt-8 sm:mt-12 px-2">
+                {/* Load More Button */}
+                {workflows.length > displayedWorkflows.length && (
+                  <div className="flex justify-center mt-8 sm:mt-12">
                     <button
-                      className="px-3 sm:px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 text-xs sm:text-sm"
-                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                      disabled={currentPage === 1}
+                      onClick={handleLoadMore}
+                      className="px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2 text-sm sm:text-base"
                     >
-                      Prev
-                    </button>
-                    <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center">
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                        (page) => (
-                          <button
-                            key={page}
-                            className={`px-3 sm:px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow text-xs sm:text-sm min-w-[32px] sm:min-w-[40px]
-                            ${
-                              page === currentPage
-                                ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
-                                : "bg-white/10 text-white/80 hover:bg-white/20 text-white border border-white/20"
-                            }
-                          `}
-                            onClick={() => setCurrentPage(page)}
-                          >
-                            {page}
-                          </button>
-                        )
-                      )}
-                    </div>
-                    <button
-                      className="px-3 sm:px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 text-xs sm:text-sm"
-                      onClick={() =>
-                        setCurrentPage((p) => Math.min(totalPages, p + 1))
-                      }
-                      disabled={currentPage === totalPages}
-                    >
-                      Next
+                      <span>Load More</span>
+                      <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                   </div>
                 )}
