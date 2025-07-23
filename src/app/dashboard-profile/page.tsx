@@ -187,9 +187,8 @@ export default function DashboardProfilePage() {
                 activities.push({
                   id: like.id,
                   type: "workflow_liked",
-                  title: `Workflow "${
-                    workflow?.title || "Unknown"
-                  }" mendapat like`,
+                  title: `Workflow "${workflow?.title || "Unknown"
+                    }" mendapat like`,
                   description: "Seseorang menyukai workflow Anda",
                   timestamp: like.created_at,
                   icon: Heart,
@@ -219,7 +218,7 @@ export default function DashboardProfilePage() {
   if (!user) {
     return (
       <div className="text-center py-16">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Not Logged In</h1>
+        <p className="text-2xl font-bold text-gray-900 mb-4">Not Logged In</p>
         <p className="text-gray-600 mb-6">
           Silakan login untuk melihat dashboard Anda.
         </p>
@@ -246,14 +245,14 @@ export default function DashboardProfilePage() {
             <div className="text-center mb-4 sm:mb-5 tablet:mb-6 lg:mb-6">
               <div className="tablet:flex tablet:justify-center">
                 <Avatar className="h-24 w-24 sm:h-32 tablet:h-36 lg:h-40 sm:w-32 tablet:w-36 lg:w-40 mx-auto mb-3 sm:mb-4">
-                <AvatarImage
-                  src={profileImage ? `${profileImage}?t=${Date.now()}` : undefined}
-                />
-                <AvatarFallback className="text-xl sm:text-2xl tablet:text-2xl lg:text-3xl">
-                  {profile?.name?.split(" ").map((n: string) => n[0]).join("")}
-                </AvatarFallback>
-              </Avatar>
-            </div>
+                  <AvatarImage
+                    src={profileImage ? `${profileImage}?t=${Date.now()}` : undefined}
+                  />
+                  <AvatarFallback className="text-xl sm:text-2xl tablet:text-2xl lg:text-3xl">
+                    {profile?.name?.split(" ").map((n: string) => n[0]).join("")}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
               <h2 className="text-lg sm:text-xl tablet:text-base lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2 break-words text-center">
                 {profile?.name}
               </h2>
@@ -297,7 +296,7 @@ export default function DashboardProfilePage() {
                   <span className="text-gray-600">following</span>
                 </div>
               </div>
-              
+
               {/* Follower/Following Stats - Tablet Layout */}
               <div className="hidden tablet:block lg:hidden space-y-2 text-center">
                 <div className="flex items-center justify-center gap-1">

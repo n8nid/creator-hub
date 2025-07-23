@@ -216,7 +216,7 @@ export default function CreatorPage() {
   if (!user) {
     return (
       <div className="text-center py-16">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Not Logged In</h1>
+        <p className="text-2xl font-bold text-gray-900 mb-4">Not Logged In</p>
         <p className="text-gray-600 mb-6">
           Silakan login untuk melihat halaman creator Anda.
         </p>
@@ -238,7 +238,7 @@ export default function CreatorPage() {
       {/* Header Section */}
       <div className="flex justify-between items-center px-2">
         <div className="flex-1 min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">Creator Saya</h1>
+          <p className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">Creator Saya</p>
           <p className="text-gray-600 mt-2 text-sm sm:text-base break-words">
             Kelola status creator dan portfolio Anda
           </p>
@@ -330,10 +330,10 @@ export default function CreatorPage() {
               {creatorStatus?.status === "approved"
                 ? "Creator Aktif"
                 : creatorStatus?.status === "pending"
-                ? "Menunggu Review"
-                : creatorStatus?.status === "rejected"
-                ? "Ditolak"
-                : "Belum Mengajukan"}
+                  ? "Menunggu Review"
+                  : creatorStatus?.status === "rejected"
+                    ? "Ditolak"
+                    : "Belum Mengajukan"}
             </span>
           </div>
           <p className="text-sm text-gray-600 break-words">
