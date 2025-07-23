@@ -848,48 +848,224 @@ body {
 
 /* Workflow Page Styles */
 .workflow-card {
-  width: 399.79px;
+  width: 100%;
+  max-width: 530px;
   height: 630px;
-  min-width: 399.79px;
   min-height: 630px;
   position: relative;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .workflow-grid {
   display: grid;
-  grid-template-columns: repeat(4, 399.79px);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px 32px;
-  justify-content: start;
+  justify-content: center;
   align-items: start;
+  /* Mengikuti container-box tanpa padding tambahan */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-@media (max-width: 1800px) {
+/* Responsive grid dengan auto-fit untuk semua ukuran layar */
+/* Ultra Wide Desktop (2560px+) */
+@media (min-width: 2561px) {
   .workflow-grid {
-    grid-template-columns: repeat(4, 399.79px);
-    gap: 20px 28px;
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 3000px;
+    margin: 0 auto;
+  }
+  
+  .workflow-card {
+    max-width: 550px;
   }
 }
 
-@media (max-width: 1600px) {
+/* Large Desktop (1921px - 2560px) */
+@media (min-width: 1921px) and (max-width: 2560px) {
   .workflow-grid {
-    grid-template-columns: repeat(3, 399.79px);
-    gap: 18px 24px;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 2400px;
+    margin: 0 auto;
+  }
+  
+  .workflow-card {
+    max-width: 530px;
   }
 }
 
-@media (max-width: 1200px) {
+/* Large Laptop (1441px - 1920px) */
+@media (min-width: 1441px) and (max-width: 1920px) {
   .workflow-grid {
-    grid-template-columns: repeat(2, 399.79px);
-    gap: 16px 20px;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .workflow-card {
+    max-width: 400px;
   }
 }
 
-@media (max-width: 900px) {
+/* Standard Laptop (1025px - 1440px) */
+@media (min-width: 769px) and (max-width: 1024px) {
   .workflow-grid {
-    grid-template-columns: repeat(1, 399.79px);
-    gap: 16px;
-    justify-content: center;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .workflow-card {
+    max-width: 450px;
+  }
+}
+
+/* Tablet Portrait (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .workflow-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .workflow-card {
+    max-width: 450px;
+    height: auto;
+    min-height: 480px;
+  }
+}
+
+/* Tablet Landscape (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .workflow-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .workflow-card {
+    max-width: 350px;
+    height: auto;
+    min-height: 420px;
+  }
+}
+
+/* Tablet/Mobile Landscape (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) and (orientation: landscape) {
+  .workflow-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .workflow-card {
+    max-width: 250px;
+    height: auto;
+    min-height: 350px;
+  }
+}
+
+/* Mobile Portrait (320px - 480px) */
+@media (max-width: 480px) {
+  .workflow-grid {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 12px;
+  }
+  
+  .workflow-card {
+    max-width: 100%;
+    height: auto;
+    min-height: 260px;
+  }
+}
+
+/* Small Mobile (320px - 375px) */
+@media (max-width: 375px) {
+  .workflow-card {
+    min-height: 220px;
+  }
+}
+
+/* Mobile responsive untuk card content padding */
+@media (max-width: 768px) {
+  .workflow-card .p-4.sm\\:p-6 {
+    padding: 12px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .workflow-card .p-4.sm\\:p-6 {
+    padding: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .workflow-card .p-4.sm\\:p-6 {
+    padding: 6px !important;
+  }
+}
+
+/* Workflow grid mengikuti container-box padding */
+.workflow-grid {
+  /* Menggunakan width 100% dan margin auto untuk centering */
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  /* Mengikuti container-box tanpa padding tambahan */
+  box-sizing: border-box;
+}
+
+
+
+
+
+/* Mobile responsive untuk tags dan author spacing */
+@media (max-width: 768px) {
+  .workflow-card .mb-4 {
+    margin-bottom: 8px !important;
+  }
+  
+  .workflow-card .pt-4 {
+    padding-top: 8px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .workflow-card .mb-4 {
+    margin-bottom: 6px !important;
+  }
+  
+  .workflow-card .pt-4 {
+    padding-top: 6px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .workflow-card .mb-4 {
+    margin-bottom: 3px !important;
+  }
+  
+  .workflow-card .pt-4 {
+    padding-top: 3px !important;
+  }
+  
+  /* Mobile responsive untuk tags */
+  .workflow-card .px-2.sm\\:px-3 {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+  
+  .workflow-card .py-1 {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+  
+  .workflow-card .text-xs {
+    font-size: 9px !important;
+  }
+  
+  /* Mobile responsive untuk author section */
+  .workflow-card .w-6.h-6.sm\\:w-8.sm\\:h-8 {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .workflow-card .text-xs.sm\\:text-sm {
+    font-size: 9px !important;
   }
 }
 
@@ -904,6 +1080,32 @@ body {
   margin: 0 !important;
 }
 
+/* Mobile responsive untuk workflow preview */
+@media (max-width: 768px) {
+  .workflow-preview-container {
+    height: 180px;
+  }
+}
+
+@media (max-width: 640px) {
+  .workflow-preview-container {
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .workflow-preview-container {
+    height: 120px;
+  }
+}
+
+/* Workflow preview wrapper dengan posisi relative */
+.workflow-preview-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .workflow-preview-content {
   position: absolute;
   top: 0;
@@ -916,7 +1118,7 @@ body {
 
 /* Remove padding from embedded workflow frame */
 .embedded_workflow.frame {
-  padding: 0 !important;
+  padding: 0px;
   background-color: var(--n8n-frame-background-color, hsl(260, 11%, 95%));
 }
 
@@ -954,8 +1156,8 @@ n8n-demo {
 .embedded_workflow.frame,
 .embedded_workflow.frame *,
 .embedded_workflow.frame iframe {
-  padding: 0 !important;
-  margin: 0 !important;
+  padding: 0px !important;
+  margin: 0px !important;
   border: none !important;
   border-radius: 0 !important;
 }
@@ -967,6 +1169,40 @@ n8n-demo {
 .workflow-preview-header-content {
   padding-left: 8px;
   padding-right: 8px;
+}
+
+/* Mobile responsive untuk workflow preview header */
+@media (max-width: 768px) {
+  .workflow-preview-header {
+    padding: 6px 0 0 0;
+  }
+  
+  .workflow-preview-header-content {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}
+
+@media (max-width: 640px) {
+  .workflow-preview-header {
+    padding: 4px 0 0 0;
+  }
+  
+  .workflow-preview-header-content {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .workflow-preview-header {
+    padding: 2px 0 0 0;
+  }
+  
+  .workflow-preview-header-content {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
 }
 
 /* Workflow Page Layout Styles */
@@ -1000,6 +1236,47 @@ n8n-demo {
   overflow-wrap: break-word;
 }
 
+/* Mobile responsive untuk workflow card content */
+@media (max-width: 768px) {
+  .workflow-card-title {
+    font-size: 14px;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  
+  .workflow-card-description {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .workflow-card-title {
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+  
+  .workflow-card-description {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .workflow-card-title {
+    font-size: 11px;
+    margin-bottom: 2px;
+    line-height: 1.2;
+  }
+  
+  .workflow-card-description {
+    font-size: 9px;
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+}
+
 /* Workflow Description Layout Styles */
 .workflow-description-text {
   color: #FFFFFF;
@@ -1019,6 +1296,359 @@ n8n-demo {
   height: 1px;
   background-color: rgba(255, 255, 255, 1);
   border: none;
+}
+
+/* Workflow Header Responsive Styles */
+.workflow-header-container {
+  width: 100%;
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.workflow-header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.workflow-title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Mobile & Tablet Layout (Vertical) */
+@media (max-width: 1024px) {
+  .workflow-header-content {
+    gap: 1.5rem;
+  }
+  
+  .workflow-title-section {
+    flex: none;
+    width: 100%;
+  }
+  
+  .workflow-description-section {
+    flex: none;
+    width: 100%;
+  }
+}
+
+.workflow-title-main {
+  font-family: sans-serif;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0;
+  text-align: left;
+}
+
+.workflow-title-sub {
+  font-family: sans-serif;
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0;
+  text-align: left;
+}
+
+.workflow-description-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+.workflow-description-text {
+  font-family: "Inter, Arial, sans-serif";
+  font-weight: 400;
+  font-style: normal;
+  line-height: 150%;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  word-break: break-words;
+}
+
+.workflow-search-container {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+}
+
+.workflow-search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 1rem;
+  padding-right: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 1.125rem;
+  transition: all 0.2s ease;
+}
+
+.workflow-search-input:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #8b5cf6;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.workflow-search-input:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.workflow-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.workflow-search-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Responsive Breakpoints untuk Workflow Header */
+@media (min-width: 1921px) {
+  .workflow-header-container {
+    padding-top: 4rem;
+    gap: 2.5rem;
+  }
+  
+  .workflow-title-main {
+    font-size: 8rem;
+  }
+  
+  .workflow-title-sub {
+    font-size: 7rem;
+  }
+  
+  .workflow-description-text {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  
+  .workflow-search-input {
+    font-size: 1.25rem;
+    padding: 1rem 1.25rem;
+    padding-right: 3.5rem;
+  }
+  
+  .workflow-search-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  .workflow-connector-line {
+    width: 800px;
+    height: 2px;
+  }
+}
+
+@media (min-width: 1441px) and (max-width: 1920px) {
+  .workflow-header-container {
+    padding-top: 3rem;
+    gap: 2rem;
+  }
+  
+  .workflow-title-main {
+    font-size: 7rem;
+  }
+  
+  .workflow-title-sub {
+    font-size: 6rem;
+  }
+  
+  .workflow-description-text {
+    font-size: 1.125rem;
+    margin-bottom: 1.75rem;
+  }
+  
+  .workflow-search-input {
+    font-size: 1.125rem;
+    padding: 0.875rem 1rem;
+    padding-right: 3.25rem;
+  }
+  
+  .workflow-search-icon {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+  
+  .workflow-connector-line {
+    width: 600px;
+    height: 2px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .workflow-header-container {
+    padding-top: 2.5rem;
+    gap: 1.75rem;
+  }
+  
+  .workflow-title-main {
+    font-size: 6rem;
+  }
+  
+  .workflow-title-sub {
+    font-size: 5rem;
+  }
+  
+  .workflow-description-text {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .workflow-search-input {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    padding-right: 3rem;
+  }
+  
+  .workflow-search-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .workflow-connector-line {
+    width: 500px;
+    height: 1px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .workflow-header-container {
+    padding-top: 2rem;
+    gap: 1.5rem;
+  }
+  
+  .workflow-title-main {
+    font-size: 5rem;
+  }
+  
+  .workflow-title-sub {
+    font-size: 4rem;
+  }
+  
+  .workflow-description-text {
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .workflow-search-container {
+    max-width: 100%;
+  }
+  
+  .workflow-search-input {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    padding-right: 3rem;
+  }
+  
+  .workflow-search-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  /* Sembunyikan garis penghubung di tablet portrait */
+  .workflow-connector-line {
+    display: none;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .workflow-header-container {
+    padding-top: 1.5rem;
+    gap: 1.25rem;
+  }
+  
+  .workflow-title-main {
+    font-size: 4rem;
+  }
+  
+  .workflow-title-sub {
+    font-size: 3.5rem;
+  }
+  
+  .workflow-description-text {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .workflow-search-container {
+    max-width: 100%;
+  }
+  
+  .workflow-search-input {
+    font-size: 0.95rem;
+    padding: 0.625rem 0.875rem;
+    padding-right: 2.75rem;
+  }
+  
+  .workflow-search-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+  
+  /* Sembunyikan garis penghubung di tablet */
+  .workflow-connector-line {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .workflow-header-container {
+    padding-top: 1rem;
+    gap: 1rem;
+  }
+  
+  .workflow-title-main {
+    font-size: 3rem;
+  }
+  
+  .workflow-title-sub {
+    font-size: 2.5rem;
+  }
+  
+  .workflow-description-text {
+    font-size: 0.95rem;
+    margin-bottom: 0.875rem;
+  }
+  
+  .workflow-search-container {
+    max-width: 100%;
+  }
+  
+  .workflow-search-input {
+    font-size: 0.9rem;
+    padding: 0.625rem 0.875rem;
+    padding-right: 2.5rem;
+  }
+  
+  .workflow-search-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  /* Sembunyikan garis penghubung di mobile */
+  .workflow-connector-line {
+    display: none;
+  }
 }
 
 /* Custom Sonner Toast Dark Theme for Auth Pages */
