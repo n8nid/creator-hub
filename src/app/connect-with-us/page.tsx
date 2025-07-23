@@ -1,62 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import GradientCircle from "@/components/GradientCircle";
 
 const ConnectWithUsPage = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [ctaMousePosition, setCtaMousePosition] = useState({ x: 0, y: 0 });
-  const [isCtaHovering, setIsCtaHovering] = useState(false);
-  const [isCtaTransitioning, setIsCtaTransitioning] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setMousePosition({ x, y });
-  };
-
-  const handleMouseEnter = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setIsHovering(true);
-      setIsTransitioning(false);
-    }, 50);
-  };
-
-  const handleMouseLeave = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setIsHovering(false);
-      setIsTransitioning(false);
-    }, 50);
-  };
-
-  const handleCtaMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setCtaMousePosition({ x, y });
-  };
-
-  const handleCtaMouseEnter = () => {
-    setIsCtaTransitioning(true);
-    setTimeout(() => {
-      setIsCtaHovering(true);
-      setIsCtaTransitioning(false);
-    }, 50);
-  };
-
-  const handleCtaMouseLeave = () => {
-    setIsCtaTransitioning(true);
-    setTimeout(() => {
-      setIsCtaHovering(false);
-      setIsCtaTransitioning(false);
-    }, 50);
-  };
 
   return (
     <div className="min-h-screen flex flex-col relative">
@@ -739,62 +687,24 @@ const ConnectWithUsPage = () => {
               </div>
 
               {/* Text Content - Positioned to the left */}
-              <div className="w-full px-4 sm:px-8 md:px-16 flex justify-start">
+              <div className="w-full container-box flex justify-start">
                 <div className="max-w-2xl relative" style={{ zIndex: 10 }}>
                   <div
-                    className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer overflow-hidden"
+                    className="relative"
                     style={{
                       width: "100%",
                       textAlign: "left",
                       position: "relative",
                       zIndex: 2,
-                      background: "rgba(255, 255, 255, 0.1)",
-                      backdropFilter: "blur(10px)",
                     }}
-                    onMouseMove={handleMouseMove}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
                   >
-                    {/* Gradient overlay yang mengikuti cursor */}
-                    <div
-                      className="absolute inset-0 pointer-events-none"
-                      style={{
-                        background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.4) 0%, rgba(168, 85, 247, 0.3) 30%, rgba(236, 72, 153, 0.2) 60%, transparent 100%)`,
-                        opacity: isHovering ? 1 : 0,
-                        transition: "opacity 0.2s ease-in-out",
-                      }}
-                    />
                     {/* Content */}
                     <div className="relative z-10">
-                      <h2
-                        className="whitespace-normal break-words"
-                        style={{
-                          fontFamily: "Albert Sans, Arial, sans-serif",
-                          fontWeight: 250,
-                          fontStyle: "thin",
-                          fontSize: "clamp(2rem, 7vw, 48px)",
-                          lineHeight: "clamp(2.5rem, 8vw, 60px)",
-                          letterSpacing: "-0.05em",
-                          color: "#FFFBFB",
-                          margin: "0 0 30px 0",
-                        }}
-                      >
+                      <h2 className="whitespace-normal break-words connect-with-us-title connect-with-us-title-color">
                         <span className="block md:inline">Platform ini hadir untuk</span>
                         <span className="block md:inline"> menghubungkan Creator</span>
                       </h2>
-                      <p
-                        style={{
-                          fontFamily: "Inter, Arial, sans-serif",
-                          fontWeight: 300,
-                          fontStyle: "light",
-                          fontSize: "clamp(14px, 3.5vw, 18px)",
-                          lineHeight: "150%",
-                          letterSpacing: "-0.01em",
-                          color: "#FFFFFF",
-                          background: "transparent",
-                          marginBottom: "32px",
-                        }}
-                      >
+                      <p className="connect-with-us-description connect-with-us-description-color">
                         dari berbagai bidang dengan para pengguna yang mencari inspirasi, ide, dan solusi melalui workflow yang praktis. Kami percaya, kolaborasi kreatif akan lebih mudah ketika prosesnya terbuka, sederhana, dan saling berbagi.
                         <br />
                         <br />
@@ -803,8 +713,7 @@ const ConnectWithUsPage = () => {
                       <div className="flex justify-start">
                         <a
                           href="/creators"
-                          className="btn-jelajah flex items-center gap-3"
-                          style={{ fontSize: "clamp(14px, 3.5vw, 18px)" }}
+                          className="btn-jelajah flex items-center gap-3 connect-with-us-button"
                         >
                           Connect With Us
                         </a>
@@ -819,7 +728,7 @@ const ConnectWithUsPage = () => {
 
         {/* Section 2: Key Benefits */}
         <div
-          className="w-full mt-24 px-16 relative"
+          className="w-full mt-24 container-box relative"
           style={{ isolation: "isolate" }}
         >
           {/* Circle gradient 2 - di belakang key benefits */}
@@ -917,10 +826,7 @@ const ConnectWithUsPage = () => {
                   <div className="text-base sm:text-xl text-white/90 font-normal mb-1">
                     Share Your Workflow
                   </div>
-                  <div
-                    className="font-bold text-white leading-snug"
-                    style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)", wordBreak: "break-word" }}
-                  >
+                  <div className="font-bold text-white leading-snug connect-with-us-benefit-title">
                     Bagikan workflow Anda untuk membantu kreator lain menemukan cara kerja yang lebih efisien dan terarah.
                   </div>
                 </div>
@@ -946,10 +852,7 @@ const ConnectWithUsPage = () => {
                   <div className="text-base sm:text-xl text-white/90 font-normal mb-1">
                     Access Ready-to-Use Workflows
                   </div>
-                  <div
-                    className="font-bold text-white leading-snug"
-                    style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)", wordBreak: "break-word" }}
-                  >
+                  <div className="font-bold text-white leading-snug connect-with-us-benefit-title">
                     Jelajahi berbagai workflow yang praktis dan dapat langsung Anda terapkan dalam proses kerja Anda.
                   </div>
                 </div>
@@ -975,10 +878,7 @@ const ConnectWithUsPage = () => {
                   <div className="text-base sm:text-xl text-white/90 font-normal mb-1">
                     Connect & Collaborate
                   </div>
-                  <div
-                    className="font-bold text-white leading-snug"
-                    style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)", wordBreak: "break-word" }}
-                  >
+                  <div className="font-bold text-white leading-snug connect-with-us-benefit-title">
                     Bangun koneksi dan kolaborasi dengan kreator lain untuk mengembangkan proyek yang lebih maksimal.
                   </div>
                 </div>
@@ -989,7 +889,7 @@ const ConnectWithUsPage = () => {
 
         {/* Call to Action Section */}
         <div
-          className="w-full mt-24 px-4 sm:px-8 md:px-16 py-10 flex justify-center relative"
+          className="w-full mt-24 container-box py-10 flex justify-center relative"
           style={{
             background: "transparent",
             isolation: "isolate",
@@ -997,77 +897,44 @@ const ConnectWithUsPage = () => {
           }}
         >
           <div
-            className="relative rounded-2xl border border-white/20 p-4 md:p-8 cursor-pointer flex flex-col items-start md:items-center md:flex-row md:justify-between gap-6 md:gap-8 overflow-hidden w-full max-w-md md:max-w-2xl"
-            style={{
-              background: "rgba(255, 255, 255, 0.05)",
-              backdropFilter: "blur(10px)",
-              zIndex: 30,
-            }}
-            onMouseMove={handleCtaMouseMove}
-            onMouseEnter={handleCtaMouseEnter}
-            onMouseLeave={handleCtaMouseLeave}
+            className="relative flex flex-col md:flex-row items-center justify-between gap-8 w-full max-w-md md:max-w-2xl"
+            style={{ zIndex: 40 }}
           >
-            {/* Gradient overlay yang mengikuti cursor */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `radial-gradient(circle at ${ctaMousePosition.x}px ${ctaMousePosition.y}px, rgba(59, 130, 246, 0.4) 0%, rgba(168, 85, 247, 0.3) 30%, rgba(236, 72, 153, 0.2) 60%, transparent 100%)`,
-                opacity: isCtaHovering ? 1 : 0,
-                transition: "opacity 0.2s ease-in-out",
-              }}
-            />
-            {/* Content */}
-            <div
-              className="relative flex flex-col md:flex-row items-center justify-between gap-8 w-full"
-              style={{ zIndex: 40 }}
-            >
-              <div className="flex flex-col items-start justify-center">
-                <div
-                  style={{
-                    fontFamily: "Albert Sans, Arial, sans-serif",
-                    fontWeight: 200,
-                    fontSize: "clamp(1.1rem, 4vw, 22px)",
-                    lineHeight: "130%",
-                    color: "#fff",
-                    letterSpacing: "-0.01em",
-                    textAlign: "left",
-                  }}
-                >
-                  Sudah 300 orang bergabung.<br />Ayo, mulai perjalanan Anda hari ini!
-                </div>
+            <div className="flex flex-col items-start justify-center">
+              <div className="connect-with-us-cta-text connect-with-us-cta-text-color">
+                Sudah 300 orang bergabung.<br />Ayo, mulai perjalanan Anda hari ini!
               </div>
-              <a
-                href="/creators"
-                className="rounded-full mt-4 px-4 py-2.5 tablet:px-6 tablet:py-3 text-sm tablet:text-base font-semibold flex items-center justify-center gap-2 w-full md:w-auto btn-jelajah"
-                style={{ fontSize: "clamp(0.875rem, 3vw, 1rem)", minHeight: "40px" }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow =
-                    "0 6px 20px rgba(0, 0, 0, 0.1)";
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 16px rgba(0, 0, 0, 0.1)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                Join Community
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-4 h-4 tablet:w-5 tablet:h-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
-              </a>
             </div>
+            <a
+              href="/creators"
+              className="rounded-full mt-4 px-4 py-2.5 tablet:px-6 tablet:py-3 text-sm tablet:text-base font-semibold flex items-center justify-center gap-2 w-full md:w-auto btn-jelajah connect-with-us-cta-button"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow =
+                  "0 6px 20px rgba(0, 0, 0, 0.1)";
+                e.currentTarget.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow =
+                  "0 4px 16px rgba(0, 0, 0, 0.1)";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
+            >
+              Join Community
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-4 h-4 tablet:w-5 tablet:h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </a>
           </div>
         </div>
       </main>

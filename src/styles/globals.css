@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "./container.css";
+
 /* Markdown Editor Styles */
 [data-color-mode*="light"] {
   --color-canvas-default: #ffffff;
@@ -2145,3 +2147,16 @@ n8n-demo {
 }
 
 /* Creator Detail Layout Improvements */
+
+/* Connect With Us Page Colors */
+.connect-with-us-title-color {
+  color: #FFFBFB !important;
+}
+
+.connect-with-us-description-color {
+  color: #FFFFFF !important;
+}
+
+.connect-with-us-cta-text-color {
+  color: #fff !important;
+}
