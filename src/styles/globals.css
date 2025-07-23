@@ -772,7 +772,6 @@ body {
     border-bottom: 3px solid rgba(255, 255, 255, 0.3) !important;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
     isolation: isolate !important;
-    transform: translateZ(0) !important;
   }
 
   /* Memastikan navbar container tetap solid untuk readability */

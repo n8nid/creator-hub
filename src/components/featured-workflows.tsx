@@ -8,6 +8,66 @@ import Link from "next/link";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
+// Custom Arrow Components to avoid carouselState prop issues
+const CustomLeftArrow = React.forwardRef<HTMLButtonElement, any>(
+  (props, ref) => {
+    const { onClick, carouselState, rtl, ...rest } = props;
+    return (
+      <button
+        ref={ref}
+        onClick={onClick}
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-all duration-300 z-10"
+        {...rest}
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+    );
+  }
+);
+
+const CustomRightArrow = React.forwardRef<HTMLButtonElement, any>(
+  (props, ref) => {
+    const { onClick, carouselState, rtl, ...rest } = props;
+    return (
+      <button
+        ref={ref}
+        onClick={onClick}
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-all duration-300 z-10"
+        {...rest}
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+    );
+  }
+);
+
+CustomLeftArrow.displayName = "CustomLeftArrow";
+CustomRightArrow.displayName = "CustomRightArrow";
+
 const FeaturedWorkflows = () => {
   const [workflows, setWorkflows] = useState<any[]>([]);
 
@@ -111,15 +171,12 @@ const FeaturedWorkflows = () => {
             className="w-full"
             itemClass="px-3"
             containerClass="carousel-container"
-            partialVisible={false}
             infinite={true}
             autoPlay={false}
-            autoPlaySpeed={3000}
             keyBoardControl={true}
             customTransition="transform 300ms ease-in-out"
             transitionDuration={300}
             removeArrowOnDeviceType={["tablet", "mobile"]}
-            dotListClass="custom-dot-list-style"
             draggable={true}
             swipeable={true}
             centerMode={false}
@@ -127,40 +184,8 @@ const FeaturedWorkflows = () => {
             ssr={true}
             showDots={false}
             arrows={true}
-            customLeftArrow={
-              <button className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-all duration-300 z-10">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-            }
-            customRightArrow={
-              <button className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-all duration-300 z-10">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            }
+            customLeftArrow={<CustomLeftArrow />}
+            customRightArrow={<CustomRightArrow />}
           >
             {workflows.map((workflow, index) => (
               <div key={workflow.id} className="h-full">
