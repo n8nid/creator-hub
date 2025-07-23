@@ -120,22 +120,20 @@ const HeroSection = () => {
         </div>
         {/* INSIGHT & BUTTONS */}
         <div className="w-full pt-[10rem] 2xl:pt-[15.625rem] flex flex-col items-center">
-          <div
-            style={{ width: "100%", display: "flex", justifyContent: "center" }}
-          >
-            <div className="2xl:px-[10rem] lg:px-[5rem] md:px-[3rem]">
+          <div className="hero-insight-wrapper">
+            <div className="hero-insight-container">
               {/* Gradient overlay yang mengikuti cursor */}
               <div />
               {/* Content */}
-              <div className="relative z-10">
-                <h2 className="lg:text-start text-center">
+              <div className="hero-insight-content">
+                <h2 className="hero-insight-heading">
                   <span className="hero-insight-text">
                     Dapatkan insight, workflow siap pakai, dan dukungan dari
                     komunitas yang aktif dan solutif. Workflow Hebat Dimulai
                     dari Sini.
                   </span>
                 </h2>
-                <div className="mt-[2.5rem] flex flex-col sm:flex-row md:justify-start justify-center gap-3 md:gap-6">
+                <div className="hero-insight-buttons">
                   <a className="btn-primary" href="/workflows">
                     Jelajahi Workflow
                     <svg

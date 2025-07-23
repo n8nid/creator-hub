@@ -354,15 +354,40 @@ h1.creator-detail-name {
   letter-spacing: -5% !important;
 }
 
-@media (min-width: 1024px) {
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
   .hero-insight-text {
     font-size: 5rem !important;
+    text-align: left !important;
   }
 }
 
-@media (max-width: 1023px) {
+/* Tablet (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero-insight-text {
+    font-size: 3.5rem !important;
+    text-align: center !important;
+    line-height: 4.5rem !important;
+    max-width: 90% !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* Mobile (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
   .hero-insight-text {
     font-size: 3rem !important;
+    text-align: center !important;
+    line-height: 4rem !important;
+  }
+}
+
+/* Small Mobile (320px - 480px) */
+@media (max-width: 480px) {
+  .hero-insight-text {
+    font-size: 2.5rem !important;
+    text-align: center !important;
+    line-height: 3.5rem !important;
   }
 }
 
@@ -443,7 +468,7 @@ h1.creator-detail-name {
   .connect-with-us-cta-text {
     font-size: clamp(1rem, 3.5vw, 20px) !important;
   }
-  
+
   .connect-with-us-cta-button {
     font-size: clamp(0.8rem, 2.5vw, 0.9rem) !important;
   }
@@ -470,7 +495,7 @@ h1.creator-detail-name {
   .connect-with-us-cta-text {
     font-size: clamp(0.9rem, 3vw, 18px) !important;
   }
-  
+
   .connect-with-us-cta-button {
     font-size: clamp(0.75rem, 2vw, 0.85rem) !important;
   }

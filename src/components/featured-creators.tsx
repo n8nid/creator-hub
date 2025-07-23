@@ -58,7 +58,7 @@ const FeaturedCreators = () => {
         console.error("Failed to fetch creators from API");
       }
 
-      // Ambil 6 creator pertama
+      // Ambil creator pertama (4 untuk mobile, 6 untuk desktop)
       const featuredCreators = apiCreators.slice(0, 6);
       setCreators(featuredCreators);
     } catch (error) {
@@ -72,8 +72,8 @@ const FeaturedCreators = () => {
     return (
       <section className="pt-[13.313rem] content-above-gradient">
         <div className="w-full container-box relative z-10">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
-            <h2 className="h2-title sm:text-start text-center w-full">
+          <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
+            <h2 className="h2-title text-center md:text-start w-full">
               Meet the Creators
             </h2>
             <a href="/directory" className="btn-primary">
@@ -103,8 +103,8 @@ const FeaturedCreators = () => {
               </svg>
             </a>
           </div>
-          <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6">
-            {[...Array(6)].map((_, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6">
+            {[...Array(4)].map((_, i) => (
               <div key={i} className="creator-item">
                 <div className="creator-avatar">
                   <Avatar className="creator-avatar-image">
@@ -128,8 +128,8 @@ const FeaturedCreators = () => {
   return (
     <section className="pt-[13.313rem] content-above-gradient">
       <div className="w-full container-box relative z-10">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
-          <h2 className="h2-title sm:text-start text-center w-full">
+        <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
+          <h2 className="h2-title text-center md:text-start w-full">
             Meet the Creators
           </h2>
           <a href="/directory" className="btn-primary">
@@ -160,9 +160,9 @@ const FeaturedCreators = () => {
           </a>
         </div>
 
-        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6">
           {creators.length > 0
-            ? creators.map((creator) => (
+            ? creators.slice(0, 4).map((creator) => (
                 <Link
                   key={creator.id}
                   href={`/creators/${creator.id}`}
@@ -193,7 +193,7 @@ const FeaturedCreators = () => {
                   </div>
                 </Link>
               ))
-            : [...Array(6)].map((_, i) => (
+            : [...Array(4)].map((_, i) => (
                 <div key={i} className="creator-item">
                   <div className="creator-avatar">
                     <Avatar className="creator-avatar-image">

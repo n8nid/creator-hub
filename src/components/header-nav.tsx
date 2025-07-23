@@ -202,85 +202,93 @@ export function HeaderNav() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-white/20">
-          <div className="container-box py-4">
-            <div className="flex flex-col gap-2">
-              {navItems.map((item) => {
-                let isActive = false;
-                if (item.href === "/") {
-                  isActive = pathname === "/";
-                } else if (item.href === "/workflows") {
-                  isActive =
-                    pathname === "/workflows" ||
-                    pathname.startsWith("/workflows/");
-                } else if (item.href === "/creators") {
-                  isActive =
-                    pathname === "/creators" ||
-                    pathname.startsWith("/talent/") ||
-                    pathname.startsWith("/creators/");
-                } else if (item.href === "/connect-with-us") {
-                  isActive = pathname === "/connect-with-us";
-                } else {
-                  isActive = pathname === item.href;
-                }
+        <>
+          {/* Backdrop */}
+          <div
+            className="md:hidden fixed inset-0 bg-black/40 z-40"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          {/* Menu */}
+          <div className="md:hidden absolute top-full left-0 right-0 bg-[rgba(32,26,44,0.98)] border-t border-white/20 z-50 shadow-lg">
+            <div className="container-box py-4">
+              <div className="flex flex-col gap-2">
+                {navItems.map((item) => {
+                  let isActive = false;
+                  if (item.href === "/") {
+                    isActive = pathname === "/";
+                  } else if (item.href === "/workflows") {
+                    isActive =
+                      pathname === "/workflows" ||
+                      pathname.startsWith("/workflows/");
+                  } else if (item.href === "/creators") {
+                    isActive =
+                      pathname === "/creators" ||
+                      pathname.startsWith("/talent/") ||
+                      pathname.startsWith("/creators/");
+                  } else if (item.href === "/connect-with-us") {
+                    isActive = pathname === "/connect-with-us";
+                  } else {
+                    isActive = pathname === item.href;
+                  }
 
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                      isActive
-                        ? "bg-purple-100 text-purple-700"
-                        : "text-gray-700 hover:bg-gray-100"
-                    }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-
-              {/* Mobile - User Avatar or Join Community */}
-              <div className="border-t border-gray-200 pt-4 mt-2">
-                {user ? (
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <Avatar className="w-8 h-8">
-                      <AvatarImage
-                        src={profile?.profile_image || ""}
-                        alt={profile?.name || user.email}
-                      />
-                      <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold">
-                        {getInitials(profile?.name || user.email || "")}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <div className="text-sm font-medium text-gray-900">
-                        {profile?.name || user.email}
-                      </div>
-                    </div>
-                    <button
-                      onClick={handleSignOut}
-                      className="text-red-600 hover:text-red-700 text-sm font-medium"
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
+                        isActive
+                          ? "bg-[rgba(147,51,234,0.2)] text-white"
+                          : "text-white hover:bg-white/10"
+                      }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      Sign Out
-                    </button>
-                  </div>
-                ) : (
-                  <Link
-                    href="/auth"
-                    className="flex items-center gap-3 px-4 py-3 text-purple-600 hover:bg-purple-50 rounded-lg font-medium"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <User className="w-5 h-5" />
-                    <span>Join Community</span>
-                  </Link>
-                )}
+                      <Icon className="w-5 h-5" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+
+                {/* Mobile - User Avatar or Join Community */}
+                <div className="border-t border-white/20 pt-4 mt-2">
+                  {user ? (
+                    <div className="flex items-center gap-3 px-4 py-3">
+                      <Avatar className="w-8 h-8">
+                        <AvatarImage
+                          src={profile?.profile_image || ""}
+                          alt={profile?.name || user.email}
+                        />
+                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold">
+                          {getInitials(profile?.name || user.email || "")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-white">
+                          {profile?.name || user.email}
+                        </div>
+                      </div>
+                      <button
+                        onClick={handleSignOut}
+                        className="text-red-400 hover:text-red-300 text-sm font-medium"
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <Link
+                      href="/auth"
+                      className="flex items-center gap-3 px-4 py-3 text-purple-300 hover:bg-white/10 rounded-lg font-medium"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <User className="w-5 h-5" />
+                      <span>Join Community</span>
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </header>
   );

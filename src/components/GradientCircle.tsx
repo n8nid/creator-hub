@@ -25,17 +25,12 @@ export default function GradientCircle({
     }
   };
 
-  // Pastikan style yang kita set tidak di-override oleh CSS
+  // Minimal inline styling, prioritaskan CSS classes
   const combinedStyle = {
     ...style,
-    position: "absolute" as const, // Kembali ke absolute agar tidak mengikuti scroll
-    width: style?.width || "550px",
-    height: style?.height || "550px",
-    opacity: style?.opacity || "0.4",
-    filter: style?.filter || "blur(90px)",
-    zIndex: style?.zIndex || "-1", // Gunakan z-index negatif agar benar-benar di belakang
-    borderRadius: style?.borderRadius || "50%",
-    pointerEvents: style?.pointerEvents || "none",
+    position: "absolute" as const,
+    zIndex: style?.zIndex || "-1",
+    pointerEvents: "none" as const,
   };
 
   return (

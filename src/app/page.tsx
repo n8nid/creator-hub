@@ -8,44 +8,23 @@ import GradientCircle from "@/components/GradientCircle";
 export default function Page() {
   return (
     <div className="min-h-screen flex flex-col relative">
-      {/* Gradient circles langsung di halaman */}
-      {/* Circle Gradient 1: Diatas, menyentuh header navbar, judul dan dibawahnya */}
-      <GradientCircle
-        type="hero"
-        style={{
-          top: "50px",
-          left: "35%",
-          transform: "translateX(-50%)",
-          zIndex: -1,
-        }}
-      />
+      {/* Responsive Gradient Circles */}
+      {/* Hero Circle - Positioned by CSS */}
+      <GradientCircle type="hero" />
 
-      {/* Circle Gradient 2: ditengah, di antara workflow dan meet creator */}
+      {/* About Circle - Positioned by CSS */}
+      <GradientCircle type="about" />
 
-      {/* Circle Gradient 3: di bawah, di key benefit agak bawah */}
+      {/* Footer Circles - Custom positioning for multiple circles */}
       <GradientCircle
         type="footer"
-        style={{
-          top: "2700px",
-          left: "70%",
-          transform: "translateX(-80%)",
-          zIndex: 1,
-          width: "40rem",
-          height: "40rem",
-          opacity: "0.3",
-        }}
+        className="gradient-circle-footer-1"
+        style={{ zIndex: 1 }}
       />
       <GradientCircle
         type="footer"
-        className="lg:top-[3800px] top-[3000px]"
-        style={{
-          left: "20%",
-          transform: "translateX(-80%)",
-          zIndex: 1,
-          width: "40rem",
-          height: "40rem",
-          opacity: "0.3%",
-        }}
+        className="gradient-circle-footer-2"
+        style={{ zIndex: 1 }}
       />
 
       <main className="flex-grow relative z-10">

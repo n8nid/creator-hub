@@ -78,12 +78,12 @@ const FeaturedWorkflows = () => {
       slidesToSlide: 1,
     },
     desktop: {
-      breakpoint: { max: 1536, min: 1024 },
+      breakpoint: { max: 1536, min: 1025 },
       items: 3,
       slidesToSlide: 1,
     },
     tablet: {
-      breakpoint: { max: 1024, min: 768 },
+      breakpoint: { max: 1024, min: 769 },
       items: 2,
       slidesToSlide: 1,
     },
@@ -129,43 +129,41 @@ const FeaturedWorkflows = () => {
   }, []);
 
   return (
-    <section className="pt-[17.063rem] content-above-gradient">
-      <div className="w-full container-box relative z-10">
-        <div className="flex flex-col items-start justify-start mb-12">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-6">
-            <h2 className="h2-title sm:text-start text-center w-full">
-              Explore Workflow
-            </h2>
-            <Link href="/workflows" className="btn-primary">
-              Jelajahi Workflow
-              <svg
-                width="19"
-                height="20"
-                viewBox="0 0 19 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
-                  stroke="black"
-                  strokeOpacity="0.05"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-          </div>
+    <section className="featured-workflows-section content-above-gradient">
+      <div className="featured-workflows-container container-box">
+        <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
+          <h2 className="h2-title text-center md:text-start w-full">
+            Explore Workflow
+          </h2>
+          <Link href="/workflows" className="btn-primary">
+            Jelajahi Workflow
+            <svg
+              width="19"
+              height="20"
+              viewBox="0 0 19 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                stroke="black"
+                strokeOpacity="0.05"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
         </div>
 
-        <div className="mt-[7.313rem] w-full">
+        <div className="featured-workflows-carousel-section">
           <Carousel
             responsive={responsive}
             className="w-full"
@@ -176,7 +174,7 @@ const FeaturedWorkflows = () => {
             keyBoardControl={true}
             customTransition="transform 300ms ease-in-out"
             transitionDuration={300}
-            removeArrowOnDeviceType={["tablet", "mobile"]}
+            removeArrowOnDeviceType={["mobile"]}
             draggable={true}
             swipeable={true}
             centerMode={false}
