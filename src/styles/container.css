@@ -1,3 +1,3 @@
 .container-box {
-  @apply xl:px-[10.063rem] lg:px-20 md:px-9 px-5;
+  @apply xl:px-[10.063rem] lg:px-20 md:px-14 px-8;
 }

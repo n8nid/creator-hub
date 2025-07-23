@@ -153,7 +153,7 @@ export default function WorkflowDetailPublicPage() {
       <main className="flex-grow relative z-10">
         <div className="container-box">
           {/* Bagian 1: Judul + Workflow Canvas */}
-          <div className="flex xl:flex-row flex-col gap-8 mb-12 h-[60rem] md:h-[45rem] lg:h-[27rem]">
+          <div className="flex xl:flex-row flex-col gap-8 mb-12 h-[45rem] sm:h-[45rem] md:h-[34rem] lg:h-[34rem]">
             {/* Kiri - Judul */}
             <div className="flex flex-col justify-start lg:col-span-2 w-full xl:w-[50%]">
               {/* Back to Workflows Button */}

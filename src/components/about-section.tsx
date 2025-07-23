@@ -79,7 +79,10 @@ const AboutSection = () => {
               fill="none"
               viewBox="0 0 1134 854"
             >
-              <path fill="url(#pattern0_9091_108)" d="M0 0h1551.81v854H0z"></path>
+              <path
+                fill="url(#pattern0_9091_108)"
+                d="M0 0h1551.81v854H0z"
+              ></path>
               <defs>
                 <pattern
                   id="pattern0_9091_108"
@@ -117,7 +120,7 @@ const AboutSection = () => {
                   }}
                 /> */}
                 {/* Content */}
-                <div className="relative z-10 lg:w-[60%] lg:pl-[9rem]">
+                <div className="relative z-10 lg:w-[90%] xl:w-[60%] lg:pl-[5rem] xl:pl-[9rem]">
                   <h2
                     style={{
                       fontFamily: "'Albert Sans', sans-serif",
@@ -129,7 +132,8 @@ const AboutSection = () => {
                     }}
                     className="text-[3rem] lg:text-[5rem] "
                   >
-                    Platform ini hadir untuk<br /> menghubungkan kreator
+                    Platform ini hadir untuk
+                    <br /> menghubungkan kreator
                   </h2>
                   <p
                     style={{
@@ -155,12 +159,21 @@ const AboutSection = () => {
                     terarah dan efisien.
                   </p>
                   <div className="flex justify-start">
-                    <a
-                      href="/creators"
-                      className="btn-jelajah flex items-center gap-3"
-                      style={{ fontSize: "clamp(14px, 3.5vw, 18px)" }}
-                    >
+                    <a href="/creators" className="btn-primary">
                       Connect With Us
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13 7l5 5m0 0l-5 5m5-5H6"
+                        />
+                      </svg>
                     </a>
                   </div>
                 </div>
@@ -375,24 +388,9 @@ const AboutSection = () => {
             </div>
             <a
               href="/creators"
-              className="btn-jelajah flex items-center justify-center gap-3 w-full sm:w-auto"
+              className="btn-primary"
               style={{
-                background: "linear-gradient(90deg, #D900FF 0%, #9500FF 100%)",
-                color: "#fff",
-                boxShadow: "0 4px 16px 0 #9500FF66",
                 minWidth: "160px",
-                justifyContent: "center",
-                transition: "all 0.2s ease",
-                backdropFilter: "none",
-                WebkitBackdropFilter: "none",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = "0 6px 20px 0 #9500FF88";
-                e.currentTarget.style.transform = "translateY(-1px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "0 4px 16px 0 #9500FF66";
-                e.currentTarget.style.transform = "translateY(0)";
               }}
             >
               Join Community
@@ -414,7 +412,7 @@ const AboutSection = () => {
           </div>
         </div>
       </div>
-    </section >
+    </section>
   );
 };
 

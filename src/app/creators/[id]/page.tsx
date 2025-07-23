@@ -303,8 +303,20 @@ export default function CreatorDetailPage() {
           zIndex: -1,
         }}
       />
+
+      {/* Gradient circle kedua di area kanan */}
+      <GradientCircle
+        type="hero"
+        style={{
+          top: "75vh",
+          left: "80vw",
+          transform: "translateX(50%)",
+          zIndex: -1,
+        }}
+      />
+
       <main className="flex-grow relative z-10">
-        <div className="w-full container-box pt-40 sm:pt-48 pb-24 sm:pb-32">
+        <div className="w-full container-box pt-40 sm:pt-48">
           {/* Creator Profile Section */}
           <div className="creator-detail-profile-section mb-6 sm:mb-8">
             {/* Left Side - Avatar */}
@@ -487,7 +499,7 @@ export default function CreatorDetailPage() {
           </div>
 
           {/* Workflows Section */}
-          <div className="space-y-4 sm:space-y-6 mt-28 sm:mt-32">
+          <div className="space-y-12 sm:space-y-16 mt-28 sm:mt-32">
             {workflows.length === 0 ? (
               <div className="text-center py-8 sm:py-12 px-2">
                 <p className="text-gray-300 text-base sm:text-lg break-words">
@@ -569,13 +581,25 @@ export default function CreatorDetailPage() {
 
                 {/* Load More Button */}
                 {workflows.length > displayedWorkflows.length && (
-                  <div className="flex justify-center mt-8 sm:mt-12">
+                  <div className="flex justify-center mt-12 sm:mt-16">
                     <button
                       onClick={handleLoadMore}
-                      className="px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2 text-sm sm:text-base"
+                      className="px-10 py-4 rounded-full font-medium bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-3"
                     >
                       <span>Load More</span>
-                      <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 17l9.2-9.2M17 17V7H7"
+                        />
+                      </svg>
                     </button>
                   </div>
                 )}

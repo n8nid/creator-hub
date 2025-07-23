@@ -79,19 +79,15 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen text-white overflow-visible content-above-gradient">
+    <section className="relative text-white overflow-visible content-above-gradient">
       <div className="w-full container-box relative z-10 mt-40 2xl:mt-mt-custom-14">
         {/* HERO HEADING & SUBHEADING */}
         <div className="w-full pt-0 2xl:pt-20 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col lg:flex-row lg:items-center w-full">
             {/* Kiri: Heading, Community, dan Deskripsi */}
-            <div className="flex flex-col items-start flex-1">
-              <h1>
-                N8N Indonesia
-              </h1>
-              <div className="h1-large">
-                Community
-              </div>
+            <div className="flex flex-col md:items-start items-center flex-1">
+              <h1>N8N Indonesia</h1>
+              <div className="h1-large">Community</div>
               <p className="paragraph-17-reguler">
                 Temukan dan bagikan workflow automation yang powerful.
               </p>
@@ -114,16 +110,14 @@ const HeroSection = () => {
           <div
             style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
-            <div
-              className="2xl:px-[20rem]"
-            >
+            <div className="2xl:px-[20rem]">
               {/* Gradient overlay yang mengikuti cursor */}
               <div />
               {/* Content */}
               <div className="relative z-10">
                 <h2 className="lg:text-start text-center">
                   <span
-                    className="md:text-[5rem] text-[4rem]"
+                    className="lg:text-[5rem] text-[3rem]"
                     style={{
                       fontFamily: "Albert Sans",
                       fontWeight: 250,
@@ -132,14 +126,13 @@ const HeroSection = () => {
                       letterSpacing: "-5%",
                     }}
                   >
-                    Dapatkan insight, workflow siap pakai, dan dukungan dari komunitas yang aktif dan solutif. Workflow Hebat Dimulai dari Sini.
+                    Dapatkan insight, workflow siap pakai, dan dukungan dari
+                    komunitas yang aktif dan solutif. Workflow Hebat Dimulai
+                    dari Sini.
                   </span>
                 </h2>
-                <div className="mt-[2.5rem] flex flex-col sm:flex-row gap-3 md:gap-6">
-                  <a
-                    className="btn-jelajah flex items-center justify-center gap-3 w-full sm:w-auto"
-                    href="/workflows"
-                  >
+                <div className="mt-[2.5rem] flex flex-col sm:flex-row md:justify-start justify-center gap-3 md:gap-6">
+                  <a className="btn-primary" href="/workflows">
                     Jelajahi Workflow
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +140,6 @@ const HeroSection = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="currentColor"
-                      className="w-5 h-5"
                     >
                       <path
                         strokeLinecap="round"
@@ -156,10 +148,7 @@ const HeroSection = () => {
                       />
                     </svg>
                   </a>
-                  <a
-                    className="btn-creator flex items-center justify-center gap-3 w-full sm:w-auto"
-                    href="/directory"
-                  >
+                  <a className="btn-secondary" href="/directory">
                     Temukan Creator
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +156,6 @@ const HeroSection = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="currentColor"
-                      className="w-5 h-5"
                     >
                       <path
                         strokeLinecap="round"

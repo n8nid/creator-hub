@@ -5,9 +5,94 @@ import { Button } from "./ui/button";
 import { Workflow } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+// Custom Arrow Components to avoid carouselState prop issues
+const CustomLeftArrow = React.forwardRef<HTMLButtonElement, any>(
+  (props, ref) => {
+    const { onClick, carouselState, rtl, ...rest } = props;
+    return (
+      <button
+        ref={ref}
+        onClick={onClick}
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-all duration-300 z-10"
+        {...rest}
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+    );
+  }
+);
+
+const CustomRightArrow = React.forwardRef<HTMLButtonElement, any>(
+  (props, ref) => {
+    const { onClick, carouselState, rtl, ...rest } = props;
+    return (
+      <button
+        ref={ref}
+        onClick={onClick}
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-all duration-300 z-10"
+        {...rest}
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+    );
+  }
+);
+
+CustomLeftArrow.displayName = "CustomLeftArrow";
+CustomRightArrow.displayName = "CustomRightArrow";
 
 const FeaturedWorkflows = () => {
   const [workflows, setWorkflows] = useState<any[]>([]);
+
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 1536 },
+      items: 4,
+      slidesToSlide: 1,
+    },
+    desktop: {
+      breakpoint: { max: 1536, min: 1024 },
+      items: 3,
+      slidesToSlide: 1,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 768 },
+      items: 2,
+      slidesToSlide: 1,
+    },
+    mobile: {
+      breakpoint: { max: 768, min: 0 },
+      items: 1,
+      slidesToSlide: 1,
+    },
+  };
 
   useEffect(() => {
     const fetchWorkflows = async () => {
@@ -16,7 +101,7 @@ const FeaturedWorkflows = () => {
         .select("id, title, description, category, tags, profile_id")
         .eq("status", "approved")
         .order("created_at", { ascending: false })
-        .limit(4);
+        .limit(8);
 
       // Fetch profile data for each workflow
       if (data && data.length > 0) {
@@ -48,47 +133,79 @@ const FeaturedWorkflows = () => {
       <div className="w-full container-box relative z-10">
         <div className="flex flex-col items-start justify-start mb-12">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-6">
-            <h2 className="h2-title md:text-start text-center w-full">
+            <h2 className="h2-title sm:text-start text-center w-full">
               Explore Workflow
             </h2>
-            <Link
-              href="/workflows"
-              className="btn-jelajah flex items-center justify-center gap-3 w-full sm:w-auto"
-              style={{ height: 60 }}
-            >
+            <Link href="/workflows" className="btn-primary">
               Jelajahi Workflow
-              <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592" stroke="black" stroke-opacity="0.05" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <svg
+                width="19"
+                height="20"
+                viewBox="0 0 19 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                  stroke="black"
+                  strokeOpacity="0.05"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </Link>
           </div>
         </div>
-        <div className="flex justify-end">
-          <div className="mt-[7.313rem] w-[80%] relative flex justify-end items-center">
-            <a className="absolute  z-40">
-              <svg width="31" height="56" viewBox="0 0 31 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 53L28 28L3 3" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M3 53L28 28L3 3" stroke="black" stroke-opacity="0.05" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </a>
-            <div className="flex gap-8 translate-x-[15rem]">
-              {workflows.map((workflow, index) => (
+
+        <div className="mt-[7.313rem] w-full">
+          <Carousel
+            responsive={responsive}
+            className="w-full"
+            itemClass="px-3"
+            containerClass="carousel-container"
+            infinite={true}
+            autoPlay={false}
+            keyBoardControl={true}
+            customTransition="transform 300ms ease-in-out"
+            transitionDuration={300}
+            removeArrowOnDeviceType={["tablet", "mobile"]}
+            draggable={true}
+            swipeable={true}
+            centerMode={false}
+            focusOnSelect={false}
+            ssr={true}
+            showDots={false}
+            arrows={true}
+            customLeftArrow={<CustomLeftArrow />}
+            customRightArrow={<CustomRightArrow />}
+          >
+            {workflows.map((workflow, index) => (
+              <div key={workflow.id} className="h-full">
                 <Link
-                  key={workflow.id}
                   href={`/workflows/${workflow.id}`}
-                  className={`group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block w-[24rem] ${index === workflows.length - 1 ? 'bg-[#959DA1]' : ''}`}
+                  className={`group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block h-full ${
+                    index === workflows.length - 1 ? "bg-[#959DA1]" : ""
+                  }`}
                 >
                   {/* Content */}
-                  <div className="p-6">
+                  <div className="p-6 h-full flex flex-col">
                     {/* Category Badge */}
                     <div className="flex justify-end mb-4">
                       <span className="inline-flex items-center px-3 py-1 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
                         {workflow.category || "General"}
                       </span>
                     </div>
+
                     {/* Title */}
-                    <h3 className="text-lg font-bold text-purple-900 mb-2 line-clamp-2 group-hover:text-purple-700 transition-colors">
+                    <h3 className="text-lg font-bold text-purple-900 mb-2 line-clamp-2 group-hover:text-purple-700 transition-colors flex-grow">
                       {workflow.title}
                     </h3>
 
@@ -116,7 +233,7 @@ const FeaturedWorkflows = () => {
                     </div>
 
                     {/* Author */}
-                    <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-3 pt-4 border-t border-gray-100 mt-auto">
                       <div className="w-8 h-8 rounded-full overflow-hidden">
                         {workflow.profile_image ? (
                           <img
@@ -136,9 +253,9 @@ const FeaturedWorkflows = () => {
                     </div>
                   </div>
                 </Link>
-              ))}
-            </div>
-          </div>
+              </div>
+            ))}
+          </Carousel>
         </div>
       </div>
     </section>
