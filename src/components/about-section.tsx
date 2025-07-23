@@ -120,17 +120,17 @@ const AboutSection = () => {
                   }}
                 /> */}
                 {/* Content */}
-                <div className="relative z-10 lg:w-[90%] xl:w-[60%] lg:pl-[5rem] xl:pl-[9rem]">
+                <div className="relative z-10 lg:w-[85%] xl:w-[70%] 2xl:w-[65%] lg:pl-[3rem] xl:pl-[5rem] 2xl:pl-[7rem]">
                   <h2
                     style={{
                       fontFamily: "'Albert Sans', sans-serif",
                       fontWeight: 250,
                       fontStyle: "normal",
-                      lineHeight: "5rem",
+                      lineHeight: "4.5rem",
                       letterSpacing: "-5%",
                       color: "#FFFFFF",
                     }}
-                    className="text-[3rem] lg:text-[5rem] "
+                    className="text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem] xl:text-[5rem]"
                   >
                     Platform ini hadir untuk
                     <br /> menghubungkan kreator
@@ -140,12 +140,13 @@ const AboutSection = () => {
                       fontFamily: "Inter, Arial, sans-serif",
                       fontWeight: 300,
                       fontStyle: "light",
-                      fontSize: "clamp(14px, 3.5vw, 18px)",
+                      fontSize: "clamp(14px, 2.5vw, 18px)",
                       lineHeight: "150%",
                       letterSpacing: "-0.01em",
                       color: "#FFFFFF",
                       background: "transparent",
                       marginBottom: "2rem",
+                      marginTop: "1.5rem",
                     }}
                   >
                     dari berbagai bidang dengan para pengguna yang mencari

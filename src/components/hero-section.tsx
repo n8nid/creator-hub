@@ -123,22 +123,13 @@ const HeroSection = () => {
           <div
             style={{ width: "100%", display: "flex", justifyContent: "center" }}
           >
-            <div className="2xl:px-[20rem]">
+            <div className="2xl:px-[10rem] lg:px-[5rem] md:px-[3rem]">
               {/* Gradient overlay yang mengikuti cursor */}
               <div />
               {/* Content */}
               <div className="relative z-10">
                 <h2 className="lg:text-start text-center">
-                  <span
-                    className="lg:text-[5rem] text-[3rem]"
-                    style={{
-                      fontFamily: "Albert Sans",
-                      fontWeight: 250,
-                      fontStyle: "thin",
-                      lineHeight: "5.875rem",
-                      letterSpacing: "-5%",
-                    }}
-                  >
+                  <span className="hero-insight-text">
                     Dapatkan insight, workflow siap pakai, dan dukungan dari
                     komunitas yang aktif dan solutif. Workflow Hebat Dimulai
                     dari Sini.
