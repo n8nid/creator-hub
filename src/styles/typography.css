@@ -338,9 +338,9 @@ h1.creator-detail-name {
   font-family: "Albert Sans", Arial, sans-serif !important;
   font-weight: 250 !important;
   font-style: thin !important;
-  font-size: clamp(2rem, 7vw, 48px) !important;
-  line-height: clamp(2.5rem, 8vw, 60px) !important;
-  letter-spacing: -0.05em !important;
+  font-size: 55px !important;
+  line-height: 94px !important;
+  letter-spacing: -5% !important;
   margin: 0 0 30px 0 !important;
   text-align: left !important;
 }
@@ -349,9 +349,9 @@ h1.creator-detail-name {
   font-family: "Inter", Arial, sans-serif !important;
   font-weight: 300 !important;
   font-style: light !important;
-  font-size: clamp(14px, 3.5vw, 18px) !important;
+  font-size: 18px !important;
   line-height: 150% !important;
-  letter-spacing: -0.01em !important;
+  letter-spacing: -1% !important;
   background: transparent !important;
   margin-bottom: 32px !important;
 }
@@ -369,6 +369,24 @@ h1.creator-detail-name {
   text-align: left !important;
 }
 
+.connect-with-us-cta-line-1 {
+  font-family: "Albert Sans", Arial, sans-serif !important;
+  font-weight: 300 !important;
+  font-size: 24px !important;
+  line-height: 120% !important;
+  letter-spacing: -0.01em !important;
+  margin-bottom: 4px !important;
+}
+
+.connect-with-us-cta-line-2 {
+  font-family: "Albert Sans", Arial, sans-serif !important;
+  font-weight: 200 !important;
+  font-size: 20px !important;
+  line-height: 120% !important;
+  letter-spacing: -0.01em !important;
+  opacity: 0.9 !important;
+}
+
 .connect-with-us-cta-button {
   font-size: clamp(0.875rem, 3vw, 1rem) !important;
   min-height: 40px !important;
@@ -380,14 +398,21 @@ h1.creator-detail-name {
 }
 
 /* Responsive adjustments for connect-with-us */
+@media (max-width: 1024px) {
+  .connect-with-us-title {
+    font-size: 44px !important;
+    line-height: 52px !important;
+  }
+}
+
 @media (max-width: 768px) {
   .connect-with-us-title {
-    font-size: clamp(1.8rem, 6vw, 42px) !important;
-    line-height: clamp(2.2rem, 7vw, 52px) !important;
+    font-size: 36px !important;
+    line-height: 42px !important;
   }
   
   .connect-with-us-description {
-    font-size: clamp(13px, 3vw, 16px) !important;
+    font-size: 16px !important;
   }
   
   .connect-with-us-button {
@@ -396,6 +421,14 @@ h1.creator-detail-name {
   
   .connect-with-us-cta-text {
     font-size: clamp(1rem, 3.5vw, 20px) !important;
+  }
+  
+  .connect-with-us-cta-line-1 {
+    font-size: 20px !important;
+  }
+  
+  .connect-with-us-cta-line-2 {
+    font-size: 18px !important;
   }
   
   .connect-with-us-cta-button {
@@ -409,12 +442,12 @@ h1.creator-detail-name {
 
 @media (max-width: 640px) {
   .connect-with-us-title {
-    font-size: clamp(1.6rem, 5vw, 36px) !important;
-    line-height: clamp(2rem, 6vw, 44px) !important;
+    font-size: 28px !important;
+    line-height: 32px !important;
   }
   
   .connect-with-us-description {
-    font-size: clamp(12px, 2.5vw, 14px) !important;
+    font-size: 14px !important;
   }
   
   .connect-with-us-button {
@@ -423,6 +456,14 @@ h1.creator-detail-name {
   
   .connect-with-us-cta-text {
     font-size: clamp(0.9rem, 3vw, 18px) !important;
+  }
+  
+  .connect-with-us-cta-line-1 {
+    font-size: 18px !important;
+  }
+  
+  .connect-with-us-cta-line-2 {
+    font-size: 16px !important;
   }
   
   .connect-with-us-cta-button {

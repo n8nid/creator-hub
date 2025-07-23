@@ -2160,3 +2160,38 @@ n8n-demo {
 .connect-with-us-cta-text-color {
   color: #fff !important;
 }
+
+.connect-with-us-cta-button-gradient {
+  background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2) !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+}
+
+.connect-with-us-cta-button-gradient:hover {
+  background: linear-gradient(135deg, #7C3AED 0%, #DB2777 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Responsive styling for CTA button */
+@media (max-width: 768px) {
+  .connect-with-us-cta-button-gradient {
+    padding: 12px 24px !important;
+    font-size: 14px !important;
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .connect-with-us-cta-button-gradient {
+    padding: 10px 20px !important;
+    font-size: 13px !important;
+    gap: 6px !important;
+  }
+}
