@@ -19,7 +19,135 @@ h1 {
   letter-spacing: -5%;
 }
 
+.hero-title-main {
+  font-family: "Albert Sans", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: Regular !important;
+  font-size: 86px !important;
+  line-height: 134.4px !important;
+  letter-spacing: -5% !important;
+  color: #ffffff !important;
+  margin-bottom: 0 !important;
+  text-align: left !important;
+}
 
+.hero-title-sub {
+  font-family: "Albert Sans", sans-serif !important;
+  font-weight: 100 !important;
+  font-style: Thin !important;
+  font-size: 86px !important;
+  line-height: 134.4px !important;
+  letter-spacing: -5% !important;
+  color: #ffffff !important;
+  margin-bottom: 0 !important;
+  margin-top: -50px !important;
+  text-align: left !important;
+}
+
+/* Hero Description based on Figma specifications */
+.hero-description {
+  font-family: "Inter", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: Regular !important;
+  font-size: 20px !important;
+  line-height: 150% !important;
+  letter-spacing: -1% !important;
+  color: #ffffff !important;
+  text-align: left !important;
+}
+
+/* Creator Name based on Figma specifications */
+.creator-name {
+  font-family: "Albert Sans", sans-serif !important;
+  font-weight: 700 !important;
+  font-style: Bold !important;
+  font-size: 25px !important;
+  line-height: 96% !important;
+  letter-spacing: 0% !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  text-align: left !important;
+  overflow: hidden !important;
+  white-space: normal !important;
+  max-height: 2.4em !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+/* Creator Experience Level based on Figma specifications */
+.creator-experience {
+  font-family: "Albert Sans", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: Regular !important;
+  font-size: 20px !important;
+  line-height: 119% !important;
+  letter-spacing: 0% !important;
+  color: #ffffff !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+/* Responsive hero title sizing */
+@media (max-width: 1024px) {
+  .hero-title-main,
+  .hero-title-sub {
+    font-size: 64px !important;
+    line-height: 100px !important;
+  }
+  .hero-title-sub {
+    margin-top: -35px !important;
+  }
+  .hero-description {
+    font-size: 18px !important;
+  }
+  .creator-name {
+    font-size: 22px !important;
+  }
+  .creator-experience {
+    font-size: 18px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title-main,
+  .hero-title-sub {
+    font-size: 48px !important;
+    line-height: 75px !important;
+  }
+  .hero-title-sub {
+    margin-top: -30px !important;
+  }
+  .hero-description {
+    font-size: 16px !important;
+  }
+  .creator-name {
+    font-size: 20px !important;
+  }
+  .creator-experience {
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-title-main,
+  .hero-title-sub {
+    font-size: 36px !important;
+    line-height: 56px !important;
+  }
+  .hero-title-sub {
+    margin-top: -25px !important;
+  }
+  .hero-description {
+    font-size: 14px !important;
+  }
+  .creator-name {
+    font-size: 18px !important;
+  }
+  .creator-experience {
+    font-size: 14px !important;
+  }
+}
 
 .paragraph-17-reguler {
   font-family: "Inter", sans-serif;
@@ -30,12 +158,12 @@ h1 {
 }
 
 .desc-hero-screen {
-font-family: 'Albert Sans', sans-serif;
-font-weight: 400;
-font-style: Regular;
-font-size: 2.188rem !important;
-line-height: 120%;
-letter-spacing: -1%;
+  font-family: "Albert Sans", sans-serif;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 2.188rem !important;
+  line-height: 120%;
+  letter-spacing: -1%;
 }
 
 .h2-title {
@@ -86,7 +214,7 @@ letter-spacing: -1%;
 .creator-detail-experience {
   font-family: "Inter", sans-serif;
   font-weight: 200;
-  font-size: 20px;
+  font-size: 24px;
   line-height: 150%;
   letter-spacing: -1%;
   color: white;
@@ -100,7 +228,7 @@ letter-spacing: -1%;
   }
 
   .creator-detail-experience {
-    font-size: 18px;
+    font-size: 22px;
   }
 }
 
@@ -110,7 +238,7 @@ letter-spacing: -1%;
   }
 
   .creator-detail-experience {
-    font-size: 16px;
+    font-size: 20px;
   }
 }
 

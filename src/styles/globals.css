@@ -971,20 +971,20 @@ n8n-demo {
 
 /* Workflow Page Layout Styles */
 .workflow-title-main {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 0;
   text-align: left;
 }
 
 .workflow-title-sub {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 0;
   text-align: left;
 }
 
 /* Workflow Card Title Layout Styles */
 .workflow-card-title {
-  color: #622A9A;
+  color: #622a9a;
   margin-bottom: 8px;
   text-align: left;
   word-wrap: break-word;
@@ -993,7 +993,7 @@ n8n-demo {
 
 /* Workflow Card Description Layout Styles */
 .workflow-card-description {
-  color: #5C6063;
+  color: #5c6063;
   margin-bottom: 16px;
   text-align: left;
   word-wrap: break-word;
@@ -1002,13 +1002,13 @@ n8n-demo {
 
 /* Workflow Description Layout Styles */
 .workflow-description-text {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 24px;
   text-align: left;
 }
 
 .workflow-description-text-mobile {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 20px;
   text-align: left;
 }
@@ -1105,23 +1105,6 @@ n8n-demo {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.creator-name {
-  color: white;
-  margin: 0;
-  overflow: hidden;
-  white-space: normal;
-  line-height: 1.2;
-  max-height: 2.4em;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.creator-experience {
-  color: #ffffff;
-  margin: 0;
 }
 
 /* Responsive adjustments */

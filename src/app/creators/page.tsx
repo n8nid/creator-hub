@@ -292,7 +292,7 @@ export default function CreatorsPage() {
 
             {/* Kanan: Deskripsi dan Search */}
             <div className="hidden md:flex flex-col items-start flex-1 min-w-0">
-              <div className="hero-description max-w-3xl">
+              <div className="hero-description max-w-3xl mb-6">
                 Kenalan dengan kreator N8N Indonesia yang rutin berbagi
                 workflow, tips, dan ide automasi. Temukan inspirasi untuk
                 project automasimu!
@@ -313,7 +313,7 @@ export default function CreatorsPage() {
 
           {/* Mobile: Deskripsi dan Search */}
           <div className="md:hidden flex flex-col items-start w-full mt-6">
-            <div className="hero-description max-w-3xl">
+            <div className="hero-description max-w-3xl mb-4">
               Kenalan dengan kreator N8N Indonesia yang rutin berbagi workflow,
               tips, dan ide automasi. Temukan inspirasi untuk project
               automasimu!
