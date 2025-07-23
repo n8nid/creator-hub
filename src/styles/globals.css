@@ -2021,66 +2021,133 @@ n8n-demo {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .creator-item {
-    padding: 0.75rem;
-    gap: 0.75rem;
-    flex-direction: column;
+    padding: 1.25rem;
+    gap: 1.25rem;
+    flex-direction: row;
     align-items: center;
-    text-align: center;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+  }
+
+  .creator-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
   }
 
   .creator-avatar-image {
-    width: 6rem;
-    height: 6rem;
+    width: 5.5rem;
+    height: 5.5rem;
+    border: 3px solid white;
   }
 
   .creator-info {
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     justify-content: center;
     width: 100%;
+  }
+
+  .creator-info h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+  }
+
+  .creator-info p {
+    font-size: 0.9rem;
+    opacity: 0.8;
   }
 }
 
 @media (max-width: 640px) {
   .creator-item {
-    padding: 0.5rem;
-    gap: 0.5rem;
-    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    flex-direction: row;
     align-items: center;
-    text-align: center;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+  }
+
+  .creator-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
   }
 
   .creator-avatar-image {
     width: 5rem;
     height: 5rem;
+    border: 3px solid white;
   }
 
   .creator-info {
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     justify-content: center;
     width: 100%;
+  }
+
+  .creator-info h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+  }
+
+  .creator-info p {
+    font-size: 0.875rem;
+    opacity: 0.8;
   }
 }
 
 @media (max-width: 425px) {
+  .creator-item {
+    padding: 0.875rem;
+    gap: 0.875rem;
+    background: transparent;
+    border: none;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+  }
+
+  .creator-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+  }
+
+  .creator-avatar-image {
+    width: 4.5rem;
+    height: 4.5rem;
+    border: 2px solid white;
+  }
+
   .creator-info h3 {
-    text-align: center !important;
+    text-align: left !important;
     width: 100% !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.375rem !important;
   }
 
   .creator-info p {
-    text-align: center !important;
+    text-align: left !important;
     width: 100% !important;
+    font-size: 0.8rem !important;
+    opacity: 0.8 !important;
   }
 
   .creator-name {
-    text-align: center !important;
+    text-align: left !important;
     width: 100% !important;
   }
 
   .creator-experience {
-    text-align: center !important;
+    text-align: left !important;
     width: 100% !important;
   }
 }
@@ -2094,19 +2161,36 @@ n8n-demo {
   overflow: hidden;
 }
 
+@media (max-width: 1024px) {
+  .creator-detail-avatar {
+    width: 16rem;
+    height: 16rem;
+    border: 5px solid white;
+  }
+}
+
 @media (max-width: 768px) {
   .creator-detail-avatar {
-    width: 10rem;
-    height: 10rem;
+    width: 16rem;
+    height: 16rem;
     border: 5px solid white;
   }
 }
 
 @media (max-width: 640px) {
   .creator-detail-avatar {
-    width: 8rem;
-    height: 8rem;
-    border: 4px solid white;
+    width: 16rem;
+    height: 16rem;
+    border: 5px solid white;
+  }
+
+  /* Reduce creator name font size for mobile */
+  .creator-detail-name {
+    font-size: 16px !important;
+  }
+
+  .creator-detail-experience {
+    font-size: 18px !important;
   }
 }
 
@@ -2118,6 +2202,13 @@ n8n-demo {
   max-width: 280px !important;
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
+}
+
+/* Hide search bar in profile section for mobile */
+@media (max-width: 640px) {
+  .creator-detail-search-container {
+    display: none !important;
+  }
 }
 
 .creator-detail-search-input {
@@ -2249,18 +2340,110 @@ n8n-demo {
   max-width: none;
 }
 
-/* Responsive design for mobile */
+/* Responsive design for tablet and mobile */
 @media (max-width: 1024px) {
   .creator-detail-profile-section {
     flex-direction: column;
     align-items: center;
+    text-align: center;
+    gap: 1.5rem;
   }
 
   .creator-detail-content {
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     width: 100%;
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .creator-detail-content > div {
+    text-align: center !important;
+  }
+
+  .creator-detail-search-container {
+    display: none; /* Hide search from profile section on tablet */
+  }
+
+  .creator-detail-name-section {
+    order: 1;
+  }
+
+  .creator-detail-bio-section {
+    order: 2;
+    width: 100%;
+    text-align: center;
+  }
+
+  .creator-detail-bio-section > div {
+    text-align: center;
+  }
+
+  .creator-detail-bio-section .hero-description {
+    text-align: center !important;
+  }
+
+  .creator-detail-bio-section .flex {
+    justify-content: center;
+  }
+
+  .creator-detail-search-container-tablet {
+    margin-bottom: 2rem;
+  }
+
+  /* Override hero-description text alignment for tablet */
+  .creator-detail-bio-section .hero-description,
+  .creator-detail-bio-section .hero-description p,
+  .creator-detail-bio-section .hero-description h1,
+  .creator-detail-bio-section .hero-description h2,
+  .creator-detail-bio-section .hero-description h3,
+  .creator-detail-bio-section .hero-description ul,
+  .creator-detail-bio-section .hero-description ol,
+  .creator-detail-bio-section .hero-description li,
+  .creator-detail-bio-section .hero-description strong,
+  .creator-detail-bio-section .hero-description em,
+  .creator-detail-bio-section .hero-description code,
+  .creator-detail-bio-section .hero-description pre,
+  .creator-detail-bio-section .hero-description a,
+  .creator-detail-bio-section .hero-description blockquote {
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .creator-detail-profile-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+  }
+
+  .creator-detail-content {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .creator-detail-content > div {
+    text-align: center !important;
+  }
+
+  .creator-detail-search-container {
+    order: -1;
+    margin-bottom: 1.25rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .creator-detail-name-section {
+    order: 1;
+  }
+
+  .creator-detail-bio-section {
+    order: 2;
+    width: 100%;
   }
 }
 

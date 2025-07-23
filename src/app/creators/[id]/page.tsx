@@ -344,7 +344,7 @@ export default function CreatorDetailPage() {
 
             {/* Center - Name, Experience, Search */}
             <div className="flex-1 min-w-0 creator-detail-content">
-              <div className="text-left">
+              <div className="text-left creator-detail-name-section">
                 <h1 className="creator-detail-name break-words">
                   {creator.name}
                 </h1>
@@ -367,7 +367,7 @@ export default function CreatorDetailPage() {
             </div>
 
             {/* Right Side - Bio and Social Links (Without container) */}
-            <div className="flex-1 w-full lg:w-auto">
+            <div className="flex-1 w-full lg:w-auto creator-detail-bio-section">
               {/* About Creator */}
               {creator.about_markdown && (
                 <div className="mb-4 sm:mb-6">
@@ -500,6 +500,19 @@ export default function CreatorDetailPage() {
 
           {/* Workflows Section */}
           <div className="space-y-12 sm:space-y-16 mt-28 sm:mt-32">
+            {/* Search Bar for Mobile and Tablet - Above Workflows */}
+            <div className="block creator-detail-search-container-tablet">
+              <div className="relative w-full max-w-md mx-auto">
+                <input
+                  type="text"
+                  placeholder="Cari workflow..."
+                  className="w-full pl-4 pr-12 py-3 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-lg text-white placeholder-white/60"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
+              </div>
+            </div>
             {workflows.length === 0 ? (
               <div className="text-center py-8 sm:py-12 px-2">
                 <p className="text-gray-300 text-base sm:text-lg break-words">

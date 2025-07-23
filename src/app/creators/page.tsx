@@ -277,7 +277,7 @@ export default function CreatorsPage() {
 
       <div className="w-full container-box relative z-10 mb-32">
         {/* HERO HEADING & SUBHEADING */}
-        <div className="w-full pt-56 md:pt-64 flex flex-col gap-6 md:gap-10">
+        <div className="w-full pt-32 md:pt-64 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col md:flex-row md:items-center w-full">
             {/* Kiri: Heading */}
             <div className="flex flex-col items-start flex-shrink-0">
@@ -333,7 +333,7 @@ export default function CreatorsPage() {
         </div>
 
         {/* Creators Grid - New Layout */}
-        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6 mt-48 md:mt-56">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6 mt-24 md:mt-56 w-full">
           {loading ? (
             <div className="col-span-full text-center py-12 text-white/60">
               Loading...
