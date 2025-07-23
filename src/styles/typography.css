@@ -36,6 +36,16 @@ h1 {
   letter-spacing: -1%;
 }
 
+.h2-title {
+  font-family: "Albert Sans", sans-serif;
+  font-weight: 300;
+  font-style: light;
+  font-size: 6.25rem;
+  line-height: 120%;
+  letter-spacing: 0%;
+  color: #ffffff;
+}
+
 @media (max-width: 1500px) {
   html {
     font-size: 16px;
@@ -43,6 +53,9 @@ h1 {
 }
 
 @media (max-width: 1024px) {
+  .h2-title {
+    font-size: 3.75rem;
+  }
   html {
     font-size: 14px;
   }
