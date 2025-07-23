@@ -19,7 +19,14 @@ h1 {
   letter-spacing: -5%;
 }
 
-
+.h3 {
+  font-family: "Albert Sans", sans-serif;
+  font-weight: 600;
+  font-style: Thin;
+  font-size: 2.188rem !important;
+  line-height: 120%;
+  letter-spacing: -1%;
+}
 
 .paragraph-17-reguler {
   font-family: "Inter", sans-serif;
@@ -30,12 +37,12 @@ h1 {
 }
 
 .desc-hero-screen {
-font-family: 'Albert Sans', sans-serif;
-font-weight: 400;
-font-style: Regular;
-font-size: 2.188rem !important;
-line-height: 120%;
-letter-spacing: -1%;
+  font-family: "Albert Sans", sans-serif;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 2.188rem !important;
+  line-height: 120%;
+  letter-spacing: -1%;
 }
 
 .h2-title {
@@ -49,15 +56,15 @@ letter-spacing: -1%;
 }
 
 @media (max-width: 1500px) {
+  .h2-title {
+    font-size: 3.75rem;
+  }
   html {
     font-size: 16px;
   }
 }
 
 @media (max-width: 1024px) {
-  .h2-title {
-    font-size: 3.75rem;
-  }
   html {
     font-size: 14px;
   }
@@ -95,6 +102,9 @@ letter-spacing: -1%;
 
 /* Responsive font sizing for creator detail */
 @media (max-width: 768px) {
+  .h2-title {
+    font-size: 2.75rem;
+  }
   .creator-detail-name {
     font-size: 28px !important;
   }

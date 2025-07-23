@@ -971,20 +971,20 @@ n8n-demo {
 
 /* Workflow Page Layout Styles */
 .workflow-title-main {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 0;
   text-align: left;
 }
 
 .workflow-title-sub {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 0;
   text-align: left;
 }
 
 /* Workflow Card Title Layout Styles */
 .workflow-card-title {
-  color: #622A9A;
+  color: #622a9a;
   margin-bottom: 8px;
   text-align: left;
   word-wrap: break-word;
@@ -993,7 +993,7 @@ n8n-demo {
 
 /* Workflow Card Description Layout Styles */
 .workflow-card-description {
-  color: #5C6063;
+  color: #5c6063;
   margin-bottom: 16px;
   text-align: left;
   word-wrap: break-word;
@@ -1002,13 +1002,13 @@ n8n-demo {
 
 /* Workflow Description Layout Styles */
 .workflow-description-text {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 24px;
   text-align: left;
 }
 
 .workflow-description-text-mobile {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 20px;
   text-align: left;
 }
@@ -1353,4 +1353,21 @@ n8n-demo {
   font-family: "Inter", sans-serif !important;
   font-weight: 600 !important;
   line-height: 1.4 !important;
+}
+
+/* Carousel spacing styles */
+.carousel-container {
+  padding: 0 2rem;
+}
+
+.carousel-item-padding {
+  padding: 0 1rem !important;
+}
+
+.carousel-track {
+  gap: 1.5rem !important;
+}
+
+.carousel-item-wrapper {
+  padding: 0 0.5rem;
 }
