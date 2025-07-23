@@ -158,86 +158,75 @@ export default function WorkflowsPage() {
         }}
       />
 
-      <div className="w-full container-box relative z-10">
+      <div className="w-full container-box relative z-10 overflow-hidden">
         {/* HERO HEADING & SUBHEADING */}
-        <div className="w-full pt-8 md:pt-16 flex flex-col gap-6 md:gap-10">
-          <div className="flex flex-col md:flex-row md:items-center w-full">
-            {/* Kiri: Heading */}
-            <div className="flex flex-col items-start flex-1 min-w-0">
-              <h1 className="font-sans font-semibold text-[2.5rem] sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] tracking-tight text-white mb-0 text-left">
-                Explore
-              </h1>
-              <h2 className="font-sans font-thin text-[2.2rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-tight text-white mb-0 text-left">
-                Workflows
-              </h2>
-            </div>
-
-            {/* Garis Penyambung */}
-            <div className="hidden md:flex items-center justify-center mx-8 my-4">
-              <div className="workflow-connector-line" />
-            </div>
-
-            {/* Kanan: Deskripsi dan Search */}
-            <div className="hidden md:flex flex-col items-start flex-1 min-w-0">
-              <div
-                style={{
-                  fontFamily: "Inter, Arial, sans-serif",
-                  fontWeight: 400,
-                  fontStyle: "normal",
-                  fontSize: "18px",
-                  lineHeight: "150%",
-                  letterSpacing: "-0.01em",
-                  color: "#FFFFFF",
-                  marginBottom: "24px",
-                  textAlign: "left",
-                }}
-              >
-                Temukan workflow automation yang powerful dan siap pakai.
-                Tingkatkan produktivitas dengan solusi yang sudah teruji.
+        <div className="workflow-header-container">
+          <div className="workflow-header-content">
+            {/* Desktop Layout (1025px+) */}
+            <div className="hidden lg:flex flex-row items-center w-full">
+              {/* Kiri: Heading */}
+              <div className="workflow-title-section">
+                <h1 className="workflow-title-main">
+                  Explore
+                </h1>
+                <h2 className="workflow-title-sub">
+                  Workflows
+                </h2>
               </div>
-              {/* Search Bar */}
-              <div className="relative w-full max-w-md">
-                <input
-                  type="text"
-                  placeholder="Cari Workflow"
-                  className="w-full pl-4 pr-12 py-3 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-lg text-white placeholder-white/60"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
+
+              {/* Garis Penyambung - Hanya Desktop */}
+              <div className="flex items-center justify-center mx-8 my-4">
+                <div className="workflow-connector-line" />
+              </div>
+
+              {/* Kanan: Deskripsi dan Search */}
+              <div className="workflow-description-section">
+                <div className="workflow-description-text">
+                  Temukan beragam workflow N8N buatan kreator Indonesia, dari yang simpel hingga kompleks, untuk mempermudah pekerjaan Anda.
+                </div>
+                {/* Search Bar */}
+                <div className="workflow-search-container">
+                  <input
+                    type="text"
+                    placeholder="Cari Workflow"
+                    className="workflow-search-input"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <Search className="workflow-search-icon" />
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Mobile: Deskripsi dan Search */}
-          <div className="md:hidden flex flex-col items-start w-full mt-6">
-            <div
-              style={{
-                fontFamily: "Inter, Arial, sans-serif",
-                fontWeight: 400,
-                fontStyle: "normal",
-                fontSize: "16px",
-                lineHeight: "150%",
-                letterSpacing: "-0.01em",
-                color: "#FFFFFF",
-                marginBottom: "20px",
-                textAlign: "left",
-              }}
-              className="break-words"
-            >
-              Temukan workflow automation yang powerful dan siap pakai.
-              Tingkatkan produktivitas dengan solusi yang sudah teruji.
-            </div>
-            {/* Search Bar Mobile */}
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Cari Workflow"
-                className="w-full pl-4 pr-12 py-3 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-base sm:text-lg text-white placeholder-white/60"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-4 h-4 sm:w-5 sm:h-5" />
+            {/* Mobile & Tablet Layout (0px - 1024px) */}
+            <div className="lg:hidden flex flex-col items-start w-full">
+              {/* Heading */}
+              <div className="workflow-title-section">
+                <h1 className="workflow-title-main">
+                  Explore
+                </h1>
+                <h2 className="workflow-title-sub">
+                  Workflows
+                </h2>
+              </div>
+
+              {/* Deskripsi dan Search - Vertical Layout */}
+              <div className="workflow-description-section">
+                <div className="workflow-description-text">
+                  Temukan beragam workflow N8N buatan kreator Indonesia, dari yang simpel hingga kompleks, untuk mempermudah pekerjaan Anda.
+                </div>
+                {/* Search Bar */}
+                <div className="workflow-search-container">
+                  <input
+                    type="text"
+                    placeholder="Cari Workflow"
+                    className="workflow-search-input"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <Search className="workflow-search-icon" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -274,7 +263,7 @@ export default function WorkflowsPage() {
         */}
 
         {/* Workflows Grid */}
-        <div className="workflow-grid mt-16 sm:mt-24 mb-20 sm:mb-32">
+        <div className="workflow-grid mt-16 sm:mt-24 mb-20 sm:mb-32 overflow-hidden">
           {loading ? (
             <div className="w-full text-center py-8 sm:py-12 text-white/60 text-sm sm:text-base break-words">
               Loading...
@@ -306,7 +295,9 @@ export default function WorkflowsPage() {
                         <span className="text-xs font-semibold text-gray-700">Workflow Preview</span>
                         <span className="text-xs text-gray-500 bg-gray-200 px-1 rounded">Diagram</span>
                       </div>
-                      <div className="bg-white workflow-preview-container relative">
+                      {/* Div wrapper dengan posisi relative untuk workflow preview */}
+                      <div className="relative workflow-preview-wrapper">
+                        <div className="bg-white workflow-preview-container absolute">
                         {workflow.json_n8n ? (
                           <div
                             className="workflow-preview-content absolute w-full h-full"
@@ -327,6 +318,7 @@ export default function WorkflowsPage() {
                             </div>
                           </div>
                         )}
+                      </div>
                       </div>
                     </div>
                   </div>
