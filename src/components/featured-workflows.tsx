@@ -13,20 +13,24 @@ const FeaturedWorkflows = () => {
 
   const responsive = {
     superLargeDesktop: {
-      breakpoint: { max: 4000, min: 1400 },
+      breakpoint: { max: 4000, min: 1536 },
       items: 4,
+      slidesToSlide: 1,
     },
     desktop: {
-      breakpoint: { max: 1400, min: 1024 },
+      breakpoint: { max: 1536, min: 1024 },
       items: 3,
+      slidesToSlide: 1,
     },
     tablet: {
       breakpoint: { max: 1024, min: 768 },
       items: 2,
+      slidesToSlide: 1,
     },
     mobile: {
       breakpoint: { max: 768, min: 0 },
       items: 1,
+      slidesToSlide: 1,
     },
   };
 
@@ -37,7 +41,7 @@ const FeaturedWorkflows = () => {
         .select("id, title, description, category, tags, profile_id")
         .eq("status", "approved")
         .order("created_at", { ascending: false })
-        .limit(4);
+        .limit(8);
 
       // Fetch profile data for each workflow
       if (data && data.length > 0) {
@@ -100,86 +104,133 @@ const FeaturedWorkflows = () => {
             </Link>
           </div>
         </div>
-        <div className="flex relative">
-          <div className="mt-[7.313rem] w-full relative flex justify-center items-center carousel-container">
-            <Carousel
-              responsive={responsive}
-              className="w-full max-w-7xl mx-auto"
-              itemClass="carousel-item-padding"
-              containerClass="carousel-track"
-              partialVisible={true}
-            >
-              {workflows.map((workflow, index) => (
-                <div key={workflow.id} className="carousel-item-wrapper">
-                  <Link
-                    href={`/workflows/${workflow.id}`}
-                    className={`group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block w-[20rem] ${
-                      index === workflows.length - 1 ? "bg-[#959DA1]" : ""
-                    }`}
-                  >
-                    {/* Content */}
-                    <div className="p-6">
-                      {/* Category Badge */}
-                      <div className="flex justify-end mb-4">
-                        <span className="inline-flex items-center px-3 py-1 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
-                          {workflow.category || "General"}
+
+        <div className="mt-[7.313rem] w-full">
+          <Carousel
+            responsive={responsive}
+            className="w-full"
+            itemClass="px-3"
+            containerClass="carousel-container"
+            partialVisible={false}
+            infinite={true}
+            autoPlay={false}
+            autoPlaySpeed={3000}
+            keyBoardControl={true}
+            customTransition="transform 300ms ease-in-out"
+            transitionDuration={300}
+            removeArrowOnDeviceType={["tablet", "mobile"]}
+            dotListClass="custom-dot-list-style"
+            draggable={true}
+            swipeable={true}
+            centerMode={false}
+            focusOnSelect={false}
+            ssr={true}
+            showDots={false}
+            arrows={true}
+            customLeftArrow={
+              <button className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-all duration-300 z-10">
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+            }
+            customRightArrow={
+              <button className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-all duration-300 z-10">
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            }
+          >
+            {workflows.map((workflow, index) => (
+              <div key={workflow.id} className="h-full">
+                <Link
+                  href={`/workflows/${workflow.id}`}
+                  className={`group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block h-full ${
+                    index === workflows.length - 1 ? "bg-[#959DA1]" : ""
+                  }`}
+                >
+                  {/* Content */}
+                  <div className="p-6 h-full flex flex-col">
+                    {/* Category Badge */}
+                    <div className="flex justify-end mb-4">
+                      <span className="inline-flex items-center px-3 py-1 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
+                        {workflow.category || "General"}
+                      </span>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-lg font-bold text-purple-900 mb-2 line-clamp-2 group-hover:text-purple-700 transition-colors flex-grow">
+                      {workflow.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                      {workflow.description ||
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros."}
+                    </p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {(workflow.tags || []).slice(0, 3).map((tag: string) => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium"
+                        >
+                          {tag}
                         </span>
-                      </div>
-                      {/* Title */}
-                      <h3 className="text-lg font-bold text-purple-900 mb-2 line-clamp-2 group-hover:text-purple-700 transition-colors">
-                        {workflow.title}
-                      </h3>
+                      ))}
+                      {(workflow.tags || []).length > 3 && (
+                        <span className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium">
+                          +{(workflow.tags || []).length - 3}
+                        </span>
+                      )}
+                    </div>
 
-                      {/* Description */}
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-                        {workflow.description ||
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros."}
-                      </p>
-
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {(workflow.tags || [])
-                          .slice(0, 3)
-                          .map((tag: string) => (
-                            <span
-                              key={tag}
-                              className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        {(workflow.tags || []).length > 3 && (
-                          <span className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium">
-                            +{(workflow.tags || []).length - 3}
-                          </span>
+                    {/* Author */}
+                    <div className="flex items-center gap-3 pt-4 border-t border-gray-100 mt-auto">
+                      <div className="w-8 h-8 rounded-full overflow-hidden">
+                        {workflow.profile_image ? (
+                          <img
+                            src={workflow.profile_image}
+                            alt={workflow.profile_name || "Creator"}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
+                            {workflow.profile_name?.charAt?.(0) || "C"}
+                          </div>
                         )}
                       </div>
-
-                      {/* Author */}
-                      <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                        <div className="w-8 h-8 rounded-full overflow-hidden">
-                          {workflow.profile_image ? (
-                            <img
-                              src={workflow.profile_image}
-                              alt={workflow.profile_name || "Creator"}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
-                              {workflow.profile_name?.charAt?.(0) || "C"}
-                            </div>
-                          )}
-                        </div>
-                        <span className="text-sm text-purple-900 font-medium">
-                          {workflow.profile_name || "Creator"}
-                        </span>
-                      </div>
+                      <span className="text-sm text-purple-900 font-medium">
+                        {workflow.profile_name || "Creator"}
+                      </span>
                     </div>
-                  </Link>
-                </div>
-              ))}
-            </Carousel>
-          </div>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </Carousel>
         </div>
       </div>
     </section>

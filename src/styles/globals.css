@@ -1340,19 +1340,64 @@ n8n-demo {
 
 /* Carousel spacing styles */
 .carousel-container {
-  padding: 0 2rem;
+  padding: 0 1rem;
+  position: relative;
 }
 
-.carousel-item-padding {
-  padding: 0 1rem !important;
+.carousel-container .react-multiple-carousel__arrow {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  transition: all 0.3s ease !important;
 }
 
-.carousel-track {
-  gap: 1.5rem !important;
+.carousel-container .react-multiple-carousel__arrow:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  transform: scale(1.1) !important;
 }
 
-.carousel-item-wrapper {
-  padding: 0 0.5rem;
+.carousel-container .react-multiple-carousel__arrow--left {
+  left: 0 !important;
+}
+
+.carousel-container .react-multiple-carousel__arrow--right {
+  right: 0 !important;
+}
+
+.carousel-container .react-multiple-carousel__arrow::before {
+  color: white !important;
+  font-size: 16px !important;
+}
+
+/* Responsive carousel adjustments */
+@media (max-width: 768px) {
+  .carousel-container {
+    padding: 0 0.5rem;
+  }
+
+  .carousel-container .react-multiple-carousel__arrow {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .carousel-container {
+    padding: 0 0.25rem;
+  }
+
+  .carousel-container .react-multiple-carousel__arrow {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+  }
 }
 
 /* Button Styles - Konsisten untuk semua button di homepage */
