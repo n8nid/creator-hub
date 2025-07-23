@@ -275,7 +275,7 @@ export default function CreatorsPage() {
         }}
       />
 
-      <div className="w-full container-box px-16 relative z-10 mb-32">
+      <div className="w-full container-box relative z-10 mb-32">
         {/* HERO HEADING & SUBHEADING */}
         <div className="w-full pt-56 md:pt-64 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col md:flex-row md:items-center w-full">

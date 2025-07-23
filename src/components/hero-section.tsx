@@ -80,7 +80,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative text-white overflow-visible content-above-gradient">
-      <div className="w-full container-box px-16 relative z-10 mt-32 2xl:mt-36">
+      <div className="w-full container-box relative z-10 mt-32 2xl:mt-36">
         {/* HERO HEADING & SUBHEADING */}
         <div className="w-full pt-0 2xl:pt-20 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col md:flex-row md:items-center w-full">
