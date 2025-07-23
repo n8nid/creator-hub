@@ -153,7 +153,7 @@ export default function WorkflowsSubPage() {
   if (!user) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Not Logged In</h1>
+        <p className="text-2xl font-bold text-gray-900 mb-4">Not Logged In</p>
         <p className="text-gray-600 mb-6">
           Silakan login untuk mengelola workflow Anda.
         </p>
@@ -165,7 +165,7 @@ export default function WorkflowsSubPage() {
     <div className="space-y-8 mt-4 overflow-x-hidden">
       {/* Header Section */}
       <div className="px-2">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">Workflow Saya</h1>
+        <p className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">Workflow Saya</p>
         <p className="text-gray-600 mt-2 text-sm sm:text-base break-words">Kelola workflow Anda</p>
       </div>
 
@@ -328,15 +328,14 @@ export default function WorkflowsSubPage() {
                       {w.complexity || "-"}
                     </span>
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full break-words ${
-                        w.status === "approved"
-                          ? "bg-green-100 text-green-800"
-                          : w.status === "pending"
+                      className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full break-words ${w.status === "approved"
+                        ? "bg-green-100 text-green-800"
+                        : w.status === "pending"
                           ? "bg-yellow-100 text-yellow-800"
                           : w.status === "rejected"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-gray-100 text-gray-700"
-                      }`}
+                            ? "bg-red-100 text-red-800"
+                            : "bg-gray-100 text-gray-700"
+                        }`}
                     >
                       {w.status}
                     </span>

@@ -113,7 +113,7 @@ export default function AddWorkflowPage() {
   if (!user) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Not Logged In</h1>
+        <p className="text-2xl font-bold text-gray-900 mb-4">Not Logged In</p>
         <p className="text-gray-600 mb-6">
           Silakan login untuk menambah workflow.
         </p>
