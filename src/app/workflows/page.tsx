@@ -60,8 +60,14 @@ export default function WorkflowsPage() {
 
         setWorkflows(workflowsWithName);
         console.log("Workflows data:", workflowsWithName);
-        console.log("Workflows with json_n8n:", workflowsWithName.filter(w => w.json_n8n));
-        console.log("Sample workflow json_n8n:", workflowsWithName[0]?.json_n8n);
+        console.log(
+          "Workflows with json_n8n:",
+          workflowsWithName.filter((w) => w.json_n8n)
+        );
+        console.log(
+          "Sample workflow json_n8n:",
+          workflowsWithName[0]?.json_n8n
+        );
       } else {
         console.error("Failed to fetch workflows");
         setWorkflows([]);
@@ -158,112 +164,63 @@ export default function WorkflowsPage() {
         }}
       />
 
-      <div className="w-full container-box relative z-10 overflow-hidden">
+      <div className="w-full container-box relative z-10 mb-32">
         {/* HERO HEADING & SUBHEADING */}
-        <div className="workflow-header-container">
-          <div className="workflow-header-content">
-            {/* Desktop Layout (1025px+) */}
-            <div className="hidden lg:flex flex-row items-center w-full">
-              {/* Kiri: Heading */}
-              <div className="workflow-title-section">
-                <h1 className="workflow-title-main">
-                  Explore
-                </h1>
-                <h2 className="workflow-title-sub">
-                  Workflows
-                </h2>
-              </div>
-
-              {/* Garis Penyambung - Hanya Desktop */}
-              <div className="flex items-center justify-center mx-8 my-4">
-                <div className="workflow-connector-line" />
-              </div>
-
-              {/* Kanan: Deskripsi dan Search */}
-              <div className="workflow-description-section">
-                <div className="workflow-description-text">
-                  Temukan beragam workflow N8N buatan kreator Indonesia, dari yang simpel hingga kompleks, untuk mempermudah pekerjaan Anda.
-                </div>
-                {/* Search Bar */}
-                <div className="workflow-search-container">
-                  <input
-                    type="text"
-                    placeholder="Cari Workflow"
-                    className="workflow-search-input"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                  <Search className="workflow-search-icon" />
-                </div>
-              </div>
+        <div className="w-full pt-56 md:pt-64 flex flex-col gap-6 md:gap-10">
+          <div className="flex flex-col md:flex-row md:items-center w-full">
+            {/* Kiri: Heading */}
+            <div className="flex flex-col items-start flex-shrink-0">
+              <h1 className="hero-title-main">Explore</h1>
+              <h2 className="hero-title-sub">Workflows</h2>
             </div>
 
-            {/* Mobile & Tablet Layout (0px - 1024px) */}
-            <div className="lg:hidden flex flex-col items-start w-full">
-              {/* Heading */}
-              <div className="workflow-title-section">
-                <h1 className="workflow-title-main">
-                  Explore
-                </h1>
-                <h2 className="workflow-title-sub">
-                  Workflows
-                </h2>
-              </div>
+            {/* Garis Penyambung */}
+            <div className="hidden md:flex items-center flex-1 min-w-0 mx-8">
+              <div className="h-0.5 flex-1 bg-white/40" />
+            </div>
 
-              {/* Deskripsi dan Search - Vertical Layout */}
-              <div className="workflow-description-section">
-                <div className="workflow-description-text">
-                  Temukan beragam workflow N8N buatan kreator Indonesia, dari yang simpel hingga kompleks, untuk mempermudah pekerjaan Anda.
-                </div>
-                {/* Search Bar */}
-                <div className="workflow-search-container">
-                  <input
-                    type="text"
-                    placeholder="Cari Workflow"
-                    className="workflow-search-input"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                  <Search className="workflow-search-icon" />
-                </div>
+            {/* Kanan: Deskripsi dan Search */}
+            <div className="hidden md:flex flex-col items-start flex-1 min-w-0">
+              <div className="hero-description max-w-3xl mb-6">
+                Temukan beragam workflow N8N buatan kreator Indonesia, dari yang
+                simpel hingga kompleks, untuk mempermudah pekerjaan Anda.
+              </div>
+              {/* Search Bar */}
+              <div className="relative w-full max-w-md">
+                <input
+                  type="text"
+                  placeholder="Cari Workflow"
+                  className="w-full pl-4 pr-12 py-3 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-lg text-white placeholder-white/60"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Filter Section - DISABLED */}
-        {/* 
-        <div className="flex flex-col items-center justify-center mt-8 sm:mt-12 mb-6 sm:mb-8 gap-2">
-          <div className="flex flex-row items-center gap-2 sm:gap-4">
-            <Filter className="w-4 h-4 text-white/60 flex-shrink-0" />
-            <span className="text-white/80 font-medium text-sm sm:text-base break-words">
-              Filter by category:
-            </span>
-          </div>
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12 w-full">
-            {["All", ...workflowCategories].map((category) => (
-              <button
-                key={category}
-                className={`px-3 sm:px-6 py-2 sm:py-3 rounded-full font-medium transition-all duration-200 text-xs sm:text-sm whitespace-nowrap ${
-                  categoryFilter === category
-                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
-                    : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20"
-                }`}
-                onClick={() => setCategoryFilter(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-          <div className="text-white/60 text-xs sm:text-sm text-center break-words">
-            {filteredWorkflows.length} workflow
-            {filteredWorkflows.length !== 1 ? "s" : ""} found
+          {/* Mobile: Deskripsi dan Search */}
+          <div className="md:hidden flex flex-col items-start w-full mt-6">
+            <div className="hero-description max-w-3xl mb-4">
+              Temukan beragam workflow N8N buatan kreator Indonesia, dari yang
+              simpel hingga kompleks, untuk mempermudah pekerjaan Anda.
+            </div>
+            {/* Search Bar Mobile */}
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Cari Workflow"
+                className="w-full pl-4 pr-12 py-3 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-lg text-white placeholder-white/60"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
+            </div>
           </div>
         </div>
-        */}
 
         {/* Workflows Grid */}
-        <div className="workflow-grid mt-16 sm:mt-24 mb-20 sm:mb-32 overflow-hidden">
+        <div className="workflow-grid mt-44 sm:mt-52 mb-20 sm:mb-32 overflow-hidden">
           {loading ? (
             <div className="w-full text-center py-8 sm:py-12 text-white/60 text-sm sm:text-base break-words">
               Loading...
@@ -287,38 +244,46 @@ export default function WorkflowsPage() {
                       {workflow.category || "General"}
                     </span>
                   </div>
-                  
+
                   {/* Workflow Diagram Preview */}
                   <div className="w-full">
                     <div className="bg-gray-50 border-b border-gray-200 workflow-preview-header">
                       <div className="flex items-center justify-between mb-1 px-2 workflow-preview-header-content">
-                        <span className="text-xs font-semibold text-gray-700">Workflow Preview</span>
-                        <span className="text-xs text-gray-500 bg-gray-200 px-1 rounded">Diagram</span>
+                        <span className="text-xs font-semibold text-gray-700">
+                          Workflow Preview
+                        </span>
+                        <span className="text-xs text-gray-500 bg-gray-200 px-1 rounded">
+                          Diagram
+                        </span>
                       </div>
                       {/* Div wrapper dengan posisi relative untuk workflow preview */}
                       <div className="relative workflow-preview-wrapper">
                         <div className="bg-white workflow-preview-container absolute">
-                        {workflow.json_n8n ? (
-                          <div
-                            className="workflow-preview-content absolute w-full h-full"
-                            dangerouslySetInnerHTML={{
-                              __html: `<n8n-demo workflow='${workflow.json_n8n.replace(
-                                /'/g,
-                                "&#39;"
-                              )}' frame="true" style="width: 100%; height: 100%; border: none; border-radius: 0; margin: 0; padding: 0; overflow: hidden; display: block;"></n8n-demo>`,
-                            }}
-                          />
-                        ) : (
-                          <div className="workflow-preview-content absolute w-full h-full flex items-center justify-center bg-gray-100">
-                            <div className="text-center text-gray-500">
-                              <div className="text-2xl mb-1">📋</div>
-                              <p className="text-xs">No workflow data</p>
-                              <p className="text-xs text-gray-400 mt-1">json_n8n field empty</p>
-                              <p className="text-xs text-gray-400 mt-1">Add workflow JSON to see preview</p>
+                          {workflow.json_n8n ? (
+                            <div
+                              className="workflow-preview-content absolute w-full h-full"
+                              dangerouslySetInnerHTML={{
+                                __html: `<n8n-demo workflow='${workflow.json_n8n.replace(
+                                  /'/g,
+                                  "&#39;"
+                                )}' frame="true" style="width: 100%; height: 100%; border: none; border-radius: 0; margin: 0; padding: 0; overflow: hidden; display: block;"></n8n-demo>`,
+                              }}
+                            />
+                          ) : (
+                            <div className="workflow-preview-content absolute w-full h-full flex items-center justify-center bg-gray-100">
+                              <div className="text-center text-gray-500">
+                                <div className="text-2xl mb-1">📋</div>
+                                <p className="text-xs">No workflow data</p>
+                                <p className="text-xs text-gray-400 mt-1">
+                                  json_n8n field empty
+                                </p>
+                                <p className="text-xs text-gray-400 mt-1">
+                                  Add workflow JSON to see preview
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -382,10 +347,9 @@ export default function WorkflowsPage() {
         {/* Pagination */}
         {totalPages > 1 && <Pagination />}
         <p className="text-white/60 text-xs sm:text-sm mt-8 sm:mt-12 mb-8 sm:mb-12 text-center break-words">
-          {totalPages > 1 
+          {totalPages > 1
             ? `Showing page ${currentPage} of ${totalPages}`
-            : `Showing all ${filteredWorkflows.length} workflows`
-          }
+            : `Showing all ${filteredWorkflows.length} workflows`}
         </p>
       </div>
     </div>
