@@ -119,7 +119,7 @@ const FeaturedCreators = () => {
       <div className="w-full container-box relative z-10">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
           <h2
-            className="h2-title md:text-start text-center w-full"
+            className="h2-title sm:text-start text-center w-full"
             
           >
             Meet the Creators

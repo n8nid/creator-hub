@@ -37,8 +37,8 @@ export default function Page() {
       />
       <GradientCircle
         type="footer"
+        className="lg:top-[3800px] top-[3000px]"
         style={{
-          top: "3000px",
           left: "20%",
           transform: "translateX(-80%)",
           zIndex: 1,

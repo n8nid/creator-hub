@@ -1337,3 +1337,20 @@ n8n-demo {
   font-weight: 600 !important;
   line-height: 1.4 !important;
 }
+
+/* Carousel spacing styles */
+.carousel-container {
+  padding: 0 2rem;
+}
+
+.carousel-item-padding {
+  padding: 0 1rem !important;
+}
+
+.carousel-track {
+  gap: 1.5rem !important;
+}
+
+.carousel-item-wrapper {
+  padding: 0 0.5rem;
+}

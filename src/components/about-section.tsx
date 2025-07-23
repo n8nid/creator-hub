@@ -117,7 +117,7 @@ const AboutSection = () => {
                   }}
                 /> */}
                 {/* Content */}
-                <div className="relative z-10 lg:w-[60%] lg:pl-[9rem]">
+                <div className="relative z-10 lg:w-[90%] xl:w-[60%] lg:pl-[5rem] xl:pl-[9rem]">
                   <h2
                     style={{
                       fontFamily: "'Albert Sans', sans-serif",

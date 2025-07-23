@@ -79,13 +79,13 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-screen text-white overflow-visible content-above-gradient">
+    <section className="relative text-white overflow-visible content-above-gradient">
       <div className="w-full container-box relative z-10 mt-40 2xl:mt-mt-custom-14">
         {/* HERO HEADING & SUBHEADING */}
         <div className="w-full pt-0 2xl:pt-20 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col lg:flex-row lg:items-center w-full">
             {/* Kiri: Heading, Community, dan Deskripsi */}
-            <div className="flex flex-col items-start flex-1">
+            <div className="flex flex-col md:items-start items-center flex-1">
               <h1>
                 N8N Indonesia
               </h1>
@@ -123,7 +123,7 @@ const HeroSection = () => {
               <div className="relative z-10">
                 <h2 className="lg:text-start text-center">
                   <span
-                    className="md:text-[5rem] text-[4rem]"
+                    className="lg:text-[5rem] text-[3rem]"
                     style={{
                       fontFamily: "Albert Sans",
                       fontWeight: 250,
@@ -135,7 +135,7 @@ const HeroSection = () => {
                     Dapatkan insight, workflow siap pakai, dan dukungan dari komunitas yang aktif dan solutif. Workflow Hebat Dimulai dari Sini.
                   </span>
                 </h2>
-                <div className="mt-[2.5rem] flex flex-col sm:flex-row gap-3 md:gap-6">
+                <div className="mt-[2.5rem] flex flex-col sm:flex-row md:justify-start justify-center gap-3 md:gap-6">
                   <a
                     className="btn-jelajah flex items-center justify-center gap-3 w-full sm:w-auto"
                     href="/workflows"
