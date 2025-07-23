@@ -72,11 +72,7 @@ const FeaturedWorkflows = () => {
             <h2 className="h2-title sm:text-start text-center w-full">
               Explore Workflow
             </h2>
-            <Link
-              href="/workflows"
-              className="btn-jelajah flex items-center justify-center gap-3 w-full sm:w-auto"
-              style={{ height: 60 }}
-            >
+            <Link href="/workflows" className="btn-primary">
               Jelajahi Workflow
               <svg
                 width="19"

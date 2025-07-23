@@ -1354,3 +1354,120 @@ n8n-demo {
 .carousel-item-wrapper {
   padding: 0 0.5rem;
 }
+
+/* Button Styles - Konsisten untuk semua button di homepage */
+.btn-primary {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px 40px !important;
+  border-radius: 9999px !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 1.2 !important;
+  background: linear-gradient(135deg, #d946ef 0%, #9333ea 100%) !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  box-shadow: 0 10px 15px -3px rgba(147, 51, 234, 0.3),
+    0 4px 6px -2px rgba(147, 51, 234, 0.1) !important;
+  transition: all 0.3s ease !important;
+  transform: translateY(0) !important;
+  min-height: 56px !important;
+  justify-content: center !important;
+  border: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 20px 25px -5px rgba(147, 51, 234, 0.4),
+    0 10px 10px -5px rgba(147, 51, 234, 0.2) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+.btn-secondary {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px 40px !important;
+  border-radius: 9999px !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 1.2 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f3e8ff 100%) !important;
+  color: #9333ea !important;
+  text-decoration: none !important;
+  box-shadow: 0 10px 15px -3px rgba(147, 51, 234, 0.2),
+    0 4px 6px -2px rgba(147, 51, 234, 0.1) !important;
+  transition: all 0.3s ease !important;
+  transform: translateY(0) !important;
+  min-height: 56px !important;
+  justify-content: center !important;
+  border: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+}
+
+.btn-secondary:hover {
+  box-shadow: 0 20px 25px -5px rgba(147, 51, 234, 0.3),
+    0 10px 10px -5px rgba(147, 51, 234, 0.2) !important;
+  transform: translateY(-2px) scale(1.02) !important;
+  background: linear-gradient(135deg, #faf5ff 0%, #e9d5ff 100%) !important;
+}
+
+.btn-secondary:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+/* Responsive button sizing */
+@media (max-width: 640px) {
+  .btn-primary,
+  .btn-secondary {
+    padding: 14px 32px !important;
+    font-size: 14px !important;
+    min-height: 48px !important;
+    gap: 8px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-primary,
+  .btn-secondary {
+    padding: 12px 24px !important;
+    font-size: 14px !important;
+    min-height: 44px !important;
+    gap: 6px !important;
+  }
+}
+
+/* Button icon styling */
+.btn-primary svg,
+.btn-secondary svg {
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .btn-primary svg,
+  .btn-secondary svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-primary svg,
+  .btn-secondary svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+}
+
+/* Creator Detail Layout Improvements */
