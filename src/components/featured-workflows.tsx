@@ -14,20 +14,20 @@ const FeaturedWorkflows = () => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 1400 },
-      items: 4
+      items: 4,
     },
     desktop: {
       breakpoint: { max: 1400, min: 1024 },
-      items: 3
+      items: 3,
     },
     tablet: {
       breakpoint: { max: 1024, min: 768 },
-      items: 2
+      items: 2,
     },
     mobile: {
       breakpoint: { max: 768, min: 0 },
-      items: 1
-    }
+      items: 1,
+    },
   };
 
   useEffect(() => {
@@ -78,17 +78,36 @@ const FeaturedWorkflows = () => {
               style={{ height: 60 }}
             >
               Jelajahi Workflow
-              <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592" stroke="black" stroke-opacity="0.05" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <svg
+                width="19"
+                height="20"
+                viewBox="0 0 19 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                  stroke="black"
+                  strokeOpacity="0.05"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </Link>
           </div>
         </div>
         <div className="flex relative">
           <div className="mt-[7.313rem] w-full relative flex justify-center items-center carousel-container">
-            <Carousel 
-              responsive={responsive} 
+            <Carousel
+              responsive={responsive}
               className="w-full max-w-7xl mx-auto"
               itemClass="carousel-item-padding"
               containerClass="carousel-track"
@@ -98,7 +117,9 @@ const FeaturedWorkflows = () => {
                 <div key={workflow.id} className="carousel-item-wrapper">
                   <Link
                     href={`/workflows/${workflow.id}`}
-                    className={`group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block w-[20rem] ${index === workflows.length - 1 ? 'bg-[#959DA1]' : ''}`}
+                    className={`group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block w-[20rem] ${
+                      index === workflows.length - 1 ? "bg-[#959DA1]" : ""
+                    }`}
                   >
                     {/* Content */}
                     <div className="p-6">
@@ -121,14 +142,16 @@ const FeaturedWorkflows = () => {
 
                       {/* Tags */}
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {(workflow.tags || []).slice(0, 3).map((tag: string) => (
-                          <span
-                            key={tag}
-                            className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                        {(workflow.tags || [])
+                          .slice(0, 3)
+                          .map((tag: string) => (
+                            <span
+                              key={tag}
+                              className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium"
+                            >
+                              {tag}
+                            </span>
+                          ))}
                         {(workflow.tags || []).length > 3 && (
                           <span className="px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium">
                             +{(workflow.tags || []).length - 3}
