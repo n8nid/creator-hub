@@ -280,7 +280,7 @@ export default function CreatorsPage() {
         <div className="w-full pt-56 md:pt-64 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col md:flex-row md:items-center w-full">
             {/* Kiri: Heading */}
-            <div className="flex flex-col items-start flex-1 min-w-0">
+            <div className="flex flex-col items-start flex-shrink-0">
               <h1 className="hero-title-main">Explore</h1>
               <h2 className="hero-title-sub">Creator</h2>
             </div>
