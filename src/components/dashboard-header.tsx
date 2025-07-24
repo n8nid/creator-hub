@@ -12,16 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
 
-interface DashboardHeaderProps {
-  sidebarOpen?: boolean;
-  toggleSidebar?: () => void;
-}
-
-export function DashboardHeader({ sidebarOpen = false, toggleSidebar }: DashboardHeaderProps) {
+export function DashboardHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, profile, signOut } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigation = [
     {
@@ -48,194 +45,233 @@ export function DashboardHeader({ sidebarOpen = false, toggleSidebar }: Dashboar
     }
   };
 
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-300 px-2 sm:px-4 tablet:px-6 py-3 sm:py-4 shadow-sm w-full overflow-hidden">
-      <div className="flex items-center justify-between w-full">
-        {/* Logo dan Brand */}
-        <div className="flex items-center gap-2 sm:gap-4 tablet:gap-6 lg:gap-8">
-          <Link
-            href="/"
-            className="flex items-center gap-1 sm:gap-2 text-gray-900 hover:text-gray-700 transition-colors"
-          >
-            {/* N8N Logo - Node yang saling terhubung */}
-            <div className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-full h-full"
-              >
-                {/* Node 1 - Left */}
-                <circle
-                  cx="2"
-                  cy="12"
-                  r="1.8"
-                  fill="currentColor"
-                  opacity="1"
-                />
-                {/* Node 2 - Left Center */}
-                <circle
-                  cx="7"
-                  cy="12"
-                  r="1.8"
-                  fill="currentColor"
-                  opacity="1"
-                />
-                {/* Node 3 - Center */}
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="1.8"
-                  fill="currentColor"
-                  opacity="1"
-                />
-                {/* Node 4 - Right Top */}
-                <circle
-                  cx="17"
-                  cy="6"
-                  r="1.8"
-                  fill="currentColor"
-                  opacity="1"
-                />
-                {/* Node 5 - Right Bottom */}
-                <circle
-                  cx="17"
-                  cy="18"
-                  r="1.8"
-                  fill="currentColor"
-                  opacity="1"
-                />
+    <>
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-300 px-2 sm:px-4 tablet:px-6 py-3 sm:py-4 shadow-sm w-full overflow-hidden">
+        <div className="flex items-center w-full">
+          {/* Left Side - Logo, Brand, and Navigation */}
+          <div className="flex items-center gap-4 sm:gap-6 lg:gap-8 flex-1">
+            {/* Logo dan Brand */}
+            <Link
+              href="/"
+              className="flex items-center gap-2 sm:gap-3 text-gray-900 hover:text-gray-700 transition-colors"
+            >
+              {/* N8N Logo - Node yang saling terhubung */}
+              <div className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-full h-full"
+                >
+                  {/* Node 1 - Left */}
+                  <circle
+                    cx="2"
+                    cy="12"
+                    r="1.8"
+                    fill="currentColor"
+                    opacity="1"
+                  />
+                  {/* Node 2 - Left Center */}
+                  <circle
+                    cx="7"
+                    cy="12"
+                    r="1.8"
+                    fill="currentColor"
+                    opacity="1"
+                  />
+                  {/* Node 3 - Center */}
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="1.8"
+                    fill="currentColor"
+                    opacity="1"
+                  />
+                  {/* Node 4 - Right Top */}
+                  <circle
+                    cx="17"
+                    cy="6"
+                    r="1.8"
+                    fill="currentColor"
+                    opacity="1"
+                  />
+                  {/* Node 5 - Right Bottom */}
+                  <circle
+                    cx="17"
+                    cy="18"
+                    r="1.8"
+                    fill="currentColor"
+                    opacity="1"
+                  />
+                  {/* Connection Lines - Improved connections */}
+                  <path
+                    d="M3.8 12H6.2"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M8.8 12H11.2"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M13.8 12H15.2"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M15.2 12L17 6"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M15.2 12L17 18"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+              <span className="text-lg sm:text-xl font-bold">n8n ID</span>
+            </Link>
 
-                {/* Koneksi antar node */}
-                <path
-                  d="M3.8 12L5.2 12"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  opacity="1"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M8.8 12L10.2 12"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  opacity="1"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M13.8 12L15.2 12"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  opacity="1"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M15.2 12L17 6"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  opacity="1"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M15.2 12L17 18"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  opacity="1"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-            <span className="text-sm sm:text-base md:text-lg font-semibold tracking-wide">n8n ID</span>
-          </Link>
+            {/* Desktop Navigation - Hidden on mobile, positioned next to logo */}
+            <nav className="hidden sm:flex items-center gap-4 sm:gap-6">
+              {navigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`text-sm font-medium transition-colors ${
+                    pathname === item.href
+                      ? "text-purple-600"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
 
-          {/* Navigation Menu - Hidden on mobile, visible on tablet and desktop */}
-          <nav className="hidden sm:flex items-center gap-1 sm:gap-2 tablet:gap-3 lg:gap-6">
-            {navigation.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <div key={item.href} className="relative">
-                  <Link
-                    href={item.href}
-                    className={`text-xs sm:text-sm tablet:text-sm font-medium transition-colors pb-1 sm:pb-2 whitespace-nowrap ${
-                      isActive
-                        ? "text-gray-900 font-semibold"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                  {isActive && (
-                    <div
-                      className="absolute -bottom-3 sm:-bottom-4 left-0 right-0 h-0.5 bg-purple-600 z-10"
-                    ></div>
-                  )}
-                </div>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* User Profile Section */}
-        <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
-          {/* Sidebar Toggle Button - Visible only on mobile */}
-          {toggleSidebar && (
+          {/* Right Side - User Menu & Mobile Menu Button */}
+          <div className="flex items-center gap-2 sm:gap-4">
+            {/* Notifications */}
             <Button
               variant="ghost"
-              size="icon"
-              onClick={toggleSidebar}
-              className="flex sm:hidden h-8 w-8 sm:h-10 sm:w-10 text-gray-600 hover:text-gray-900"
+              size="sm"
+              className="p-2 text-gray-600 hover:text-gray-900"
             >
-              {sidebarOpen ? (
-                <X className="h-4 w-4 sm:h-5 sm:w-5" />
-              ) : (
-                <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
-              )}
+              <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
-          )}
-          {/* Notification Bell */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative text-gray-600 hover:text-gray-900 h-8 w-8 sm:h-10 sm:w-10"
-          >
-            <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="absolute -top-1 -right-1 h-2 w-2 sm:h-3 sm:w-3 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
-              1
-            </span>
-          </Button>
 
-          {/* User Profile Dropdown - Hanya Icon */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            {/* User Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2 p-2 hover:bg-gray-100"
+                >
+                  <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
+                    <AvatarImage
+                      src={profile?.profile_image || undefined}
+                      alt={profile?.name || "User"}
+                    />
+                    <AvatarFallback className="text-xs sm:text-sm">
+                      {profile?.name?.charAt(0) || "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden sm:block text-sm font-medium text-gray-700">
+                    {profile?.name || "User"}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={handleSignOut}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sign Out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Mobile Menu Button - Only visible on mobile */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleMobileMenu}
+              className="sm:hidden p-2 text-gray-600 hover:text-gray-900"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/40 z-40 sm:hidden"
+            onClick={toggleMobileMenu}
+          />
+
+          {/* Mobile Menu */}
+          <div className="fixed top-0 right-0 w-64 h-full bg-white border-l border-gray-200 z-50 transform transition-transform duration-300 ease-in-out sm:hidden">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
               <Button
                 variant="ghost"
-                size="icon"
-                className="h-8 w-8 sm:h-10 sm:w-10 rounded-full p-0 hover:bg-gray-100"
+                size="sm"
+                onClick={toggleMobileMenu}
+                className="p-1"
               >
-                <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
-                  <AvatarImage
-                    src={profile?.profile_image || undefined}
-                    alt={profile?.name || user?.email || "User"}
-                  />
-                  <AvatarFallback className="bg-gray-100 text-gray-600 text-xs sm:text-sm font-medium">
-                    {profile?.name?.charAt(0).toUpperCase() ||
-                      user?.email?.charAt(0).toUpperCase() ||
-                      "U"}
-                  </AvatarFallback>
-                </Avatar>
+                <X className="w-5 h-5" />
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem
-                onClick={handleSignOut}
-                className="text-black hover:text-black"
+            </div>
+
+            <nav className="p-4 space-y-2">
+              {navigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={toggleMobileMenu}
+                  className={`block px-4 py-3 rounded-lg font-medium transition-colors ${
+                    pathname === item.href
+                      ? "bg-purple-100 text-purple-700"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+              {/* Divider */}
+              <div className="border-t border-gray-200 my-4" />
+
+              {/* Sign Out */}
+              <button
+                onClick={() => {
+                  handleSignOut();
+                  toggleMobileMenu();
+                }}
+                className="w-full text-left px-4 py-3 rounded-lg font-medium text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
               >
-                <LogOut className="mr-2 h-4 w-4" />
+                <LogOut className="w-4 h-4" />
                 Sign Out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-    </header>
+              </button>
+            </nav>
+          </div>
+        </>
+      )}
+    </>
   );
 }
