@@ -58,6 +58,7 @@ interface Workflow {
   tags?: string[];
   complexity?: string;
   status?: string;
+  json_n8n?: string;
 }
 
 export default function CreatorDetailPage() {
@@ -501,7 +502,7 @@ export default function CreatorDetailPage() {
           {/* Workflows Section */}
           <div className="space-y-12 sm:space-y-16 mt-28 sm:mt-32">
             {/* Search Bar for Mobile and Tablet - Above Workflows */}
-            <div className="block creator-detail-search-container-tablet">
+            <div className="block lg:hidden creator-detail-search-container-tablet">
               <div className="relative w-full max-w-md mx-auto">
                 <input
                   type="text"
@@ -523,28 +524,97 @@ export default function CreatorDetailPage() {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <div className="workflow-grid mt-8 mb-20 sm:mb-32 overflow-hidden">
                   {displayedWorkflows.map((workflow) => (
                     <Link
                       key={workflow.id}
                       href={`/workflows/${workflow.id}`}
-                      className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block"
+                      className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block workflow-card"
                     >
-                      {/* Content */}
-                      <div className="p-4 sm:p-6">
+                      {/* Div 1: Workflow Preview Diagram (Full Width) */}
+                      <div className="w-full relative h-[45%] overflow-hidden">
                         {/* Category Badge */}
-                        <div className="flex justify-end mb-4">
-                          <span className="inline-flex items-center px-3 py-1 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
+                        <div className="absolute top-4 right-4 z-10">
+                          <span className="inline-flex items-center px-3 py-2 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
                             {workflow.category || "General"}
                           </span>
                         </div>
+
+                        {/* Workflow Diagram Preview */}
+                        <div className="w-full top-0 absolute min-h-96">
+                          <div className="bg-gray-50 border-b border-gray-200 workflow-preview-header">
+                            {/* Div wrapper dengan posisi relative untuk workflow preview */}
+                            <div className="h-full workflow-preview-wrapper">
+                              <div className="bg-red-500 workflow-preview-container -translate-x-36 -translate-y-10">
+                                {workflow.json_n8n ? (
+                                  <div
+                                    className="workflow-preview-content absolute w-full h-full"
+                                    dangerouslySetInnerHTML={{
+                                      __html: `<n8n-demo workflow='${workflow.json_n8n.replace(
+                                        /'/g,
+                                        "&#39;"
+                                      )}' frame="true" style="width: 100%; height: 100%; border: none; border-radius: 0; margin: 0; padding: 0; overflow: hidden; display: block;"></n8n-demo>`,
+                                    }}
+                                  />
+                                ) : (
+                                  <div className="workflow-preview-content absolute w-full h-full flex items-center justify-center bg-gray-100">
+                                    <div className="text-center text-gray-500">
+                                      <div className="text-2xl mb-1">📋</div>
+                                      <p className="text-xs">
+                                        No workflow data
+                                      </p>
+                                      <p className="text-xs text-gray-400 mt-1">
+                                        json_n8n field empty
+                                      </p>
+                                      <p className="text-xs text-gray-400 mt-1">
+                                        Add workflow JSON to see preview
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <span className="btn-jelajah-workflow w-full flex items-center justify-center gap-3 sm:w-fit rounded-full mt-[23px] min-w-[200px]">
+                            Pelajari
+                            <svg
+                              width="19"
+                              height="20"
+                              viewBox="0 0 19 20"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                                stroke="#622a9a"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                              <path
+                                d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                                stroke="black"
+                                strokeOpacity="0.05"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Div 2: Content (Judul, Deskripsi, Tag, Creator) */}
+                      <div className="p-4 sm:p-6">
                         {/* Title */}
-                        <h3 className="text-base sm:text-lg font-bold text-purple-900 mb-2 line-clamp-2 group-hover:text-purple-700 transition-colors break-words">
+                        <h3 className="workflow-card-title group-hover:text-purple-700 transition-colors">
                           {workflow.title}
                         </h3>
 
                         {/* Description */}
-                        <p className="text-xs sm:text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed break-words">
+                        <p className="workflow-card-description line-clamp-3">
                           {workflow.description ||
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros."}
                         </p>
@@ -568,7 +638,7 @@ export default function CreatorDetailPage() {
                           )}
                         </div>
 
-                        {/* Stats */}
+                        {/* Author */}
                         <div className="flex items-center gap-2 sm:gap-3 pt-4 border-t border-gray-100">
                           <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full overflow-hidden flex-shrink-0">
                             {creator?.avatar_url ? (
