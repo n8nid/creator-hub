@@ -129,10 +129,9 @@ export default function WorkflowsPage() {
           <button
             key={page}
             className={`px-3 sm:px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow text-xs sm:text-sm min-w-[32px] sm:min-w-[40px]
-              ${
-                page === currentPage
-                  ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
-                  : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20"
+              ${page === currentPage
+                ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
+                : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20"
               }
             `}
             onClick={() => setCurrentPage(page)}
@@ -220,7 +219,7 @@ export default function WorkflowsPage() {
         </div>
 
         {/* Workflows Grid */}
-        <div className="workflow-grid mt-44 sm:mt-52 mb-20 sm:mb-32 overflow-hidden">
+        <div className="workflow-grid mt-32 mb-20 sm:mb-32 overflow-hidden">
           {loading ? (
             <div className="w-full text-center py-8 sm:py-12 text-white/60 text-sm sm:text-base break-words">
               Loading...
@@ -237,28 +236,20 @@ export default function WorkflowsPage() {
                 className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block workflow-card"
               >
                 {/* Div 1: Workflow Preview Diagram (Full Width) */}
-                <div className="w-full pt-12">
+                <div className="w-full relative h-[45%] overflow-hidden">
                   {/* Category Badge */}
                   <div className="absolute top-4 right-4 z-10">
-                    <span className="inline-flex items-center px-3 py-1 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
+                    <span className="inline-flex items-center px-3 py-2 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
                       {workflow.category || "General"}
                     </span>
                   </div>
 
                   {/* Workflow Diagram Preview */}
-                  <div className="w-full">
+                  <div className="w-full top-0 absolute min-h-96">
                     <div className="bg-gray-50 border-b border-gray-200 workflow-preview-header">
-                      <div className="flex items-center justify-between mb-1 px-2 workflow-preview-header-content">
-                        <span className="text-xs font-semibold text-gray-700">
-                          Workflow Preview
-                        </span>
-                        <span className="text-xs text-gray-500 bg-gray-200 px-1 rounded">
-                          Diagram
-                        </span>
-                      </div>
                       {/* Div wrapper dengan posisi relative untuk workflow preview */}
-                      <div className="relative workflow-preview-wrapper">
-                        <div className="bg-white workflow-preview-container absolute">
+                      <div className=" h-full workflow-preview-wrapper">
+                        <div className="bg-red-500 workflow-preview-container -translate-x-36 -translate-y-10">
                           {workflow.json_n8n ? (
                             <div
                               className="workflow-preview-content absolute w-full h-full"
@@ -287,6 +278,36 @@ export default function WorkflowsPage() {
                       </div>
                     </div>
                   </div>
+                  <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span
+                      className="btn-jelajah-workflow w-full flex items-center justify-center gap-3 sm:w-fit rounded-full mt-[23px] min-w-[200px]"
+                    >
+                      Pelajari
+                      <svg
+                        width="19"
+                        height="20"
+                        viewBox="0 0 19 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                          stroke="#622a9a"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                          stroke="black"
+                          strokeOpacity="0.05"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </div>
                 </div>
 
                 {/* Div 2: Content (Judul, Deskripsi, Tag, Creator) */}
@@ -294,6 +315,7 @@ export default function WorkflowsPage() {
                   {/* Title */}
                   <h3 className="workflow-card-title group-hover:text-purple-700 transition-colors">
                     {workflow.title}
+                    test
                   </h3>
 
                   {/* Description */}

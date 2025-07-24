@@ -74,7 +74,7 @@ export function LoginForm() {
                 <Input
                   placeholder="Enter your email"
                   {...field}
-                  className="bg-white/20 border-white/30 text-white placeholder:text-gray-300 focus:bg-white/30 focus:border-white/50"
+                  className="w-full pl-4 pr-12 py-3 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-lg text-white placeholder-white/60"
                 />
               </FormControl>
               <FormMessage className="text-red-400" />
@@ -93,7 +93,7 @@ export function LoginForm() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     {...field}
-                    className="bg-white/20 border-white/30 text-white placeholder:text-gray-300 focus:bg-white/30 focus:border-white/50"
+                    className="w-full pl-4 pr-12 py-3 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-lg text-white placeholder-white/60"
                   />
                   <Button
                     type="button"
@@ -116,7 +116,7 @@ export function LoginForm() {
         />
         <Button
           type="submit"
-          className="w-full text-white border-0"
+          className="w-full text-white border-0 rounded-full"
           style={{
             background:
               "linear-gradient(85.56deg, #D900FF 2.74%, #9500FF 91.78%)",

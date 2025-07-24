@@ -129,10 +129,9 @@ export function HeaderNav() {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-2 px-6 py-2 rounded-full font-semibold transition-all duration-200 text-base select-none
-                  ${
-                    isActive
-                      ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
-                      : "bg-transparent text-white hover:bg-white/10"
+                  ${isActive
+                    ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
+                    : "bg-transparent text-white hover:bg-white/10"
                   }
                 `}
                 style={{ minWidth: 0 }}
@@ -183,6 +182,13 @@ export function HeaderNav() {
                   align="end"
                   className="w-56 bg-white/95 backdrop-blur-sm border border-white/20"
                 >
+                  <Link href="/dashboard-profile" passHref legacyBehavior>
+                    <DropdownMenuItem className="text-red-600 hover:text-red-700 cursor-pointer">
+                      <span>
+                        Profile
+                      </span>
+                    </DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem
                     onClick={handleSignOut}
                     className="text-red-600 hover:text-red-700 cursor-pointer"
@@ -236,11 +242,10 @@ export function HeaderNav() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                        isActive
-                          ? "bg-[rgba(147,51,234,0.2)] text-white"
-                          : "text-white hover:bg-white/10"
-                      }`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive
+                        ? "bg-[rgba(147,51,234,0.2)] text-white"
+                        : "text-white hover:bg-white/10"
+                        }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <Icon className="w-5 h-5" />
@@ -267,6 +272,13 @@ export function HeaderNav() {
                           {profile?.name || user.email}
                         </div>
                       </div>
+                      <Link href="/dashboard-profile" passHref legacyBehavior>
+                        <button
+                          className="text-red-400 hover:text-red-300 text-sm font-medium"
+                        >
+                          Profile
+                        </button>
+                      </Link>
                       <button
                         onClick={handleSignOut}
                         className="text-red-400 hover:text-red-300 text-sm font-medium"

@@ -100,7 +100,7 @@ export default function AuthPage() {
       <div className="flex items-center justify-center h-[calc(100vh-4rem)] -mt-8">
         <div className="w-full max-w-md space-y-6 px-4">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-white mb-2">Welcome back</h1>
+            <p className="text-3xl font-bold text-white mb-2">Welcome back</p>
             <p className="text-gray-300">
               Enter your credentials to access your account
             </p>

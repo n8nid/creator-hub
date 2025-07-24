@@ -333,7 +333,7 @@ export default function CreatorsPage() {
         </div>
 
         {/* Creators Grid - New Layout */}
-        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6 mt-24 md:mt-56 w-full">
+        <div className="grid grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6 mt-48 md:mt-56">
           {loading ? (
             <div className="col-span-full text-center py-12 text-white/60">
               Loading...
