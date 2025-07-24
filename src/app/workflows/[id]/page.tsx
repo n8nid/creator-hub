@@ -153,7 +153,7 @@ export default function WorkflowDetailPublicPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative mt-[7.813rem]">
+    <div className="min-h-screen flex flex-col relative mt-[4rem]">
       {/* Circle Gradient di atas */}
       <GradientCircle
         type="hero"
@@ -170,7 +170,7 @@ export default function WorkflowDetailPublicPage() {
           {/* Bagian 1: Judul + Workflow Canvas */}
           <div className="flex xl:flex-row flex-col gap-8 mb-12 h-[45rem] sm:h-[45rem] md:h-[34rem] lg:h-[34rem]">
             {/* Kiri - Judul */}
-            <div className="flex flex-col justify-start lg:col-span-2 w-full xl:w-[50%]">
+            <div className="flex flex-col justify-center lg:col-span-2 w-full xl:w-[50%]">
               {/* Back to Workflows Button */}
 
               {/* Workflow Title */}
@@ -181,7 +181,7 @@ export default function WorkflowDetailPublicPage() {
             </div>
 
             {/* Kanan - Workflow Canvas */}
-            <div className="rounded-2xl w-full xl:w-[50%]">
+            <div className="rounded-2xl w-full xl:w-[50%] flex items-center justify-center">
               {workflow.screenshot_url ? (
                 <img
                   src={workflow.screenshot_url}
@@ -349,35 +349,6 @@ export default function WorkflowDetailPublicPage() {
                     </div>
                   </div>
                 )}
-
-                {/* Last Update */}
-                {/* <div>
-                <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-2">
-                  Last Update
-                </h3>
-                <p className="text-white">
-                  Last update{" "}
-                  {formatDate(workflow.updated_at || workflow.created_at)}
-                </p>
-              </div> */}
-
-                {/* Categories */}
-                {/* <div>
-                <h3 className="text-sm font-bold text-white/60 uppercase tracking-wider mb-2">
-                  Categories
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {workflow.category ? (
-                    <span className="px-3 py-1 text-sm bg-white/10 border border-white/20 text-white rounded-lg">
-                      {workflow.category}
-                    </span>
-                  ) : (
-                    <span className="px-3 py-1 text-sm bg-white/10 border border-white/20 text-white rounded-lg">
-                      General
-                    </span>
-                  )}
-                </div>
-              </div> */}
               </div>
               <p className="text-white/80 mt-8">
                 dipublish pada {formatPublishedDate(workflow.created_at)}
