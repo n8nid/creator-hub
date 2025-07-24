@@ -185,6 +185,7 @@ export default function CreatorDetailPage() {
         tags: workflow.tags || [],
         complexity: workflow.complexity,
         status: workflow.status,
+        json_n8n: workflow.json_n8n, // Add json_n8n field for workflow preview
       }));
 
       setWorkflows(transformedWorkflows);
