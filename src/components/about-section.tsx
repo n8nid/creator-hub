@@ -65,7 +65,10 @@ const AboutSection = () => {
     <section className="relative w-full content-above-gradient">
       <div className="relative container-box z-10">
         {/* About Section Content */}
-        <div className="pt-[10rem] relative" style={{ isolation: "isolate" }}>
+        <div
+          className="pt-[10rem] md:pt-[10rem] sm:pt-[4rem] xs:pt-[2rem] relative"
+          style={{ isolation: "isolate" }}
+        >
           {/* Network Graphic - Absolute positioned to the right */}
           <div
             className="absolute -right-40 top-0 bottom-0 w-[80vw] h-full flex items-center justify-end opacity-45"
