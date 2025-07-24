@@ -94,13 +94,62 @@ export function HeaderNav() {
       }}
     >
       <div
-        className={`${"w-full container-box"} flex items-center justify-between pt-[4rem]`}
+        className={`${"w-full container-box"} flex items-center justify-between pt-[4rem] md:pt-[4rem] sm:pt-[2rem] xs:pt-[1rem]`}
       >
         {/* Logo/Brand - Mobile */}
-        <div className="md:hidden">
-          <Link href="/" className="text-white font-bold text-xl">
-            N8N
-          </Link>
+        <div className="md:hidden flex items-center gap-2">
+          {/* N8N Logo - Node yang saling terhubung */}
+          <div className="w-8 h-8 flex items-center justify-center text-white">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-full h-full"
+            >
+              {/* Node 1 - Left */}
+              <circle cx="2" cy="12" r="1.8" fill="currentColor" opacity="1" />
+              {/* Node 2 - Left Center */}
+              <circle cx="7" cy="12" r="1.8" fill="currentColor" opacity="1" />
+              {/* Node 3 - Center */}
+              <circle cx="12" cy="12" r="1.8" fill="currentColor" opacity="1" />
+              {/* Node 4 - Right Top */}
+              <circle cx="17" cy="6" r="1.8" fill="currentColor" opacity="1" />
+              {/* Node 5 - Right Bottom */}
+              <circle cx="17" cy="18" r="1.8" fill="currentColor" opacity="1" />
+              {/* Connection Lines - Improved connections */}
+              <path
+                d="M3.8 12H6.2"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M8.8 12H11.2"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M13.8 12H15.2"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M15.2 12L17 6"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M15.2 12L17 18"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
+          <span className="text-white font-bold text-lg">n8n ID</span>
         </div>
 
         {/* Desktop Navigation */}
@@ -129,9 +178,10 @@ export function HeaderNav() {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-2 px-6 py-2 rounded-full font-semibold transition-all duration-200 text-base select-none
-                  ${isActive
-                    ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
-                    : "bg-transparent text-white hover:bg-white/10"
+                  ${
+                    isActive
+                      ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
+                      : "bg-transparent text-white hover:bg-white/10"
                   }
                 `}
                 style={{ minWidth: 0 }}
@@ -145,6 +195,18 @@ export function HeaderNav() {
 
         {/* Right side - Avatar/Join Community + Mobile Menu Button */}
         <div className="flex items-center gap-4">
+          {/* Mobile - Join Community Button */}
+          {!user && (
+            <div className="md:hidden">
+              <Link
+                href="/auth"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
+              >
+                Join Community
+              </Link>
+            </div>
+          )}
+
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMobileMenu}
@@ -184,9 +246,7 @@ export function HeaderNav() {
                 >
                   <Link href="/dashboard-profile" passHref legacyBehavior>
                     <DropdownMenuItem className="text-red-600 hover:text-red-700 cursor-pointer">
-                      <span>
-                        Profile
-                      </span>
+                      <span>Profile</span>
                     </DropdownMenuItem>
                   </Link>
                   <DropdownMenuItem
@@ -242,10 +302,11 @@ export function HeaderNav() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive
-                        ? "bg-[rgba(147,51,234,0.2)] text-white"
-                        : "text-white hover:bg-white/10"
-                        }`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
+                        isActive
+                          ? "bg-[rgba(147,51,234,0.2)] text-white"
+                          : "text-white hover:bg-white/10"
+                      }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <Icon className="w-5 h-5" />
@@ -273,9 +334,7 @@ export function HeaderNav() {
                         </div>
                       </div>
                       <Link href="/dashboard-profile" passHref legacyBehavior>
-                        <button
-                          className="text-red-400 hover:text-red-300 text-sm font-medium"
-                        >
+                        <button className="text-red-400 hover:text-red-300 text-sm font-medium">
                           Profile
                         </button>
                       </Link>
