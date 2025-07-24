@@ -244,7 +244,7 @@ const FeaturedWorkflows = () => {
                 <Link
                   key={workflow.id}
                   href={`/workflows/${workflow.id}`}
-                  className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block workflow-card"
+                  className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 block overflow-hidden h-full"
                 >
                   {/* Div 1: Workflow Preview Diagram (Full Width) */}
                   <div className="w-full relative workflow-preview-section overflow-hidden">
@@ -256,14 +256,14 @@ const FeaturedWorkflows = () => {
                     </div>
 
                     {/* Workflow Diagram Preview */}
-                    <div className="w-full top-0 absolute min-h-96">
+                    <div className="w-full -top-4 lg:top-0 absolute min-h-72">
                       <div className="bg-gray-50 border-b border-gray-200 workflow-preview-header">
                         {/* Div wrapper dengan posisi relative untuk workflow preview */}
-                        <div className=" h-full workflow-preview-wrapper">
-                          <div className="bg-red-500 workflow-preview-container workflow-preview-transform">
+                        <div className="h-full workflow-preview-wrapper">
+                          <div className="workflow-preview-container workflow-preview-transform">
                             {workflow.json_n8n ? (
                               <div
-                                className="workflow-preview-content absolute w-full h-full"
+                                className="workflow-preview-content absolute -translate-x-48  min-w-[1000px] h-full"
                                 dangerouslySetInnerHTML={{
                                   __html: `<n8n-demo workflow='${workflow.json_n8n.replace(
                                     /'/g,
@@ -291,7 +291,7 @@ const FeaturedWorkflows = () => {
                     </div>
                     <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <span
-                        className="btn-jelajah-workflow w-full flex items-center justify-center gap-3 sm:w-fit rounded-full mt-[23px] min-w-[200px]"
+                        className="btn-jelajah-workflow  flex items-center justify-center gap-3 rounded-full mt-[23px] max-w-[200px]"
                       >
                         Pelajari
                         <svg
