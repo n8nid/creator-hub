@@ -129,9 +129,10 @@ export default function WorkflowsPage() {
           <button
             key={page}
             className={`px-3 sm:px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow text-xs sm:text-sm min-w-[32px] sm:min-w-[40px]
-              ${page === currentPage
-                ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
-                : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20"
+              ${
+                page === currentPage
+                  ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
+                  : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20"
               }
             `}
             onClick={() => setCurrentPage(page)}
@@ -165,7 +166,7 @@ export default function WorkflowsPage() {
 
       <div className="w-full container-box relative z-10 mb-32">
         {/* HERO HEADING & SUBHEADING */}
-        <div className="w-full pt-40 md:pt-64 flex flex-col gap-6 md:gap-10">
+        <div className="w-full pt-32 md:pt-64 flex flex-col gap-6 md:gap-10">
           <div className="flex flex-col md:flex-row md:items-center w-full">
             {/* Kiri: Heading */}
             <div className="flex flex-col items-start flex-shrink-0">
@@ -279,9 +280,7 @@ export default function WorkflowsPage() {
                     </div>
                   </div>
                   <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span
-                      className="btn-jelajah-workflow  flex items-center justify-center gap-3 rounded-full mt-[23px] max-w-[200px]"
-                    >
+                    <span className="btn-jelajah-workflow  flex items-center justify-center gap-3 rounded-full mt-[23px] max-w-[200px]">
                       Pelajari
                       <svg
                         width="19"

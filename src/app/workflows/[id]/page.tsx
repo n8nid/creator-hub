@@ -168,9 +168,9 @@ export default function WorkflowDetailPublicPage() {
       <main className="flex-grow relative z-10">
         <div className="container-box">
           {/* Bagian 1: Judul + Workflow Canvas */}
-          <div className="flex xl:flex-row flex-col gap-8 mb-12 h-[45rem] sm:h-[45rem] md:h-[34rem] lg:h-[34rem]">
+          <div className="flex lg:flex-row flex-col gap-8 mb-12 h-[45rem] sm:h-[45rem] md:h-[34rem] lg:h-[34rem]">
             {/* Kiri - Judul */}
-            <div className="flex flex-col justify-center lg:col-span-2 w-full xl:w-[50%]">
+            <div className="flex flex-col justify-center lg:col-span-2 w-full lg:w-[50%]">
               {/* Back to Workflows Button */}
 
               {/* Workflow Title */}
@@ -181,7 +181,7 @@ export default function WorkflowDetailPublicPage() {
             </div>
 
             {/* Kanan - Workflow Canvas */}
-            <div className="rounded-2xl w-full xl:w-[50%] flex items-center justify-center">
+            <div className="rounded-2xl w-full lg:w-[50%] flex items-center justify-center">
               {workflow.screenshot_url ? (
                 <img
                   src={workflow.screenshot_url}
@@ -218,11 +218,11 @@ export default function WorkflowDetailPublicPage() {
           </div>
 
           {/* Bagian 2: Info Creator + Deskripsi */}
-          <div className="flex xl:flex-row flex-col gap-8">
+          <div className="flex lg:flex-row flex-col gap-8">
             {/* Kiri - Info Creator, Last Update, Categories */}
 
             {/* Kanan - Deskripsi Workflow */}
-            <div className="pr-6 w-full xl:w-[50%]">
+            <div className="pr-6 w-full lg:w-[50%]">
               <div className="prose prose-invert prose-lg max-w-none text-white/80 leading-relaxed">
                 <ReactMarkdown
                   components={{
