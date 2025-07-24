@@ -503,3 +503,60 @@ h1.creator-detail-name {
     font-size: clamp(0.85rem, 2.5vw, 1rem) !important;
   }
 }
+
+/* Workflow Page Title Styling - Shared between Add and Edit pages */
+.workflow-page-title {
+  font-family: "Albert Sans", sans-serif !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.workflow-page-title-line-1 {
+  display: block !important;
+  font-size: 80px !important;
+  margin-bottom: 4px !important;
+  line-height: 1.05 !important;
+}
+
+.workflow-page-title-line-2 {
+  display: block !important;
+  font-size: 80px !important;
+  margin-bottom: 0 !important;
+  line-height: 1.05 !important;
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .workflow-page-title-line-1,
+  .workflow-page-title-line-2 {
+    font-size: 50px !important;
+  }
+}
+
+/* Small Mobile (max-width: 640px) */
+@media (max-width: 640px) {
+  .workflow-page-title-line-1,
+  .workflow-page-title-line-2 {
+    font-size: 40px !important;
+  }
+}
+
+/* Tablet (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .workflow-page-title-line-1,
+  .workflow-page-title-line-2 {
+    font-size: 70px !important;
+  }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+  .workflow-page-title-line-1,
+  .workflow-page-title-line-2 {
+    font-size: 80px !important;
+  }
+}
