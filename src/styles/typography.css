@@ -94,12 +94,11 @@ h1 {
   color: #ffffff !important;
   margin: 0 !important;
   text-align: left !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   white-space: normal !important;
-  max-height: 2.4em !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
 }
 
 /* Creator Experience Level based on Figma specifications */

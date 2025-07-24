@@ -58,8 +58,8 @@ const FeaturedCreators = () => {
         console.error("Failed to fetch creators from API");
       }
 
-      // Ambil creator pertama (4 untuk mobile, 6 untuk desktop)
-      const featuredCreators = apiCreators.slice(0, 6);
+      // Ambil creator sesuai dengan jumlah yang dibutuhkan
+      const featuredCreators = apiCreators.slice(0, 6); // Selalu ambil 6 dari API, render sesuai breakpoint
       setCreators(featuredCreators);
     } catch (error) {
       console.error("Error fetching featured creators:", error);
@@ -104,7 +104,7 @@ const FeaturedCreators = () => {
             </a>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6">
-            {[...Array(4)].map((_, i) => (
+            {[...Array(6)].map((_, i) => (
               <div key={i} className="creator-item">
                 <div className="creator-avatar">
                   <Avatar className="creator-avatar-image">
@@ -162,7 +162,7 @@ const FeaturedCreators = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 tablet:gap-5 lg:gap-6">
           {creators.length > 0
-            ? creators.slice(0, 4).map((creator) => (
+            ? creators.slice(0, 6).map((creator) => (
                 <Link
                   key={creator.id}
                   href={`/creators/${creator.id}`}
@@ -193,7 +193,7 @@ const FeaturedCreators = () => {
                   </div>
                 </Link>
               ))
-            : [...Array(4)].map((_, i) => (
+            : [...Array(6)].map((_, i) => (
                 <div key={i} className="creator-item">
                   <div className="creator-avatar">
                     <Avatar className="creator-avatar-image">

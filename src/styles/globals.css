@@ -3079,3 +3079,18 @@ n8n-demo {
     gap: 6px !important;
   }
 }
+
+/* Responsive creator visibility for Meet the Creators section */
+/* Desktop (1024px+): Show all 6 creators */
+@media (min-width: 1024px) {
+  .creator-item:nth-child(n + 5) {
+    display: block;
+  }
+}
+
+/* Mobile/Tablet (768px-1023px): Hide creators 5 and 6 */
+@media (max-width: 1023px) {
+  .creator-item:nth-child(n + 5) {
+    display: none;
+  }
+}
