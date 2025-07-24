@@ -94,13 +94,62 @@ export function HeaderNav() {
       }}
     >
       <div
-        className={`${"w-full container-box"} flex items-center justify-between pt-[4rem]`}
+        className={`${"w-full container-box"} flex items-center justify-between pt-[4rem] md:pt-[4rem] sm:pt-[2rem] xs:pt-[1rem]`}
       >
         {/* Logo/Brand - Mobile */}
-        <div className="md:hidden">
-          <Link href="/" className="text-white font-bold text-xl">
-            N8N
-          </Link>
+        <div className="md:hidden flex items-center gap-2">
+          {/* N8N Logo - Node yang saling terhubung */}
+          <div className="w-8 h-8 flex items-center justify-center text-white">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-full h-full"
+            >
+              {/* Node 1 - Left */}
+              <circle cx="2" cy="12" r="1.8" fill="currentColor" opacity="1" />
+              {/* Node 2 - Left Center */}
+              <circle cx="7" cy="12" r="1.8" fill="currentColor" opacity="1" />
+              {/* Node 3 - Center */}
+              <circle cx="12" cy="12" r="1.8" fill="currentColor" opacity="1" />
+              {/* Node 4 - Right Top */}
+              <circle cx="17" cy="6" r="1.8" fill="currentColor" opacity="1" />
+              {/* Node 5 - Right Bottom */}
+              <circle cx="17" cy="18" r="1.8" fill="currentColor" opacity="1" />
+              {/* Connection Lines - Improved connections */}
+              <path
+                d="M3.8 12H6.2"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M8.8 12H11.2"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M13.8 12H15.2"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M15.2 12L17 6"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M15.2 12L17 18"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </div>
+          <span className="text-white font-bold text-lg">n8n ID</span>
         </div>
 
         {/* Desktop Navigation */}
@@ -129,9 +178,10 @@ export function HeaderNav() {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-2 px-6 py-2 rounded-full font-semibold transition-all duration-200 text-base select-none
-                  ${isActive
-                    ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
-                    : "bg-transparent text-white hover:bg-white/10"
+                  ${
+                    isActive
+                      ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
+                      : "bg-transparent text-white hover:bg-white/10"
                   }
                 `}
                 style={{ minWidth: 0 }}
@@ -145,6 +195,18 @@ export function HeaderNav() {
 
         {/* Right side - Avatar/Join Community + Mobile Menu Button */}
         <div className="flex items-center gap-4">
+          {/* Mobile - Join Community Button */}
+          {!user && (
+            <div className="md:hidden">
+              <Link
+                href="/auth"
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
+              >
+                Join Community
+              </Link>
+            </div>
+          )}
+
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMobileMenu}
@@ -180,21 +242,75 @@ export function HeaderNav() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="w-56 bg-white/95 backdrop-blur-sm border border-white/20"
+                  className="w-72 bg-gradient-to-br from-purple-900/95 to-pink-900/95 backdrop-blur-md border border-purple-500/30 shadow-2xl shadow-purple-500/20 rounded-xl overflow-hidden"
                 >
-                  <Link href="/dashboard-profile" passHref legacyBehavior>
-                    <DropdownMenuItem className="text-red-600 hover:text-red-700 cursor-pointer">
-                      <span>
-                        Profile
-                      </span>
+                  {/* User Info Section */}
+                  <div className="p-4 border-b border-purple-500/20">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="w-12 h-12 ring-2 ring-purple-500/50">
+                        <AvatarImage
+                          src={profile?.profile_image || ""}
+                          alt={profile?.name || user.email}
+                        />
+                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-lg font-bold">
+                          {getInitials(profile?.name || user.email || "")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-white font-semibold text-sm truncate">
+                          {profile?.name || user.email}
+                        </div>
+                        <div className="text-purple-200 text-xs truncate">
+                          {user.email}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Menu Items */}
+                  <div className="p-2">
+                    <Link href="/dashboard-profile" passHref legacyBehavior>
+                      <DropdownMenuItem className="flex items-center gap-3 px-3 py-2.5 text-white hover:bg-white/10 rounded-lg cursor-pointer transition-all duration-200 group">
+                        <div className="w-5 h-5 flex items-center justify-center">
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                          </svg>
+                        </div>
+                        <span className="font-medium">Dashboard Profile</span>
+                      </DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuItem
+                      onClick={handleSignOut}
+                      className="flex items-center gap-3 px-3 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg cursor-pointer transition-all duration-200 group"
+                    >
+                      <div className="w-5 h-5 flex items-center justify-center">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                          />
+                        </svg>
+                      </div>
+                      <span className="font-medium">Sign Out</span>
                     </DropdownMenuItem>
-                  </Link>
-                  <DropdownMenuItem
-                    onClick={handleSignOut}
-                    className="text-red-600 hover:text-red-700 cursor-pointer"
-                  >
-                    Sign Out
-                  </DropdownMenuItem>
+                  </div>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
@@ -242,10 +358,11 @@ export function HeaderNav() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive
-                        ? "bg-[rgba(147,51,234,0.2)] text-white"
-                        : "text-white hover:bg-white/10"
-                        }`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
+                        isActive
+                          ? "bg-[rgba(147,51,234,0.2)] text-white"
+                          : "text-white hover:bg-white/10"
+                      }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <Icon className="w-5 h-5" />
@@ -257,34 +374,76 @@ export function HeaderNav() {
                 {/* Mobile - User Avatar or Join Community */}
                 <div className="border-t border-white/20 pt-4 mt-2">
                   {user ? (
-                    <div className="flex items-center gap-3 px-4 py-3">
-                      <Avatar className="w-8 h-8">
-                        <AvatarImage
-                          src={profile?.profile_image || ""}
-                          alt={profile?.name || user.email}
-                        />
-                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold">
-                          {getInitials(profile?.name || user.email || "")}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <div className="text-sm font-medium text-white">
-                          {profile?.name || user.email}
+                    <div className="flex flex-col gap-3">
+                      {/* User Info */}
+                      <div className="flex items-center gap-3 px-4 py-3">
+                        <Avatar className="w-10 h-10 ring-2 ring-purple-500/50">
+                          <AvatarImage
+                            src={profile?.profile_image || ""}
+                            alt={profile?.name || user.email}
+                          />
+                          <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold">
+                            {getInitials(profile?.name || user.email || "")}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="text-sm font-semibold text-white">
+                            {profile?.name || user.email}
+                          </div>
+                          <div className="text-xs text-purple-200">
+                            {user.email}
+                          </div>
                         </div>
                       </div>
-                      <Link href="/dashboard-profile" passHref legacyBehavior>
+
+                      {/* Action Buttons */}
+                      <div className="flex flex-col gap-2 px-4">
+                        <Link href="/dashboard-profile" passHref legacyBehavior>
+                          <button
+                            className="flex items-center gap-3 w-full px-3 py-2.5 text-white hover:bg-white/10 rounded-lg font-medium transition-all duration-200 group"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <div className="w-5 h-5 flex items-center justify-center">
+                              <svg
+                                className="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                />
+                              </svg>
+                            </div>
+                            <span>Dashboard Profile</span>
+                          </button>
+                        </Link>
+
                         <button
-                          className="text-red-400 hover:text-red-300 text-sm font-medium"
+                          onClick={handleSignOut}
+                          className="flex items-center gap-3 w-full px-3 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg font-medium transition-all duration-200 group"
                         >
-                          Profile
+                          <div className="w-5 h-5 flex items-center justify-center">
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                              />
+                            </svg>
+                          </div>
+                          <span>Sign Out</span>
                         </button>
-                      </Link>
-                      <button
-                        onClick={handleSignOut}
-                        className="text-red-400 hover:text-red-300 text-sm font-medium"
-                      >
-                        Sign Out
-                      </button>
+                      </div>
                     </div>
                   ) : (
                     <Link

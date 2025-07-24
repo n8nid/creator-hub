@@ -2441,6 +2441,28 @@ n8n-demo {
   }
 }
 
+/* Specific adjustments for 1024px to prevent search bar from overlapping */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .creator-detail-search-container {
+    width: 280px !important;
+    min-width: 280px !important;
+    max-width: 280px !important;
+  }
+
+  .creator-detail-search-input {
+    min-width: 280px !important;
+    max-width: 280px !important;
+  }
+
+  .creator-detail-content {
+    gap: 0.75rem;
+  }
+
+  .creator-detail-profile-section {
+    gap: 1.25rem;
+  }
+}
+
 .creator-detail-search:focus {
   outline: none;
   border-color: #8b5cf6;
@@ -2501,7 +2523,7 @@ n8n-demo {
 }
 
 /* Responsive design for tablet and mobile */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .creator-detail-profile-section {
     flex-direction: column;
     align-items: center;
@@ -2522,7 +2544,7 @@ n8n-demo {
   }
 
   .creator-detail-search-container {
-    display: none; /* Hide search from profile section on tablet */
+    display: none; /* Hide search from profile section on mobile */
   }
 
   .creator-detail-name-section {
@@ -2551,7 +2573,7 @@ n8n-demo {
     margin-bottom: 2rem;
   }
 
-  /* Override hero-description text alignment for tablet */
+  /* Override hero-description text alignment for mobile */
   .creator-detail-bio-section .hero-description,
   .creator-detail-bio-section .hero-description p,
   .creator-detail-bio-section .hero-description h1,
@@ -3214,5 +3236,20 @@ n8n-demo {
     padding: 10px 20px !important;
     font-size: 13px !important;
     gap: 6px !important;
+  }
+}
+
+/* Responsive creator visibility for Meet the Creators section */
+/* Desktop (1024px+): Show all 6 creators */
+@media (min-width: 1024px) {
+  .creator-item:nth-child(n + 5) {
+    display: block;
+  }
+}
+
+/* Mobile/Tablet (768px-1023px): Hide creators 5 and 6 */
+@media (max-width: 1023px) {
+  .creator-item:nth-child(n + 5) {
+    display: none;
   }
 }
