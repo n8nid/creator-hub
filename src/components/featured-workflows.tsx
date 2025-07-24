@@ -247,7 +247,7 @@ const FeaturedWorkflows = () => {
                   className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 overflow-hidden block workflow-card"
                 >
                   {/* Div 1: Workflow Preview Diagram (Full Width) */}
-                  <div className="w-full relative h-[45%] overflow-hidden">
+                  <div className="w-full relative workflow-preview-section overflow-hidden">
                     {/* Category Badge */}
                     <div className="absolute top-4 right-4 z-10">
                       <span className="inline-flex items-center px-3 py-2 text-xs font-semibold bg-gradient-to-r from-purple-600 to-black text-white rounded-full">
@@ -260,7 +260,7 @@ const FeaturedWorkflows = () => {
                       <div className="bg-gray-50 border-b border-gray-200 workflow-preview-header">
                         {/* Div wrapper dengan posisi relative untuk workflow preview */}
                         <div className=" h-full workflow-preview-wrapper">
-                          <div className="bg-red-500 workflow-preview-container -translate-x-36 -translate-y-10">
+                          <div className="bg-red-500 workflow-preview-container workflow-preview-transform">
                             {workflow.json_n8n ? (
                               <div
                                 className="workflow-preview-content absolute w-full h-full"
