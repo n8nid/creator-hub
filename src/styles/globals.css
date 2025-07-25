@@ -1055,6 +1055,24 @@ body {
     position: relative;
     z-index: 10;
   }
+
+  /* Mobile Hamburger Menu Fix - Khusus untuk mobile 640px ke bawah */
+  @media (max-width: 640px) {
+    /* Hamburger menu button dengan background yang jelas */
+    button[aria-label="Toggle mobile menu"] {
+      background: rgba(32, 26, 44, 0.95) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Hover state untuk hamburger menu */
+    button[aria-label="Toggle mobile menu"]:hover {
+      background: rgba(32, 26, 44, 0.98) !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+  }
 }
 
 /* Workflow Page Styles */
@@ -3251,5 +3269,96 @@ n8n-demo {
 @media (max-width: 1023px) {
   .creator-item:nth-child(n + 5) {
     display: none;
+  }
+}
+
+/* Footer Responsive Spacing Fixes */
+/* Tablet (769px - 1024px) - Horizontal layout with description on right */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .footer-transparent .flex.flex-col.md\\:flex-row {
+    gap: 2rem !important;
+  }
+
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child {
+    flex-direction: row !important; /* Horizontal layout */
+    gap: 2rem !important;
+    align-items: flex-start !important;
+  }
+
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child h2 {
+    padding-right: 2rem !important;
+    margin-bottom: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child p {
+    max-width: 20rem !important;
+    margin-left: 0 !important;
+    flex: 1 !important;
+  }
+
+  .footer-transparent .flex.flex-row.gap-16.md\\:gap-20.lg\\:gap-24 {
+    margin-top: 0 !important;
+    gap: 2rem !important;
+  }
+}
+
+/* Laptop (1025px - 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child {
+    gap: 3rem !important;
+  }
+
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child h2 {
+    padding-right: 4rem !important;
+  }
+
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child p {
+    max-width: 24rem !important;
+  }
+
+  .footer-transparent .flex.flex-row.gap-16.md\\:gap-20.lg\\:gap-24 {
+    gap: 3rem !important;
+  }
+}
+
+/* Desktop (1441px+) */
+@media (min-width: 1441px) {
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child {
+    gap: 4rem !important;
+  }
+
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child h2 {
+    padding-right: 7.813rem !important;
+  }
+
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child p {
+    max-width: 28rem !important;
+  }
+
+  .footer-transparent .flex.flex-row.gap-16.md\\:gap-20.lg\\:gap-24 {
+    gap: 4rem !important;
+  }
+}
+
+/* Mobile (max-width: 768px) - Vertical layout */
+@media (max-width: 768px) {
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+  }
+
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child h2 {
+    padding-right: 0 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .footer-transparent .flex.flex-col.md\\:flex-row > div:first-child p {
+    max-width: 100% !important;
+  }
+
+  .footer-transparent .flex.flex-row.gap-16.md\\:gap-20.lg\\:gap-24 {
+    margin-top: 2rem !important;
+    gap: 2rem !important;
   }
 }

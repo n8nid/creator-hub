@@ -8,19 +8,19 @@ const MainFooter = () => {
         {/* Konten utama */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 md:gap-0">
           {/* Kiri: Judul & Deskripsi */}
-          <div className="flex items-start">
-            <h2 className="text-4xl md:text-5xl font-semibold leading-tight pr-[7.813rem]">
+          <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-0">
+            <h2 className="text-4xl md:text-5xl font-semibold leading-tight md:pr-[7.813rem]">
               N8N Indonesia
               <br />
               <span className="font-light">Community</span>
             </h2>
-            <p className="paragraph-17-regulertext-white/80 max-w-md">
+            <p className="paragraph-17-regulertext-white/80 max-w-md md:max-w-lg">
               Komunitas automation terbesar di Indonesia. Bergabunglah dengan
               ribuan developer yang membangun workflow powerful.
             </p>
           </div>
           {/* Kanan: Menu */}
-          <div className="flex flex-row gap-16 md:gap-24 mt-8 md:mt-0">
+          <div className="flex flex-row gap-16 md:gap-20 lg:gap-24 mt-8 md:mt-0">
             <div>
               <h4 className="font-semibold mb-3">Explore</h4>
               <ul className="space-y-2 text-white/80">
