@@ -84,7 +84,7 @@ export function HeaderNav() {
 
   return (
     <header
-      className="sticky top-0 z-50 transition-all duration-300 ease-in-out"
+      className="sticky top-0 transition-all duration-300 ease-in-out"
       style={{
         background: "transparent",
         backdropFilter: "none",
@@ -178,10 +178,9 @@ export function HeaderNav() {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-2 px-6 py-2 rounded-full font-semibold transition-all duration-200 text-base select-none
-                  ${
-                    isActive
-                      ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
-                      : "bg-transparent text-white hover:bg-white/10"
+                  ${isActive
+                    ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
+                    : "bg-transparent text-white hover:bg-white/10"
                   }
                 `}
                 style={{ minWidth: 0 }}
@@ -358,11 +357,10 @@ export function HeaderNav() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                        isActive
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive
                           ? "bg-[rgba(147,51,234,0.2)] text-white"
                           : "text-white hover:bg-white/10"
-                      }`}
+                        }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <Icon className="w-5 h-5" />
