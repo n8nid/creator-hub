@@ -150,7 +150,7 @@ const HeroSection = () => {
                       />
                     </svg>
                   </a>
-                  <a className="btn-secondary" href="/directory">
+                  <a className="btn-secondary" href="/creators">
                     Temukan Creator
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
