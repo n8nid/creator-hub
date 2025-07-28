@@ -132,7 +132,7 @@ const FeaturedCreators = () => {
           <h2 className="h2-title text-center md:text-start w-full">
             Meet the Creators
           </h2>
-          <a href="/directory" className="btn-primary">
+          <a href="/creators" className="btn-primary">
             Temukan Creator
             <svg
               width="19"

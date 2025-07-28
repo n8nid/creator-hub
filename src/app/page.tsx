@@ -8,14 +8,7 @@ import GradientCircle from "@/components/GradientCircle";
 export default function Page() {
   return (
     <div className="min-h-screen flex flex-col relative">
-      {/* Responsive Gradient Circles */}
-      {/* Hero Circle - Positioned by CSS */}
       <GradientCircle type="hero" />
-
-      {/* About Circle - Positioned by CSS */}
-      <GradientCircle type="about" />
-
-      {/* Footer Circles - Custom positioning for multiple circles */}
       <GradientCircle
         type="footer"
         className="gradient-circle-footer-1"

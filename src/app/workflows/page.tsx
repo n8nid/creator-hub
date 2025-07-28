@@ -157,9 +157,20 @@ export default function WorkflowsPage() {
       <GradientCircle
         type="hero"
         style={{
-          top: "20vh",
+          top: "10vh",
           left: "25vw",
           transform: "translateX(-50%)",
+          zIndex: -1,
+        }}
+      />
+
+      {/* Gradient circle kedua di area kanan */}
+      <GradientCircle
+        type="hero"
+        style={{
+          top: "75vh",
+          left: "80vw",
+          transform: "translateX(50%)",
           zIndex: -1,
         }}
       />
