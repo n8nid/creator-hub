@@ -165,8 +165,12 @@ export default function WorkflowsSubPage() {
     <div className="space-y-8 mt-4 overflow-x-hidden">
       {/* Header Section */}
       <div className="px-2">
-        <p className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">Workflow Saya</p>
-        <p className="text-gray-600 mt-2 text-sm sm:text-base break-words">Kelola workflow Anda</p>
+        <p className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">
+          Workflow Saya
+        </p>
+        <p className="text-gray-600 mt-2 text-sm sm:text-base break-words">
+          Kelola workflow Anda
+        </p>
       </div>
 
       {/* Search and Filter Bar */}
@@ -248,16 +252,14 @@ export default function WorkflowsSubPage() {
           </Select>
 
           {/* Add Workflow Button */}
-          <Button
-            asChild
-            className="w-full sm:w-auto bg-purple-900 hover:bg-purple-800 text-white text-sm flex-shrink-0"
+          <Link
+            href="/dashboard-profile/workflows/add"
+            className="btn-primary px-4 py-2 text-sm"
           >
-            <Link href="/dashboard-profile/workflows/add">
-              <Plus className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Tambah Workflow</span>
-              <span className="sm:hidden">Tambah</span>
-            </Link>
-          </Button>
+            <Plus className="w-4 h-4 mr-2" />
+            <span className="hidden sm:inline">Tambah Workflow</span>
+            <span className="sm:hidden">Tambah</span>
+          </Link>
         </div>
       </div>
 
@@ -320,7 +322,9 @@ export default function WorkflowsSubPage() {
                   )}
 
                   {/* Title */}
-                  <h3 className="font-semibold text-gray-900 text-sm sm:text-base break-words line-clamp-2">{w.title}</h3>
+                  <h3 className="font-semibold text-gray-900 text-sm sm:text-base break-words line-clamp-2">
+                    {w.title}
+                  </h3>
 
                   {/* Badges */}
                   <div className="flex items-center gap-2 flex-wrap">
@@ -328,14 +332,15 @@ export default function WorkflowsSubPage() {
                       {w.complexity || "-"}
                     </span>
                     <span
-                      className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full break-words ${w.status === "approved"
-                        ? "bg-green-100 text-green-800"
-                        : w.status === "pending"
+                      className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full break-words ${
+                        w.status === "approved"
+                          ? "bg-green-100 text-green-800"
+                          : w.status === "pending"
                           ? "bg-yellow-100 text-yellow-800"
                           : w.status === "rejected"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-gray-100 text-gray-700"
-                        }`}
+                          ? "bg-red-100 text-red-800"
+                          : "bg-gray-100 text-gray-700"
+                      }`}
                     >
                       {w.status}
                     </span>
@@ -360,7 +365,9 @@ export default function WorkflowsSubPage() {
 
                   {/* Footer Info */}
                   <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100">
-                    <span className="break-words">Updated: {w.updated_at?.slice(0, 10)}</span>
+                    <span className="break-words">
+                      Updated: {w.updated_at?.slice(0, 10)}
+                    </span>
                     <span className="flex items-center gap-1 flex-shrink-0">
                       <span>❤️</span>
                       <span>0</span>
@@ -392,7 +399,9 @@ export default function WorkflowsSubPage() {
                 >
                   <Link href="/dashboard-profile/workflows/add">
                     <Plus className="w-4 h-4 mr-2" />
-                    <span className="hidden sm:inline">Tambah Workflow Pertama</span>
+                    <span className="hidden sm:inline">
+                      Tambah Workflow Pertama
+                    </span>
                     <span className="sm:hidden">Tambah Workflow</span>
                   </Link>
                 </Button>
@@ -406,53 +415,49 @@ export default function WorkflowsSubPage() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-1 sm:gap-2 mt-8 px-4">
           {/* Previous Button */}
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className="border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white disabled:opacity-50 text-xs sm:text-sm"
+            className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm disabled:opacity-50 pagination-btn"
           >
             <span className="hidden sm:inline">Previous</span>
             <span className="sm:hidden">Prev</span>
-          </Button>
+          </button>
 
           {/* Page Numbers */}
           <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center">
             {getPageNumbers().map((page, index) => (
               <div key={index}>
                 {page === "..." ? (
-                  <span className="px-2 sm:px-3 py-2 text-gray-500 text-xs sm:text-sm">...</span>
+                  <span className="px-2 sm:px-3 py-2 text-gray-500 text-xs sm:text-sm">
+                    ...
+                  </span>
                 ) : (
-                  <Button
-                    variant={currentPage === page ? "default" : "outline"}
-                    size="sm"
+                  <button
                     onClick={() => setCurrentPage(page as number)}
                     className={
                       currentPage === page
-                        ? "bg-purple-900 hover:bg-purple-800 text-white text-xs sm:text-sm min-w-[32px] sm:min-w-[40px]"
-                        : "border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white text-xs sm:text-sm min-w-[32px] sm:min-w-[40px]"
+                        ? "btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm min-w-[32px] sm:min-w-[40px] pagination-btn"
+                        : "btn-secondary px-3 sm:px-4 py-2 text-xs sm:text-sm min-w-[32px] sm:min-w-[40px] pagination-btn"
                     }
                   >
                     {page}
-                  </Button>
+                  </button>
                 )}
               </div>
             ))}
           </div>
 
           {/* Next Button */}
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={() =>
               setCurrentPage(Math.min(totalPages, currentPage + 1))
             }
             disabled={currentPage === totalPages}
-            className="border-purple-900 text-purple-900 hover:bg-purple-900 hover:text-white disabled:opacity-50 text-xs sm:text-sm"
+            className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm disabled:opacity-50 pagination-btn"
           >
             Next
-          </Button>
+          </button>
         </div>
       )}
     </div>

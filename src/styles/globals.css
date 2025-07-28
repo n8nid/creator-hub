@@ -2972,6 +2972,70 @@ n8n-demo {
   transform: translateY(0) scale(0.98) !important;
 }
 
+/* Pagination Button Styles - Smaller version of homepage buttons */
+.btn-primary.px-3,
+.btn-secondary.px-3,
+.btn-secondary.px-4 {
+  padding: 8px 16px !important;
+  min-height: 36px !important;
+  font-size: 14px !important;
+  gap: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px -2px rgba(147, 51, 234, 0.2),
+    0 2px 4px -1px rgba(147, 51, 234, 0.1) !important;
+}
+
+.btn-primary.px-3:hover,
+.btn-secondary.px-3:hover,
+.btn-secondary.px-4:hover {
+  transform: translateY(-1px) scale(1.01) !important;
+  box-shadow: 0 6px 16px -3px rgba(147, 51, 234, 0.3),
+    0 3px 6px -2px rgba(147, 51, 234, 0.2) !important;
+}
+
+.btn-primary.px-3:active,
+.btn-secondary.px-3:active,
+.btn-secondary.px-4:active {
+  transform: translateY(0) scale(0.99) !important;
+}
+
+/* Disabled state for pagination buttons */
+.btn-primary.px-3:disabled,
+.btn-primary.px-4:disabled,
+.btn-secondary.px-3:disabled,
+.btn-secondary.px-4:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: 0 2px 8px -1px rgba(147, 51, 234, 0.1) !important;
+}
+
+.btn-primary.px-3:disabled:hover,
+.btn-primary.px-4:disabled:hover,
+.btn-secondary.px-3:disabled:hover,
+.btn-secondary.px-4:disabled:hover {
+  transform: none !important;
+  box-shadow: 0 2px 8px -1px rgba(147, 51, 234, 0.1) !important;
+}
+
+/* Responsive pagination button sizing */
+@media (max-width: 640px) {
+  .btn-primary.px-3,
+  .btn-primary.px-4,
+  .btn-secondary.px-3,
+  .btn-secondary.px-4 {
+    padding: 6px 12px !important;
+    min-height: 32px !important;
+    font-size: 12px !important;
+  }
+
+  .pagination-btn {
+    padding: 6px 12px !important;
+    min-height: 32px !important;
+    font-size: 12px !important;
+  }
+}
+
 /* Responsive button sizing */
 /* Tablet (769px - 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -3361,4 +3425,69 @@ n8n-demo {
     margin-top: 2rem !important;
     gap: 2rem !important;
   }
+}
+
+/* Dashboard button styles - Medium size for dashboard actions */
+.btn-primary.px-4 {
+  padding: 10px 20px !important;
+  min-height: 40px !important;
+  font-size: 14px !important;
+  gap: 8px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px -2px rgba(147, 51, 234, 0.2),
+    0 2px 4px -1px rgba(147, 51, 234, 0.1) !important;
+}
+
+.btn-primary.px-4:hover {
+  transform: translateY(-1px) scale(1.01) !important;
+  box-shadow: 0 6px 16px -3px rgba(147, 51, 234, 0.3),
+    0 3px 6px -2px rgba(147, 51, 234, 0.2) !important;
+}
+
+.btn-primary.px-4:active {
+  transform: translateY(0) scale(0.99) !important;
+}
+
+/* Pagination button styles - px-4 variant for pagination */
+.btn-primary.px-4.pagination-btn {
+  padding: 8px 16px !important;
+  min-height: 36px !important;
+  font-size: 14px !important;
+  gap: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px -2px rgba(147, 51, 234, 0.2),
+    0 2px 4px -1px rgba(147, 51, 234, 0.1) !important;
+}
+
+/* Pagination button styles - General pagination styling */
+.pagination-btn {
+  padding: 8px 16px !important;
+  min-height: 36px !important;
+  font-size: 14px !important;
+  gap: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px -2px rgba(147, 51, 234, 0.2),
+    0 2px 4px -1px rgba(147, 51, 234, 0.1) !important;
+}
+
+.pagination-btn:hover {
+  transform: translateY(-1px) scale(1.01) !important;
+  box-shadow: 0 6px 16px -3px rgba(147, 51, 234, 0.3),
+    0 3px 6px -2px rgba(147, 51, 234, 0.2) !important;
+}
+
+.pagination-btn:active {
+  transform: translateY(0) scale(0.99) !important;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: 0 2px 8px -1px rgba(147, 51, 234, 0.1) !important;
+}
+
+.pagination-btn:disabled:hover {
+  transform: none !important;
+  box-shadow: 0 2px 8px -1px rgba(147, 51, 234, 0.1) !important;
 }

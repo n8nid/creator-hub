@@ -118,7 +118,7 @@ export default function WorkflowsPage() {
   const Pagination = () => (
     <div className="flex justify-center items-center gap-1 sm:gap-2 mt-8 sm:mt-12">
       <button
-        className="px-3 sm:px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 text-xs sm:text-sm"
+        className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm disabled:opacity-50 pagination-btn"
         onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
         disabled={currentPage === 1}
       >
@@ -128,11 +128,11 @@ export default function WorkflowsPage() {
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <button
             key={page}
-            className={`px-3 sm:px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow text-xs sm:text-sm min-w-[32px] sm:min-w-[40px]
+            className={`px-3 sm:px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow text-xs sm:text-sm min-w-[32px] sm:min-w-[40px] pagination-btn
               ${
                 page === currentPage
-                  ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white scale-105"
-                  : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white border border-white/20"
+                  ? "btn-primary scale-105"
+                  : "btn-secondary"
               }
             `}
             onClick={() => setCurrentPage(page)}
@@ -142,7 +142,7 @@ export default function WorkflowsPage() {
         ))}
       </div>
       <button
-        className="px-3 sm:px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 text-xs sm:text-sm"
+        className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm disabled:opacity-50 pagination-btn"
         onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
         disabled={currentPage === totalPages}
       >
