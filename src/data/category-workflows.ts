@@ -1,11 +1,9 @@
 export const workflowCategories = [
-  "E-commerce",
-  "Communication",
-  "Data Management",
-  "Analytics",
-  "Finance",
+  "AI",
+  "Sales",
+  "IT Ops",
   "Marketing",
-  "Operations",
-  "HR",
-  "Content",
+  "Document Ops",
+  "Support",
+  "Other",
 ];
