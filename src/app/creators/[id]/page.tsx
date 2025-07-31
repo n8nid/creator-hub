@@ -23,7 +23,10 @@ import {
   Github,
   Globe,
   ChevronDown,
+  Twitter,
+  Youtube,
 } from "lucide-react";
+import { FaDiscord, FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 
@@ -35,10 +38,15 @@ interface Creator {
   location: string;
   bio: string;
   about_markdown?: string;
-  linkedin_url?: string;
-  instagram_url?: string;
-  github_url?: string;
-  website_url?: string;
+  linkedin?: string;
+  instagram?: string;
+  github?: string;
+  website?: string;
+  twitter?: string;
+  threads?: string;
+  discord?: string;
+  Whatsapp?: string;
+  youtube?: string;
   avatar_url?: string;
 }
 
@@ -80,10 +88,10 @@ export default function CreatorDetailPage() {
     if (creator) {
       console.log("Creator data:", creator);
       console.log("Social links check:", {
-        linkedin: creator.linkedin_url,
-        instagram: creator.instagram_url,
-        github: creator.github_url,
-        website: creator.website_url,
+        linkedin: creator.linkedin,
+        instagram: creator.instagram,
+        github: creator.github,
+        website: creator.website,
       });
     }
   }, [creator]);
@@ -127,10 +135,15 @@ export default function CreatorDetailPage() {
         location: profileData.location || "Unknown",
         bio: profileData.bio || "",
         about_markdown: profileData.about_markdown || "",
-        linkedin_url: profileData.linkedin || "",
-        instagram_url: profileData.instagram || "",
-        github_url: profileData.github || "",
-        website_url: profileData.website || "",
+        linkedin: profileData.linkedin || "",
+        instagram: profileData.instagram || "",
+        github: profileData.github || "",
+        website: profileData.website || "",
+        twitter: profileData.twitter || "",
+        threads: profileData.threads || "",
+        discord: profileData.discord || "",
+        Whatsapp: profileData.Whatsapp || "",
+        youtube: profileData.youtube || "",
         avatar_url: profileData.profile_image || "",
       };
 
@@ -456,9 +469,9 @@ export default function CreatorDetailPage() {
 
               {/* Social Links */}
               <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
-                {creator.linkedin_url && (
+                {creator.linkedin && (
                   <a
-                    href={creator.linkedin_url}
+                    href={creator.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-white hover:text-gray-300 transition-colors"
@@ -466,19 +479,19 @@ export default function CreatorDetailPage() {
                     <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
                   </a>
                 )}
-                {creator.instagram_url && (
+                {creator.twitter && (
                   <a
-                    href={creator.instagram_url}
+                    href={creator.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-white hover:text-gray-300 transition-colors"
                   >
-                    <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <Twitter className="w-5 h-5 sm:w-6 sm:h-6" />
                   </a>
                 )}
-                {creator.github_url && (
+                {creator.github && (
                   <a
-                    href={creator.github_url}
+                    href={creator.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-white hover:text-gray-300 transition-colors"
@@ -486,9 +499,66 @@ export default function CreatorDetailPage() {
                     <Github className="w-5 h-5 sm:w-6 sm:h-6" />
                   </a>
                 )}
-                {creator.website_url && (
+                {creator.instagram && (
                   <a
-                    href={creator.website_url}
+                    href={creator.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-gray-300 transition-colors"
+                  >
+                    <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </a>
+                )}
+                {creator.threads && (
+                  <a
+                    href={creator.threads}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-gray-300 transition-colors"
+                  >
+                    <svg
+                      className="w-5 h-5 sm:w-6 sm:h-6"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Zm0 18.5A8.5 8.5 0 1 1 12 3.5a8.5 8.5 0 0 1 0 17Zm.25-13.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Zm-2.5 2.5a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm5 0a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm-2.5 8.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Z" />
+                    </svg>
+                  </a>
+                )}
+                {creator.discord && (
+                  <a
+                    href={creator.discord}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-gray-300 transition-colors"
+                  >
+                    <FaDiscord className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </a>
+                )}
+                {creator.Whatsapp && (
+                  <a
+                    href={`https://wa.me/${creator.Whatsapp.replace(/\D/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-gray-300 transition-colors"
+                  >
+                    <FaWhatsapp className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </a>
+                )}
+                {creator.youtube && (
+                  <a
+                    href={creator.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white hover:text-gray-300 transition-colors"
+                  >
+                    <Youtube className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </a>
+                )}
+                {creator.website && (
+                  <a
+                    href={creator.website}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-white hover:text-gray-300 transition-colors"

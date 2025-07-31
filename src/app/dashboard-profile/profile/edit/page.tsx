@@ -19,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { TagInput } from "@/components/ui/tag-input";
 import { PROVINCES } from "@/data/indonesia-regions";
 import { FaDiscord } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import MDEditor from "@uiw/react-md-editor";
@@ -40,6 +41,7 @@ const defaultProfileForm = {
   threads: "",
   discord: "",
   youtube: "",
+  whatsapp: "",
 };
 
 export default function EditProfilePage() {
@@ -93,6 +95,7 @@ export default function EditProfilePage() {
           threads: data.threads || "",
           discord: data.discord || "",
           youtube: data.youtube || "",
+          whatsapp: data.Whatsapp || "",
         });
         setSkills(data.skills || []);
         // Set profile image without cache busting for database-stored URL
@@ -116,6 +119,8 @@ export default function EditProfilePage() {
     if (!form.name.trim()) errors.name = "Nama wajib diisi.";
     if (form.website && !/^https?:\/\//.test(form.website))
       errors.website = "Website harus diawali http(s)://";
+    if (form.whatsapp && !/^(\+62|62|0)8[1-9][0-9]{6,9}$/.test(form.whatsapp.replace(/\s/g, '')))
+      errors.whatsapp = "Format nomor Whatsapp tidak valid. Gunakan format: 08123456789 atau +628123456789";
     // Bisa tambah validasi lain jika perlu
     return errors;
   };
@@ -158,58 +163,336 @@ export default function EditProfilePage() {
     if (!tempImageFile || !user) return;
 
     try {
+      console.log("Starting crop process...");
+      console.log("Crop values:", crop);
+      console.log("Temp image file:", tempImageFile.name);
+
       // Create canvas for cropping
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      const img = new Image();
+      
+      if (!ctx) {
+        console.error("Failed to get canvas context");
+        toast.error("Gagal memproses gambar: Canvas context tidak tersedia");
+        return;
+      }
 
+      const img = new Image();
+      
+      // Set up image loading with proper error handling
       img.onload = () => {
+        console.log("Image loaded successfully");
+        console.log("Image natural dimensions:", img.naturalWidth, "x", img.naturalHeight);
+        
         // Set fixed output size for consistency (400x400 pixels)
         const outputSize = 400;
 
-        // Calculate crop dimensions based on percentage
-        const cropWidth = (crop.width / 100) * img.naturalWidth;
-        const cropHeight = (crop.height / 100) * img.naturalHeight;
-        const cropX = (crop.x / 100) * img.naturalWidth;
-        const cropY = (crop.y / 100) * img.naturalHeight;
+        // Calculate crop dimensions based on unit (px or %)
+        let cropWidth, cropHeight, cropX, cropY;
+        
+        if (crop.unit === 'px') {
+          // ReactCrop provides pixel values based on the preview image size
+          // We need to scale these coordinates to match the original image dimensions
+          
+          // Get the preview image element to calculate scaling
+          const previewImg = document.querySelector('.ReactCrop__image') as HTMLImageElement;
+          let scaleX = 1, scaleY = 1;
+          
+          if (previewImg) {
+            scaleX = img.naturalWidth / previewImg.width;
+            scaleY = img.naturalHeight / previewImg.height;
+            console.log("Scaling factors:", { scaleX, scaleY, previewWidth: previewImg.width, previewHeight: previewImg.height });
+          } else {
+            // Fallback: try to find the image in the crop modal
+            const cropModalImg = document.querySelector('.w-96.h-96 img') as HTMLImageElement;
+            if (cropModalImg) {
+              scaleX = img.naturalWidth / cropModalImg.width;
+              scaleY = img.naturalHeight / cropModalImg.height;
+              console.log("Fallback scaling factors:", { scaleX, scaleY, modalImgWidth: cropModalImg.width, modalImgHeight: cropModalImg.height });
+            } else {
+              console.warn("Could not find preview image for scaling, using 1:1 scale");
+            }
+          }
+          
+          // Apply scaling to convert preview coordinates to original image coordinates
+          cropWidth = Math.max(1, crop.width * scaleX);
+          cropHeight = Math.max(1, crop.height * scaleY);
+          cropX = Math.max(0, crop.x * scaleX);
+          cropY = Math.max(0, crop.y * scaleY);
+          
+          // Validate scaling factors to prevent extreme values
+          if (scaleX > 10 || scaleY > 10 || scaleX < 0.1 || scaleY < 0.1) {
+            console.warn("Extreme scaling factors detected:", { scaleX, scaleY });
+            console.warn("This might indicate incorrect preview image detection");
+          }
+          
+          console.log("Scaled crop coordinates:", {
+            originalCrop: { x: crop.x, y: crop.y, width: crop.width, height: crop.height },
+            scaledCrop: { x: cropX, y: cropY, width: cropWidth, height: cropHeight },
+            scaleFactors: { scaleX, scaleY }
+          });
+        } else {
+          // Fallback to percentage calculation
+          cropWidth = Math.max(1, (crop.width / 100) * img.naturalWidth);
+          cropHeight = Math.max(1, (crop.height / 100) * img.naturalHeight);
+          cropX = Math.max(0, (crop.x / 100) * img.naturalWidth);
+          cropY = Math.max(0, (crop.y / 100) * img.naturalHeight);
+        }
 
-        canvas.width = outputSize;
-        canvas.height = outputSize;
+        console.log("Calculated crop dimensions:", {
+          cropX,
+          cropY,
+          cropWidth,
+          cropHeight,
+          outputSize,
+          imageWidth: img.naturalWidth,
+          imageHeight: img.naturalHeight,
+          cropValues: crop,
+          cropUnit: crop.unit
+        });
 
-        if (ctx) {
-          ctx.drawImage(
-            img,
+        // Validate crop dimensions with tolerance for rounding errors
+        if (cropWidth <= 0 || cropHeight <= 0) {
+          console.error("Invalid crop dimensions:", { cropWidth, cropHeight });
+          toast.error("Area crop tidak valid. Silakan coba lagi.");
+          return;
+        }
+
+        // Check if crop area is too small (less than 50x50 pixels)
+        const minCropSize = 50;
+        if (cropWidth < minCropSize || cropHeight < minCropSize) {
+          console.warn("Crop area is very small:", { cropWidth, cropHeight, minCropSize });
+          // Don't show error, just log warning and continue
+        }
+
+        // Validate that crop area is reasonable (not larger than image)
+        if (cropWidth > img.naturalWidth * 1.1 || cropHeight > img.naturalHeight * 1.1) {
+          console.error("Crop area is unreasonably large:", { 
+            cropWidth, 
+            cropHeight, 
+            imageWidth: img.naturalWidth, 
+            imageHeight: img.naturalHeight 
+          });
+          toast.error("Area crop terlalu besar. Silakan pilih area yang lebih kecil.");
+          return;
+        }
+
+        // Log the exact crop area being processed
+        console.log("Crop area analysis:", {
+          cropArea: cropWidth * cropHeight,
+          imageArea: img.naturalWidth * img.naturalHeight,
+          cropPercentage: ((cropWidth * cropHeight) / (img.naturalWidth * img.naturalHeight)) * 100,
+          isReasonable: cropWidth <= img.naturalWidth && cropHeight <= img.naturalHeight
+        });
+
+        // Final validation: ensure crop coordinates are within image bounds
+        const isCropValid = cropX >= 0 && cropY >= 0 && 
+                           cropX + cropWidth <= img.naturalWidth && 
+                           cropY + cropHeight <= img.naturalHeight;
+        
+        if (!isCropValid) {
+          console.error("Invalid crop coordinates:", {
+            cropX, cropY, cropWidth, cropHeight,
+            imageWidth: img.naturalWidth, imageHeight: img.naturalHeight,
+            isValid: isCropValid
+          });
+          
+          // Try to adjust the crop area to fit within bounds
+          const adjustedCropX = Math.max(0, Math.min(cropX, img.naturalWidth - cropWidth));
+          const adjustedCropY = Math.max(0, Math.min(cropY, img.naturalHeight - cropHeight));
+          const adjustedCropWidth = Math.min(cropWidth, img.naturalWidth - adjustedCropX);
+          const adjustedCropHeight = Math.min(cropHeight, img.naturalHeight - adjustedCropY);
+          
+          console.log("Adjusted crop coordinates:", {
+            original: { cropX, cropY, cropWidth, cropHeight },
+            adjusted: { adjustedCropX, adjustedCropY, adjustedCropWidth, adjustedCropHeight }
+          });
+          
+          // Use adjusted coordinates
+          cropX = adjustedCropX;
+          cropY = adjustedCropY;
+          cropWidth = adjustedCropWidth;
+          cropHeight = adjustedCropHeight;
+        }
+
+        console.log("Final crop coordinates:", {
+          cropX, cropY, cropWidth, cropHeight,
+          imageWidth: img.naturalWidth, imageHeight: img.naturalHeight,
+          aspectRatio: cropWidth / cropHeight
+        });
+
+        // Add tolerance of 1 pixel for rounding errors
+        const tolerance = 1;
+        const maxAllowedX = img.naturalWidth + tolerance;
+        const maxAllowedY = img.naturalHeight + tolerance;
+        
+        if (cropX + cropWidth > maxAllowedX || cropY + cropHeight > maxAllowedY) {
+          console.error("Crop area exceeds image bounds (with tolerance):", {
             cropX,
             cropY,
             cropWidth,
             cropHeight,
-            0,
-            0,
-            outputSize,
-            outputSize
-          );
+            imageWidth: img.naturalWidth,
+            imageHeight: img.naturalHeight,
+            maxAllowedX,
+            maxAllowedY,
+            exceedsX: cropX + cropWidth > maxAllowedX,
+            exceedsY: cropY + cropHeight > maxAllowedY
+          });
+          
+          // Instead of showing error, try to auto-adjust the crop area
+          console.log("Attempting to auto-adjust crop area...");
+          
+          // If the excess is very small (within 5 pixels), auto-adjust
+          const excessX = Math.max(0, cropX + cropWidth - img.naturalWidth);
+          const excessY = Math.max(0, cropY + cropHeight - img.naturalHeight);
+          
+          if (excessX <= 5 && excessY <= 5) {
+            console.log("Auto-adjusting crop area (excess within acceptable range)");
+            // Continue with clamped values
+          } else {
+            toast.error("Area crop melebihi batas gambar. Silakan coba lagi.");
+            return;
+          }
         }
 
-        // Convert canvas to blob
-        canvas.toBlob(
-          async (blob) => {
-            if (blob) {
+        // Clamp crop dimensions to image bounds to prevent any issues
+        const clampedCropX = Math.min(cropX, img.naturalWidth - 1);
+        const clampedCropY = Math.min(cropY, img.naturalHeight - 1);
+        const clampedCropWidth = Math.min(cropWidth, img.naturalWidth - clampedCropX);
+        const clampedCropHeight = Math.min(cropHeight, img.naturalHeight - clampedCropY);
+
+        console.log("Clamped crop dimensions:", {
+          clampedCropX,
+          clampedCropY,
+          clampedCropWidth,
+          clampedCropHeight
+        });
+
+        // Handle case where crop is the full image (100% width and height or full pixel dimensions)
+        // Make this detection more strict to avoid false positives
+        const isFullImageCrop = (crop.unit === '%' && crop.width === 100 && crop.height === 100 && crop.x === 0 && crop.y === 0) ||
+                               (crop.unit === 'px' && 
+                                crop.width >= img.naturalWidth * 0.98 && 
+                                crop.height >= img.naturalHeight * 0.98 && 
+                                crop.x <= 2 && 
+                                crop.y <= 2);
+        
+        if (isFullImageCrop) {
+          console.log("Full image crop detected, using original image dimensions");
+        } else {
+          console.log("Specific crop area detected, using exact crop coordinates");
+        }
+
+        canvas.width = outputSize;
+        canvas.height = outputSize;
+
+        // Clear canvas first
+        ctx.clearRect(0, 0, outputSize, outputSize);
+
+        try {
+          if (isFullImageCrop) {
+            // For full image crop, use object-fit: cover approach
+            const scale = Math.max(outputSize / img.naturalWidth, outputSize / img.naturalHeight);
+            const scaledWidth = img.naturalWidth * scale;
+            const scaledHeight = img.naturalHeight * scale;
+            const offsetX = (outputSize - scaledWidth) / 2;
+            const offsetY = (outputSize - scaledHeight) / 2;
+            
+            ctx.drawImage(
+              img,
+              offsetX,
+              offsetY,
+              scaledWidth,
+              scaledHeight
+            );
+          } else {
+            // Normal crop - use original crop coordinates, not clamped ones
+            // Only clamp if absolutely necessary to prevent out-of-bounds
+            const finalCropX = Math.max(0, Math.min(cropX, img.naturalWidth - cropWidth));
+            const finalCropY = Math.max(0, Math.min(cropY, img.naturalHeight - cropHeight));
+            const finalCropWidth = Math.min(cropWidth, img.naturalWidth - finalCropX);
+            const finalCropHeight = Math.min(cropHeight, img.naturalHeight - finalCropY);
+            
+            console.log("Final crop coordinates for drawing:", {
+              finalCropX,
+              finalCropY,
+              finalCropWidth,
+              finalCropHeight,
+              originalCropX: cropX,
+              originalCropY: cropY,
+              originalCropWidth: cropWidth,
+              originalCropHeight: cropHeight,
+              imageDimensions: { width: img.naturalWidth, height: img.naturalHeight }
+            });
+            
+            // Validate that the final crop area is reasonable
+            if (finalCropWidth < 10 || finalCropHeight < 10) {
+              console.error("Final crop area is too small:", { finalCropWidth, finalCropHeight });
+              toast.error("Area crop terlalu kecil. Silakan pilih area yang lebih besar.");
+              return;
+            }
+            
+            ctx.drawImage(
+              img,
+              finalCropX,
+              finalCropY,
+              finalCropWidth,
+              finalCropHeight,
+              0,
+              0,
+              outputSize,
+              outputSize
+            );
+          }
+          
+          console.log("Image drawn to canvas successfully");
+        } catch (drawError) {
+          console.error("Error drawing image to canvas:", drawError);
+          toast.error("Gagal memproses gambar: Error saat menggambar ke canvas");
+          return;
+        }
+
+        // Convert canvas to blob with better error handling
+        try {
+          canvas.toBlob(
+            async (blob) => {
+              if (!blob) {
+                console.error("Failed to create blob from canvas");
+                toast.error("Gagal memproses gambar: Tidak dapat membuat file");
+                return;
+              }
+
+              console.log("Blob created successfully, size:", blob.size);
+              
+              if (blob.size === 0) {
+                console.error("Blob is empty");
+                toast.error("Gagal memproses gambar: File hasil crop kosong");
+                return;
+              }
+
               const fileExt = tempImageFile.name
                 .split(".")
                 .pop()
-                ?.toLowerCase();
+                ?.toLowerCase() || "jpg";
+              
               // Add timestamp to prevent cache issues
               const timestamp = Date.now();
               const filePath = `user-profiles/${user.id}-${timestamp}.${fileExt}`;
+
+              console.log("Uploading to path:", filePath);
 
               const { error } = await supabase.storage
                 .from("user-profiles")
                 .upload(filePath, blob, { upsert: true });
 
               if (!error) {
+                console.log("Upload successful");
+                
                 const { data: urlData } = supabase.storage
                   .from("user-profiles")
                   .getPublicUrl(filePath);
+                
                 // Add cache busting parameter
                 const imageUrl = `${urlData.publicUrl}?t=${Date.now()}`;
                 setProfileImage(imageUrl);
@@ -261,22 +544,93 @@ export default function EditProfilePage() {
                 }
 
                 toast.success("Foto profil berhasil diperbarui!");
+                
+                // Reset state after successful upload
+                setShowCropModal(false);
+                setCropImage("");
+                setTempImageFile(null);
+                setCrop({
+                  unit: "%",
+                  width: 100,
+                  height: 100,
+                  x: 0,
+                  y: 0,
+                });
               } else {
+                console.error("Upload error:", error);
                 toast.error(`Gagal menyimpan foto: ${error.message}`);
+                
+                // Reset state on upload error
+                setShowCropModal(false);
+                setCropImage("");
+                setTempImageFile(null);
+                setCrop({
+                  unit: "%",
+                  width: 100,
+                  height: 100,
+                  x: 0,
+                  y: 0,
+                });
               }
-            }
-          },
-          "image/jpeg",
-          0.9
-        );
+            },
+            "image/jpeg",
+            0.9
+          );
+        } catch (blobError) {
+          console.error("Error creating blob:", blobError);
+          toast.error("Gagal memproses gambar: Error saat membuat file");
+          
+          // Reset state on blob error
+          setShowCropModal(false);
+          setCropImage("");
+          setTempImageFile(null);
+          setCrop({
+            unit: "%",
+            width: 100,
+            height: 100,
+            x: 0,
+            y: 0,
+          });
+        }
       };
 
+      // Set up error handling for image loading
+      img.onerror = () => {
+        console.error("Failed to load image");
+        toast.error("Gagal memuat gambar. Silakan coba lagi.");
+        setShowCropModal(false);
+        setCropImage("");
+        setTempImageFile(null);
+        setCrop({
+          unit: "%",
+          width: 100,
+          height: 100,
+          x: 0,
+          y: 0,
+        });
+      };
+
+      // Set image source AFTER setting up event handlers
       img.src = cropImage;
+      
+      // Don't reset state here, wait for the process to complete
+      // setShowCropModal(false);
+      // setCropImage("");
+      // setTempImageFile(null);
+    } catch (error) {
+      console.error("Crop process error:", error);
+      toast.error("Gagal memproses gambar.");
+      // Reset state on error
       setShowCropModal(false);
       setCropImage("");
       setTempImageFile(null);
-    } catch (error) {
-      toast.error("Gagal memproses gambar.");
+      setCrop({
+        unit: "%",
+        width: 100,
+        height: 100,
+        x: 0,
+        y: 0,
+      });
     }
   };
 
@@ -329,6 +683,7 @@ export default function EditProfilePage() {
         threads: form.threads || null,
         discord: form.discord || null,
         youtube: form.youtube || null,
+        Whatsapp: form.whatsapp || null,
       };
       const { error } = await supabase
         .from("profiles")
@@ -490,6 +845,22 @@ export default function EditProfilePage() {
                       disabled={submitting}
                     />
                   </div>
+                  <div className="flex items-center gap-2">
+                    <FaWhatsapp className="h-5 w-5 text-gray-700" />
+                    <Input
+                      name="whatsapp"
+                      value={form.whatsapp || ""}
+                      onChange={handleChange}
+                      placeholder="Whatsapp"
+                      className="flex-1"
+                      disabled={submitting}
+                    />
+                  </div>
+                  {formError.whatsapp && (
+                    <p className="text-sm text-red-600 mt-1">
+                      {formError.whatsapp}
+                    </p>
+                  )}
                   <div className="flex items-center gap-2">
                     <Youtube className="h-5 w-5 text-gray-700" />
                     <Input
@@ -682,17 +1053,31 @@ export default function EditProfilePage() {
               <div className="w-96 h-96 bg-gray-100 rounded-lg overflow-hidden">
                 <ReactCrop
                   crop={crop}
-                  onChange={(c) => setCrop(c)}
+                  onChange={(c) => {
+                    console.log("Crop changed:", c);
+                    setCrop(c);
+                  }}
                   aspect={1}
                   circularCrop
                   minWidth={50}
                   minHeight={50}
+                  keepSelection
+                  ruleOfThirds
                 >
                   <img
                     src={cropImage}
                     alt="Crop preview"
                     className="w-full h-full object-contain"
                     style={{ maxWidth: "100%", maxHeight: "100%" }}
+                    onLoad={(e) => {
+                      const img = e.target as HTMLImageElement;
+                      console.log("Crop preview image loaded:", {
+                        naturalWidth: img.naturalWidth,
+                        naturalHeight: img.naturalHeight,
+                        displayWidth: img.width,
+                        displayHeight: img.height
+                      });
+                    }}
                   />
                 </ReactCrop>
               </div>

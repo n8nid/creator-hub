@@ -21,6 +21,8 @@ import {
   Heart,
   MessageSquare,
   Download,
+  Twitter,
+  Youtube,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -29,6 +31,9 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { FaDiscord } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 export default function DashboardProfilePage() {
   const { user } = useAuth();
@@ -316,15 +321,16 @@ export default function DashboardProfilePage() {
               )}
 
               {/* Social Links */}
-              <div className="flex gap-3 sm:gap-4">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-4">
                 {profile?.website && (
                   <a
                     href={profile.website}
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Website"
+                    className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   >
-                    <Globe className="h-4 w-4 sm:h-4 lg:h-5 sm:w-4 lg:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                    <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
                 {profile?.linkedin && (
@@ -333,8 +339,20 @@ export default function DashboardProfilePage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="LinkedIn"
+                    className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   >
-                    <Linkedin className="h-4 w-4 sm:h-4 lg:h-5 sm:w-4 lg:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                    <Linkedin className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                  </a>
+                )}
+                {profile?.twitter && (
+                  <a
+                    href={profile.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Twitter"
+                    className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <Twitter className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
                 {profile?.github && (
@@ -343,8 +361,9 @@ export default function DashboardProfilePage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="GitHub"
+                    className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   >
-                    <Github className="h-4 w-4 sm:h-4 lg:h-5 sm:w-4 lg:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                    <Github className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
                 {profile?.instagram && (
@@ -353,8 +372,60 @@ export default function DashboardProfilePage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Instagram"
+                    className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
                   >
-                    <Instagram className="h-4 w-4 sm:h-4 lg:h-5 sm:w-4 lg:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                    <Instagram className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                  </a>
+                )}
+                {profile?.threads && (
+                  <a
+                    href={profile.threads}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Threads"
+                    className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <svg
+                      className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2Zm0 18.5A8.5 8.5 0 1 1 12 3.5a8.5 8.5 0 0 1 0 17Zm.25-13.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Zm-2.5 2.5a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm5 0a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm-2.5 8.25a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5a.75.75 0 0 1 .75-.75Z" />
+                    </svg>
+                  </a>
+                )}
+                {profile?.discord && (
+                  <a
+                    href={profile.discord}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Discord"
+                    className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <FaDiscord className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                  </a>
+                )}
+                {profile?.Whatsapp && (
+                  <a
+                    href={`https://wa.me/${profile.Whatsapp.replace(/\D/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="WhatsApp"
+                    className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <FaWhatsapp className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
+                  </a>
+                )}
+                {profile?.youtube && (
+                  <a
+                    href={profile.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="YouTube"
+                    className="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <Youtube className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600 hover:text-gray-900 transition-colors" />
                   </a>
                 )}
               </div>

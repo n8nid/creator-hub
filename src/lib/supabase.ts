@@ -69,6 +69,7 @@ export type Database = {
           threads: string | null;
           discord: string | null;
           youtube: string | null;
+          Whatsapp: string | null;
         };
         Insert: {
           id?: string;
@@ -99,6 +100,7 @@ export type Database = {
           threads?: string | null;
           discord?: string | null;
           youtube?: string | null;
+          Whatsapp?: string | null;
         };
         Update: {
           id?: string;
@@ -129,6 +131,7 @@ export type Database = {
           threads?: string | null;
           discord?: string | null;
           youtube?: string | null;
+          Whatsapp?: string | null;
         };
       };
       workflows: {

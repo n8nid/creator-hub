@@ -22,7 +22,7 @@ import {
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import type { Database } from "@/lib/supabase";
-import { FaDiscord } from "react-icons/fa";
+import { FaDiscord, FaWhatsapp } from "react-icons/fa";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 type Workflow = Database["public"]["Tables"]["workflows"]["Row"];
@@ -251,6 +251,16 @@ export function TalentProfile({ profileId }: TalentProfileProps) {
                     title="Discord"
                   >
                     <FaDiscord className="h-5 w-5 text-blue-600 hover:text-blue-800 transition-colors" />
+                  </a>
+                )}
+                {profile.Whatsapp && (
+                  <a
+                    href={`https://wa.me/${profile.Whatsapp.replace(/\D/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="WhatsApp"
+                  >
+                    <FaWhatsapp className="h-5 w-5 text-blue-600 hover:text-blue-800 transition-colors" />
                   </a>
                 )}
                 {profile.youtube && (

@@ -28,6 +28,11 @@ CREATE TABLE public.profiles (
   profile_image TEXT, -- URL to profile image
   status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'pending', 'approved', 'rejected')),
   admin_notes TEXT, -- Admin notes for rejection reasons
+  instagram TEXT,
+  threads TEXT,
+  discord TEXT,
+  youtube TEXT,
+  Whatsapp TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   UNIQUE(user_id)
@@ -125,3 +130,12 @@ CREATE POLICY "Admins can view admin users" ON public.admin_users
       WHERE user_id = auth.uid()
     )
   );
+
+-- Add Whatsapp column if it doesn't exist (for existing databases)
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                   WHERE table_name = 'profiles' AND column_name = 'Whatsapp') THEN
+        ALTER TABLE public.profiles ADD COLUMN "Whatsapp" TEXT;
+    END IF;
+END $$;
