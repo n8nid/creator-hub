@@ -23,6 +23,7 @@ import {
   Download,
   Twitter,
   Youtube,
+  Mail,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -41,6 +42,8 @@ export default function DashboardProfilePage() {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useState<string>("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>("");
   const [stats, setStats] = useState({
     totalWorkflows: 0,
     publishedWorkflows: 0,
@@ -65,6 +68,18 @@ export default function DashboardProfilePage() {
       if (!user) return;
 
       try {
+        // Set user email
+        setUserEmail(user.email || "");
+
+        // Check if user is admin
+        const { data: adminData } = await supabase
+          .from("admin_users")
+          .select("*")
+          .eq("user_id", user.id)
+          .single();
+        
+        setIsAdmin(!!adminData);
+
         const { data } = await supabase
           .from("profiles")
           .select("*")
@@ -317,6 +332,19 @@ export default function DashboardProfilePage() {
                 <div className="flex items-center text-gray-600 text-xs sm:text-sm lg:text-base">
                   <MapPin className="h-3 w-3 sm:h-4 lg:h-4 sm:w-4 lg:w-4 mr-1" />
                   {profile.location}
+                </div>
+              )}
+
+              {/* Email - Only visible to admin and user */}
+              {(isAdmin || user?.id === profile?.user_id) && userEmail && (
+                <div className="flex items-center text-gray-600 text-xs sm:text-xs lg:text-xs">
+                  <Mail className="h-3 w-3 sm:h-4 lg:h-4 sm:w-4 lg:w-4 mr-1" />
+                  <span className="break-all">{userEmail}</span>
+                  {isAdmin && (
+                    <Badge variant="outline" className="ml-2 text-xs">
+                      Admin View
+                    </Badge>
+                  )}
                 </div>
               )}
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import GradientCircle from "@/components/GradientCircle";
 import { Badge } from "@/components/ui/badge";
@@ -25,10 +26,12 @@ import {
   ChevronDown,
   Twitter,
   Youtube,
+  Mail,
 } from "lucide-react";
 import { FaDiscord, FaWhatsapp } from "react-icons/fa";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import { useAuth } from "@/lib/auth-context";
 
 interface Creator {
   id: string;
@@ -48,6 +51,7 @@ interface Creator {
   Whatsapp?: string;
   youtube?: string;
   avatar_url?: string;
+  email?: string;
 }
 
 interface Workflow {
@@ -78,6 +82,10 @@ export default function CreatorDetailPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const workflowsPerPage = 8;
+  const router = useRouter();
+  const { user } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [creatorEmail, setCreatorEmail] = useState<string>("");
 
   useEffect(() => {
     fetchCreatorData();
@@ -109,6 +117,17 @@ export default function CreatorDetailPage() {
 
   const fetchCreatorData = async () => {
     try {
+      // Check if current user is admin
+      if (user) {
+        const { data: adminData } = await supabase
+          .from("admin_users")
+          .select("*")
+          .eq("user_id", user.id)
+          .single();
+        
+        setIsAdmin(!!adminData);
+      }
+
       // Fetch creator data from profiles table
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
@@ -120,6 +139,19 @@ export default function CreatorDetailPage() {
         console.error("Error fetching profile:", profileError);
         setLoading(false);
         return;
+      }
+
+      // Fetch creator's email from auth.users table (admin only)
+      if (isAdmin && profileData.user_id) {
+        const { data: userData } = await supabase
+          .from("users")
+          .select("email")
+          .eq("id", profileData.user_id)
+          .single();
+        
+        if (userData) {
+          setCreatorEmail(userData.email);
+        }
       }
 
       // Debug log untuk melihat data profile
@@ -145,6 +177,7 @@ export default function CreatorDetailPage() {
         Whatsapp: profileData.Whatsapp || "",
         youtube: profileData.youtube || "",
         avatar_url: profileData.profile_image || "",
+        email: profileData.email || "",
       };
 
       console.log("Creator data:", creatorData);
@@ -464,6 +497,17 @@ export default function CreatorDetailPage() {
                       {creator.about_markdown}
                     </ReactMarkdown>
                   </div>
+                </div>
+              )}
+
+              {/* Email - Admin Only */}
+              {isAdmin && creatorEmail && (
+                <div className="flex items-center justify-center lg:justify-start text-white/80 text-xs mb-4">
+                  <Mail className="w-4 h-4 mr-2" />
+                  <span className="break-all">{creatorEmail}</span>
+                  <Badge variant="outline" className="ml-2 text-xs border-white/30 text-white/80">
+                    Admin View
+                  </Badge>
                 </div>
               )}
 
