@@ -537,8 +537,10 @@ export default function UsersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Manajemen User</h1>
-          <p className="text-gray-600">Kelola pengguna dan akses sistem</p>
+          <h1 className="admin-page-title">Manajemen User</h1>
+          <p className="admin-page-subtitle">
+            Kelola pengguna dan akses sistem
+          </p>
         </div>
         <Button>
           <Plus className="h-4 w-4 mr-2" />
@@ -550,7 +552,7 @@ export default function UsersPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <CardTitle className="admin-card-title">Total Users</CardTitle>
             <Users className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
@@ -561,7 +563,7 @@ export default function UsersPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+            <CardTitle className="admin-card-title">Active Users</CardTitle>
             <UserCheck className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
@@ -572,7 +574,7 @@ export default function UsersPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Creators</CardTitle>
+            <CardTitle className="admin-card-title">Creators</CardTitle>
             <UserCheck className="h-4 w-4 text-purple-500" />
           </CardHeader>
           <CardContent>
@@ -583,9 +585,7 @@ export default function UsersPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Rejected Users
-            </CardTitle>
+            <CardTitle className="admin-card-title">Rejected Users</CardTitle>
             <UserX className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
@@ -598,7 +598,7 @@ export default function UsersPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Daftar User</CardTitle>
+            <CardTitle className="admin-section-title">Daftar User</CardTitle>
             <div className="flex items-center space-x-2">
               <div className="relative">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />

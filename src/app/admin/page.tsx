@@ -266,8 +266,10 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Dashboard Admin</h1>
-          <p className="text-gray-600">Selamat datang di panel administrasi</p>
+          <h1 className="admin-page-title">Dashboard Admin</h1>
+          <p className="admin-page-subtitle">
+            Selamat datang di panel administrasi
+          </p>
         </div>
       </div>
 
@@ -276,9 +278,7 @@ export default function AdminDashboard() {
         {statsCards.map((stat) => (
           <Card key={stat.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {stat.title}
-              </CardTitle>
+              <CardTitle className="admin-card-title">{stat.title}</CardTitle>
               <stat.icon className={`h-4 w-4 ${stat.color}`} />
             </CardHeader>
             <CardContent>
@@ -301,7 +301,9 @@ export default function AdminDashboard() {
         {/* Recent Activity */}
         <Card>
           <CardHeader>
-            <CardTitle>Aktivitas Terbaru</CardTitle>
+            <CardTitle className="admin-section-title">
+              Aktivitas Terbaru
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -354,7 +356,7 @@ export default function AdminDashboard() {
         {/* Quick Actions */}
         <Card>
           <CardHeader>
-            <CardTitle>Aksi Cepat</CardTitle>
+            <CardTitle className="admin-section-title">Aksi Cepat</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid gap-3">

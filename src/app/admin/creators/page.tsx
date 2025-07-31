@@ -146,8 +146,10 @@ export default function ModerasiCreatorPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Moderasi Creator</h1>
-          <p className="text-gray-600">Kelola pengajuan dan status creator</p>
+          <h1 className="admin-page-title">Moderasi Creator</h1>
+          <p className="admin-page-subtitle">
+            Kelola pengajuan dan status creator
+          </p>
         </div>
       </div>
 
@@ -155,7 +157,7 @@ export default function ModerasiCreatorPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
+            <CardTitle className="admin-card-title">Pending</CardTitle>
             <Clock className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
@@ -165,7 +167,7 @@ export default function ModerasiCreatorPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Approved</CardTitle>
+            <CardTitle className="admin-card-title">Approved</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
@@ -175,7 +177,7 @@ export default function ModerasiCreatorPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Rejected</CardTitle>
+            <CardTitle className="admin-card-title">Rejected</CardTitle>
             <XCircle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
@@ -185,7 +187,7 @@ export default function ModerasiCreatorPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total</CardTitle>
+            <CardTitle className="admin-card-title">Total</CardTitle>
             <AlertCircle className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
@@ -198,7 +200,9 @@ export default function ModerasiCreatorPage() {
       {/* Daftar Pengajuan Creator Pending */}
       <Card>
         <CardHeader>
-          <CardTitle>Daftar Pengajuan Creator (Pending)</CardTitle>
+          <CardTitle className="admin-section-title">
+            Daftar Pengajuan Creator (Pending)
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (

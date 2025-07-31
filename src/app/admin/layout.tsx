@@ -129,7 +129,7 @@ export default function AdminLayout({
           <div className="h-16 flex items-center justify-center border-b">
             <div className="flex items-center space-x-2">
               <Shield className="h-6 w-6 text-blue-600" />
-              <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
+              <h1 className="admin-panel-title">Admin Panel</h1>
             </div>
           </div>
 
@@ -152,7 +152,13 @@ export default function AdminLayout({
                       isActive ? "text-blue-600" : "text-gray-500"
                     }`}
                   />
-                  {item.name}
+                  <span
+                    className={
+                      isActive ? "admin-nav-item-active" : "admin-nav-item"
+                    }
+                  >
+                    {item.name}
+                  </span>
                 </Link>
               );
             })}
@@ -167,10 +173,8 @@ export default function AdminLayout({
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
-                  {mockUser?.email}
-                </p>
-                <p className="text-xs text-gray-500">Administrator</p>
+                <p className="admin-user-info truncate">{mockUser?.email}</p>
+                <p className="admin-user-role">Administrator</p>
               </div>
             </div>
             <Button
@@ -190,11 +194,9 @@ export default function AdminLayout({
         {/* Header */}
         <header className="bg-white shadow-sm">
           <div className="h-16 flex items-center justify-between px-4">
-            <h2 className="text-lg font-semibold text-gray-900">
-              {getCurrentPageTitle()}
-            </h2>
+            <h2 className="admin-page-title">{getCurrentPageTitle()}</h2>
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-500">Admin Panel</span>
+              <span className="admin-user-role">Admin Panel</span>
             </div>
           </div>
         </header>

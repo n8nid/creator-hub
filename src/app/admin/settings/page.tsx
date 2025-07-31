@@ -130,15 +130,15 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Pengaturan</h1>
-          <p className="text-gray-600">Konfigurasi sistem dan keamanan</p>
+          <h1 className="admin-page-title">Pengaturan</h1>
+          <p className="admin-page-subtitle">Konfigurasi sistem dan keamanan</p>
         </div>
       </div>
 
       {/* Info Akun Admin */}
       <Card>
         <CardHeader>
-          <CardTitle>Info Akun Admin</CardTitle>
+          <CardTitle className="admin-section-title">Info Akun Admin</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="mb-2">

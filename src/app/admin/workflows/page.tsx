@@ -204,8 +204,8 @@ export default function ModerasiWorkflowPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Moderasi Workflow</h1>
-          <p className="text-gray-600">
+          <h1 className="admin-page-title">Moderasi Workflow</h1>
+          <p className="admin-page-subtitle">
             Review dan kelola workflow yang dipublikasikan
           </p>
         </div>
@@ -243,9 +243,7 @@ export default function ModerasiWorkflowPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Pending Review
-            </CardTitle>
+            <CardTitle className="admin-card-title">Pending Review</CardTitle>
             <Eye className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
@@ -256,7 +254,7 @@ export default function ModerasiWorkflowPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Published</CardTitle>
+            <CardTitle className="admin-card-title">Published</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
@@ -267,7 +265,7 @@ export default function ModerasiWorkflowPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Rejected</CardTitle>
+            <CardTitle className="admin-card-title">Rejected</CardTitle>
             <XCircle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
@@ -278,7 +276,7 @@ export default function ModerasiWorkflowPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total</CardTitle>
+            <CardTitle className="admin-card-title">Total</CardTitle>
             <FileText className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
@@ -291,7 +289,7 @@ export default function ModerasiWorkflowPage() {
       {/* Tabel Workflow sesuai tab */}
       <Card>
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="admin-section-title">
             {tab === "pending"
               ? "Daftar Workflow Pending"
               : tab === "approved"

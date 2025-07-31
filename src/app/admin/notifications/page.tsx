@@ -189,8 +189,10 @@ export default function NotificationsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Notifikasi</h1>
-          <p className="text-gray-600">Kelola notifikasi sistem dan pengguna</p>
+          <h1 className="admin-page-title">Notifikasi</h1>
+          <p className="admin-page-subtitle">
+            Kelola notifikasi sistem dan pengguna
+          </p>
         </div>
       </div>
 
@@ -233,7 +235,7 @@ export default function NotificationsPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Unread</CardTitle>
+            <CardTitle className="admin-card-title">Unread</CardTitle>
             <Bell className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
@@ -244,7 +246,7 @@ export default function NotificationsPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today</CardTitle>
+            <CardTitle className="admin-card-title">Today</CardTitle>
             <MessageSquare className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
@@ -255,7 +257,7 @@ export default function NotificationsPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Important</CardTitle>
+            <CardTitle className="admin-card-title">Important</CardTitle>
             <AlertTriangle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
@@ -266,7 +268,7 @@ export default function NotificationsPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total</CardTitle>
+            <CardTitle className="admin-card-title">Total</CardTitle>
             <Info className="h-4 w-4 text-gray-500" />
           </CardHeader>
           <CardContent>
@@ -279,7 +281,7 @@ export default function NotificationsPage() {
       {/* List Notifikasi */}
       <Card>
         <CardHeader>
-          <CardTitle>Daftar Notifikasi</CardTitle>
+          <CardTitle className="admin-section-title">Daftar Notifikasi</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (

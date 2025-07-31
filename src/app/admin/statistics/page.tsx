@@ -201,8 +201,10 @@ export default function StatisticsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Statistik</h1>
-          <p className="text-gray-600">Analisis data dan performa platform</p>
+          <h1 className="admin-page-title">Statistik</h1>
+          <p className="admin-page-subtitle">
+            Analisis data dan performa platform
+          </p>
         </div>
       </div>
 
@@ -210,7 +212,7 @@ export default function StatisticsPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <CardTitle className="admin-card-title">Total Users</CardTitle>
             <Users className="h-4 w-4 text-blue-500" />
           </CardHeader>
           <CardContent>
@@ -225,9 +227,7 @@ export default function StatisticsPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Creators
-            </CardTitle>
+            <CardTitle className="admin-card-title">Active Creators</CardTitle>
             <TrendingUp className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
@@ -240,7 +240,7 @@ export default function StatisticsPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="admin-card-title">
               Published Workflows
             </CardTitle>
             <FileText className="h-4 w-4 text-purple-500" />
@@ -255,7 +255,7 @@ export default function StatisticsPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Growth Rate</CardTitle>
+            <CardTitle className="admin-card-title">Growth Rate</CardTitle>
             <BarChart3 className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
@@ -274,7 +274,9 @@ export default function StatisticsPage() {
       {/* Grafik Tren Pengajuan */}
       <Card>
         <CardHeader>
-          <CardTitle>Tren Pengajuan Creator & Workflow per Bulan</CardTitle>
+          <CardTitle className="admin-section-title">
+            Tren Pengajuan Creator & Workflow per Bulan
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="w-full h-72">
@@ -304,7 +306,9 @@ export default function StatisticsPage() {
       {/* Grafik User Baru per Bulan */}
       <Card>
         <CardHeader>
-          <CardTitle>Pertumbuhan User Baru per Bulan</CardTitle>
+          <CardTitle className="admin-section-title">
+            Pertumbuhan User Baru per Bulan
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="w-full h-72">
