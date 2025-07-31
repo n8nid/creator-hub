@@ -260,7 +260,15 @@ export default function WorkflowsPage() {
                       {/* Div wrapper dengan posisi relative untuk workflow preview */}
                       <div className="h-full workflow-preview-wrapper">
                         <div className="workflow-preview-container workflow-preview-transform">
-                          {workflow.json_n8n ? (
+                          {workflow.screenshot_url ? (
+                            <div className="workflow-preview-content absolute w-full h-full">
+                              <img
+                                src={workflow.screenshot_url}
+                                alt={`Preview workflow ${workflow.title}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ) : workflow.json_n8n ? (
                             <div
                               className="workflow-preview-content absolute -translate-x-48  min-w-[1000px] h-full"
                               dangerouslySetInnerHTML={{

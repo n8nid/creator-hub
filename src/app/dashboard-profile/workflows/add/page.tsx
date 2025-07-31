@@ -16,6 +16,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { TagInput } from "@/components/ui/tag-input";
+import { ImageUpload } from "@/components/ui/image-upload";
+import { uploadWorkflowImage } from "@/lib/upload-utils";
 import { toast } from "sonner";
 import MDEditor from "@uiw/react-md-editor";
 
@@ -33,6 +35,7 @@ export default function AddWorkflowPage() {
     category: string;
     complexity: string;
     json_n8n: string;
+    screenshot_url: string;
   }>({
     title: "",
     description: "",
@@ -40,6 +43,7 @@ export default function AddWorkflowPage() {
     category: "",
     complexity: "",
     json_n8n: "",
+    screenshot_url: "",
   });
 
   useEffect(() => {
@@ -94,6 +98,7 @@ export default function AddWorkflowPage() {
         category: workflowForm.category,
         complexity: workflowForm.complexity,
         json_n8n: workflowForm.json_n8n,
+        screenshot_url: workflowForm.screenshot_url,
         status: "pending",
       });
       if (error) {
@@ -342,6 +347,26 @@ export default function AddWorkflowPage() {
             disabled={submitting}
             className="font-mono text-sm"
           />
+        </div>
+
+        {/* Upload Gambar Workflow */}
+        <div>
+          <label className="block font-medium mb-2 text-gray-900 text-sm sm:text-base">
+            Gambar Workflow
+          </label>
+          <ImageUpload
+            value={workflowForm.screenshot_url}
+            onChange={(url) =>
+              setWorkflowForm({ ...workflowForm, screenshot_url: url })
+            }
+            onUpload={uploadWorkflowImage}
+            disabled={submitting}
+            placeholder="Upload screenshot workflow Anda"
+          />
+          <p className="text-sm text-gray-600 mt-2">
+            Upload screenshot atau gambar workflow untuk preview di card
+            workflow
+          </p>
         </div>
 
         {/* Preview Workflow */}

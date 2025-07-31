@@ -16,6 +16,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { TagInput } from "@/components/ui/tag-input";
+import { ImageUpload } from "@/components/ui/image-upload";
+import { uploadWorkflowImage } from "@/lib/upload-utils";
 import { toast } from "sonner";
 import MDEditor from "@uiw/react-md-editor";
 
@@ -37,6 +39,7 @@ export default function WorkflowDetailUserPage() {
     category: "",
     complexity: "",
     json_n8n: "",
+    screenshot_url: "",
   });
 
   useEffect(() => {
@@ -64,6 +67,7 @@ export default function WorkflowDetailUserPage() {
           category: data.category || "",
           complexity: data.complexity || "",
           json_n8n: data.json_n8n || "",
+          screenshot_url: data.screenshot_url || "",
         });
       }
     };
@@ -109,6 +113,7 @@ export default function WorkflowDetailUserPage() {
           category: editForm.category,
           complexity: editForm.complexity,
           json_n8n: editForm.json_n8n,
+          screenshot_url: editForm.screenshot_url,
         })
         .eq("id", workflowId);
       if (error) {
@@ -405,6 +410,26 @@ export default function WorkflowDetailUserPage() {
               disabled={saving}
               className="font-mono text-sm"
             />
+          </div>
+
+          {/* Upload Gambar Workflow */}
+          <div>
+            <label className="block font-medium mb-2 text-gray-900 text-sm sm:text-base">
+              Gambar Workflow
+            </label>
+            <ImageUpload
+              value={editForm.screenshot_url}
+              onChange={(url) =>
+                setEditForm({ ...editForm, screenshot_url: url })
+              }
+              onUpload={uploadWorkflowImage}
+              disabled={saving}
+              placeholder="Upload screenshot workflow Anda"
+            />
+            <p className="text-sm text-gray-600 mt-2">
+              Upload screenshot atau gambar workflow untuk preview di card
+              workflow
+            </p>
           </div>
 
           {/* Preview JSON */}

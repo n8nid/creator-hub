@@ -98,7 +98,9 @@ const FeaturedWorkflows = () => {
     const fetchWorkflows = async () => {
       const { data } = await supabase
         .from("workflows")
-        .select("id, title, description, category, tags, profile_id, json_n8n")
+        .select(
+          "id, title, description, category, tags, profile_id, json_n8n, screenshot_url"
+        )
         .eq("status", "approved")
         .order("created_at", { ascending: false })
         .limit(8);
@@ -261,7 +263,15 @@ const FeaturedWorkflows = () => {
                         {/* Div wrapper dengan posisi relative untuk workflow preview */}
                         <div className="h-full workflow-preview-wrapper">
                           <div className="workflow-preview-container workflow-preview-transform">
-                            {workflow.json_n8n ? (
+                            {workflow.screenshot_url ? (
+                              <div className="workflow-preview-content absolute w-full h-full">
+                                <img
+                                  src={workflow.screenshot_url}
+                                  alt={`Preview workflow ${workflow.title}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ) : workflow.json_n8n ? (
                               <div
                                 className="workflow-preview-content absolute -translate-x-48  min-w-[1000px] h-full"
                                 dangerouslySetInnerHTML={{

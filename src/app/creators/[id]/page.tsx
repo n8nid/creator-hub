@@ -71,6 +71,7 @@ interface Workflow {
   complexity?: string;
   status?: string;
   json_n8n?: string;
+  screenshot_url?: string;
 }
 
 export default function CreatorDetailPage() {
@@ -124,7 +125,7 @@ export default function CreatorDetailPage() {
           .select("*")
           .eq("user_id", user.id)
           .single();
-        
+
         setIsAdmin(!!adminData);
       }
 
@@ -148,7 +149,7 @@ export default function CreatorDetailPage() {
           .select("email")
           .eq("id", profileData.user_id)
           .single();
-        
+
         if (userData) {
           setCreatorEmail(userData.email);
         }
@@ -232,6 +233,7 @@ export default function CreatorDetailPage() {
         complexity: workflow.complexity,
         status: workflow.status,
         json_n8n: workflow.json_n8n, // Add json_n8n field for workflow preview
+        screenshot_url: workflow.screenshot_url,
       }));
 
       setWorkflows(transformedWorkflows);
@@ -505,7 +507,10 @@ export default function CreatorDetailPage() {
                 <div className="flex items-center justify-center lg:justify-start text-white/80 text-xs mb-4">
                   <Mail className="w-4 h-4 mr-2" />
                   <span className="break-all">{creatorEmail}</span>
-                  <Badge variant="outline" className="ml-2 text-xs border-white/30 text-white/80">
+                  <Badge
+                    variant="outline"
+                    className="ml-2 text-xs border-white/30 text-white/80"
+                  >
                     Admin View
                   </Badge>
                 </div>
@@ -582,7 +587,10 @@ export default function CreatorDetailPage() {
                 )}
                 {creator.Whatsapp && (
                   <a
-                    href={`https://wa.me/${creator.Whatsapp.replace(/\D/g, '')}`}
+                    href={`https://wa.me/${creator.Whatsapp.replace(
+                      /\D/g,
+                      ""
+                    )}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-white hover:text-gray-300 transition-colors"
@@ -794,7 +802,15 @@ export default function CreatorDetailPage() {
                             {/* Div wrapper dengan posisi relative untuk workflow preview */}
                             <div className="h-full workflow-preview-wrapper">
                               <div className="workflow-preview-container workflow-preview-transform">
-                                {workflow.json_n8n ? (
+                                {workflow.screenshot_url ? (
+                                  <div className="workflow-preview-content absolute w-full h-full">
+                                    <img
+                                      src={workflow.screenshot_url}
+                                      alt={`Preview workflow ${workflow.title}`}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                ) : workflow.json_n8n ? (
                                   <div
                                     className="workflow-preview-content absolute -translate-x-48  min-w-[1000px] h-full"
                                     dangerouslySetInnerHTML={{
@@ -808,7 +824,9 @@ export default function CreatorDetailPage() {
                                   <div className="workflow-preview-content absolute w-full h-full flex items-center justify-center bg-gray-100">
                                     <div className="text-center text-gray-500">
                                       <div className="text-2xl mb-1">📋</div>
-                                      <p className="text-xs">No workflow data</p>
+                                      <p className="text-xs">
+                                        No workflow data
+                                      </p>
                                       <p className="text-xs text-gray-400 mt-1">
                                         json_n8n field empty
                                       </p>
@@ -823,9 +841,7 @@ export default function CreatorDetailPage() {
                           </div>
                         </div>
                         <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <span
-                            className="btn-jelajah-workflow  flex items-center justify-center gap-3 rounded-full mt-[23px] max-w-[200px]"
-                          >
+                          <span className="btn-jelajah-workflow  flex items-center justify-center gap-3 rounded-full mt-[23px] max-w-[200px]">
                             Pelajari
                             <svg
                               width="19"
@@ -870,14 +886,16 @@ export default function CreatorDetailPage() {
 
                         {/* Tags */}
                         <div className="flex flex-wrap gap-1 sm:gap-2 mb-4">
-                          {(workflow.tags || []).slice(0, 3).map((tag: string) => (
-                            <span
-                              key={tag}
-                              className="px-2 sm:px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium break-words"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                          {(workflow.tags || [])
+                            .slice(0, 3)
+                            .map((tag: string) => (
+                              <span
+                                key={tag}
+                                className="px-2 sm:px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium break-words"
+                              >
+                                {tag}
+                              </span>
+                            ))}
                           {(workflow.tags || []).length > 3 && (
                             <span className="px-2 sm:px-3 py-1 text-xs bg-gray-200 text-purple-700 rounded-full font-medium">
                               +{(workflow.tags || []).length - 3}
