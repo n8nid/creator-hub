@@ -130,9 +130,7 @@ export default function WorkflowsPage() {
             key={page}
             className={`px-3 sm:px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow text-xs sm:text-sm min-w-[32px] sm:min-w-[40px] pagination-btn
               ${
-                page === currentPage
-                  ? "btn-primary scale-105"
-                  : "btn-secondary"
+                page === currentPage ? "btn-primary scale-105" : "btn-secondary"
               }
             `}
             onClick={() => setCurrentPage(page)}

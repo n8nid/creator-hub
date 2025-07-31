@@ -290,9 +290,7 @@ const FeaturedWorkflows = () => {
                       </div>
                     </div>
                     <div className="absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <span
-                        className="btn-jelajah-workflow  flex items-center justify-center gap-3 rounded-full mt-[23px] max-w-[200px]"
-                      >
+                      <span className="btn-jelajah-workflow  flex items-center justify-center gap-3 rounded-full mt-[23px] max-w-[200px]">
                         Pelajari
                         <svg
                           width="19"
