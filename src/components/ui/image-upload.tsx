@@ -1,30 +1,44 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
-import { Upload, X, Image as ImageIcon } from "lucide-react";
-import { Button } from "./button";
+import { useState, useCallback, useRef } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import {
+  X,
+  Upload,
+  Image,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { formatFileSize } from "@/lib/upload-utils";
 
 interface ImageUploadProps {
-  value?: string;
-  onChange: (value: string) => void;
-  onUpload: (file: File) => Promise<string>;
-  disabled?: boolean;
+  bucket: "events" | "news";
+  onUploadComplete: (url: string, path: string) => void;
+  onUploadError: (error: string) => void;
+  onRemove?: () => void;
+  currentImage?: string;
   className?: string;
-  placeholder?: string;
 }
 
-export function ImageUpload({
-  value,
-  onChange,
-  onUpload,
-  disabled = false,
+export default function ImageUpload({
+  bucket,
+  onUploadComplete,
+  onUploadError,
+  onRemove,
+  currentImage,
   className,
-  placeholder = "Upload gambar workflow",
 }: ImageUploadProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(
+    currentImage || null
+  );
+  const [uploadedPath, setUploadedPath] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -37,155 +51,191 @@ export function ImageUpload({
     setIsDragOver(false);
   }, []);
 
-  const handleDrop = useCallback(async (e: React.DragEvent) => {
+  const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
 
     const files = Array.from(e.dataTransfer.files);
     if (files.length > 0) {
-      const file = files[0];
-      if (file.type.startsWith("image/")) {
-        await handleFileUpload(file);
-      }
+      handleFileUpload(files[0]);
     }
   }, []);
 
   const handleFileSelect = useCallback(
-    async (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files || []);
       if (files.length > 0) {
-        const file = files[0];
-        await handleFileUpload(file);
+        handleFileUpload(files[0]);
       }
     },
     []
   );
 
   const handleFileUpload = async (file: File) => {
-    if (disabled || isUploading) return;
-
-    // File validation for security
-    const allowedTypes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-      "image/webp",
-    ];
-    const maxSize = 5 * 1024 * 1024; // 5MB
-
-    if (!allowedTypes.includes(file.type)) {
-      console.error("ImageUpload: Invalid file type");
-      toast.error("Hanya file gambar yang diizinkan (JPG, PNG, GIF, WebP)");
-      return;
-    }
-
-    if (file.size > maxSize) {
-      console.error("ImageUpload: File too large");
-      toast.error("Ukuran file maksimal 5MB");
-      return;
-    }
-
     setIsUploading(true);
+    setUploadProgress(0);
+
     try {
-      // Try API route first
-      console.log("ImageUpload: Trying API route...");
+      // Simulate progress
+      const progressInterval = setInterval(() => {
+        setUploadProgress((prev) => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 100);
+
+      // Create form data
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch("/api/upload-workflow-image", {
+      // Upload to API
+      const response = await fetch(`/api/admin/upload/${bucket}`, {
         method: "POST",
         body: formData,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("ImageUpload: API route success:", data);
-        onChange(data.url);
-        return;
+      clearInterval(progressInterval);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Upload failed");
       }
 
-      // Fallback to upload utils
-      console.log("ImageUpload: API route failed, trying upload utils...");
-      const url = await onUpload(file);
-      onChange(url);
+      const data = await response.json();
+
+      setUploadProgress(100);
+      setUploadedImage(data.url);
+      setUploadedPath(data.path);
+
+      onUploadComplete(data.url, data.path);
     } catch (error) {
-      console.error("ImageUpload: Upload failed:", error);
-      toast.error("Upload gagal. Silakan coba lagi.");
+      console.error("Upload error:", error);
+      onUploadError(error instanceof Error ? error.message : "Upload failed");
     } finally {
       setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
-  const handleRemove = () => {
-    onChange("");
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+  const handleRemove = async () => {
+    if (uploadedPath) {
+      try {
+        await fetch(
+          `/api/admin/upload/${bucket}?path=${encodeURIComponent(
+            uploadedPath
+          )}`,
+          {
+            method: "DELETE",
+          }
+        );
+      } catch (error) {
+        console.error("Delete error:", error);
+      }
     }
+
+    setUploadedImage(null);
+    setUploadedPath(null);
+    onRemove?.();
   };
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const displayImage = uploadedImage || currentImage;
 
   return (
     <div className={cn("space-y-4", className)}>
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/jpg,image/png,image/webp"
         onChange={handleFileSelect}
         className="hidden"
-        disabled={disabled || isUploading}
       />
 
-      {value ? (
-        <div className="relative group">
-          <img
-            src={value}
-            alt="Workflow preview"
-            className="w-full h-48 object-cover rounded-lg border-2 border-gray-200"
-          />
-          <Button
-            type="button"
-            variant="destructive"
-            size="sm"
-            onClick={handleRemove}
-            disabled={disabled || isUploading}
-            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
+      {displayImage ? (
+        <Card className="relative overflow-hidden">
+          <CardContent className="p-0">
+            <div className="relative">
+              <img
+                src={displayImage}
+                alt="Uploaded image"
+                className="w-full h-48 object-cover"
+              />
+              <div className="absolute top-2 right-2 flex gap-2">
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={handleClick}
+                  disabled={isUploading}
+                  className="bg-white/90 hover:bg-white"
+                >
+                  <Upload className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={handleRemove}
+                  disabled={isUploading}
+                  className="bg-white/90 hover:bg-white"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       ) : (
-        <div
+        <Card
           className={cn(
-            "border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer",
+            "border-2 border-dashed transition-colors cursor-pointer",
             isDragOver
               ? "border-blue-500 bg-blue-50"
               : "border-gray-300 hover:border-gray-400",
-            disabled && "opacity-50 cursor-not-allowed"
+            isUploading && "pointer-events-none opacity-50"
           )}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          onClick={() =>
-            !disabled && !isUploading && fileInputRef.current?.click()
-          }
+          onClick={handleClick}
         >
-          <div className="flex flex-col items-center space-y-4">
+          <CardContent className="p-8 text-center">
             {isUploading ? (
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+              <div className="space-y-4">
+                <Loader2 className="h-12 w-12 mx-auto animate-spin text-blue-500" />
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Uploading image...</p>
+                  <Progress value={uploadProgress} className="w-full" />
+                  <p className="text-xs text-gray-500">{uploadProgress}%</p>
+                </div>
+              </div>
             ) : (
-              <ImageIcon className="h-8 w-8 text-gray-400" />
+              <div className="space-y-4">
+                <div className="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                  <Image className="h-6 w-6 text-gray-400" />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-900">
+                    Drop your image here, or click to browse
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Supports JPG, PNG, WebP up to 5MB
+                  </p>
+                </div>
+              </div>
             )}
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-900">
-                {isUploading ? "Uploading..." : placeholder}
-              </p>
-              <p className="text-xs text-gray-500">
-                {isUploading
-                  ? "Please wait..."
-                  : "Drag & drop gambar workflow atau klik untuk memilih"}
-              </p>
-            </div>
-          </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {isUploading && (
+        <div className="flex items-center gap-2 text-sm text-blue-600">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span>Uploading...</span>
         </div>
       )}
     </div>

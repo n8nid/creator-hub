@@ -11,14 +11,14 @@ export interface UploadConfig {
 export const UPLOAD_CONFIGS: Record<string, UploadConfig> = {
   events: {
     bucket: "events",
-    maxSize: 5 * 1024 * 1024, // 5MB
+    maxSize: 2 * 1024 * 1024, // 2MB (reduced for compatibility)
     allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
     maxWidth: 1920,
     maxHeight: 1080,
   },
   news: {
     bucket: "news",
-    maxSize: 5 * 1024 * 1024, // 5MB
+    maxSize: 2 * 1024 * 1024, // 2MB (reduced for compatibility)
     allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
     maxWidth: 1920,
     maxHeight: 1080,

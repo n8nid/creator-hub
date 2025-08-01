@@ -17,6 +17,7 @@ import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import ContentImageUpload from "@/components/admin/content-image-upload";
 
 export default function CreateNewsPage() {
   const router = useRouter();
@@ -182,16 +183,18 @@ export default function CreateNewsPage() {
               />
             </div>
 
-            {/* Image URL */}
+            {/* Image Upload */}
             <div className="space-y-2">
-              <Label htmlFor="image_url">Image URL</Label>
-              <Input
-                id="image_url"
-                value={formData.image_url}
-                onChange={(e) => handleInputChange("image_url", e.target.value)}
-                placeholder="https://example.com/image.jpg"
-                type="url"
+              <Label>News Image</Label>
+              <ContentImageUpload
+                bucket="news"
+                onImageChange={(url) => handleInputChange("image_url", url)}
+                currentImage={formData.image_url}
               />
+              <p className="text-sm text-muted-foreground">
+                Upload an image for your news article. Supports JPG, PNG, WebP
+                up to 5MB.
+              </p>
             </div>
 
             {/* Featured */}

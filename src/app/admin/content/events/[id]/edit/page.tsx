@@ -17,6 +17,7 @@ import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import ContentImageUpload from "@/components/admin/content-image-upload";
 
 interface Event {
   id: string;
@@ -247,16 +248,18 @@ export default function EditEventPage() {
               />
             </div>
 
-            {/* Image URL */}
+            {/* Image Upload */}
             <div className="space-y-2">
-              <Label htmlFor="image_url">Image URL</Label>
-              <Input
-                id="image_url"
-                value={formData.image_url}
-                onChange={(e) => handleInputChange("image_url", e.target.value)}
-                placeholder="https://example.com/image.jpg"
-                type="url"
+              <Label>Event Image</Label>
+              <ContentImageUpload
+                bucket="events"
+                onImageChange={(url) => handleInputChange("image_url", url)}
+                currentImage={formData.image_url}
               />
+              <p className="text-sm text-muted-foreground">
+                Upload an image for your event. Supports JPG, PNG, WebP up to
+                5MB.
+              </p>
             </div>
 
             {/* Featured */}
