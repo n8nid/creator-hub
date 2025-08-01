@@ -16,8 +16,10 @@ export default function NewsPage() {
   const { news, loading: newsLoading, error: newsError } = useNews(10);
 
   const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
-  // Carousel navigation
+  // Hero Carousel navigation
   const nextCarousel = () => {
     if (featuredContent.length > 0) {
       setCurrentCarouselIndex((prev) => (prev + 1) % featuredContent.length);
@@ -29,6 +31,52 @@ export default function NewsPage() {
       setCurrentCarouselIndex(
         (prev) => (prev - 1 + featuredContent.length) % featuredContent.length
       );
+    }
+  };
+
+  // Events Carousel navigation with horizontal scroll
+  const nextEvent = () => {
+    const container = document.getElementById("events-container");
+    if (container) {
+      const cardWidth = 320; // w-80 = 320px
+      const gap = 24; // gap-6 = 24px
+      const scrollAmount = cardWidth + gap;
+      container.scrollLeft += scrollAmount;
+      setScrollPosition(container.scrollLeft + scrollAmount);
+    }
+  };
+
+  const prevEvent = () => {
+    const container = document.getElementById("events-container");
+    if (container) {
+      const cardWidth = 320; // w-80 = 320px
+      const gap = 24; // gap-6 = 24px
+      const scrollAmount = cardWidth + gap;
+      container.scrollLeft -= scrollAmount;
+      setScrollPosition(container.scrollLeft - scrollAmount);
+    }
+  };
+
+  // News Carousel navigation with horizontal scroll
+  const nextNews = () => {
+    const container = document.getElementById("news-container");
+    if (container) {
+      const cardWidth = 320; // w-80 = 320px
+      const gap = 24; // gap-6 = 24px
+      const scrollAmount = cardWidth + gap;
+      container.scrollLeft += scrollAmount;
+      setScrollPosition(container.scrollLeft + scrollAmount);
+    }
+  };
+
+  const prevNews = () => {
+    const container = document.getElementById("news-container");
+    if (container) {
+      const cardWidth = 320; // w-80 = 320px
+      const gap = 24; // gap-6 = 24px
+      const scrollAmount = cardWidth + gap;
+      container.scrollLeft -= scrollAmount;
+      setScrollPosition(container.scrollLeft - scrollAmount);
     }
   };
 
@@ -185,11 +233,14 @@ export default function NewsPage() {
           </h2>
 
           {/* Horizontal Scrollable Events */}
-          <div className="relative">
-            {/* Navigation Arrows */}
-            <button className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-gradient-to-r from-gray-800/80 to-gray-600/80 backdrop-blur-sm rounded-lg flex items-center justify-center hover:from-gray-700/90 hover:to-gray-500/90 transition-all duration-200">
+          <div className="flex items-center gap-0">
+            {/* Left Navigation Arrow */}
+            <button
+              onClick={prevEvent}
+              className="w-6 md:w-8 lg:w-10 h-12 md:h-16 lg:h-20 bg-gradient-to-r from-white/20 to-transparent backdrop-blur-sm flex items-center justify-center hover:from-white/30 hover:to-transparent transition-all duration-200 group flex-shrink-0"
+            >
               <svg
-                className="w-6 h-6 text-white"
+                className="w-3 md:w-4 lg:w-5 h-3 md:h-4 lg:h-5 text-white transition-colors duration-200"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -197,30 +248,17 @@ export default function NewsPage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={3}
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
             </button>
 
-            <button className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-gradient-to-r from-gray-600/80 to-gray-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center hover:from-gray-500/90 hover:to-gray-700/90 transition-all duration-200">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </button>
-
             {/* Events Container */}
-            <div className="flex gap-6 overflow-x-auto scrollbar-hide px-4 py-4">
+            <div
+              id="events-container"
+              className="flex gap-6 overflow-x-auto scrollbar-hide px-4 py-4 scroll-smooth flex-1"
+            >
               {eventsLoading ? (
                 // Loading skeleton
                 Array.from({ length: 4 }).map((_, index) => (
@@ -273,12 +311,9 @@ export default function NewsPage() {
                       </div>
                     </div>
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-2">
+                      <h3 className="text-xl font-bold text-gray-800 mb-3">
                         {event.title}
                       </h3>
-                      {event.location && (
-                        <p className="text-gray-600 mb-3">{event.location}</p>
-                      )}
                       <p className="text-sm text-gray-500">
                         diadakan pada {formatDate(event.event_date)}
                       </p>
@@ -291,6 +326,26 @@ export default function NewsPage() {
                 </div>
               )}
             </div>
+
+            {/* Right Navigation Arrow */}
+            <button
+              onClick={nextEvent}
+              className="w-6 md:w-8 lg:w-10 h-12 md:h-16 lg:h-20 bg-gradient-to-r from-transparent to-white/20 backdrop-blur-sm flex items-center justify-center hover:from-transparent hover:to-white/30 transition-all duration-200 group flex-shrink-0"
+            >
+              <svg
+                className="w-3 md:w-4 lg:w-5 h-3 md:h-4 lg:h-5 text-white transition-colors duration-200"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -302,11 +357,14 @@ export default function NewsPage() {
           </h2>
 
           {/* Horizontal Scrollable News */}
-          <div className="relative">
-            {/* Navigation Arrows */}
-            <button className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-gradient-to-r from-gray-800/80 to-gray-600/80 backdrop-blur-sm rounded-lg flex items-center justify-center hover:from-gray-700/90 hover:to-gray-500/90 transition-all duration-200">
+          <div className="flex items-center gap-0">
+            {/* Left Navigation Arrow */}
+            <button
+              onClick={prevNews}
+              className="w-6 md:w-8 lg:w-10 h-12 md:h-16 lg:h-20 bg-gradient-to-r from-white/20 to-transparent backdrop-blur-sm flex items-center justify-center hover:from-white/30 hover:to-transparent transition-all duration-200 group flex-shrink-0"
+            >
               <svg
-                className="w-6 h-6 text-white"
+                className="w-3 md:w-4 lg:w-5 h-3 md:h-4 lg:h-5 text-white transition-colors duration-200"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -314,30 +372,17 @@ export default function NewsPage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={3}
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
             </button>
 
-            <button className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 w-12 h-12 bg-gradient-to-r from-gray-600/80 to-gray-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center hover:from-gray-500/90 hover:to-gray-700/90 transition-all duration-200">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </button>
-
             {/* News Container */}
-            <div className="flex gap-6 overflow-x-auto scrollbar-hide px-4 py-4">
+            <div
+              id="news-container"
+              className="flex gap-6 overflow-x-auto scrollbar-hide px-4 py-4 scroll-smooth flex-1"
+            >
               {newsLoading ? (
                 // Loading skeleton
                 Array.from({ length: 4 }).map((_, index) => (
@@ -390,14 +435,12 @@ export default function NewsPage() {
                       </div>
                     </div>
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-800 mb-2">
+                      <h3 className="text-xl font-bold text-gray-800 mb-3">
                         {newsItem.title}
                       </h3>
-                      {newsItem.excerpt && (
-                        <p className="text-gray-600 mb-3">{newsItem.excerpt}</p>
-                      )}
                       <p className="text-sm text-gray-500">
-                        diposting pada {formatDate(newsItem.published_date)}
+                        dipublikasikan pada{" "}
+                        {formatDate(newsItem.published_date)}
                       </p>
                     </div>
                   </div>
@@ -408,6 +451,26 @@ export default function NewsPage() {
                 </div>
               )}
             </div>
+
+            {/* Right Navigation Arrow */}
+            <button
+              onClick={nextNews}
+              className="w-6 md:w-8 lg:w-10 h-12 md:h-16 lg:h-20 bg-gradient-to-r from-transparent to-white/20 backdrop-blur-sm flex items-center justify-center hover:from-transparent hover:to-white/30 transition-all duration-200 group flex-shrink-0"
+            >
+              <svg
+                className="w-3 md:w-4 lg:w-5 h-3 md:h-4 lg:h-5 text-white transition-colors duration-200"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
