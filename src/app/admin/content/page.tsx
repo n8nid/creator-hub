@@ -222,20 +222,103 @@ export default function ContentManagementPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Content Management</h1>
+          <div>
+            <h1 className="admin-page-title">Content Management</h1>
+            <p className="admin-page-subtitle">
+              Manage events and news for your community
+            </p>
+          </div>
+          <Button disabled>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Event
+          </Button>
         </div>
+
+        {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Card key={i}>
-              <CardHeader>
-                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-              </CardHeader>
-              <CardContent>
-                <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
-              </CardContent>
-            </Card>
-          ))}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="admin-card-title">Total Events</CardTitle>
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                <span className="animate-pulse text-gray-400">...</span>
+              </div>
+              <p className="text-xs text-muted-foreground">Loading...</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="admin-card-title">Total News</CardTitle>
+              <Newspaper className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                <span className="animate-pulse text-gray-400">...</span>
+              </div>
+              <p className="text-xs text-muted-foreground">Loading...</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="admin-card-title">Total Content</CardTitle>
+              <Plus className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                <span className="animate-pulse text-gray-400">...</span>
+              </div>
+              <p className="text-xs text-muted-foreground">Loading...</p>
+            </CardContent>
+          </Card>
         </div>
+
+        {/* Content Tabs */}
+        <Card>
+          <CardHeader>
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="events" className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  Events
+                </TabsTrigger>
+                <TabsTrigger value="news" className="flex items-center gap-2">
+                  <Newspaper className="h-4 w-4" />
+                  News
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between p-4 border rounded-lg"
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="h-4 bg-gray-200 rounded animate-pulse w-32"></div>
+                      <div className="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+                    </div>
+                    <div className="h-3 bg-gray-200 rounded animate-pulse w-48 mb-1"></div>
+                    <div className="flex items-center gap-4">
+                      <div className="h-3 bg-gray-200 rounded animate-pulse w-24"></div>
+                      <div className="h-3 bg-gray-200 rounded animate-pulse w-20"></div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 bg-gray-200 rounded animate-pulse w-16"></div>
+                    <div className="h-8 bg-gray-200 rounded animate-pulse w-20"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -244,7 +327,12 @@ export default function ContentManagementPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Content Management</h1>
+        <div>
+          <h1 className="admin-page-title">Content Management</h1>
+          <p className="admin-page-subtitle">
+            Manage events and news for your community
+          </p>
+        </div>
         <Button
           onClick={() => router.push(`/admin/content/${activeTab}/create`)}
         >
