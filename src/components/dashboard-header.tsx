@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { Bell, LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -164,15 +164,6 @@ export function DashboardHeader() {
 
           {/* Right Side - User Menu & Mobile Menu Button */}
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Notifications */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-2 text-gray-600 hover:text-gray-900"
-            >
-              <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Button>
-
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
