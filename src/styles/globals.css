@@ -35,6 +35,15 @@ body {
     overflow: hidden;
   }
 
+  /* Hide scrollbar for horizontal scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+
   /* Tablet-specific utilities */
   .tablet-container {
     max-width: 1024px;
