@@ -1,12 +1,47 @@
-import { Metadata } from "next";
-import GradientCircle from "@/components/GradientCircle";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Berita - N8N Indonesia Community",
-  description: "Berita terbaru dan informasi seputar N8N Indonesia Community",
-};
+import GradientCircle from "@/components/GradientCircle";
+import { useFeaturedContent } from "@/hooks/use-featured-content";
+import { useEvents } from "@/hooks/use-events";
+import { useNews } from "@/hooks/use-news";
+import { useState } from "react";
 
 export default function NewsPage() {
+  const {
+    featuredContent,
+    loading: featuredLoading,
+    error: featuredError,
+  } = useFeaturedContent();
+  const { events, loading: eventsLoading, error: eventsError } = useEvents(10);
+  const { news, loading: newsLoading, error: newsError } = useNews(10);
+
+  const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
+
+  // Carousel navigation
+  const nextCarousel = () => {
+    if (featuredContent.length > 0) {
+      setCurrentCarouselIndex((prev) => (prev + 1) % featuredContent.length);
+    }
+  };
+
+  const prevCarousel = () => {
+    if (featuredContent.length > 0) {
+      setCurrentCarouselIndex(
+        (prev) => (prev - 1 + featuredContent.length) % featuredContent.length
+      );
+    }
+  };
+
+  // Format date helper
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
   return (
     <div className="text-white content-above-gradient relative">
       {/* Gradient circle langsung di halaman */}
@@ -53,67 +88,99 @@ export default function NewsPage() {
 
           {/* KOLOM KANAN: Carousel Featured Content */}
           <div className="flex-1 lg:max-w-[55%] w-full">
-            <div className="relative bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20">
-              {/* Carousel Image */}
-              <div className="relative h-80 lg:h-96">
-                <img
-                  src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800"
-                  alt="N8N Community Event"
-                  className="w-full h-full object-cover"
-                />
+            {featuredLoading ? (
+              <div className="relative bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20 h-80 lg:h-96 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+              </div>
+            ) : featuredError ? (
+              <div className="relative bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20 h-80 lg:h-96 flex items-center justify-center">
+                <p className="text-white/60">Error loading featured content</p>
+              </div>
+            ) : featuredContent.length > 0 ? (
+              <div className="relative bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20">
+                {/* Carousel Image */}
+                <div className="relative h-80 lg:h-96">
+                  <img
+                    src={
+                      featuredContent[currentCarouselIndex]?.image_url ||
+                      "/placeholder.svg"
+                    }
+                    alt={
+                      featuredContent[currentCarouselIndex]?.title ||
+                      "N8N Community Event"
+                    }
+                    className="w-full h-full object-cover"
+                  />
 
-                {/* Overlay Text */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                  <div className="w-8 h-0.5 bg-white mb-3"></div>
-                  <p className="text-white text-sm lg:text-base leading-relaxed">
-                    1 juta orang lebih pengguna n8n di Indonesia menjadi alasan
-                    dibuatnya website community n8n Indonesia
-                  </p>
+                  {/* Overlay Text */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                    <div className="w-8 h-0.5 bg-white mb-3"></div>
+                    <p className="text-white text-sm lg:text-base leading-relaxed">
+                      {featuredContent[currentCarouselIndex]?.excerpt ||
+                        featuredContent[currentCarouselIndex]?.description ||
+                        "1 juta orang lebih pengguna n8n di Indonesia menjadi alasan dibuatnya website community n8n Indonesia"}
+                    </p>
+                  </div>
+
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={prevCarousel}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200"
+                  >
+                    <svg
+                      className="w-5 h-5 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </button>
+
+                  <button
+                    onClick={nextCarousel}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200"
+                  >
+                    <svg
+                      className="w-5 h-5 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
                 </div>
 
-                {/* Navigation Arrows */}
-                <button className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                </button>
-
-                <button className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </button>
+                {/* Pagination Dots */}
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                  {featuredContent.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                        index === currentCarouselIndex
+                          ? "bg-white"
+                          : "bg-white/40"
+                      }`}
+                    ></div>
+                  ))}
+                </div>
               </div>
-
-              {/* Pagination Dots */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
-                <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-                <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-                <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-                <div className="w-2 h-2 bg-white/40 rounded-full"></div>
+            ) : (
+              <div className="relative bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20 h-80 lg:h-96 flex items-center justify-center">
+                <p className="text-white/60">No featured content available</p>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -161,163 +228,75 @@ export default function NewsPage() {
 
             {/* Events Container */}
             <div className="flex gap-6 overflow-x-auto scrollbar-hide px-4 py-4">
-              {/* Event Card 1 */}
-              <div className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-48">
-                  <img
-                    src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400"
-                    alt="Meet Up Perdana n8n Community Regional Surabaya"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* View Button Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
-                      <span>Lihat</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
+              {eventsLoading ? (
+                // Loading skeleton
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex-shrink-0 w-80 bg-white/10 rounded-2xl overflow-hidden animate-pulse"
+                  >
+                    <div className="h-48 bg-white/20"></div>
+                    <div className="p-6">
+                      <div className="h-6 bg-white/20 rounded mb-2"></div>
+                      <div className="h-4 bg-white/20 rounded mb-3"></div>
+                      <div className="h-3 bg-white/20 rounded"></div>
+                    </div>
                   </div>
+                ))
+              ) : eventsError ? (
+                <div className="flex-shrink-0 w-full flex items-center justify-center py-8">
+                  <p className="text-white/60">Error loading events</p>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    Meet Up Perdana n8n
-                  </h3>
-                  <p className="text-gray-600 mb-3">
-                    Community Regional Surabaya
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    diadakan pada 25 September 2025
-                  </p>
-                </div>
-              </div>
-
-              {/* Event Card 2 */}
-              <div className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-48">
-                  <img
-                    src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400"
-                    alt="Workshop n8n Automation untuk Beginners"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* View Button Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
-                      <span>Lihat</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
+              ) : events.length > 0 ? (
+                events.map((event) => (
+                  <div
+                    key={event.id}
+                    className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <div className="relative h-48">
+                      <img
+                        src={event.image_url || "/placeholder.svg"}
+                        alt={event.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* View Button Overlay */}
+                      <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
+                          <span>Lihat</span>
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">
+                        {event.title}
+                      </h3>
+                      {event.location && (
+                        <p className="text-gray-600 mb-3">{event.location}</p>
+                      )}
+                      <p className="text-sm text-gray-500">
+                        diadakan pada {formatDate(event.event_date)}
+                      </p>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="flex-shrink-0 w-full flex items-center justify-center py-8">
+                  <p className="text-white/60">No upcoming events</p>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    Workshop n8n Automation
-                  </h3>
-                  <p className="text-gray-600 mb-3">untuk Beginners</p>
-                  <p className="text-sm text-gray-500">
-                    diadakan pada 15 Oktober 2025
-                  </p>
-                </div>
-              </div>
-
-              {/* Event Card 3 */}
-              <div className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-48">
-                  <img
-                    src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400"
-                    alt="N8N Community Gathering Jakarta"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* View Button Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
-                      <span>Lihat</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    N8N Community Gathering
-                  </h3>
-                  <p className="text-gray-600 mb-3">Jakarta</p>
-                  <p className="text-sm text-gray-500">
-                    diadakan pada 30 Oktober 2025
-                  </p>
-                </div>
-              </div>
-
-              {/* Event Card 4 */}
-              <div className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-48">
-                  <img
-                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400"
-                    alt="Advanced N8N Workflows Webinar"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* View Button Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
-                      <span>Lihat</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    Advanced N8N Workflows
-                  </h3>
-                  <p className="text-gray-600 mb-3">Webinar</p>
-                  <p className="text-sm text-gray-500">
-                    diadakan pada 12 November 2025
-                  </p>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -366,161 +345,75 @@ export default function NewsPage() {
 
             {/* News Container */}
             <div className="flex gap-6 overflow-x-auto scrollbar-hide px-4 py-4">
-              {/* News Card 1 */}
-              <div className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-48">
-                  <img
-                    src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400"
-                    alt="Pengguna n8n Community Indonesia mencapai 500ribu"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* View Button Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
-                      <span>Lihat</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
+              {newsLoading ? (
+                // Loading skeleton
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex-shrink-0 w-80 bg-white/10 rounded-2xl overflow-hidden animate-pulse"
+                  >
+                    <div className="h-48 bg-white/20"></div>
+                    <div className="p-6">
+                      <div className="h-6 bg-white/20 rounded mb-2"></div>
+                      <div className="h-4 bg-white/20 rounded mb-3"></div>
+                      <div className="h-3 bg-white/20 rounded"></div>
+                    </div>
                   </div>
+                ))
+              ) : newsError ? (
+                <div className="flex-shrink-0 w-full flex items-center justify-center py-8">
+                  <p className="text-white/60">Error loading news</p>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    Pengguna n8n Community Indonesia
-                  </h3>
-                  <p className="text-gray-600 mb-3">mencapai 500ribu</p>
-                  <p className="text-sm text-gray-500">
-                    diposting pada 1 Agustus 2025
-                  </p>
-                </div>
-              </div>
-
-              {/* News Card 2 */}
-              <div className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-48">
-                  <img
-                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400"
-                    alt="Tips dan Trik Optimasi Workflow n8n"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* View Button Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
-                      <span>Lihat</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
+              ) : news.length > 0 ? (
+                news.map((newsItem) => (
+                  <div
+                    key={newsItem.id}
+                    className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <div className="relative h-48">
+                      <img
+                        src={newsItem.image_url || "/placeholder.svg"}
+                        alt={newsItem.title}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* View Button Overlay */}
+                      <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
+                          <span>Lihat</span>
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">
+                        {newsItem.title}
+                      </h3>
+                      {newsItem.excerpt && (
+                        <p className="text-gray-600 mb-3">{newsItem.excerpt}</p>
+                      )}
+                      <p className="text-sm text-gray-500">
+                        diposting pada {formatDate(newsItem.published_date)}
+                      </p>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="flex-shrink-0 w-full flex items-center justify-center py-8">
+                  <p className="text-white/60">No news available</p>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    Tips dan Trik Optimasi
-                  </h3>
-                  <p className="text-gray-600 mb-3">Workflow n8n</p>
-                  <p className="text-sm text-gray-500">
-                    diposting pada 15 Agustus 2025
-                  </p>
-                </div>
-              </div>
-
-              {/* News Card 3 */}
-              <div className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-48">
-                  <img
-                    src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=400"
-                    alt="N8N Indonesia Community Resmi Diluncurkan"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* View Button Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
-                      <span>Lihat</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    N8N Indonesia Community
-                  </h3>
-                  <p className="text-gray-600 mb-3">Resmi Diluncurkan</p>
-                  <p className="text-sm text-gray-500">
-                    diposting pada 20 Agustus 2025
-                  </p>
-                </div>
-              </div>
-
-              {/* News Card 4 */}
-              <div className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-48">
-                  <img
-                    src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400"
-                    alt="Cara Membuat Workflow Automation Pertama"
-                    className="w-full h-full object-cover"
-                  />
-                  {/* View Button Overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
-                      <span>Lihat</span>
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    Cara Membuat Workflow
-                  </h3>
-                  <p className="text-gray-600 mb-3">Automation Pertama</p>
-                  <p className="text-sm text-gray-500">
-                    diposting pada 25 Agustus 2025
-                  </p>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
