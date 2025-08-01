@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import GradientCircle from "@/components/GradientCircle";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -87,6 +88,32 @@ export default function CreatorDetailPage() {
   const { user } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
   const [creatorEmail, setCreatorEmail] = useState<string>("");
+  // Menggunakan supabase yang sudah diimport dari @/lib/supabase
+  
+  // Helper function untuk memformat nomor WhatsApp untuk link wa.me
+  const formatWhatsAppForLink = (whatsappNumber: string): string => {
+    if (!whatsappNumber) return '';
+    
+    const cleanNumber = whatsappNumber.replace(/\s/g, '');
+    
+    // Jika sudah dalam format 62xxx, hapus semua non-digit
+    if (/^62[0-9]+$/.test(cleanNumber)) {
+      return cleanNumber;
+    }
+    
+    // Jika dalam format +62xxx, hapus + dan semua non-digit
+    if (/^\+62[0-9]+$/.test(cleanNumber)) {
+      return cleanNumber.replace(/\D/g, '');
+    }
+    
+    // Jika dalam format 08xxx, ubah ke 62xxx
+    if (/^08[0-9]+$/.test(cleanNumber)) {
+      return '62' + cleanNumber.substring(1);
+    }
+    
+    // Fallback: hapus semua non-digit
+    return cleanNumber.replace(/\D/g, '');
+  };
 
   useEffect(() => {
     fetchCreatorData();
@@ -587,10 +614,7 @@ export default function CreatorDetailPage() {
                 )}
                 {creator.Whatsapp && (
                   <a
-                    href={`https://wa.me/${creator.Whatsapp.replace(
-                      /\D/g,
-                      ""
-                    )}`}
+                    href={`https://wa.me/${formatWhatsAppForLink(creator.Whatsapp)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-white hover:text-gray-300 transition-colors"

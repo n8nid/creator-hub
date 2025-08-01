@@ -39,6 +39,31 @@ import { useRouter } from "next/navigation";
 export default function DashboardProfilePage() {
   const { user } = useAuth();
   const supabase = createClientComponentClient();
+  
+  // Helper function untuk memformat nomor WhatsApp untuk link wa.me
+  const formatWhatsAppForLink = (whatsappNumber: string): string => {
+    if (!whatsappNumber) return '';
+    
+    const cleanNumber = whatsappNumber.replace(/\s/g, '');
+    
+    // Jika sudah dalam format 62xxx, hapus semua non-digit
+    if (/^62[0-9]{8,12}$/.test(cleanNumber)) {
+      return cleanNumber;
+    }
+    
+    // Jika dalam format +62xxx, hapus + dan semua non-digit
+    if (/^\+62[0-9]{8,12}$/.test(cleanNumber)) {
+      return cleanNumber.replace(/\D/g, '');
+    }
+    
+    // Jika dalam format 08xxx, ubah ke 62xxx
+    if (/^08[0-9]{8,12}$/.test(cleanNumber)) {
+      return '62' + cleanNumber.substring(1);
+    }
+    
+    // Fallback: hapus semua non-digit
+    return cleanNumber.replace(/\D/g, '');
+  };
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useState<string>("");
@@ -436,7 +461,7 @@ export default function DashboardProfilePage() {
                 )}
                 {profile?.Whatsapp && (
                   <a
-                    href={`https://wa.me/${profile.Whatsapp.replace(/\D/g, '')}`}
+                    href={`https://wa.me/${formatWhatsAppForLink(profile.Whatsapp)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     title="WhatsApp"
