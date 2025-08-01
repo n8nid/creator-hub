@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Home, Workflow, User, Link as LinkIcon, Menu, X } from "lucide-react";
+import { Home, Workflow, User, Link as LinkIcon, Menu, X, Newspaper } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect, useState } from "react";
@@ -37,6 +37,11 @@ const navItems = [
     label: "Creator",
     href: "/creators",
     icon: User,
+  },
+  {
+    label: "News",
+    href: "/news",
+    icon: Newspaper,
   },
   {
     label: "Connect With Us",
@@ -166,6 +171,8 @@ export function HeaderNav() {
                 pathname === "/creators" ||
                 pathname.startsWith("/talent/") ||
                 pathname.startsWith("/creators/");
+            } else if (item.href === "/news") {
+              isActive = pathname === "/news";
             } else if (item.href === "/connect-with-us") {
               isActive = pathname === "/connect-with-us";
             } else {
@@ -346,6 +353,8 @@ export function HeaderNav() {
                       pathname === "/creators" ||
                       pathname.startsWith("/talent/") ||
                       pathname.startsWith("/creators/");
+                  } else if (item.href === "/news") {
+                    isActive = pathname === "/news";
                   } else if (item.href === "/connect-with-us") {
                     isActive = pathname === "/connect-with-us";
                   } else {
