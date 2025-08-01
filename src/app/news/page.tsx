@@ -5,6 +5,7 @@ import { useFeaturedContent } from "@/hooks/use-featured-content";
 import { useEvents } from "@/hooks/use-events";
 import { useNews } from "@/hooks/use-news";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function NewsPage() {
   const {
@@ -227,10 +228,38 @@ export default function NewsPage() {
 
         {/* UPCOMING EVENT SECTION */}
         <div className="mt-28 md:mt-32">
-          {/* Section Title */}
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
-            Upcoming Event
-          </h2>
+          {/* Section Title with Button */}
+          <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-white text-center md:text-start w-full">
+              Upcoming Event
+            </h2>
+            <Link href="/upcoming-events" className="btn-primary">
+              Lihat selengkapnya
+              <svg
+                width="19"
+                height="20"
+                viewBox="0 0 19 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                  stroke="black"
+                  strokeOpacity="0.05"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </div>
 
           {/* Horizontal Scrollable Events */}
           <div className="flex items-center gap-0">
@@ -351,10 +380,38 @@ export default function NewsPage() {
 
         {/* NEWS & REPORT SECTION */}
         <div className="mt-20">
-          {/* Section Title */}
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
-            News & Report
-          </h2>
+          {/* Section Title with Button */}
+          <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-between mb-8 sm:mb-12 md:mb-16 gap-4 sm:gap-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-white text-center md:text-start w-full">
+              News & Report
+            </h2>
+            <Link href="/news-report" className="btn-primary">
+              Lihat selengkapnya
+              <svg
+                width="19"
+                height="20"
+                viewBox="0 0 19 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M11.3889 13.4538V8.11112M11.3889 8.11112H6.0463M11.3889 8.11112L3.48959 16.0105M7.84079 18.3374C10.5298 18.87 13.4265 18.0943 15.5104 16.0105C18.8299 12.6909 18.8299 7.30906 15.5104 3.9896C12.1909 0.670134 6.80904 0.670134 3.48959 3.9896C1.4057 6.07349 0.630042 8.97019 1.16259 11.6592"
+                  stroke="black"
+                  strokeOpacity="0.05"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </div>
 
           {/* Horizontal Scrollable News */}
           <div className="flex items-center gap-0">
