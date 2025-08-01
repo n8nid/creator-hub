@@ -34,6 +34,16 @@ const MainFooter = () => {
                     Creator
                   </a>
                 </li>
+                <li>
+                  <a href="/upcoming-events" className="hover:underline">
+                    Upcoming Events
+                  </a>
+                </li>
+                <li>
+                  <a href="/news-report" className="hover:underline">
+                    News & Report
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
