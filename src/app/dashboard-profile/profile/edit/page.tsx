@@ -165,7 +165,7 @@ export default function EditProfilePage() {
       }
       
       if (!isValid) {
-        errors.whatsapp = "Format nomor Whatsapp tidak valid. Gunakan format: 08123456789 atau +628123456789";
+      errors.whatsapp = "Format nomor Whatsapp tidak valid. Gunakan format: 08123456789 atau +628123456789";
       }
     }
     // Bisa tambah validasi lain jika perlu
