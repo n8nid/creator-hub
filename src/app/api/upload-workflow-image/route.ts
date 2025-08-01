@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       "image/gif",
       "image/webp",
     ];
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
 
     if (!allowedTypes.includes(file.type)) {
       console.log("API Route: Invalid file type:", file.type);
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     if (file.size > maxSize) {
       console.log("API Route: File too large:", file.size);
       return NextResponse.json(
-        { error: "File too large. Maximum size is 5MB." },
+        { error: "File too large. Maximum size is 10MB." },
         { status: 400 }
       );
     }
@@ -91,7 +91,6 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error("API Route: Upload error details:", {
         message: error.message,
-        statusCode: error.statusCode,
         error: error,
       });
       return NextResponse.json(

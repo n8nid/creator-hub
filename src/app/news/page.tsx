@@ -67,7 +67,7 @@ export default function NewsPage() {
       />
       <div className="w-full container-box relative z-10 mb-32">
         {/* HERO SECTION - 2 COLUMN LAYOUT */}
-        <div className="w-full pt-32 md:pt-64 flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+        <div className="w-full pt-32 md:pt-64 flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
           {/* KOLOM KIRI: Judul + Garis + Deskripsi */}
           <div className="flex flex-col items-start flex-1 lg:max-w-[45%]">
             {/* Judul */}
@@ -87,7 +87,7 @@ export default function NewsPage() {
           </div>
 
           {/* KOLOM KANAN: Carousel Featured Content */}
-          <div className="flex-1 lg:max-w-[55%] w-full">
+          <div className="flex-1 lg:max-w-[55%] w-full flex justify-center items-center">
             {featuredLoading ? (
               <div className="relative bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20 h-80 lg:h-96 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
@@ -97,38 +97,16 @@ export default function NewsPage() {
                 <p className="text-white/60">Error loading featured content</p>
               </div>
             ) : featuredContent.length > 0 ? (
-              <div className="relative bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20">
-                {/* Carousel Image */}
-                <div className="relative h-80 lg:h-96">
-                  <img
-                    src={
-                      featuredContent[currentCarouselIndex]?.image_url ||
-                      "/placeholder.svg"
-                    }
-                    alt={
-                      featuredContent[currentCarouselIndex]?.title ||
-                      "N8N Community Event"
-                    }
-                    className="w-full h-full object-cover"
-                  />
-
-                  {/* Overlay Text */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                    <div className="w-8 h-0.5 bg-white mb-3"></div>
-                    <p className="text-white text-sm lg:text-base leading-relaxed">
-                      {featuredContent[currentCarouselIndex]?.excerpt ||
-                        featuredContent[currentCarouselIndex]?.description ||
-                        "1 juta orang lebih pengguna n8n di Indonesia menjadi alasan dibuatnya website community n8n Indonesia"}
-                    </p>
-                  </div>
-
-                  {/* Navigation Arrows */}
+              <div className="relative w-full max-w-[95%] md:max-w-[90%] lg:max-w-[85%] xl:max-w-[800px] self-center">
+                {/* Carousel Container with Navigation */}
+                <div className="flex items-center gap-0">
+                  {/* Left Navigation Arrow */}
                   <button
                     onClick={prevCarousel}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200"
+                    className="w-8 md:w-10 lg:w-12 h-16 md:h-20 lg:h-24 xl:h-32 bg-gradient-to-r from-white/20 to-transparent backdrop-blur-sm flex items-center justify-center hover:from-white/30 hover:to-transparent transition-all duration-200 group flex-shrink-0"
                   >
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-4 md:w-5 lg:w-6 h-4 md:h-5 lg:h-6 text-white transition-colors duration-200"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -136,18 +114,47 @@ export default function NewsPage() {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={3}
                         d="M15 19l-7-7 7-7"
                       />
                     </svg>
                   </button>
 
+                  {/* Carousel Image Container - Full Layout Fix */}
+                  <div className="w-full aspect-video bg-white/10 backdrop-blur-md rounded-lg overflow-hidden flex-shrink-0 relative">
+                    <div className="relative w-full h-full">
+                      <img
+                        src={
+                          featuredContent[currentCarouselIndex]?.image_url ||
+                          "/placeholder.svg"
+                        }
+                        alt={
+                          featuredContent[currentCarouselIndex]?.title ||
+                          "N8N Community Event"
+                        }
+                        className="w-full h-full object-cover"
+                      />
+
+                      {/* Custom Overlay Text - Gradient Black Box */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent pt-8 pb-3 px-3 md:pt-12 md:pb-4 md:px-4 lg:pt-16 lg:pb-5 lg:px-5 xl:pt-20 xl:pb-6 xl:px-6">
+                        <div className="w-8 h-0.5 bg-white mb-3"></div>
+                        <p className="text-white text-sm md:text-sm lg:text-base xl:text-lg leading-relaxed font-medium">
+                          {featuredContent[currentCarouselIndex]?.excerpt ||
+                            featuredContent[currentCarouselIndex]
+                              ?.description ||
+                            "1 juta orang lebih pengguna n8n di Indonesia menjadi alasan dibuatnya website community n8n Indonesia"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Navigation Arrow */}
                   <button
                     onClick={nextCarousel}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200"
+                    className="w-8 md:w-10 lg:w-12 h-16 md:h-20 lg:h-24 xl:h-32 bg-gradient-to-r from-transparent to-white/20 backdrop-blur-sm flex items-center justify-center hover:from-transparent hover:to-white/30 transition-all duration-200 group flex-shrink-0"
                   >
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-4 md:w-5 lg:w-6 h-4 md:h-5 lg:h-6 text-white transition-colors duration-200"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -155,25 +162,11 @@ export default function NewsPage() {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={3}
                         d="M9 5l7 7-7 7"
                       />
                     </svg>
                   </button>
-                </div>
-
-                {/* Pagination Dots */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                  {featuredContent.map((_, index) => (
-                    <div
-                      key={index}
-                      className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                        index === currentCarouselIndex
-                          ? "bg-white"
-                          : "bg-white/40"
-                      }`}
-                    ></div>
-                  ))}
                 </div>
               </div>
             ) : (
