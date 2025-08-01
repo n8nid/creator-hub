@@ -114,13 +114,60 @@ export default function EditProfilePage() {
     fileInputRef.current?.click();
   };
 
+  // Helper function untuk memformat nomor WhatsApp
+  const formatWhatsAppNumber = (number: string): string => {
+    const cleanNumber = number.replace(/\s/g, '');
+    
+    // Jika sudah dalam format yang benar, return as is
+    if (/^08[0-9]{8,12}$/.test(cleanNumber)) {
+      return cleanNumber;
+    }
+    if (/^\+628[0-9]{8,12}$/.test(cleanNumber)) {
+      return cleanNumber;
+    }
+    if (/^628[0-9]{8,12}$/.test(cleanNumber)) {
+      return cleanNumber;
+    }
+    
+    // Jika dimulai dengan 0, ubah ke format 62
+    if (/^0[0-9]{8,12}$/.test(cleanNumber)) {
+      return '62' + cleanNumber.substring(1);
+    }
+    
+    return cleanNumber;
+  };
+
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
     if (!form.name.trim()) errors.name = "Nama wajib diisi.";
     if (form.website && !/^https?:\/\//.test(form.website))
       errors.website = "Website harus diawali http(s)://";
-    if (form.whatsapp && !/^(\+62|62|0)8[1-9][0-9]{6,9}$/.test(form.whatsapp.replace(/\s/g, '')))
-      errors.whatsapp = "Format nomor Whatsapp tidak valid. Gunakan format: 08123456789 atau +628123456789";
+    if (form.whatsapp) {
+      const cleanNumber = form.whatsapp.replace(/\s/g, '');
+      
+      // Validasi format dan panjang nomor WhatsApp Indonesia
+      let isValid = false;
+      
+      // Cek panjang total dan format
+      const length = cleanNumber.length;
+      
+      // Format: 08xxx (10-13 digit total)
+      if (/^08[0-9]+$/.test(cleanNumber) && length >= 10 && length <= 13) {
+        isValid = true;
+      }
+      // Format: +628xxx (12-15 digit total)
+      else if (/^\+628[0-9]+$/.test(cleanNumber) && length >= 12 && length <= 15) {
+        isValid = true;
+      }
+      // Format: 628xxx (11-14 digit total)
+      else if (/^628[0-9]+$/.test(cleanNumber) && length >= 11 && length <= 14) {
+        isValid = true;
+      }
+      
+      if (!isValid) {
+        errors.whatsapp = "Format nomor Whatsapp tidak valid. Gunakan format: 08123456789 atau +628123456789";
+      }
+    }
     // Bisa tambah validasi lain jika perlu
     return errors;
   };
@@ -683,7 +730,7 @@ export default function EditProfilePage() {
         threads: form.threads || null,
         discord: form.discord || null,
         youtube: form.youtube || null,
-        Whatsapp: form.whatsapp || null,
+        Whatsapp: form.whatsapp ? formatWhatsAppNumber(form.whatsapp) : null,
       };
       const { error } = await supabase
         .from("profiles")

@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { Database } from "@/lib/supabase";
 import { FaDiscord, FaWhatsapp } from "react-icons/fa";
 
@@ -35,6 +36,32 @@ export function TalentProfile({ profileId }: TalentProfileProps) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [loading, setLoading] = useState(true);
+  // Menggunakan supabase yang sudah diimport dari @/lib/supabase
+  
+  // Helper function untuk memformat nomor WhatsApp untuk link wa.me
+  const formatWhatsAppForLink = (whatsappNumber: string): string => {
+    if (!whatsappNumber) return '';
+    
+    const cleanNumber = whatsappNumber.replace(/\s/g, '');
+    
+    // Jika sudah dalam format 62xxx, hapus semua non-digit
+    if (/^62[0-9]+$/.test(cleanNumber)) {
+      return cleanNumber;
+    }
+    
+    // Jika dalam format +62xxx, hapus + dan semua non-digit
+    if (/^\+62[0-9]+$/.test(cleanNumber)) {
+      return cleanNumber.replace(/\D/g, '');
+    }
+    
+    // Jika dalam format 08xxx, ubah ke 62xxx
+    if (/^08[0-9]+$/.test(cleanNumber)) {
+      return '62' + cleanNumber.substring(1);
+    }
+    
+    // Fallback: hapus semua non-digit
+    return cleanNumber.replace(/\D/g, '');
+  };
 
   useEffect(() => {
     fetchProfileData();
@@ -255,7 +282,7 @@ export function TalentProfile({ profileId }: TalentProfileProps) {
                 )}
                 {profile.Whatsapp && (
                   <a
-                    href={`https://wa.me/${profile.Whatsapp.replace(/\D/g, '')}`}
+                    href={`https://wa.me/${formatWhatsAppForLink(profile.Whatsapp)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     title="WhatsApp"
