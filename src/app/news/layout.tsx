@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Berita - N8N Indonesia Community",
-  description: "Berita terbaru dan informasi seputar N8N Indonesia Community",
+  title: "Creator Hub",
+  description: "A platform for creators",
 };
 
 export default function NewsLayout({
