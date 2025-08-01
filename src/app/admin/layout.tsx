@@ -16,6 +16,7 @@ import {
   Bell,
   BarChart3,
   Shield,
+  Newspaper,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -72,6 +73,7 @@ export default function AdminLayout({
     { name: "Moderasi Creator", href: "/admin/creators", icon: UserCheck },
     { name: "Moderasi Workflow", href: "/admin/workflows", icon: FileText },
     { name: "Manajemen User", href: "/admin/users", icon: Users },
+    { name: "Events & News", href: "/admin/content", icon: Newspaper },
     { name: "Notifikasi", href: "/admin/notifications", icon: Bell },
     { name: "Statistik", href: "/admin/statistics", icon: BarChart3 },
     { name: "Pengaturan", href: "/admin/settings", icon: Settings },
