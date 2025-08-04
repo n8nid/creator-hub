@@ -71,40 +71,64 @@ export default function EditProfilePage() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!user) return;
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-      setProfile(data);
-      setLoading(false);
-      if (data) {
-        setForm({
-          name: data.name || "",
-          bio: data.bio || "",
-          about_markdown: data.about_markdown || "",
-          website: data.website || "",
-          linkedin: data.linkedin || "",
-          twitter: data.twitter || "",
-          github: data.github || "",
-          experience_level: data.experience_level || "",
-          availability: data.availability || "",
-          location: data.location || "",
-          instagram: data.instagram || "",
-          threads: data.threads || "",
-          discord: data.discord || "",
-          youtube: data.youtube || "",
-          whatsapp: data.Whatsapp || "",
-        });
-        setSkills(data.skills || []);
-        // Set profile image without cache busting for database-stored URL
-        setProfileImage(data.profile_image || "");
-        if (data.location) {
-          const [prov, city] = data.location.split(", ");
-          setProvinsi(prov || "");
-          setKota(city || "");
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", user.id)
+          .single();
+        
+        if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+          console.error("Error fetching profile:", error);
         }
+        
+        setProfile(data);
+        
+        if (data) {
+          setForm({
+            name: data.name || "",
+            bio: data.bio || "",
+            about_markdown: data.about_markdown || "",
+            website: data.website || "",
+            linkedin: data.linkedin || "",
+            twitter: data.twitter || "",
+            github: data.github || "",
+            experience_level: data.experience_level || "",
+            availability: data.availability || "",
+            location: data.location || "",
+            instagram: data.instagram || "",
+            threads: data.threads || "",
+            discord: data.discord || "",
+            youtube: data.youtube || "",
+            whatsapp: data.Whatsapp || "",
+          });
+          setSkills(data.skills || []);
+          setProfileImage(data.profile_image || "");
+          
+          // Parse location data
+          if (data.location) {
+            const locationParts = data.location.split(", ");
+            if (locationParts.length >= 2) {
+              setProvinsi(locationParts[0].trim());
+              setKota(locationParts[1].trim());
+            } else if (locationParts.length === 1) {
+              setProvinsi(locationParts[0].trim());
+              setKota("");
+            }
+          } else {
+            setProvinsi("");
+            setKota("");
+          }
+        }
+      } catch (err) {
+        console.error("Unexpected error fetching profile:", err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchProfile();
@@ -142,6 +166,8 @@ export default function EditProfilePage() {
     if (!form.name.trim()) errors.name = "Nama wajib diisi.";
     if (form.website && !/^https?:\/\//.test(form.website))
       errors.website = "Website harus diawali http(s)://";
+    
+
     if (form.whatsapp) {
       const cleanNumber = form.whatsapp.replace(/\s/g, '');
       
@@ -711,8 +737,23 @@ export default function EditProfilePage() {
         : skills
         ? [skills]
         : [];
-      const location =
-        provinsi && kota ? `${provinsi}, ${kota}` : form.location;
+      // Determine final location value
+      let finalLocation = "";
+      if (provinsi && kota) {
+        finalLocation = `${provinsi}, ${kota}`;
+      } else if (provinsi) {
+        finalLocation = provinsi;
+      } else if (form.location) {
+        finalLocation = form.location;
+      }
+      
+      // Log location data for debugging
+      console.log("Location data:", {
+        provinsi,
+        kota,
+        formLocation: form.location,
+        finalLocation: finalLocation
+      });
       const updateData: Record<string, any> = {
         name: form.name,
         bio: form.bio || null,
@@ -723,7 +764,7 @@ export default function EditProfilePage() {
         github: form.github || null,
         experience_level: form.experience_level || null,
         availability: form.availability || null,
-        location,
+        location: finalLocation,
         skills: safeSkills,
         profile_image: profileImage || null,
         instagram: form.instagram || null,
@@ -732,17 +773,89 @@ export default function EditProfilePage() {
         youtube: form.youtube || null,
         Whatsapp: form.whatsapp ? formatWhatsAppNumber(form.whatsapp) : null,
       };
-      const { error } = await supabase
+      
+      // Log the complete update data
+      console.log("Complete update data:", updateData);
+      // Check if profile exists first, then update
+      console.log("Checking if profile exists for user:", user.id);
+      const { data: existingProfile, error: checkError } = await supabase
         .from("profiles")
-        .update(updateData)
-        .eq("user_id", user.id);
-      if (error) {
-        toast.error(`Gagal menyimpan perubahan: ${error.message}`);
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+      
+      if (checkError && checkError.code !== 'PGRST116') {
+        console.error("Error checking profile:", checkError);
+        toast.error(`Error checking profile: ${checkError.message}`);
         setSubmitting(false);
         return;
       }
-      toast.success("Profil berhasil disimpan!");
-      router.push("/dashboard-profile");
+      
+      let result;
+      
+      if (existingProfile) {
+        // Profile exists, update it
+        console.log("Profile exists, updating with ID:", existingProfile.id);
+        result = await supabase
+          .from("profiles")
+          .update(updateData)
+          .eq("user_id", user.id)
+          .select();
+      } else {
+        // Profile doesn't exist, create new one
+        console.log("Profile doesn't exist, creating new one");
+        result = await supabase
+          .from("profiles")
+          .insert({
+            user_id: user.id,
+            ...updateData
+          })
+          .select();
+      }
+      
+      if (result.error) {
+        console.error("Database error:", result.error);
+        
+        // Handle specific errors
+        if (result.error.code === '42501') {
+          toast.error("Akses ditolak. Pastikan Anda login dan memiliki izin untuk mengupdate profil.");
+        } else if (result.error.code === '23505') {
+          toast.error("Data duplikat. Silakan coba lagi.");
+        } else if (result.error.code === '23503') {
+          toast.error("Referensi tidak valid. Silakan coba lagi.");
+        } else {
+          toast.error(`Gagal menyimpan perubahan: ${result.error.message}`);
+        }
+        
+        setSubmitting(false);
+        return;
+      }
+      
+      // Verify the data was saved successfully
+      if (result.data && result.data.length > 0) {
+        const savedProfile = result.data[0];
+        console.log("Saved profile data:", savedProfile);
+        console.log("Saved location:", savedProfile.location);
+        console.log("Expected location:", finalLocation);
+        
+        if (savedProfile.location === finalLocation) {
+          toast.success("Profil berhasil disimpan!");
+        } else {
+          console.warn("Location mismatch:", {
+            expected: finalLocation,
+            saved: savedProfile.location
+          });
+          toast.success("Profil berhasil disimpan!");
+        }
+      } else {
+        console.warn("No data returned from operation");
+        toast.success("Profil berhasil disimpan!");
+      }
+      
+      // Wait a moment before redirecting
+      setTimeout(() => {
+        router.push("/dashboard-profile");
+      }, 1000);
     } catch (err: any) {
       toast.error(err?.message || "Gagal menyimpan perubahan.");
       setSubmitting(false);
@@ -979,8 +1092,12 @@ export default function EditProfilePage() {
                       className="w-1/2 border rounded px-2 py-2 text-sm"
                       value={provinsi}
                       onChange={(e) => {
-                        setProvinsi(e.target.value);
+                        const selectedProvinsi = e.target.value;
+                        setProvinsi(selectedProvinsi);
                         setKota("");
+                        // Update form location when provinsi changes
+                        const newLocation = selectedProvinsi ? selectedProvinsi : "";
+                        setForm(prev => ({ ...prev, location: newLocation }));
                       }}
                       disabled={submitting}
                     >
@@ -995,7 +1112,13 @@ export default function EditProfilePage() {
                       name="kota"
                       className="w-1/2 border rounded px-2 py-2 text-sm"
                       value={kota}
-                      onChange={(e) => setKota(e.target.value)}
+                      onChange={(e) => {
+                        const selectedKota = e.target.value;
+                        setKota(selectedKota);
+                        // Update form location when kota changes
+                        const newLocation = provinsi && selectedKota ? `${provinsi}, ${selectedKota}` : provinsi || "";
+                        setForm(prev => ({ ...prev, location: newLocation }));
+                      }}
                       disabled={!provinsi || submitting}
                     >
                       <option value="">Pilih Kota/Kabupaten</option>
@@ -1008,6 +1131,7 @@ export default function EditProfilePage() {
                       )}
                     </select>
                   </div>
+
                 </div>
                 {/*
                 <div>
