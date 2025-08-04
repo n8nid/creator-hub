@@ -1,10 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import GradientCircle from "@/components/GradientCircle";
 import { useUpcomingEvents } from "@/hooks/use-upcoming-events";
 import { Calendar, MapPin, Clock, Users } from "lucide-react";
 
 export default function UpcomingEventsPage() {
+  const router = useRouter();
   const { 
     upcomingEvents, 
     loading: eventsLoading, 
@@ -169,7 +171,10 @@ export default function UpcomingEventsPage() {
                     </div>
                     {/* View Button Overlay */}
                     <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
+                      <button 
+                        onClick={() => router.push(`/events/${event.id}`)}
+                        className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200"
+                      >
                         <span>Lihat Detail</span>
                         <svg
                           className="w-4 h-4"
@@ -227,7 +232,10 @@ export default function UpcomingEventsPage() {
 
                     {/* Action Button */}
                     <div className="mt-4 pt-4 border-t border-gray-100">
-                      <button className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium">
+                      <button 
+                        onClick={() => router.push(`/events/${event.id}`)}
+                        className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium"
+                      >
                         Daftar Event
                       </button>
                     </div>

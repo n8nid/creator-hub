@@ -1,0 +1,24 @@
+import Link from "next/link";
+import { XCircle } from "lucide-react";
+
+export default function NotFound() {
+  return (
+    <div className="text-white content-above-gradient relative min-h-screen">
+      <div className="w-full container-box relative z-10 pt-32">
+        <div className="text-center">
+          <XCircle className="w-16 h-16 mx-auto mb-4 text-red-400" />
+          <h1 className="text-2xl font-bold mb-2">Event Tidak Ditemukan</h1>
+          <p className="text-white/60 mb-6">
+            Event yang Anda cari tidak ditemukan atau telah dihapus.
+          </p>
+          <Link 
+            href="/upcoming-events"
+            className="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Kembali ke Daftar Event
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+} 
