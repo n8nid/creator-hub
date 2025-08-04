@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import GradientCircle from "@/components/GradientCircle";
 import { useFeaturedContent } from "@/hooks/use-featured-content";
 import { useEvents } from "@/hooks/use-events";
@@ -8,6 +9,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function NewsPage() {
+  const router = useRouter();
   const {
     featuredContent,
     loading: featuredLoading,
@@ -473,7 +475,10 @@ export default function NewsPage() {
                       />
                       {/* View Button Overlay */}
                       <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <button className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200">
+                        <button 
+                          onClick={() => router.push(`/news/${newsItem.slug}`)}
+                          className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200"
+                        >
                           <span>Lihat</span>
                           <svg
                             className="w-4 h-4"
