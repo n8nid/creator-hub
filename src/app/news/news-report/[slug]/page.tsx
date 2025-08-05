@@ -289,7 +289,7 @@ export default function NewsDetailPage() {
       <GradientCircle
         type="hero"
         style={{
-          top: "60vh",
+          top: "80vh",
           left: "80vw",
           transform: "translateX(50%)",
           zIndex: -1,

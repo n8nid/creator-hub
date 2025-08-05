@@ -305,7 +305,7 @@ export default function EventDetailPage() {
       <GradientCircle
         type="hero"
         style={{
-          top: "60vh",
+          top: "100vh",
           left: "80vw",
           transform: "translateX(50%)",
           zIndex: -1,
