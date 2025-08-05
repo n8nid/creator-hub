@@ -3,16 +3,18 @@
 import { useRouter } from "next/navigation";
 import GradientCircle from "@/components/GradientCircle";
 import { useUpcomingEvents } from "@/hooks/use-upcoming-events";
-import { Calendar, MapPin, Clock, Users } from "lucide-react";
+import { Calendar, MapPin, Clock, Users, Search } from "lucide-react";
+import { useState } from "react";
 
 export default function UpcomingEventsPage() {
   const router = useRouter();
-  const { 
-    upcomingEvents, 
-    loading: eventsLoading, 
+  const [searchTerm, setSearchTerm] = useState("");
+  const {
+    upcomingEvents,
+    loading: eventsLoading,
     error: eventsError,
     totalEvents,
-    featuredEvents
+    featuredEvents,
   } = useUpcomingEvents(20);
 
   // Format date helper
@@ -33,6 +35,16 @@ export default function UpcomingEventsPage() {
       minute: "2-digit",
     });
   };
+
+  // Filter events based on search term
+  const filteredEvents = upcomingEvents.filter(
+    (event) =>
+      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (event.description?.toLowerCase() || "").includes(
+        searchTerm.toLowerCase()
+      ) ||
+      (event.location?.toLowerCase() || "").includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="text-white content-above-gradient relative">
@@ -57,51 +69,60 @@ export default function UpcomingEventsPage() {
           zIndex: -1,
         }}
       />
-      
+
       <div className="w-full container-box relative z-10 mb-32">
-        {/* HERO SECTION - 2 COLUMN LAYOUT */}
-        <div className="w-full pt-32 md:pt-64 flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
-          {/* KOLOM KIRI: Judul + Garis + Deskripsi */}
-          <div className="flex flex-col items-start flex-1 lg:max-w-[45%]">
-            {/* Judul */}
-            <div className="flex flex-col items-start mb-6">
+        {/* HERO HEADING & SUBHEADING */}
+        <div className="w-full pt-32 md:pt-64 flex flex-col gap-6 md:gap-10">
+          <div className="flex flex-col md:flex-row md:items-center w-full">
+            {/* Kiri: Heading */}
+            <div className="flex flex-col items-start flex-shrink-0">
               <h1 className="hero-title-main">Upcoming</h1>
               <h2 className="hero-title-sub">Events</h2>
             </div>
 
-            {/* Garis Horizontal */}
-            <div className="w-24 h-0.5 bg-white mb-8"></div>
+            {/* Garis Penyambung */}
+            <div className="hidden md:flex items-center flex-1 min-w-0 mx-8">
+              <div className="h-0.5 flex-1 bg-white/40" />
+            </div>
 
-            {/* Deskripsi */}
-            <div className="hero-description max-w-lg">
-              Temukan dan ikuti event-event menarik dari komunitas N8N Indonesia. 
-              Bergabunglah dengan meetup, workshop, dan acara networking untuk 
-              meningkatkan skill automation Anda!
+            {/* Kanan: Deskripsi dan Search */}
+            <div className="hidden md:flex flex-col items-start flex-1 min-w-0">
+              <div className="hero-description max-w-3xl mb-6">
+                Temukan dan ikuti event-event menarik dari komunitas N8N
+                Indonesia. Bergabunglah dengan meetup, workshop, dan acara
+                networking untuk meningkatkan skill automation Anda!
+              </div>
+              {/* Search Bar */}
+              <div className="relative w-full max-w-md">
+                <input
+                  type="text"
+                  placeholder="Cari Event"
+                  className="w-full pl-4 pr-12 py-3 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-lg text-white placeholder-white/60"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
+              </div>
             </div>
           </div>
 
-          {/* KOLOM KANAN: Event Stats */}
-          <div className="flex-1 lg:max-w-[55%] w-full">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20 p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white mb-2">
-                    {upcomingEvents.length}
-                  </div>
-                  <div className="text-white/80 text-sm">Event Mendatang</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white mb-2">
-                    {featuredEvents}
-                  </div>
-                  <div className="text-white/80 text-sm">Event Featured</div>
-                </div>
-              </div>
-              <div className="mt-6 pt-6 border-t border-white/20">
-                <p className="text-white/80 text-sm text-center">
-                  Bergabunglah dengan komunitas dan jangan lewatkan event menarik!
-                </p>
-              </div>
+          {/* Mobile: Deskripsi dan Search */}
+          <div className="md:hidden flex flex-col items-start w-full mt-6">
+            <div className="hero-description max-w-3xl mb-4">
+              Temukan dan ikuti event-event menarik dari komunitas N8N
+              Indonesia. Bergabunglah dengan meetup, workshop, dan acara
+              networking untuk meningkatkan skill automation Anda!
+            </div>
+            {/* Search Bar Mobile */}
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Cari Event"
+                className="w-full pl-4 pr-12 py-3 border border-white/20 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white/10 hover:bg-white/20 transition-colors text-lg text-white placeholder-white/60"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 w-5 h-5" />
             </div>
           </div>
         </div>
@@ -135,8 +156,8 @@ export default function UpcomingEventsPage() {
               <div className="col-span-full flex items-center justify-center py-12">
                 <p className="text-white/60">Error loading events</p>
               </div>
-            ) : upcomingEvents.length > 0 ? (
-              upcomingEvents.map((event) => (
+            ) : filteredEvents.length > 0 ? (
+              filteredEvents.map((event) => (
                 <div
                   key={event.id}
                   className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
@@ -157,22 +178,30 @@ export default function UpcomingEventsPage() {
                     )}
                     {/* Status Badge */}
                     <div className="absolute top-4 right-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        event.status === 'published' 
-                          ? 'bg-green-500 text-white' 
-                          : event.status === 'draft'
-                          ? 'bg-gray-500 text-white'
-                          : 'bg-red-500 text-white'
-                      }`}>
-                        {event.status === 'published' ? 'Published' : 
-                         event.status === 'draft' ? 'Draft' : 
-                         event.status === 'cancelled' ? 'Cancelled' : 'Archived'}
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          event.status === "published"
+                            ? "bg-green-500 text-white"
+                            : event.status === "draft"
+                            ? "bg-gray-500 text-white"
+                            : "bg-red-500 text-white"
+                        }`}
+                      >
+                        {event.status === "published"
+                          ? "Published"
+                          : event.status === "draft"
+                          ? "Draft"
+                          : event.status === "cancelled"
+                          ? "Cancelled"
+                          : "Archived"}
                       </span>
                     </div>
                     {/* View Button Overlay */}
                     <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <button 
-                        onClick={() => router.push(`/news/upcoming-events/${event.id}`)}
+                      <button
+                        onClick={() =>
+                          router.push(`/news/upcoming-events/${event.id}`)
+                        }
                         className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200"
                       >
                         <span>Lihat Detail</span>
@@ -196,7 +225,7 @@ export default function UpcomingEventsPage() {
                     <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
                       {event.title}
                     </h3>
-                    
+
                     {event.description && (
                       <p className="text-gray-600 mb-4 line-clamp-3">
                         {event.description}
@@ -209,7 +238,8 @@ export default function UpcomingEventsPage() {
                       <div className="flex items-center gap-2 text-gray-700">
                         <Calendar className="w-4 h-4 text-purple-600" />
                         <span className="text-sm">
-                          {formatDate(event.event_date)} • {formatTime(event.event_date)}
+                          {formatDate(event.event_date)} •{" "}
+                          {formatTime(event.event_date)}
                         </span>
                       </div>
 
@@ -225,15 +255,19 @@ export default function UpcomingEventsPage() {
                       <div className="flex items-center gap-2 text-gray-700">
                         <Users className="w-4 h-4 text-purple-600" />
                         <span className="text-sm">
-                          {event.is_featured ? 'Featured Event' : 'Community Event'}
+                          {event.is_featured
+                            ? "Featured Event"
+                            : "Community Event"}
                         </span>
                       </div>
                     </div>
 
                     {/* Action Button */}
                     <div className="mt-4 pt-4 border-t border-gray-100">
-                      <button 
-                        onClick={() => router.push(`/news/upcoming-events/${event.id}`)}
+                      <button
+                        onClick={() =>
+                          router.push(`/news/upcoming-events/${event.id}`)
+                        }
                         className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium"
                       >
                         Daftar Event
@@ -242,10 +276,22 @@ export default function UpcomingEventsPage() {
                   </div>
                 </div>
               ))
+            ) : searchTerm ? (
+              <div className="col-span-full flex flex-col items-center justify-center py-12">
+                <div className="text-6xl mb-4">🔍</div>
+                <p className="text-white/60 text-lg mb-2">
+                  Tidak ada event yang ditemukan
+                </p>
+                <p className="text-white/40 text-sm">
+                  Coba kata kunci lain atau hapus pencarian
+                </p>
+              </div>
             ) : (
               <div className="col-span-full flex flex-col items-center justify-center py-12">
                 <div className="text-6xl mb-4">📅</div>
-                <p className="text-white/60 text-lg mb-2">Belum ada event mendatang</p>
+                <p className="text-white/60 text-lg mb-2">
+                  Belum ada event mendatang
+                </p>
                 <p className="text-white/40 text-sm">
                   Nantikan event menarik dari komunitas N8N Indonesia!
                 </p>
@@ -262,9 +308,7 @@ export default function UpcomingEventsPage() {
             </div>
           )}
         </div>
-
-
       </div>
     </div>
   );
-} 
+}
