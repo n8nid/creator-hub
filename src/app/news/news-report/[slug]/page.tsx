@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import GradientCircle from "@/components/GradientCircle";
 import {
   Calendar,
@@ -45,94 +46,49 @@ export default function NewsDetailPage() {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        // Simulasi fetch data news berdasarkan slug
-        // Dalam implementasi nyata, ini akan mengambil data dari API
-        const mockNews: News = {
-          id: "1",
-          title: "N8N Indonesia Community Meluncurkan Platform Creator Hub",
-          slug: params.slug as string,
-          content: `
-            <p>Komunitas N8N Indonesia dengan bangga mengumumkan peluncuran platform Creator Hub yang akan menjadi pusat pembelajaran dan kolaborasi untuk para developer automation di Indonesia.</p>
-            
-            <h2>Fitur Utama Creator Hub</h2>
-            <p>Platform ini dirancang dengan mempertimbangkan kebutuhan komunitas automation Indonesia yang terus berkembang. Beberapa fitur utama yang tersedia:</p>
-            
-            <ul>
-              <li><strong>Workflow Library:</strong> Koleksi workflow n8n yang dapat digunakan dan dimodifikasi sesuai kebutuhan</li>
-              <li><strong>Learning Center:</strong> Tutorial dan dokumentasi lengkap untuk berbagai level skill</li>
-              <li><strong>Community Forum:</strong> Tempat diskusi dan berbagi pengalaman antar member</li>
-              <li><strong>Event Management:</strong> Sistem manajemen event untuk meetup dan workshop</li>
-              <li><strong>Creator Directory:</strong> Direktori para expert dan creator n8n di Indonesia</li>
-            </ul>
-            
-            <h2>Manfaat untuk Komunitas</h2>
-            <p>Dengan adanya Creator Hub, komunitas N8N Indonesia berharap dapat:</p>
-            
-            <ol>
-              <li>Meningkatkan skill automation para developer Indonesia</li>
-              <li>Memperluas jaringan dan kolaborasi antar member</li>
-              <li>Mendorong inovasi dalam pengembangan workflow</li>
-              <li>Membuat automation lebih mudah diakses oleh berbagai kalangan</li>
-            </ol>
-            
-            <h2>Roadmap Pengembangan</h2>
-            <p>Tim pengembang Creator Hub telah menyusun roadmap pengembangan yang ambisius:</p>
-            
-            <h3>Phase 1 (Q1 2025)</h3>
-            <ul>
-              <li>Peluncuran platform dasar</li>
-              <li>Workflow library dengan 100+ template</li>
-              <li>Sistem user management</li>
-            </ul>
-            
-            <h3>Phase 2 (Q2 2025)</h3>
-            <ul>
-              <li>Integrasi dengan marketplace n8n</li>
-              <li>Sistem gamification dan achievement</li>
-              <li>Mobile app development</li>
-            </ul>
-            
-            <h3>Phase 3 (Q3-Q4 2025)</h3>
-            <ul>
-              <li>AI-powered workflow suggestions</li>
-              <li>Advanced analytics dan reporting</li>
-              <li>Integration dengan platform third-party</li>
-            </ul>
-            
-            <h2>Bagaimana Bergabung</h2>
-            <p>Untuk bergabung dengan Creator Hub, Anda dapat:</p>
-            
-            <ol>
-              <li>Mengunjungi website resmi: <a href="https://creator-hub.n8nindonesia.com" class="text-purple-400 hover:text-purple-300">creator-hub.n8nindonesia.com</a></li>
-              <li>Mendaftar sebagai member baru</li>
-              <li>Mengikuti onboarding session</li>
-              <li>Mulai berkolaborasi dengan komunitas</li>
-            </ol>
-            
-            <h2>Kesimpulan</h2>
-            <p>Peluncuran Creator Hub menandai tonggak penting dalam perjalanan komunitas N8N Indonesia. Platform ini tidak hanya akan menjadi tempat belajar, tetapi juga menjadi ekosistem yang mendukung pertumbuhan dan inovasi dalam dunia automation di Indonesia.</p>
-            
-            <p>Kami mengundang semua developer, automation enthusiast, dan siapa saja yang tertarik dengan n8n untuk bergabung dan berkontribusi dalam membangun masa depan automation yang lebih baik di Indonesia.</p>
-          `,
-          excerpt:
-            "Komunitas N8N Indonesia meluncurkan platform Creator Hub yang akan menjadi pusat pembelajaran dan kolaborasi untuk para developer automation di Indonesia.",
-          published_date: "2025-01-15T10:30:00Z",
-          image_url: "/placeholder.svg",
-          is_featured: true,
-          status: "published",
-          created_at: "2025-01-15T10:30:00Z",
-          updated_at: "2025-01-15T10:30:00Z",
-          published_at: "2025-01-15T10:30:00Z",
-          created_by: "user-123",
-          author_name: "Tim N8N Indonesia",
-          read_time: 8,
-          views: 1247,
-          tags: ["Platform", "Community", "Automation", "n8n"],
-        };
+        setError(null);
 
-        setNews(mockNews);
+        const supabase = createClientComponentClient();
+
+        // Fetch news data from database based on slug
+        const { data: newsData, error: fetchError } = await supabase
+          .from("news")
+          .select("*")
+          .eq("slug", params.slug)
+          .eq("status", "published")
+          .single();
+
+        if (fetchError) {
+          if (fetchError.code === "PGRST116") {
+            // No rows returned - news not found
+            setError("Berita tidak ditemukan");
+          } else {
+            console.error("Error fetching news:", fetchError);
+            setError("Gagal memuat detail berita");
+          }
+          return;
+        }
+
+        if (!newsData) {
+          setError("Berita tidak ditemukan");
+          return;
+        }
+
+        setNews(newsData);
+
+        // Update view count (optional)
+        try {
+          await supabase
+            .from("news")
+            .update({ views: (newsData.views || 0) + 1 })
+            .eq("id", newsData.id);
+        } catch (viewError) {
+          console.error("Error updating view count:", viewError);
+          // Don't show error to user for view count update
+        }
       } catch (err) {
-        setError("Gagal memuat detail berita");
+        console.error("Unexpected error:", err);
+        setError("Terjadi kesalahan saat memuat berita");
       } finally {
         setLoading(false);
       }
@@ -164,9 +120,41 @@ export default function NewsDetailPage() {
   };
 
   // Handle bookmark
-  const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-    // Dalam implementasi nyata, ini akan menyimpan ke database
+  const handleBookmark = async () => {
+    try {
+      const supabase = createClientComponentClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        // If not logged in, just toggle local state
+        setIsBookmarked(!isBookmarked);
+        return;
+      }
+
+      if (isBookmarked) {
+        // Remove bookmark
+        await supabase
+          .from("bookmarks")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("news_id", news?.id);
+      } else {
+        // Add bookmark
+        await supabase.from("bookmarks").insert({
+          user_id: user.id,
+          news_id: news?.id,
+          created_at: new Date().toISOString(),
+        });
+      }
+
+      setIsBookmarked(!isBookmarked);
+    } catch (err) {
+      console.error("Error handling bookmark:", err);
+      // Fallback to local state toggle
+      setIsBookmarked(!isBookmarked);
+    }
   };
 
   // Handle share
@@ -174,8 +162,8 @@ export default function NewsDetailPage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: news?.title,
-          text: news?.excerpt,
+          title: news?.title || "",
+          text: news?.excerpt || "",
           url: window.location.href,
         });
       } catch (err) {
@@ -183,8 +171,12 @@ export default function NewsDetailPage() {
       }
     } else {
       // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-      alert("Link berita telah disalin ke clipboard!");
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Link berita telah disalin ke clipboard!");
+      } catch (err) {
+        console.error("Error copying to clipboard:", err);
+      }
     }
   };
 
@@ -227,7 +219,8 @@ export default function NewsDetailPage() {
             </div>
             <h1 className="text-2xl font-bold mb-2">Berita Tidak Ditemukan</h1>
             <p className="text-white/60 mb-6">
-              Berita yang Anda cari tidak ditemukan atau telah dihapus.
+              {error ||
+                "Berita yang Anda cari tidak ditemukan atau telah dihapus."}
             </p>
             <button
               onClick={() => router.push("/news/news-report")}
