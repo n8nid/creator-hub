@@ -314,7 +314,9 @@ export default function NewsPage() {
                   <div
                     key={event.id}
                     className="flex-shrink-0 w-80 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
-                    onClick={() => router.push(`/events/${event.id}`)}
+                    onClick={() =>
+                      router.push(`/news/upcoming-events/${event.id}`)
+                    }
                   >
                     <div className="relative h-48">
                       <img
@@ -324,10 +326,10 @@ export default function NewsPage() {
                       />
                       {/* View Button Overlay */}
                       <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <button 
+                        <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            router.push(`/events/${event.id}`);
+                            router.push(`/news/upcoming-events/${event.id}`);
                           }}
                           className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200"
                         >
@@ -482,8 +484,10 @@ export default function NewsPage() {
                       />
                       {/* View Button Overlay */}
                       <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <button 
-                          onClick={() => router.push(`/news/news-report/${newsItem.slug}`)}
+                        <button
+                          onClick={() =>
+                            router.push(`/news/news-report/${newsItem.slug}`)
+                          }
                           className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200"
                         >
                           <span>Lihat</span>
