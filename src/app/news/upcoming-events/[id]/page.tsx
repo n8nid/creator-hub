@@ -11,10 +11,10 @@ import {
   Share2,
   MapPin,
   Users,
-  ExternalLink,
   User,
   Tag,
   CalendarDays,
+  ArrowRight,
 } from "lucide-react";
 
 interface Event {
@@ -29,6 +29,9 @@ interface Event {
   max_participants?: number;
   current_participants?: number;
   registration_url?: string;
+  pendaftaran_link?: string;
+  nomor_penyelenggara?: string;
+  instagram_penyelenggara?: string;
   event_type?: string;
   organizer_name?: string;
   organizer_email?: string;
@@ -42,8 +45,9 @@ export default function EventDetailPage() {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [shareSuccess, setShareSuccess] = useState(false);
+
   const [timeUntilEvent, setTimeUntilEvent] = useState<string>("");
+  const [shareSuccess, setShareSuccess] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -157,6 +161,35 @@ export default function EventDetailPage() {
     });
   };
 
+
+
+  // Handle registration
+  const handleRegistration = () => {
+    if (event?.pendaftaran_link) {
+      window.open(event.pendaftaran_link, "_blank");
+    } else if (event?.registration_url) {
+      window.open(event.registration_url, "_blank");
+    }
+  };
+
+  // Handle WhatsApp contact
+  const handleWhatsApp = () => {
+    if (event?.nomor_penyelenggara) {
+      const phoneNumber = event.nomor_penyelenggara.replace(/\D/g, '');
+      const message = `Halo! Saya tertarik dengan event "${event.title}". Bisa saya tanya lebih lanjut?`;
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, "_blank");
+    }
+  };
+
+  // Handle Instagram contact
+  const handleInstagram = () => {
+    if (event?.instagram_penyelenggara) {
+      const instagramUrl = `https://instagram.com/${event.instagram_penyelenggara.replace('@', '')}`;
+      window.open(instagramUrl, "_blank");
+    }
+  };
+
   // Handle share
   const handleShare = async () => {
     if (navigator.share) {
@@ -181,44 +214,8 @@ export default function EventDetailPage() {
     }
   };
 
-  // Handle registration
-  const handleRegistration = () => {
-    if (event?.registration_url) {
-      window.open(event.registration_url, "_blank");
-    }
-  };
-
   // Get status color
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "published":
-        return "bg-green-500 text-white";
-      case "upcoming":
-        return "bg-blue-500 text-white";
-      case "completed":
-        return "bg-gray-500 text-white";
-      case "cancelled":
-        return "bg-red-500 text-white";
-      default:
-        return "bg-gray-500 text-white";
-    }
-  };
 
-  // Get status text
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case "published":
-        return "Published";
-      case "upcoming":
-        return "Upcoming";
-      case "completed":
-        return "Completed";
-      case "cancelled":
-        return "Cancelled";
-      default:
-        return "Draft";
-    }
-  };
 
   if (loading) {
     return (
@@ -226,35 +223,35 @@ export default function EventDetailPage() {
         <div className="w-full container-box relative z-10 pt-32">
           <div className="animate-pulse">
             {/* Back button skeleton */}
-            <div className="h-6 bg-white/20 rounded w-24 mb-8"></div>
+            <div className="h-6 event-detail-skeleton-bg rounded w-24 mb-8"></div>
 
             {/* Header skeleton */}
-            <div className="h-8 bg-white/20 rounded w-1/3 mb-4"></div>
-            <div className="h-12 bg-white/20 rounded w-2/3 mb-4"></div>
-            <div className="h-6 bg-white/20 rounded w-3/4 mb-8"></div>
+            <div className="h-8 event-detail-skeleton-bg rounded w-1/3 mb-4"></div>
+            <div className="h-12 event-detail-skeleton-bg rounded w-2/3 mb-4"></div>
+            <div className="h-6 event-detail-skeleton-bg rounded w-3/4 mb-8"></div>
 
             {/* Meta skeleton */}
             <div className="flex gap-6 mb-8">
-              <div className="h-4 bg-white/20 rounded w-32"></div>
-              <div className="h-4 bg-white/20 rounded w-40"></div>
-              <div className="h-4 bg-white/20 rounded w-24"></div>
+              <div className="h-4 event-detail-skeleton-bg rounded w-32"></div>
+              <div className="h-4 event-detail-skeleton-bg rounded w-40"></div>
+              <div className="h-4 event-detail-skeleton-bg rounded w-24"></div>
             </div>
 
             {/* Action buttons skeleton */}
             <div className="flex gap-4 mb-8">
-              <div className="h-10 bg-white/20 rounded w-24"></div>
-              <div className="h-10 bg-white/20 rounded w-32"></div>
+              <div className="h-10 event-detail-skeleton-bg rounded w-24"></div>
+              <div className="h-10 event-detail-skeleton-bg rounded w-32"></div>
             </div>
 
             {/* Image skeleton */}
-            <div className="h-96 bg-white/20 rounded-2xl mb-8"></div>
+            <div className="h-96 event-detail-skeleton-bg rounded-2xl mb-8"></div>
 
             {/* Content skeleton */}
             <div className="space-y-4">
-              <div className="h-4 bg-white/20 rounded w-full"></div>
-              <div className="h-4 bg-white/20 rounded w-5/6"></div>
-              <div className="h-4 bg-white/20 rounded w-4/5"></div>
-              <div className="h-4 bg-white/20 rounded w-full"></div>
+              <div className="h-4 event-detail-skeleton-bg rounded w-full"></div>
+              <div className="h-4 event-detail-skeleton-bg rounded w-5/6"></div>
+              <div className="h-4 event-detail-skeleton-bg rounded w-4/5"></div>
+              <div className="h-4 event-detail-skeleton-bg rounded w-full"></div>
             </div>
           </div>
         </div>
@@ -267,17 +264,17 @@ export default function EventDetailPage() {
       <div className="text-white content-above-gradient relative min-h-screen">
         <div className="w-full container-box relative z-10 pt-32">
           <div className="text-center">
-            <div className="w-16 h-16 bg-red-400 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <span className="text-2xl">📅</span>
+            <div className="w-16 h-16 event-detail-error-bg rounded-full mx-auto mb-4 flex items-center justify-center">
+              <span className="text-2xl event-detail-error-icon">📅</span>
             </div>
-            <h1 className="text-2xl font-bold mb-2">Event Tidak Ditemukan</h1>
-            <p className="text-white/60 mb-6">
+            <h1 className="event-detail-title mb-2">Event Tidak Ditemukan</h1>
+            <p className="event-detail-description mb-6">
               {error ||
                 "Event yang Anda cari tidak ditemukan atau telah dihapus."}
             </p>
             <button
               onClick={() => router.push("/news/upcoming-events")}
-              className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              className="px-6 py-3 rounded-lg event-detail-button-primary"
             >
               Kembali ke Daftar Event
             </button>
@@ -288,7 +285,8 @@ export default function EventDetailPage() {
   }
 
   const isEventUpcoming = new Date(event.event_date) > new Date();
-  const isRegistrationAvailable = event.registration_url && isEventUpcoming;
+  const hasRegistrationLink = event.pendaftaran_link || event.registration_url;
+  const isRegistrationAvailable = hasRegistrationLink && isEventUpcoming;
 
   return (
     <div className="text-white content-above-gradient relative">
@@ -317,75 +315,69 @@ export default function EventDetailPage() {
         <div className="pt-32 mb-8">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+            className="flex items-center gap-2 event-detail-back-button group"
           >
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-5 h-5 event-detail-back-button-icon group-hover:-translate-x-1" />
             Kembali
           </button>
         </div>
 
+        {/* Featured Image */}
+        <div className="mb-8">
+          <div className="event-detail-image-bg rounded-2xl overflow-hidden">
+            <div className="event-detail-image-container">
+              <img
+                src={event.image_url || "/placeholder.svg"}
+                alt={event.title}
+                className="event-detail-image"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Event Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            {event.is_featured && (
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                Featured
-              </span>
-            )}
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
-                event.status
-              )}`}
-            >
-              {getStatusText(event.status)}
-            </span>
-            {event.event_type && (
-              <span className="px-3 py-1 bg-purple-600/20 text-purple-300 rounded-full text-sm border border-purple-600/30">
-                {event.event_type}
-              </span>
-            )}
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+          <h1 className="event-detail-title">
             {event.title}
           </h1>
-          <p className="text-xl text-white/80 max-w-4xl leading-relaxed">
+          <p className="event-detail-description max-w-4xl">
             {event.description}
           </p>
         </div>
 
         {/* Event Meta */}
-        <div className="flex flex-wrap items-center gap-6 mb-8 text-white/60">
+        <div className="flex flex-wrap items-center gap-6 mb-8">
           {/* Date */}
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4" />
-            <span className="text-sm">{formatDate(event.event_date)}</span>
+            <Calendar className="event-detail-meta-icon" />
+            <span className="event-detail-meta">{formatDate(event.event_date)}</span>
           </div>
 
           {/* Time */}
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4" />
-            <span className="text-sm">{formatTime(event.event_date)} WIB</span>
+            <Clock className="event-detail-meta-icon" />
+            <span className="event-detail-meta">{formatTime(event.event_date)} WIB</span>
           </div>
 
           {/* Location */}
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
-            <span className="text-sm">{event.location}</span>
+            <MapPin className="event-detail-meta-icon" />
+            <span className="event-detail-meta">{event.location}</span>
           </div>
 
           {/* Organizer */}
           {event.organizer_name && (
             <div className="flex items-center gap-2">
-              <User className="w-4 h-4" />
-              <span className="text-sm">{event.organizer_name}</span>
+              <User className="event-detail-meta-icon" />
+              <span className="event-detail-meta">{event.organizer_name}</span>
             </div>
           )}
 
           {/* Participants */}
           {(event.max_participants || event.current_participants) && (
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              <span className="text-sm">
+              <Users className="event-detail-meta-icon" />
+              <span className="event-detail-meta">
                 {event.current_participants || 0}
                 {event.max_participants && ` / ${event.max_participants}`}{" "}
                 peserta
@@ -396,169 +388,161 @@ export default function EventDetailPage() {
 
         {/* Countdown for upcoming events */}
         {isEventUpcoming && timeUntilEvent && (
-          <div className="mb-8 p-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-600/30">
+          <div className="mb-8 p-4 rounded-lg event-detail-countdown-bg">
             <div className="flex items-center gap-2">
-              <CalendarDays className="w-5 h-5 text-purple-400" />
-              <span className="text-purple-300 font-medium">
+              <CalendarDays className="event-detail-countdown-icon" />
+              <span className="event-detail-countdown">
                 {timeUntilEvent}
               </span>
             </div>
           </div>
         )}
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={handleShare}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
-          >
-            <Share2 className="w-4 h-4" />
-            {shareSuccess ? "Link Disalin!" : "Bagikan"}
-          </button>
-          {isRegistrationAvailable && (
-            <button
-              onClick={handleRegistration}
-              className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Daftar Event
-            </button>
-          )}
-        </div>
 
-        {/* Featured Image */}
-        <div className="mb-8">
-          <div className="bg-white/10 rounded-2xl overflow-hidden">
-            <img
-              src={event.image_url || "/placeholder.svg"}
-              alt={event.title}
-              className="w-full h-96 object-cover"
-            />
-          </div>
-        </div>
 
         {/* Event Details */}
-        <div className="max-w-4xl">
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-            <h2 className="text-2xl font-bold mb-6 text-white">Detail Event</h2>
+        <div className="max-w-6xl">
+          <div className="grid lg:grid-cols-3 gap-8 event-detail-layout">
+            {/* Left Column - Detail Event */}
+            <div className="lg:col-span-2 event-detail-left-column">
+              <div className="event-detail-card-bg rounded-2xl p-8 event-detail-card-padding">
+                <h2 className="event-detail-section-title mb-6">Detail Event</h2>
 
-            <div className="space-y-6">
-              {/* Event Description */}
-              <div>
-                <h3 className="text-lg font-semibold mb-3 text-white">
-                  Deskripsi
+                <div className="space-y-6">
+                  {/* Event Description */}
+                  <div>
+                    <h3 className="event-detail-section-title mb-3">
+                      Deskripsi
+                    </h3>
+                    <p className="event-detail-section-text leading-relaxed">
+                      {event.description}
+                    </p>
+                  </div>
+
+                  {/* Jadwal & Lokasi */}
+                  <div>
+                    <h3 className="event-detail-section-title mb-3">
+                      Jadwal & Lokasi
+                    </h3>
+                    <div className="space-y-3">
+                      {event.organizer_name && (
+                        <div className="flex items-center gap-3">
+                          <User className="event-detail-section-icon" />
+                          <span className="event-detail-section-text">
+                            {event.organizer_name}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-3">
+                        <Calendar className="event-detail-section-icon" />
+                        <span className="event-detail-section-text">
+                          {formatDate(event.event_date)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Clock className="event-detail-section-icon" />
+                        <span className="event-detail-section-text">
+                          {formatTime(event.event_date)} WIB
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <MapPin className="event-detail-section-icon" />
+                        <span className="event-detail-section-text">{event.location}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Registration & Contact */}
+            <div className="space-y-6 event-detail-right-column">
+              {/* Registration Card */}
+              <div className="event-detail-registration-card rounded-2xl p-6 event-detail-card-padding">
+                <h3 className="event-detail-section-title mb-3">
+                  Pendaftaran
                 </h3>
-                <p className="text-white/80 leading-relaxed">
-                  {event.description}
+                <p className="event-detail-section-text mb-4">
+                  {isEventUpcoming 
+                    ? "Tertarik? Buruan daftar sebelum kuota habis"
+                    : "Event telah berakhir, tetapi Anda masih bisa melihat informasi pendaftaran"
+                  }
                 </p>
-              </div>
-
-              {/* Event Information */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-lg font-semibold mb-3 text-white">
-                    Informasi Event
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Calendar className="w-4 h-4 text-purple-400" />
-                      <span className="text-white/80">
-                        {formatDate(event.event_date)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Clock className="w-4 h-4 text-purple-400" />
-                      <span className="text-white/80">
-                        {formatTime(event.event_date)} WIB
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-4 h-4 text-purple-400" />
-                      <span className="text-white/80">{event.location}</span>
-                    </div>
-                    {event.event_type && (
-                      <div className="flex items-center gap-3">
-                        <Tag className="w-4 h-4 text-purple-400" />
-                        <span className="text-white/80">
-                          {event.event_type}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold mb-3 text-white">
-                    Pendaftaran
-                  </h3>
-                  <div className="space-y-3">
-                    {event.organizer_name && (
-                      <div className="flex items-center gap-3">
-                        <User className="w-4 h-4 text-purple-400" />
-                        <span className="text-white/80">
-                          {event.organizer_name}
-                        </span>
-                      </div>
-                    )}
-                    {(event.max_participants || event.current_participants) && (
-                      <div className="flex items-center gap-3">
-                        <Users className="w-4 h-4 text-purple-400" />
-                        <span className="text-white/80">
-                          {event.current_participants || 0}
-                          {event.max_participants &&
-                            ` / ${event.max_participants}`}{" "}
-                          peserta
-                        </span>
-                      </div>
-                    )}
-                    {isRegistrationAvailable && (
-                      <div className="flex items-center gap-3">
-                        <ExternalLink className="w-4 h-4 text-purple-400" />
-                        <span className="text-white/80">
-                          Pendaftaran tersedia
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Registration CTA */}
-              {isRegistrationAvailable && (
-                <div className="mt-8 p-6 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-lg border border-purple-600/30">
-                  <h3 className="text-xl font-bold mb-3 text-white">
-                    Daftar Sekarang!
-                  </h3>
-                  <p className="text-white/80 mb-4">
-                    Jangan lewatkan kesempatan untuk bergabung dalam event ini.
-                    Daftar sekarang untuk mengamankan tempat Anda.
-                  </p>
+                {hasRegistrationLink ? (
                   <button
                     onClick={handleRegistration}
-                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium"
+                    className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg event-detail-button-full ${
+                      isEventUpcoming 
+                        ? "event-detail-button-primary" 
+                        : "event-detail-button-secondary"
+                    }`}
+                    disabled={!isEventUpcoming}
                   >
-                    <ExternalLink className="w-4 h-4" />
-                    Daftar Event
+                    <span>Link Pendaftaran</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
+                ) : (
+                  <div className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg event-detail-button-placeholder event-detail-button-full">
+                    <span>Link Pendaftaran Belum Tersedia</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Contact Information Card */}
+              <div className="event-detail-contact-card rounded-2xl p-6 event-detail-card-padding">
+                <h3 className="event-detail-section-title mb-3">
+                  Informasi Kontak
+                </h3>
+                <p className="event-detail-section-text mb-4">
+                  Informasi lebih lanjut? hubungi kontak dibawah ini
+                </p>
+                <div className="space-y-3">
+                                     {event.nomor_penyelenggara && (
+                     <button
+                       onClick={handleWhatsApp}
+                       className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg event-detail-whatsapp-button event-detail-button-full"
+                     >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                      </svg>
+                      <span>WhatsApp</span>
+                    </button>
+                  )}
+                                     {event.instagram_penyelenggara && (
+                     <button
+                       onClick={handleInstagram}
+                       className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg event-detail-instagram-button event-detail-button-full"
+                     >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                      </svg>
+                      <span>Instagram</span>
+                    </button>
+                  )}
                 </div>
-              )}
+                {event.instagram_penyelenggara && (
+                  <p className="event-detail-section-text text-center mt-4">
+                    {event.instagram_penyelenggara}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Event Footer */}
-        <div className="mt-12 pt-8 border-t border-white/20">
+        <div className="mt-12 pt-8 event-detail-footer-border border-t">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="text-white/60 text-sm">
+            <div className="event-detail-footer-text">
               <p>Terakhir diperbarui: {formatDate(event.updated_at)}</p>
             </div>
             <div className="flex items-center gap-4">
               <button
                 onClick={handleShare}
-                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg event-detail-footer-share-button"
               >
-                <Share2 className="w-4 h-4" />
-                Bagikan Event
+                <span>{shareSuccess ? "Link Disalin!" : "Bagikan Event"}</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
