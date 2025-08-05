@@ -160,32 +160,6 @@ export default function NewsReportPage() {
                       alt={newsItem.title}
                       className="w-full h-full object-cover"
                     />
-                    {/* Featured Badge */}
-                    {newsItem.is_featured && (
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                          Featured
-                        </span>
-                      </div>
-                    )}
-                    {/* Status Badge */}
-                    <div className="absolute top-4 right-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          newsItem.status === "published"
-                            ? "bg-green-500 text-white"
-                            : newsItem.status === "draft"
-                            ? "bg-gray-500 text-white"
-                            : "bg-red-500 text-white"
-                        }`}
-                      >
-                        {newsItem.status === "published"
-                          ? "Published"
-                          : newsItem.status === "draft"
-                          ? "Draft"
-                          : "Archived"}
-                      </span>
-                    </div>
                     {/* View Button Overlay */}
                     <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <button

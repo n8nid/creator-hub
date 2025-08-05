@@ -168,34 +168,6 @@ export default function UpcomingEventsPage() {
                       alt={event.title}
                       className="w-full h-full object-cover"
                     />
-                    {/* Featured Badge */}
-                    {event.is_featured && (
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                          Featured
-                        </span>
-                      </div>
-                    )}
-                    {/* Status Badge */}
-                    <div className="absolute top-4 right-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          event.status === "published"
-                            ? "bg-green-500 text-white"
-                            : event.status === "draft"
-                            ? "bg-gray-500 text-white"
-                            : "bg-red-500 text-white"
-                        }`}
-                      >
-                        {event.status === "published"
-                          ? "Published"
-                          : event.status === "draft"
-                          ? "Draft"
-                          : event.status === "cancelled"
-                          ? "Cancelled"
-                          : "Archived"}
-                      </span>
-                    </div>
                     {/* View Button Overlay */}
                     <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <button
