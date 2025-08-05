@@ -211,34 +211,37 @@ export default function NewsDetailPage() {
             {/* Back button skeleton */}
             <div className="h-6 bg-white/20 rounded w-24 mb-8"></div>
 
-            {/* Header skeleton */}
-            <div className="h-8 bg-white/20 rounded w-1/3 mb-4"></div>
-            <div className="h-12 bg-white/20 rounded w-2/3 mb-4"></div>
-            <div className="h-6 bg-white/20 rounded w-3/4 mb-8"></div>
+            {/* Image skeleton - 16:9 aspect ratio, not full width */}
+            <div className="max-w-4xl mx-auto aspect-video bg-white/20 rounded-2xl mb-8"></div>
+
+            {/* Title skeleton */}
+            <div className="flex gap-4 mb-6">
+              <div className="w-1 bg-white/20 rounded"></div>
+              <div className="h-8 bg-white/20 rounded w-3/4"></div>
+            </div>
 
             {/* Meta skeleton */}
             <div className="flex gap-6 mb-8">
               <div className="h-4 bg-white/20 rounded w-32"></div>
               <div className="h-4 bg-white/20 rounded w-40"></div>
-              <div className="h-4 bg-white/20 rounded w-24"></div>
             </div>
-
-            {/* Action buttons skeleton */}
-            <div className="flex gap-4 mb-8">
-              <div className="h-10 bg-white/20 rounded w-24"></div>
-              <div className="h-10 bg-white/20 rounded w-24"></div>
-            </div>
-
-            {/* Image skeleton */}
-            <div className="h-96 bg-white/20 rounded-2xl mb-8"></div>
 
             {/* Content skeleton */}
-            <div className="space-y-4">
-              <div className="h-4 bg-white/20 rounded w-full"></div>
-              <div className="h-4 bg-white/20 rounded w-5/6"></div>
-              <div className="h-4 bg-white/20 rounded w-4/5"></div>
-              <div className="h-4 bg-white/20 rounded w-full"></div>
-              <div className="h-4 bg-white/20 rounded w-3/4"></div>
+            <div className="bg-white/10 rounded-2xl p-8 border border-white/20">
+              <div className="space-y-4">
+                <div className="h-4 bg-white/20 rounded w-full"></div>
+                <div className="h-4 bg-white/20 rounded w-5/6"></div>
+                <div className="h-4 bg-white/20 rounded w-4/5"></div>
+                <div className="h-4 bg-white/20 rounded w-full"></div>
+              </div>
+            </div>
+
+            {/* Footer skeleton */}
+            <div className="mt-12 pt-8 border-t border-white/20">
+              <div className="flex justify-between items-center">
+                <div className="h-4 bg-white/20 rounded w-48"></div>
+                <div className="h-10 bg-white/20 rounded w-32"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -297,7 +300,7 @@ export default function NewsDetailPage() {
         {/* Back Button */}
         <div className="pt-32 mb-8">
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push("/news/news-report")}
             className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
@@ -305,45 +308,34 @@ export default function NewsDetailPage() {
           </button>
         </div>
 
-        {/* Article Header */}
+        {/* Featured Image - 16:9 aspect ratio, not full width */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            {news.is_featured && (
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                Featured
-              </span>
-            )}
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                news.status === "published"
-                  ? "bg-green-500 text-white"
-                  : news.status === "draft"
-                  ? "bg-gray-500 text-white"
-                  : "bg-red-500 text-white"
-              }`}
-            >
-              {news.status === "published"
-                ? "Published"
-                : news.status === "draft"
-                ? "Draft"
-                : "Archived"}
-            </span>
+          <div className="max-w-4xl mx-auto aspect-video bg-white/10 rounded-2xl overflow-hidden">
+            <img
+              src={news.image_url || "/placeholder.svg"}
+              alt={news.title}
+              className="w-full h-full object-cover"
+            />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-            {news.title}
-          </h1>
-          <p className="text-xl text-white/80 max-w-4xl leading-relaxed">
-            {news.excerpt}
-          </p>
         </div>
 
-        {/* Article Meta */}
+        {/* Title with Vertical Line */}
+        <div className="mb-6">
+          <div className="flex gap-4 items-stretch">
+            {/* Vertical Line - follows title height */}
+            <div className="w-1 bg-white rounded-full flex-shrink-0"></div>
+            {/* Title */}
+            <h1 className="article-title">{news.title}</h1>
+          </div>
+        </div>
+
+        {/* Author and Date Info */}
         <div className="flex flex-wrap items-center gap-6 mb-8 text-white/60">
           {/* Author */}
           <div className="flex items-center gap-2">
             <User className="w-4 h-4" />
             <span className="text-sm">
-              {news.author_name || "N8N Indonesia"}
+              {news.author_name || "n8n Indonesia"}
             </span>
           </div>
 
@@ -352,83 +344,7 @@ export default function NewsDetailPage() {
             <Calendar className="w-4 h-4" />
             <span className="text-sm">{formatDate(news.published_date)}</span>
           </div>
-
-          {/* Time */}
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4" />
-            <span className="text-sm">
-              {formatTime(news.published_date)} WIB
-            </span>
-          </div>
-
-          {/* Read Time */}
-          {news.read_time && (
-            <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4" />
-              <span className="text-sm">{news.read_time} menit baca</span>
-            </div>
-          )}
-
-          {/* Views */}
-          {news.views && (
-            <div className="flex items-center gap-2">
-              <Eye className="w-4 h-4" />
-              <span className="text-sm">
-                {news.views.toLocaleString()} views
-              </span>
-            </div>
-          )}
         </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={handleShare}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
-          >
-            <Share2 className="w-4 h-4" />
-            {shareSuccess ? "Link Disalin!" : "Bagikan"}
-          </button>
-          <button
-            onClick={handleBookmark}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              isBookmarked
-                ? "bg-purple-600 text-white"
-                : "bg-white/10 text-white hover:bg-white/20"
-            }`}
-          >
-            <Bookmark
-              className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`}
-            />
-            {isBookmarked ? "Tersimpan" : "Simpan"}
-          </button>
-        </div>
-
-        {/* Featured Image */}
-        <div className="mb-8">
-          <div className="bg-white/10 rounded-2xl overflow-hidden">
-            <img
-              src={news.image_url || "/placeholder.svg"}
-              alt={news.title}
-              className="w-full h-96 object-cover"
-            />
-          </div>
-        </div>
-
-        {/* Tags */}
-        {news.tags && news.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-8">
-            <Tag className="w-4 h-4 text-purple-400 mt-1" />
-            {news.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-purple-600/20 text-purple-300 rounded-full text-sm border border-purple-600/30"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
 
         {/* Article Content */}
         <div className="max-w-4xl">
@@ -452,7 +368,7 @@ export default function NewsDetailPage() {
                 className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
                 <Share2 className="w-4 h-4" />
-                Bagikan Artikel
+                {shareSuccess ? "Link Disalin!" : "Bagikan Artikel"}
               </button>
             </div>
           </div>
