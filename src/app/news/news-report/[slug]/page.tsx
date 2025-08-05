@@ -12,6 +12,8 @@ import {
   Bookmark,
   Eye,
   User,
+  FileText,
+  Tag,
 } from "lucide-react";
 
 interface News {
@@ -41,6 +43,7 @@ export default function NewsDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [shareSuccess, setShareSuccess] = useState(false);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -85,6 +88,25 @@ export default function NewsDetailPage() {
         } catch (viewError) {
           console.error("Error updating view count:", viewError);
           // Don't show error to user for view count update
+        }
+
+        // Check if user has bookmarked this news
+        try {
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+          if (user) {
+            const { data: bookmarkData } = await supabase
+              .from("bookmarks")
+              .select("*")
+              .eq("user_id", user.id)
+              .eq("news_id", newsData.id)
+              .single();
+
+            setIsBookmarked(!!bookmarkData);
+          }
+        } catch (bookmarkError) {
+          console.error("Error checking bookmark status:", bookmarkError);
         }
       } catch (err) {
         console.error("Unexpected error:", err);
@@ -173,7 +195,8 @@ export default function NewsDetailPage() {
       // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(window.location.href);
-        alert("Link berita telah disalin ke clipboard!");
+        setShareSuccess(true);
+        setTimeout(() => setShareSuccess(false), 2000);
       } catch (err) {
         console.error("Error copying to clipboard:", err);
       }
@@ -193,6 +216,19 @@ export default function NewsDetailPage() {
             <div className="h-12 bg-white/20 rounded w-2/3 mb-4"></div>
             <div className="h-6 bg-white/20 rounded w-3/4 mb-8"></div>
 
+            {/* Meta skeleton */}
+            <div className="flex gap-6 mb-8">
+              <div className="h-4 bg-white/20 rounded w-32"></div>
+              <div className="h-4 bg-white/20 rounded w-40"></div>
+              <div className="h-4 bg-white/20 rounded w-24"></div>
+            </div>
+
+            {/* Action buttons skeleton */}
+            <div className="flex gap-4 mb-8">
+              <div className="h-10 bg-white/20 rounded w-24"></div>
+              <div className="h-10 bg-white/20 rounded w-24"></div>
+            </div>
+
             {/* Image skeleton */}
             <div className="h-96 bg-white/20 rounded-2xl mb-8"></div>
 
@@ -202,6 +238,7 @@ export default function NewsDetailPage() {
               <div className="h-4 bg-white/20 rounded w-5/6"></div>
               <div className="h-4 bg-white/20 rounded w-4/5"></div>
               <div className="h-4 bg-white/20 rounded w-full"></div>
+              <div className="h-4 bg-white/20 rounded w-3/4"></div>
             </div>
           </div>
         </div>
@@ -261,9 +298,9 @@ export default function NewsDetailPage() {
         <div className="pt-32 mb-8">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             Kembali
           </button>
         </div>
@@ -327,7 +364,7 @@ export default function NewsDetailPage() {
           {/* Read Time */}
           {news.read_time && (
             <div className="flex items-center gap-2">
-              <Eye className="w-4 h-4" />
+              <FileText className="w-4 h-4" />
               <span className="text-sm">{news.read_time} menit baca</span>
             </div>
           )}
@@ -350,7 +387,7 @@ export default function NewsDetailPage() {
             className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
           >
             <Share2 className="w-4 h-4" />
-            Bagikan
+            {shareSuccess ? "Link Disalin!" : "Bagikan"}
           </button>
           <button
             onClick={handleBookmark}
@@ -381,6 +418,7 @@ export default function NewsDetailPage() {
         {/* Tags */}
         {news.tags && news.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-8">
+            <Tag className="w-4 h-4 text-purple-400 mt-1" />
             {news.tags.map((tag, index) => (
               <span
                 key={index}
@@ -396,7 +434,7 @@ export default function NewsDetailPage() {
         <div className="max-w-4xl">
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
             <div
-              className="prose prose-invert max-w-none prose-headings:text-white prose-p:text-white/80 prose-strong:text-white prose-a:text-purple-400 prose-a:hover:text-purple-300 prose-ul:text-white/80 prose-ol:text-white/80 prose-li:text-white/80"
+              className="prose prose-invert max-w-none prose-headings:text-white prose-p:text-white/80 prose-strong:text-white prose-a:text-purple-400 prose-a:hover:text-purple-300 prose-ul:text-white/80 prose-ol:text-white/80 prose-li:text-white/80 prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg"
               dangerouslySetInnerHTML={{ __html: news.content || "" }}
             />
           </div>

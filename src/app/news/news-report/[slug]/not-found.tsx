@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { XCircle } from "lucide-react";
 
 export default function NotFound() {
   return (
