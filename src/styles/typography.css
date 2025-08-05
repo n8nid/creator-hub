@@ -636,6 +636,16 @@ h1.creator-detail-name {
   margin: 0 !important;
 }
 
+.admin-page-header-title {
+  font-family: "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
+  color: #111827 !important;
+  margin: 0 !important;
+}
+
 .admin-page-subtitle {
   font-family: "Inter", sans-serif !important;
   font-weight: 400 !important;

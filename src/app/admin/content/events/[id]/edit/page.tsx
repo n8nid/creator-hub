@@ -179,7 +179,7 @@ export default function EditEventPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Edit Event</h1>
+          <h1 className="admin-page-header-title">Edit Event</h1>
           <p className="text-muted-foreground">Update event information</p>
         </div>
       </div>

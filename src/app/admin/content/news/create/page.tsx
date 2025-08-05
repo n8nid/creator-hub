@@ -101,7 +101,7 @@ export default function CreateNewsPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Create News Article</h1>
+          <h1 className="admin-page-header-title">Create News Article</h1>
           <p className="text-muted-foreground">
             Add a new news article to your community
           </p>

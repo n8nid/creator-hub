@@ -104,7 +104,7 @@ export default function CreateEventPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Create Event</h1>
+          <h1 className="admin-page-header-title">Create Event</h1>
           <p className="text-muted-foreground">
             Add a new event to your community
           </p>

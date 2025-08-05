@@ -170,7 +170,7 @@ export default function EditNewsPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Edit News Article</h1>
+          <h1 className="admin-page-header-title">Edit News Article</h1>
           <p className="text-muted-foreground">
             Update news article information
           </p>
