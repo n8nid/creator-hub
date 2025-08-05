@@ -91,6 +91,9 @@ export async function PUT(
       image_url,
       is_featured,
       status,
+      pendaftaran_link,
+      nomor_penyelenggara,
+      instagram_penyelenggara,
     } = body;
 
     // Validate required fields
@@ -122,6 +125,9 @@ export async function PUT(
       is_featured: is_featured || false,
       status,
       updated_at: new Date().toISOString(),
+      pendaftaran_link: pendaftaran_link || null,
+      nomor_penyelenggara: nomor_penyelenggara || null,
+      instagram_penyelenggara: instagram_penyelenggara || null,
     };
 
     // Set published_at if status is published

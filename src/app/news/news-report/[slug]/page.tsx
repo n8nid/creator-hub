@@ -9,11 +9,11 @@ import {
   Clock,
   ArrowLeft,
   Share2,
-  Bookmark,
-  Eye,
+  MapPin,
+  Users,
   User,
-  FileText,
   Tag,
+  FileText,
 } from "lucide-react";
 
 interface News {

@@ -109,6 +109,9 @@ export async function POST(request: NextRequest) {
       image_url,
       is_featured,
       status,
+      pendaftaran_link,
+      nomor_penyelenggara,
+      instagram_penyelenggara,
     } = body;
 
     // Validate required fields
@@ -132,6 +135,9 @@ export async function POST(request: NextRequest) {
         status: status || "draft",
         created_by: user.id,
         published_at: status === "published" ? new Date().toISOString() : null,
+        pendaftaran_link: pendaftaran_link || null,
+        nomor_penyelenggara: nomor_penyelenggara || null,
+        instagram_penyelenggara: instagram_penyelenggara || null,
       })
       .select()
       .single();

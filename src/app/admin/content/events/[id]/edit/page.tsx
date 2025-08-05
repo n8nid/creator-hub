@@ -31,6 +31,9 @@ interface Event {
   status: "draft" | "published" | "archived" | "cancelled";
   created_at: string;
   updated_at: string;
+  pendaftaran_link?: string | null;
+  nomor_penyelenggara?: string | null;
+  instagram_penyelenggara?: string | null;
 }
 
 export default function EditEventPage() {
@@ -48,6 +51,9 @@ export default function EditEventPage() {
     image_url: "",
     is_featured: false,
     status: "draft",
+    pendaftaran_link: "",
+    nomor_penyelenggara: "",
+    instagram_penyelenggara: "",
   });
 
   const eventId = params.id as string;
@@ -69,6 +75,9 @@ export default function EditEventPage() {
             image_url: event.image_url || "",
             is_featured: event.is_featured,
             status: event.status,
+            pendaftaran_link: event.pendaftaran_link || "",
+            nomor_penyelenggara: event.nomor_penyelenggara || "",
+            instagram_penyelenggara: event.instagram_penyelenggara || "",
           });
         } else {
           toast({
@@ -291,6 +300,74 @@ export default function EditEventPage() {
                   <SelectItem value="archived">Archived</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Event Registration & Contact Section */}
+            <div className="space-y-6 pt-6 border-t">
+              <div>
+                <h3 className="text-lg font-semibold mb-4">
+                  Event Registration & Contact
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Fill in the event registration and contact information
+                  (optional)
+                </p>
+              </div>
+
+              {/* Link Pendaftaran */}
+              <div className="space-y-2">
+                <Label htmlFor="pendaftaran_link">
+                  Link Pendaftaran (Google Form)
+                </Label>
+                <Input
+                  id="pendaftaran_link"
+                  type="url"
+                  value={formData.pendaftaran_link}
+                  onChange={(e) =>
+                    handleInputChange("pendaftaran_link", e.target.value)
+                  }
+                  placeholder="https://forms.google.com/..."
+                />
+                <p className="text-sm text-muted-foreground">
+                  Link Google Form untuk pendaftaran event
+                </p>
+              </div>
+
+              {/* Nomor WhatsApp */}
+              <div className="space-y-2">
+                <Label htmlFor="nomor_penyelenggara">
+                  Nomor WhatsApp Penyelenggara
+                </Label>
+                <Input
+                  id="nomor_penyelenggara"
+                  value={formData.nomor_penyelenggara}
+                  onChange={(e) =>
+                    handleInputChange("nomor_penyelenggara", e.target.value)
+                  }
+                  placeholder="6281234567890"
+                />
+                <p className="text-sm text-muted-foreground">
+                  Nomor WhatsApp penyelenggara event (format: 6281234567890)
+                </p>
+              </div>
+
+              {/* Instagram */}
+              <div className="space-y-2">
+                <Label htmlFor="instagram_penyelenggara">
+                  Instagram Penyelenggara
+                </Label>
+                <Input
+                  id="instagram_penyelenggara"
+                  value={formData.instagram_penyelenggara}
+                  onChange={(e) =>
+                    handleInputChange("instagram_penyelenggara", e.target.value)
+                  }
+                  placeholder="@username atau username"
+                />
+                <p className="text-sm text-muted-foreground">
+                  Username Instagram penyelenggara event (dengan atau tanpa @)
+                </p>
+              </div>
             </div>
 
             {/* Actions */}

@@ -98,21 +98,22 @@ CREATE POLICY "Admins can view all profiles" ON public.profiles
 
 -- RLS Policies for workflows
 CREATE POLICY "Anyone can view approved workflows" ON public.workflows
-  FOR SELECT USING (
-    status = 'approved' AND 
-    EXISTS (
-      SELECT 1 FROM public.profiles 
-      WHERE id = profile_id AND status = 'approved'
-    )
-  );
+  FOR SELECT USING (status = 'approved');
 
-CREATE POLICY "Users can manage own workflows" ON public.workflows
-  FOR ALL USING (
-    EXISTS (
-      SELECT 1 FROM public.profiles 
-      WHERE id = profile_id AND user_id = auth.uid()
-    )
-  );
+CREATE POLICY "Users can view own workflows" ON public.workflows
+  FOR SELECT USING (auth.uid() = (
+    SELECT user_id FROM public.profiles WHERE id = profile_id
+  ));
+
+CREATE POLICY "Users can insert own workflows" ON public.workflows
+  FOR INSERT WITH CHECK (auth.uid() = (
+    SELECT user_id FROM public.profiles WHERE id = profile_id
+  ));
+
+CREATE POLICY "Users can update own workflows" ON public.workflows
+  FOR UPDATE USING (auth.uid() = (
+    SELECT user_id FROM public.profiles WHERE id = profile_id
+  ));
 
 CREATE POLICY "Admins can view all workflows" ON public.workflows
   FOR ALL USING (
@@ -124,12 +125,23 @@ CREATE POLICY "Admins can view all workflows" ON public.workflows
 
 -- RLS Policies for admin_users
 CREATE POLICY "Admins can view admin users" ON public.admin_users
-  FOR SELECT USING (
+  FOR ALL USING (
     EXISTS (
       SELECT 1 FROM public.admin_users 
       WHERE user_id = auth.uid()
     )
   );
+
+-- Add new columns to events table for registration and contact information
+ALTER TABLE public.events 
+ADD COLUMN IF NOT EXISTS pendaftaran_link TEXT,
+ADD COLUMN IF NOT EXISTS nomor_penyelenggara TEXT,
+ADD COLUMN IF NOT EXISTS instagram_penyelenggara TEXT;
+
+-- Add comments for documentation
+COMMENT ON COLUMN public.events.pendaftaran_link IS 'Link Google Form untuk pendaftaran event';
+COMMENT ON COLUMN public.events.nomor_penyelenggara IS 'Nomor WhatsApp penyelenggara event (format: 6281234567890)';
+COMMENT ON COLUMN public.events.instagram_penyelenggara IS 'Username Instagram penyelenggara event (format: @username atau username)';
 
 -- Add Whatsapp column if it doesn't exist (for existing databases)
 DO $$ 
