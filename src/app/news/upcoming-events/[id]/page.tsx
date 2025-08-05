@@ -145,7 +145,7 @@ export default function EventDetailPage() {
             <h1 className="text-2xl font-bold mb-2">Event Tidak Ditemukan</h1>
             <p className="text-white/60 mb-6">Event yang Anda cari tidak ditemukan atau telah dihapus.</p>
             <button 
-              onClick={() => router.push('/upcoming-events')}
+              onClick={() => router.push('/news/upcoming-events')}
               className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               Kembali ke Daftar Event

@@ -11,8 +11,8 @@ export default function NotFound() {
           <p className="text-white/60 mb-6">
             Event yang Anda cari tidak ditemukan atau telah dihapus.
           </p>
-          <Link 
-            href="/upcoming-events"
+          <Link
+            href="/news/upcoming-events"
             className="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
           >
             Kembali ke Daftar Event
@@ -21,4 +21,4 @@ export default function NotFound() {
       </div>
     </div>
   );
-} 
+}

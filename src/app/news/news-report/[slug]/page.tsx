@@ -3,7 +3,15 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import GradientCircle from "@/components/GradientCircle";
-import { Calendar, Clock, ArrowLeft, Share2, Bookmark, Eye, User } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  ArrowLeft,
+  Share2,
+  Bookmark,
+  Eye,
+  User,
+} from "lucide-react";
 
 interface News {
   id: string;
@@ -106,7 +114,8 @@ export default function NewsDetailPage() {
             
             <p>Kami mengundang semua developer, automation enthusiast, dan siapa saja yang tertarik dengan n8n untuk bergabung dan berkontribusi dalam membangun masa depan automation yang lebih baik di Indonesia.</p>
           `,
-          excerpt: "Komunitas N8N Indonesia meluncurkan platform Creator Hub yang akan menjadi pusat pembelajaran dan kolaborasi untuk para developer automation di Indonesia.",
+          excerpt:
+            "Komunitas N8N Indonesia meluncurkan platform Creator Hub yang akan menjadi pusat pembelajaran dan kolaborasi untuk para developer automation di Indonesia.",
           published_date: "2025-01-15T10:30:00Z",
           image_url: "/placeholder.svg",
           is_featured: true,
@@ -118,9 +127,9 @@ export default function NewsDetailPage() {
           author_name: "Tim N8N Indonesia",
           read_time: 8,
           views: 1247,
-          tags: ["Platform", "Community", "Automation", "n8n"]
+          tags: ["Platform", "Community", "Automation", "n8n"],
         };
-        
+
         setNews(mockNews);
       } catch (err) {
         setError("Gagal memuat detail berita");
@@ -170,12 +179,12 @@ export default function NewsDetailPage() {
           url: window.location.href,
         });
       } catch (err) {
-        console.log('Error sharing:', err);
+        console.log("Error sharing:", err);
       }
     } else {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(window.location.href);
-      alert('Link berita telah disalin ke clipboard!');
+      alert("Link berita telah disalin ke clipboard!");
     }
   };
 
@@ -186,15 +195,15 @@ export default function NewsDetailPage() {
           <div className="animate-pulse">
             {/* Back button skeleton */}
             <div className="h-6 bg-white/20 rounded w-24 mb-8"></div>
-            
+
             {/* Header skeleton */}
             <div className="h-8 bg-white/20 rounded w-1/3 mb-4"></div>
             <div className="h-12 bg-white/20 rounded w-2/3 mb-4"></div>
             <div className="h-6 bg-white/20 rounded w-3/4 mb-8"></div>
-            
+
             {/* Image skeleton */}
             <div className="h-96 bg-white/20 rounded-2xl mb-8"></div>
-            
+
             {/* Content skeleton */}
             <div className="space-y-4">
               <div className="h-4 bg-white/20 rounded w-full"></div>
@@ -217,9 +226,11 @@ export default function NewsDetailPage() {
               <span className="text-2xl">📰</span>
             </div>
             <h1 className="text-2xl font-bold mb-2">Berita Tidak Ditemukan</h1>
-            <p className="text-white/60 mb-6">Berita yang Anda cari tidak ditemukan atau telah dihapus.</p>
-            <button 
-              onClick={() => router.push('/news')}
+            <p className="text-white/60 mb-6">
+              Berita yang Anda cari tidak ditemukan atau telah dihapus.
+            </p>
+            <button
+              onClick={() => router.push("/news/news-report")}
               className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               Kembali ke Daftar Berita
@@ -251,11 +262,11 @@ export default function NewsDetailPage() {
           zIndex: -1,
         }}
       />
-      
+
       <div className="w-full container-box relative z-10 mb-32">
         {/* Back Button */}
         <div className="pt-32 mb-8">
-          <button 
+          <button
             onClick={() => router.back()}
             className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
           >
@@ -272,19 +283,28 @@ export default function NewsDetailPage() {
                 Featured
               </span>
             )}
-            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-              news.status === 'published' 
-                ? 'bg-green-500 text-white' 
-                : news.status === 'draft'
-                ? 'bg-gray-500 text-white'
-                : 'bg-red-500 text-white'
-            }`}>
-              {news.status === 'published' ? 'Published' : 
-               news.status === 'draft' ? 'Draft' : 'Archived'}
+            <span
+              className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                news.status === "published"
+                  ? "bg-green-500 text-white"
+                  : news.status === "draft"
+                  ? "bg-gray-500 text-white"
+                  : "bg-red-500 text-white"
+              }`}
+            >
+              {news.status === "published"
+                ? "Published"
+                : news.status === "draft"
+                ? "Draft"
+                : "Archived"}
             </span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">{news.title}</h1>
-          <p className="text-xl text-white/80 max-w-4xl leading-relaxed">{news.excerpt}</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+            {news.title}
+          </h1>
+          <p className="text-xl text-white/80 max-w-4xl leading-relaxed">
+            {news.excerpt}
+          </p>
         </div>
 
         {/* Article Meta */}
@@ -292,7 +312,9 @@ export default function NewsDetailPage() {
           {/* Author */}
           <div className="flex items-center gap-2">
             <User className="w-4 h-4" />
-            <span className="text-sm">{news.author_name || 'N8N Indonesia'}</span>
+            <span className="text-sm">
+              {news.author_name || "N8N Indonesia"}
+            </span>
           </div>
 
           {/* Date */}
@@ -304,7 +326,9 @@ export default function NewsDetailPage() {
           {/* Time */}
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4" />
-            <span className="text-sm">{formatTime(news.published_date)} WIB</span>
+            <span className="text-sm">
+              {formatTime(news.published_date)} WIB
+            </span>
           </div>
 
           {/* Read Time */}
@@ -319,7 +343,9 @@ export default function NewsDetailPage() {
           {news.views && (
             <div className="flex items-center gap-2">
               <Eye className="w-4 h-4" />
-              <span className="text-sm">{news.views.toLocaleString()} views</span>
+              <span className="text-sm">
+                {news.views.toLocaleString()} views
+              </span>
             </div>
           )}
         </div>
@@ -336,13 +362,15 @@ export default function NewsDetailPage() {
           <button
             onClick={handleBookmark}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              isBookmarked 
-                ? 'bg-purple-600 text-white' 
-                : 'bg-white/10 text-white hover:bg-white/20'
+              isBookmarked
+                ? "bg-purple-600 text-white"
+                : "bg-white/10 text-white hover:bg-white/20"
             }`}
           >
-            <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
-            {isBookmarked ? 'Tersimpan' : 'Simpan'}
+            <Bookmark
+              className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`}
+            />
+            {isBookmarked ? "Tersimpan" : "Simpan"}
           </button>
         </div>
 
@@ -374,9 +402,9 @@ export default function NewsDetailPage() {
         {/* Article Content */}
         <div className="max-w-4xl">
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-            <div 
+            <div
               className="prose prose-invert max-w-none prose-headings:text-white prose-p:text-white/80 prose-strong:text-white prose-a:text-purple-400 prose-a:hover:text-purple-300 prose-ul:text-white/80 prose-ol:text-white/80 prose-li:text-white/80"
-              dangerouslySetInnerHTML={{ __html: news.content || '' }}
+              dangerouslySetInnerHTML={{ __html: news.content || "" }}
             />
           </div>
         </div>
@@ -401,4 +429,4 @@ export default function NewsDetailPage() {
       </div>
     </div>
   );
-} 
+}

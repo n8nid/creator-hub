@@ -35,12 +35,12 @@ const MainFooter = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="/upcoming-events" className="hover:underline">
+                  <a href="/news/upcoming-events" className="hover:underline">
                     Upcoming Events
                   </a>
                 </li>
                 <li>
-                  <a href="/news-report" className="hover:underline">
+                  <a href="/news/news-report" className="hover:underline">
                     News & Report
                   </a>
                 </li>

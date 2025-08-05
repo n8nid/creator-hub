@@ -235,7 +235,7 @@ export default function NewsPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-white text-center md:text-start w-full">
               Upcoming Event
             </h2>
-            <Link href="/upcoming-events" className="btn-primary">
+            <Link href="/news/upcoming-events" className="btn-primary">
               Lihat selengkapnya
               <svg
                 width="19"
@@ -387,7 +387,7 @@ export default function NewsPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-white text-center md:text-start w-full">
               News & Report
             </h2>
-            <Link href="/news-report" className="btn-primary">
+            <Link href="/news/news-report" className="btn-primary">
               Lihat selengkapnya
               <svg
                 width="19"
@@ -476,7 +476,7 @@ export default function NewsPage() {
                       {/* View Button Overlay */}
                       <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         <button 
-                          onClick={() => router.push(`/news/${newsItem.slug}`)}
+                          onClick={() => router.push(`/news/news-report/${newsItem.slug}`)}
                           className="bg-purple-500/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-purple-600/90 transition-all duration-200"
                         >
                           <span>Lihat</span>

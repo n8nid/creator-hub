@@ -13,8 +13,8 @@ export default function NotFound() {
           <p className="text-white/60 mb-6">
             Berita yang Anda cari tidak ditemukan atau telah dihapus.
           </p>
-          <Link 
-            href="/news"
+          <Link
+            href="/news/news-report"
             className="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
           >
             Kembali ke Daftar Berita
@@ -23,4 +23,4 @@ export default function NotFound() {
       </div>
     </div>
   );
-} 
+}
