@@ -360,7 +360,7 @@ export default function AddWorkflowPage() {
             Gambar Workflow
           </label>
           <ImageUpload
-            bucket="news"
+            bucket="workflow"
             currentImage={workflowForm.screenshot_url}
             onUploadComplete={(url: string, path: string) => {
               setWorkflowForm({ ...workflowForm, screenshot_url: url });

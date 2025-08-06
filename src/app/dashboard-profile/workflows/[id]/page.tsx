@@ -16,8 +16,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { TagInput } from "@/components/ui/tag-input";
-import { ImageUpload } from "@/components/ui/image-upload";
-import { uploadWorkflowImage } from "@/lib/upload-utils";
+import ImageUpload from "@/components/ui/image-upload";
 import { toast } from "sonner";
 import MDEditor from "@uiw/react-md-editor";
 
@@ -418,13 +417,17 @@ export default function WorkflowDetailUserPage() {
               Gambar Workflow
             </label>
             <ImageUpload
-              value={editForm.screenshot_url}
-              onChange={(url) =>
-                setEditForm({ ...editForm, screenshot_url: url })
-              }
-              onUpload={uploadWorkflowImage}
-              disabled={saving}
-              placeholder="Upload screenshot workflow Anda"
+              bucket="workflow"
+              currentImage={editForm.screenshot_url}
+              onUploadComplete={(url: string, path: string) => {
+                setEditForm({ ...editForm, screenshot_url: url });
+              }}
+              onUploadError={(error: string) => {
+                toast.error(`Gagal mengupload gambar: ${error}`);
+              }}
+              onRemove={() => {
+                setEditForm({ ...editForm, screenshot_url: "" });
+              }}
             />
             <p className="text-sm text-gray-600 mt-2">
               Upload screenshot atau gambar workflow untuk preview di card
