@@ -30,7 +30,7 @@ const MainFooter = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="/directory" className="hover:underline">
+                  <a href="/creators" className="hover:underline">
                     Creator
                   </a>
                 </li>
