@@ -35,7 +35,7 @@ export function DashboardFooter() {
                 </li>
                 <li>
                   <a
-                    href="/directory"
+                    href="/creators"
                     className="hover:underline transition-colors"
                   >
                     Creator
