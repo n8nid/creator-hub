@@ -1,7 +1,6 @@
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { NextResponse, NextRequest } from "next/server";
-import { notificationCreators } from "@/lib/notification-utils";
 
 export async function PATCH(
   request: NextRequest,
@@ -65,36 +64,6 @@ export async function PATCH(
     .eq("id", appId);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
-  }
-
-  // Get user email for notification
-  const { data: userData } = await supabase
-    .from("users")
-    .select("email")
-    .eq("id", application.user_id)
-    .single();
-
-  const userEmail = userData?.email || "Unknown user";
-
-  // Create notification for the user
-  try {
-    if (status === "approved") {
-      await notificationCreators.creatorApplicationApproved(
-        application.user_id,
-        userEmail,
-        appId
-      );
-    } else if (status === "rejected") {
-      await notificationCreators.creatorApplicationRejected(
-        application.user_id,
-        userEmail,
-        appId,
-        alasan_penolakan || "Tidak ada alasan"
-      );
-    }
-  } catch (notificationError) {
-    console.error("Error creating notification:", notificationError);
-    // Don't fail the request if notification fails
   }
 
   return NextResponse.json({ success: true });

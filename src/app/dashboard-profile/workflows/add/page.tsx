@@ -19,12 +19,6 @@ import { TagInput } from "@/components/ui/tag-input";
 import ImageUpload from "@/components/ui/image-upload";
 import { toast } from "sonner";
 import MDEditor from "@uiw/react-md-editor";
-import { createNotificationForAllAdmins } from "@/lib/notification-utils";
-import {
-  NOTIFICATION_TYPES,
-  NOTIFICATION_PRIORITIES,
-  RELATED_TYPES,
-} from "@/lib/supabase";
 
 export default function AddWorkflowPage() {
   const { user } = useAuth();
@@ -115,22 +109,6 @@ export default function AddWorkflowPage() {
         toast.error(`Gagal menambah workflow: ${error.message}`);
         setSubmitting(false);
         return;
-      }
-
-      // Create notification for all admins
-      try {
-        await createNotificationForAllAdmins({
-          type: NOTIFICATION_TYPES.WORKFLOW_SUBMISSION_PENDING,
-          title: "Workflow Baru Menunggu Review",
-          message: `Creator ${profile.name} mengirim workflow baru: ${workflowForm.title}`,
-          related_id: newWorkflow.id,
-          related_type: RELATED_TYPES.WORKFLOW,
-          priority: NOTIFICATION_PRIORITIES.HIGH,
-          read: false,
-        });
-      } catch (notificationError) {
-        console.error("Error creating notification:", notificationError);
-        // Don't fail the request if notification fails
       }
 
       toast.success("Workflow berhasil ditambahkan dan menunggu approval!");

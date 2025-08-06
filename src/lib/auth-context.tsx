@@ -4,12 +4,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
-import { createNotificationForAllAdmins } from "./notification-utils";
-import {
-  NOTIFICATION_TYPES,
-  NOTIFICATION_PRIORITIES,
-  RELATED_TYPES,
-} from "./supabase";
 
 type Profile = {
   id: string;
@@ -98,13 +92,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (user && session) {
       console.log("[Auth Debug] User:", user);
-      console.log("[Auth Debug] Session:", session);
-      console.log("[Auth Debug] Profile:", profile);
     }
-  }, [user, session, profile]);
+  }, [user, session]);
 
   const signIn = async (email: string, password: string) => {
-    console.log("SignIn called with email:", email);
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -114,11 +105,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) {
         console.error("SignIn error:", error);
 
-        // Handle specific error types with user-friendly messages
         if (error.message.includes("Invalid login credentials")) {
-          toast.error(
-            "Email dan password yang Anda masukkan salah. Silahkan masukkan akun yang benar."
-          );
+          toast.error("Email atau password salah. Silahkan coba lagi.");
         } else if (error.message.includes("Email not confirmed")) {
           toast.error(
             "Email belum dikonfirmasi. Silahkan cek email Anda dan klik link konfirmasi."
@@ -163,22 +151,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         status: "approved", // hanya menandakan user aktif/email verified
         // JANGAN set flag creator apapun di sini
       });
-
-      // Create notification for all admins about new user registration
-      try {
-        await createNotificationForAllAdmins({
-          type: NOTIFICATION_TYPES.USER_REGISTRATION,
-          title: "User Baru Terdaftar",
-          message: `User baru terdaftar: ${email}`,
-          related_id: data.user.id,
-          related_type: RELATED_TYPES.USER,
-          priority: NOTIFICATION_PRIORITIES.MEDIUM,
-          read: false,
-        });
-      } catch (notificationError) {
-        console.error("Error creating notification:", notificationError);
-        // Don't fail the signup if notification fails
-      }
     }
   };
 
