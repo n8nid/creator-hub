@@ -28,6 +28,37 @@ export default function WorkflowsSubPage() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const workflowsPerPage: number = 9;
 
+  // Handle resubmit workflow
+  const handleResubmit = async (workflowId: string) => {
+    if (!confirm("Yakin ingin mengajukan ulang workflow ini?")) return;
+
+    try {
+      const { error } = await supabase
+        .from("workflows")
+        .update({
+          status: "pending",
+          admin_notes: "", // Clear previous admin notes
+        })
+        .eq("id", workflowId);
+
+      if (error) {
+        alert(`Gagal mengajukan ulang workflow: ${error.message}`);
+        return;
+      }
+
+      alert("Workflow berhasil diajukan ulang!");
+      // Refresh the workflows list
+      const { data } = await supabase
+        .from("workflows")
+        .select("*")
+        .eq("profile_id", profile.id)
+        .order("created_at", { ascending: false });
+      setMyWorkflows(data || []);
+    } catch (err: any) {
+      alert(err?.message || "Gagal mengajukan ulang workflow.");
+    }
+  };
+
   useEffect(() => {
     const fetchProfile = async () => {
       if (!user) return;
@@ -346,6 +377,32 @@ export default function WorkflowsSubPage() {
                     </span>
                   </div>
 
+                  {/* Admin Notes for Rejected Workflows */}
+                  {w.status === "rejected" && w.admin_notes && (
+                    <div className="bg-red-50 border border-red-200 rounded p-2">
+                      <div className="flex items-start gap-2">
+                        <div className="flex-shrink-0 mt-0.5">
+                          <svg
+                            className="h-3 w-3 text-red-400"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs text-red-700 line-clamp-2 break-words">
+                            {w.admin_notes}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Tags */}
                   <div className="flex flex-wrap gap-1">
                     {(w.tags || []).slice(0, 3).map((tag: string) => (
@@ -368,10 +425,26 @@ export default function WorkflowsSubPage() {
                     <span className="break-words">
                       Updated: {w.updated_at?.slice(0, 10)}
                     </span>
-                    <span className="flex items-center gap-1 flex-shrink-0">
-                      <span>❤️</span>
-                      <span>0</span>
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="flex items-center gap-1 flex-shrink-0">
+                        <span>❤️</span>
+                        <span>0</span>
+                      </span>
+                      {/* Resubmit Button for Rejected Workflows */}
+                      {w.status === "rejected" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-6 px-2 text-xs bg-yellow-50 border-yellow-200 text-yellow-700 hover:bg-yellow-100"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleResubmit(w.id);
+                          }}
+                        >
+                          Resubmit
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </CardContent>
