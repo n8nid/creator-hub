@@ -2,21 +2,24 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+  DialogClose,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { FileText, Eye, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 interface Workflow {
   id: string;
@@ -431,44 +434,50 @@ export default function ModerasiWorkflowPage() {
                             Reject
                           </Button>
                           {/* Dialog alasan penolakan */}
-                          {showRejectDialog === wf.id && (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                              <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
-                                <h3 className="text-lg font-semibold mb-2">
-                                  Alasan Penolakan
-                                </h3>
-                                <textarea
-                                  className="w-full border rounded p-2 mb-4"
-                                  rows={3}
-                                  placeholder="Tulis alasan penolakan..."
+                          <Dialog
+                            open={showRejectDialog === wf.id}
+                            onOpenChange={(open) =>
+                              !open && setShowRejectDialog(null)
+                            }
+                          >
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Alasan Penolakan</DialogTitle>
+                              </DialogHeader>
+                              <div className="grid gap-4 py-4">
+                                <Label htmlFor="reason">Alasan Penolakan</Label>
+                                <Textarea
+                                  id="reason"
                                   value={rejectReason}
                                   onChange={(e) =>
                                     setRejectReason(e.target.value)
                                   }
+                                  className="min-h-[100px]"
+                                  placeholder="Tulis alasan penolakan..."
                                 />
-                                <div className="flex justify-end space-x-2">
-                                  <Button
-                                    variant="outline"
-                                    onClick={() => setShowRejectDialog(null)}
-                                  >
-                                    Batal
-                                  </Button>
-                                  <Button
-                                    variant="destructive"
-                                    disabled={
-                                      actionLoading === wf.id ||
-                                      !rejectReason.trim()
-                                    }
-                                    onClick={() =>
-                                      handleReject(wf.id, rejectReason)
-                                    }
-                                  >
-                                    Konfirmasi Reject
-                                  </Button>
-                                </div>
                               </div>
-                            </div>
-                          )}
+                              <DialogFooter>
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setShowRejectDialog(null)}
+                                >
+                                  Batal
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  disabled={
+                                    actionLoading === wf.id ||
+                                    !rejectReason.trim()
+                                  }
+                                  onClick={() =>
+                                    handleReject(wf.id, rejectReason)
+                                  }
+                                >
+                                  Konfirmasi Reject
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
                         </td>
                       )}
                     </tr>
