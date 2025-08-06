@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { formatFileSize } from "@/lib/upload-utils";
 
 interface ImageUploadProps {
-  bucket: "events" | "news";
+  bucket: "events" | "news" | "workflow";
   onUploadComplete: (url: string, path: string) => void;
   onUploadError: (error: string) => void;
   onRemove?: () => void;
@@ -91,8 +91,15 @@ export default function ImageUpload({
       const formData = new FormData();
       formData.append("file", file);
 
-      // Upload to API
-      const response = await fetch(`/api/admin/upload/${bucket}`, {
+      // Upload to API based on bucket type
+      let endpoint: string;
+      if (bucket === "workflow") {
+        endpoint = "/api/upload-workflow-image";
+      } else {
+        endpoint = `/api/admin/upload/${bucket}`;
+      }
+
+      const response = await fetch(endpoint, {
         method: "POST",
         body: formData,
       });
@@ -123,14 +130,18 @@ export default function ImageUpload({
   const handleRemove = async () => {
     if (uploadedPath) {
       try {
-        await fetch(
-          `/api/admin/upload/${bucket}?path=${encodeURIComponent(
+        let deleteEndpoint: string;
+        if (bucket === "workflow") {
+          // For workflow, we don't have a delete endpoint yet, so just remove from state
+          console.log("Workflow image removal - no delete endpoint available");
+        } else {
+          deleteEndpoint = `/api/admin/upload/${bucket}?path=${encodeURIComponent(
             uploadedPath
-          )}`,
-          {
+          )}`;
+          await fetch(deleteEndpoint, {
             method: "DELETE",
-          }
-        );
+          });
+        }
       } catch (error) {
         console.error("Delete error:", error);
       }

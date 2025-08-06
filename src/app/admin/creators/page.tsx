@@ -2,6 +2,15 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -28,6 +37,11 @@ export default function ModerasiCreatorPage() {
   const [pendingApps, setPendingApps] = useState<CreatorApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  const [selectedApp, setSelectedApp] = useState<CreatorApplication | null>(
+    null
+  );
   const { toast } = useToast();
   const supabase = createClientComponentClient();
 
@@ -100,46 +114,53 @@ export default function ModerasiCreatorPage() {
     fetchData();
   }, []);
 
-  // Aksi approve/reject
-  const handleAction = async (
-    appId: string,
-    userId: string,
-    newStatus: "approved" | "rejected"
-  ) => {
+  // Aksi approve
+  const handleApprove = async (appId: string, userId: string) => {
     setActionLoading(appId);
-    // Update status di creator_applications
-    const updates: any = { status: newStatus };
-    if (newStatus === "approved")
-      updates.tanggal_approval = new Date().toISOString();
-    const { error } = await supabase
-      .from("creator_applications")
-      .update(updates)
-      .eq("id", appId);
-    if (error) {
-      toast({
-        title: "Gagal update status",
-        description: error.message,
-        variant: "destructive",
-      });
-      setActionLoading(null);
-      return;
-    }
-    // Jika approve, update juga status di profiles
-    if (newStatus === "approved") {
+    try {
+      // Update status di creator_applications
+      const { error } = await supabase
+        .from("creator_applications")
+        .update({
+          status: "approved",
+          tanggal_approval: new Date().toISOString(),
+        })
+        .eq("id", appId);
+
+      if (error) {
+        toast({
+          title: "Gagal approve pengajuan",
+          description: error.message,
+          variant: "destructive",
+        });
+        setActionLoading(null);
+        return;
+      }
+
+      // Update status di profiles
       await supabase
         .from("profiles")
         .update({ status: "approved" })
         .eq("user_id", userId);
+
+      toast({ title: "Pengajuan berhasil diapprove" });
+
+      // Refresh data
+      setPendingApps((prev) => prev.filter((a) => a.id !== appId));
+      setStats((prev) => ({
+        ...prev,
+        pending: prev.pending - 1,
+        approved: prev.approved + 1,
+      }));
+    } catch (err: any) {
+      toast({
+        title: "Gagal approve pengajuan",
+        description: err?.message || "Terjadi kesalahan",
+        variant: "destructive",
+      });
+    } finally {
+      setActionLoading(null);
     }
-    toast({ title: `Status berhasil diubah menjadi ${newStatus}` });
-    // Refresh data
-    setPendingApps((prev) => prev.filter((a) => a.id !== appId));
-    setStats((prev) => ({
-      ...prev,
-      pending: prev.pending - 1,
-      [newStatus]: prev[newStatus] + 1,
-    }));
-    setActionLoading(null);
   };
 
   return (
@@ -239,9 +260,7 @@ export default function ModerasiCreatorPage() {
                           size="sm"
                           className="bg-green-600 hover:bg-green-700"
                           disabled={actionLoading === app.id}
-                          onClick={() =>
-                            handleAction(app.id, app.user_id, "approved")
-                          }
+                          onClick={() => handleApprove(app.id, app.user_id)}
                         >
                           Approve
                         </Button>
@@ -249,9 +268,10 @@ export default function ModerasiCreatorPage() {
                           size="sm"
                           variant="destructive"
                           disabled={actionLoading === app.id}
-                          onClick={() =>
-                            handleAction(app.id, app.user_id, "rejected")
-                          }
+                          onClick={() => {
+                            setSelectedApp(app);
+                            setRejectDialogOpen(true);
+                          }}
                         >
                           Reject
                         </Button>
@@ -264,6 +284,75 @@ export default function ModerasiCreatorPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Rejection Reason Dialog */}
+      <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Alasan Penolakan</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Label htmlFor="reason">Alasan Penolakan</Label>
+            <Textarea
+              id="reason"
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              className="min-h-[100px]"
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setRejectDialogOpen(false)}
+            >
+              Batal
+            </Button>
+            <Button
+              onClick={async () => {
+                if (!selectedApp) return;
+                setActionLoading(selectedApp.id);
+                const { error } = await supabase
+                  .from("creator_applications")
+                  .update({
+                    status: "rejected",
+                    alasan_penolakan: rejectReason,
+                  })
+                  .eq("id", selectedApp.id);
+                if (error) {
+                  toast({
+                    title: "Gagal menolak pengajuan",
+                    description: error.message,
+                    variant: "destructive",
+                  });
+                  setActionLoading(null);
+                  return;
+                }
+                // Update status di profiles
+                await supabase
+                  .from("profiles")
+                  .update({ status: "rejected" })
+                  .eq("user_id", selectedApp.user_id);
+                toast({ title: "Pengajuan ditolak" });
+                setPendingApps((prev) =>
+                  prev.filter((a) => a.id !== selectedApp.id)
+                );
+                setStats((prev) => ({
+                  ...prev,
+                  pending: prev.pending - 1,
+                  rejected: prev.rejected + 1,
+                }));
+                setRejectDialogOpen(false);
+                setRejectReason("");
+                setSelectedApp(null);
+                setActionLoading(null);
+              }}
+              disabled={actionLoading === selectedApp?.id}
+            >
+              Simpan
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

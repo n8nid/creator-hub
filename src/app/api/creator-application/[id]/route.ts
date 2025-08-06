@@ -20,6 +20,7 @@ export async function PATCH(
   if (!["approved", "rejected"].includes(status)) {
     return NextResponse.json({ error: "Status tidak valid" }, { status: 400 });
   }
+
   // Cek apakah user adalah admin
   const { data: admin } = await supabase
     .from("admin_users")
@@ -29,6 +30,21 @@ export async function PATCH(
   if (!admin) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
+
+  // Get application data first
+  const { data: application } = await supabase
+    .from("creator_applications")
+    .select("user_id")
+    .eq("id", appId)
+    .single();
+
+  if (!application) {
+    return NextResponse.json(
+      { error: "Application not found" },
+      { status: 404 }
+    );
+  }
+
   // Update status pengajuan
   const updateData: {
     status: string;
@@ -41,6 +57,7 @@ export async function PATCH(
   if (status === "rejected" && alasan_penolakan) {
     updateData.alasan_penolakan = alasan_penolakan;
   }
+
   const { error } = await supabase
     .from("creator_applications")
     .update(updateData)
@@ -48,5 +65,6 @@ export async function PATCH(
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
+
   return NextResponse.json({ success: true });
 }

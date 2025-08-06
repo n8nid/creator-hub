@@ -16,8 +16,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { TagInput } from "@/components/ui/tag-input";
-import { ImageUpload } from "@/components/ui/image-upload";
-import { uploadWorkflowImage } from "@/lib/upload-utils";
+import ImageUpload from "@/components/ui/image-upload";
 import { toast } from "sonner";
 import MDEditor from "@uiw/react-md-editor";
 
@@ -90,22 +89,28 @@ export default function AddWorkflowPage() {
     if (!profile?.id) return;
     setSubmitting(true);
     try {
-      const { error } = await supabase.from("workflows").insert({
-        profile_id: profile.id,
-        title: workflowForm.title,
-        description: workflowForm.description,
-        tags: workflowForm.tags,
-        category: workflowForm.category,
-        complexity: workflowForm.complexity,
-        json_n8n: workflowForm.json_n8n,
-        screenshot_url: workflowForm.screenshot_url,
-        status: "pending",
-      });
+      const { data: newWorkflow, error } = await supabase
+        .from("workflows")
+        .insert({
+          profile_id: profile.id,
+          title: workflowForm.title,
+          description: workflowForm.description,
+          tags: workflowForm.tags,
+          category: workflowForm.category,
+          complexity: workflowForm.complexity,
+          json_n8n: workflowForm.json_n8n,
+          screenshot_url: workflowForm.screenshot_url,
+          status: "pending",
+        })
+        .select()
+        .single();
+
       if (error) {
         toast.error(`Gagal menambah workflow: ${error.message}`);
         setSubmitting(false);
         return;
       }
+
       toast.success("Workflow berhasil ditambahkan dan menunggu approval!");
       router.push("/dashboard-profile/workflows");
     } catch (err: any) {
@@ -355,13 +360,18 @@ export default function AddWorkflowPage() {
             Gambar Workflow
           </label>
           <ImageUpload
-            value={workflowForm.screenshot_url}
-            onChange={(url) =>
-              setWorkflowForm({ ...workflowForm, screenshot_url: url })
-            }
-            onUpload={uploadWorkflowImage}
-            disabled={submitting}
-            placeholder="Upload screenshot workflow Anda"
+            bucket="workflow"
+            currentImage={workflowForm.screenshot_url}
+            onUploadComplete={(url: string, path: string) => {
+              setWorkflowForm({ ...workflowForm, screenshot_url: url });
+            }}
+            onUploadError={(error: string) => {
+              toast.error(`Gagal mengupload gambar: ${error}`);
+            }}
+            onRemove={() => {
+              setWorkflowForm({ ...workflowForm, screenshot_url: "" });
+            }}
+            className="w-full"
           />
           <p className="text-sm text-gray-600 mt-2">
             Upload screenshot atau gambar workflow untuk preview di card

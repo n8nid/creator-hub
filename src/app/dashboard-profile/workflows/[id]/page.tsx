@@ -16,8 +16,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { TagInput } from "@/components/ui/tag-input";
-import { ImageUpload } from "@/components/ui/image-upload";
-import { uploadWorkflowImage } from "@/lib/upload-utils";
+import ImageUpload from "@/components/ui/image-upload";
 import { toast } from "sonner";
 import MDEditor from "@uiw/react-md-editor";
 
@@ -104,28 +103,54 @@ export default function WorkflowDetailUserPage() {
     }
     setSaving(true);
     try {
+      // Prepare update data
+      const updateData: any = {
+        title: editForm.title,
+        description: editForm.description,
+        tags: editForm.tags,
+        category: editForm.category,
+        complexity: editForm.complexity,
+        json_n8n: editForm.json_n8n,
+        screenshot_url: editForm.screenshot_url,
+      };
+
+      // If workflow is rejected, also resubmit it
+      if (workflow?.status === "rejected") {
+        updateData.status = "pending";
+        updateData.admin_notes = null; // Clear admin notes
+        updateData.tanggal_approval = null; // Clear approval date
+      }
+
       const { error } = await supabase
         .from("workflows")
-        .update({
-          title: editForm.title,
-          description: editForm.description,
-          tags: editForm.tags,
-          category: editForm.category,
-          complexity: editForm.complexity,
-          json_n8n: editForm.json_n8n,
-          screenshot_url: editForm.screenshot_url,
-        })
+        .update(updateData)
         .eq("id", workflowId);
+
       if (error) {
-        toast.error(`Gagal menyimpan perubahan: ${error.message}`);
+        toast.error(
+          `Gagal ${
+            workflow?.status === "rejected" ? "mengajukan" : "menyimpan"
+          } perubahan: ${error.message}`
+        );
         setSaving(false);
         return;
       }
-      toast.success("Perubahan berhasil disimpan!");
+
+      const successMessage =
+        workflow?.status === "rejected"
+          ? "Workflow berhasil diajukan ulang!"
+          : "Perubahan berhasil disimpan!";
+
+      toast.success(successMessage);
       // Redirect ke halaman workflow saya
       router.push("/dashboard-profile/workflows");
     } catch (err: any) {
-      toast.error(err?.message || "Gagal menyimpan perubahan.");
+      toast.error(
+        err?.message ||
+          `Gagal ${
+            workflow?.status === "rejected" ? "mengajukan" : "menyimpan"
+          } perubahan.`
+      );
     } finally {
       setSaving(false);
     }
@@ -147,6 +172,32 @@ export default function WorkflowDetailUserPage() {
       router.push("/dashboard-profile/workflows");
     } catch (err: any) {
       toast.error(err?.message || "Gagal menghapus workflow.");
+    }
+  };
+
+  const handleResubmit = async () => {
+    if (!workflowId) return;
+    if (!confirm("Yakin ingin mengajukan ulang workflow ini?")) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from("workflows")
+        .update({
+          status: "pending",
+          admin_notes: "", // Clear previous admin notes
+        })
+        .eq("id", workflowId);
+      if (error) {
+        toast.error(`Gagal mengajukan ulang workflow: ${error.message}`);
+        setSaving(false);
+        return;
+      }
+      toast.success("Workflow berhasil diajukan ulang!");
+      router.push("/dashboard-profile/workflows");
+    } catch (err: any) {
+      toast.error(err?.message || "Gagal mengajukan ulang workflow.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -203,7 +254,11 @@ export default function WorkflowDetailUserPage() {
 
         <div className="space-y-3 sm:space-y-4">
           <h1 className="workflow-page-title">
-            <div className="workflow-page-title-line-1">Ubah dan Simpan</div>
+            <div className="workflow-page-title-line-1">
+              {isOwner && workflow?.status === "rejected"
+                ? "Ubah dan Ajukan Ulang"
+                : "Ubah dan Simpan"}
+            </div>
             <div className="workflow-page-title-line-2">
               Workflow Terbaru Anda
             </div>
@@ -265,6 +320,37 @@ export default function WorkflowDetailUserPage() {
                 <p className="text-sm">
                   <strong>Test preview workflow</strong> - Gunakan preview untuk
                   memastikan workflow masih berjalan dengan baik
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Admin Notes for Rejected Workflows in Edit Mode */}
+      {isOwner && workflow?.status === "rejected" && workflow?.admin_notes && (
+        <div className="mb-6 sm:mb-8">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-5 w-5 text-red-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base sm:text-lg font-semibold text-red-800 mb-2">
+                  Feedback dari Admin
+                </h3>
+                <p className="text-sm text-red-700 whitespace-pre-wrap">
+                  {workflow.admin_notes}
                 </p>
               </div>
             </div>
@@ -418,13 +504,17 @@ export default function WorkflowDetailUserPage() {
               Gambar Workflow
             </label>
             <ImageUpload
-              value={editForm.screenshot_url}
-              onChange={(url) =>
-                setEditForm({ ...editForm, screenshot_url: url })
-              }
-              onUpload={uploadWorkflowImage}
-              disabled={saving}
-              placeholder="Upload screenshot workflow Anda"
+              bucket="workflow"
+              currentImage={editForm.screenshot_url}
+              onUploadComplete={(url: string, path: string) => {
+                setEditForm({ ...editForm, screenshot_url: url });
+              }}
+              onUploadError={(error: string) => {
+                toast.error(`Gagal mengupload gambar: ${error}`);
+              }}
+              onRemove={() => {
+                setEditForm({ ...editForm, screenshot_url: "" });
+              }}
             />
             <p className="text-sm text-gray-600 mt-2">
               Upload screenshot atau gambar workflow untuk preview di card
@@ -461,8 +551,12 @@ export default function WorkflowDetailUserPage() {
               {saving ? (
                 <span className="flex items-center gap-2">
                   <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-4 h-4"></span>
-                  Menyimpan...
+                  {workflow.status === "rejected"
+                    ? "Mengajukan..."
+                    : "Menyimpan..."}
                 </span>
+              ) : workflow.status === "rejected" ? (
+                "Ajukan Perubahan"
               ) : (
                 "Simpan Perubahan"
               )}
@@ -482,26 +576,6 @@ export default function WorkflowDetailUserPage() {
         </form>
       ) : (
         <div className="space-y-6">
-          {/* Status Badges */}
-          <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 rounded-full">
-              {workflow.complexity || "-"}
-            </span>
-            <span
-              className={`inline-flex items-center px-3 py-1 text-sm font-semibold rounded-full ${
-                workflow.status === "approved"
-                  ? "bg-green-100 text-green-800"
-                  : workflow.status === "pending"
-                  ? "bg-yellow-100 text-yellow-800"
-                  : workflow.status === "rejected"
-                  ? "bg-red-100 text-red-800"
-                  : "bg-gray-100 text-gray-700"
-              }`}
-            >
-              {workflow.status}
-            </span>
-          </div>
-
           {/* Description */}
           <div className="prose max-w-none">
             <div dangerouslySetInnerHTML={{ __html: workflow.description }} />

@@ -20,6 +20,7 @@ export async function PATCH(
   if (!["approved", "rejected"].includes(status)) {
     return NextResponse.json({ error: "Status tidak valid" }, { status: 400 });
   }
+
   // Cek apakah user adalah admin
   const { data: admin } = await supabase
     .from("admin_users")
@@ -29,12 +30,35 @@ export async function PATCH(
   if (!admin) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
+
+  // Get workflow data first
+  const { data: workflow } = await supabase
+    .from("workflows")
+    .select(
+      `
+      id,
+      title,
+      profile_id,
+      profiles (
+        user_id,
+        name
+      )
+    `
+    )
+    .eq("id", workflowId)
+    .single();
+
+  if (!workflow) {
+    return NextResponse.json({ error: "Workflow not found" }, { status: 404 });
+  }
+
   // Update status workflow
   const updateData = {
     status,
     admin_notes: admin_notes || null,
     updated_at: new Date().toISOString(),
   };
+
   const { error } = await supabase
     .from("workflows")
     .update(updateData)
@@ -42,5 +66,6 @@ export async function PATCH(
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
+
   return NextResponse.json({ success: true });
 }

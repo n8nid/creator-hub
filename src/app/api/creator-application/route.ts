@@ -27,13 +27,19 @@ export async function POST(request: NextRequest) {
   }
 
   // Insert pengajuan baru
-  const { error } = await supabase.from("creator_applications").insert({
-    user_id: userId,
-    status: "pending",
-    tanggal_pengajuan: new Date().toISOString(),
-  });
+  const { data: newApplication, error } = await supabase
+    .from("creator_applications")
+    .insert({
+      user_id: userId,
+      status: "pending",
+      tanggal_pengajuan: new Date().toISOString(),
+    })
+    .select()
+    .single();
+
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
+
   return NextResponse.json({ success: true });
 }
