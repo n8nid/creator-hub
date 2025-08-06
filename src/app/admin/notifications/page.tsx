@@ -12,6 +12,13 @@ import {
   CheckSquare,
   Square,
   MinusSquare,
+  Clock,
+  CheckCircle,
+  XCircle,
+  User,
+  FileText,
+  Users,
+  Newspaper,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
@@ -23,19 +30,50 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-// Hapus import Supabase client
+import {
+  NOTIFICATION_TYPES,
+  NOTIFICATION_PRIORITIES,
+  RELATED_TYPES,
+} from "@/lib/supabase";
 
+// Updated notification types based on our implementation
 const NOTIF_TYPES = [
-  "all",
-  "system",
-  "creator_application",
-  "workflow_moderation",
-  "comment",
-  "interaction",
-  "warning",
-  "report",
-  "verification",
-  "important",
+  { value: "all", label: "Semua", icon: Info },
+  {
+    value: "creator_application_pending",
+    label: "Pengajuan Creator",
+    icon: User,
+  },
+  {
+    value: "creator_application_approved",
+    label: "Creator Disetujui",
+    icon: CheckCircle,
+  },
+  {
+    value: "creator_application_rejected",
+    label: "Creator Ditolak",
+    icon: XCircle,
+  },
+  {
+    value: "workflow_submission_pending",
+    label: "Workflow Pending",
+    icon: FileText,
+  },
+  {
+    value: "workflow_approved",
+    label: "Workflow Disetujui",
+    icon: CheckCircle,
+  },
+  { value: "workflow_rejected", label: "Workflow Ditolak", icon: XCircle },
+  { value: "user_registration", label: "User Baru", icon: Users },
+  { value: "content_moderation", label: "Moderasi Konten", icon: Newspaper },
+];
+
+const PRIORITY_FILTERS = [
+  { value: "all", label: "Semua Prioritas" },
+  { value: "high", label: "Tinggi", color: "text-red-600" },
+  { value: "medium", label: "Sedang", color: "text-yellow-600" },
+  { value: "low", label: "Rendah", color: "text-green-600" },
 ];
 
 const STATUS_FILTERS = [
@@ -46,16 +84,36 @@ const STATUS_FILTERS = [
 
 const PAGE_SIZE = 10;
 
+// Helper function to get priority color
+const getPriorityColor = (priority: string) => {
+  switch (priority) {
+    case "high":
+      return "text-red-600 bg-red-50 border-red-200";
+    case "medium":
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    case "low":
+      return "text-green-600 bg-green-50 border-green-200";
+    default:
+      return "text-gray-600 bg-gray-50 border-gray-200";
+  }
+};
+
+// Helper function to get type icon
+const getTypeIcon = (type: string) => {
+  const typeConfig = NOTIF_TYPES.find((t) => t.value === type);
+  return typeConfig?.icon || Info;
+};
+
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [typeFilter, setTypeFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [selectedNotif, setSelectedNotif] = useState<any | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  // Hapus ADMIN_ID
 
   // Fetch notifications function (agar bisa dipanggil ulang)
   const fetchNotifications = async () => {
@@ -103,10 +161,8 @@ export default function NotificationsPage() {
       n.created_at &&
       new Date(n.created_at).toDateString() === new Date().toDateString()
   ).length;
-  // Important: type === 'warning' atau 'important'
-  const important = notifications.filter(
-    (n) => n.type === "warning" || n.type === "important"
-  ).length;
+  // Important: priority === 'high'
+  const important = notifications.filter((n) => n.priority === "high").length;
 
   // Handler mark as read
   const markAsRead = async (notifId: string) => {
@@ -155,22 +211,22 @@ export default function NotificationsPage() {
 
   // Filter logic
   const filteredNotifications = notifications.filter((notif) => {
-    let typeOk =
-      typeFilter === "all" ||
-      notif.type === typeFilter ||
-      (typeFilter === "important" &&
-        (notif.type === "important" || notif.type === "warning"));
+    let typeOk = typeFilter === "all" || notif.type === typeFilter;
+    let priorityOk =
+      priorityFilter === "all" || notif.priority === priorityFilter;
     let statusOk =
       statusFilter === "all" ||
       (statusFilter === "unread" && !notif.read) ||
       (statusFilter === "read" && notif.read);
     let searchOk =
       !search ||
+      notif.title?.toLowerCase().includes(search.toLowerCase()) ||
       notif.message?.toLowerCase().includes(search.toLowerCase()) ||
       notif.type?.toLowerCase().includes(search.toLowerCase()) ||
       notif.user_name?.toLowerCase().includes(search.toLowerCase()) ||
-      notif.user_email?.toLowerCase().includes(search.toLowerCase());
-    return typeOk && statusOk && searchOk;
+      notif.user_email?.toLowerCase().includes(search.toLowerCase()) ||
+      notif.related_type?.toLowerCase().includes(search.toLowerCase());
+    return typeOk && priorityOk && statusOk && searchOk;
   });
 
   // Pagination logic
@@ -183,7 +239,7 @@ export default function NotificationsPage() {
   // Reset page ke 1 jika filter/search berubah
   useEffect(() => {
     setPage(1);
-  }, [typeFilter, statusFilter, search]);
+  }, [typeFilter, priorityFilter, statusFilter, search]);
 
   return (
     <div className="space-y-6">
@@ -198,19 +254,33 @@ export default function NotificationsPage() {
 
       {/* Filter & Search Bar */}
       <div className="flex flex-wrap gap-2 items-center mb-2">
-        <label className="text-sm">Tipe:</label>
+        <label className="text-sm font-medium">Tipe:</label>
         <select
           className="border rounded px-2 py-1 text-sm"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
         >
           {NOTIF_TYPES.map((type) => (
-            <option key={type} value={type}>
-              {type === "all" ? "Semua" : type}
+            <option key={type.value} value={type.value}>
+              {type.label}
             </option>
           ))}
         </select>
-        <label className="text-sm ml-4">Status:</label>
+
+        <label className="text-sm font-medium ml-4">Prioritas:</label>
+        <select
+          className="border rounded px-2 py-1 text-sm"
+          value={priorityFilter}
+          onChange={(e) => setPriorityFilter(e.target.value)}
+        >
+          {PRIORITY_FILTERS.map((priority) => (
+            <option key={priority.value} value={priority.value}>
+              {priority.label}
+            </option>
+          ))}
+        </select>
+
+        <label className="text-sm font-medium ml-4">Status:</label>
         <select
           className="border rounded px-2 py-1 text-sm"
           value={statusFilter}
@@ -222,10 +292,11 @@ export default function NotificationsPage() {
             </option>
           ))}
         </select>
+
         <input
           type="text"
           className="border rounded px-2 py-1 text-sm ml-4 flex-1 min-w-[200px]"
-          placeholder="Cari notifikasi..."
+          placeholder="Cari notifikasi (judul, pesan, user, tipe)..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -281,7 +352,9 @@ export default function NotificationsPage() {
       {/* List Notifikasi */}
       <Card>
         <CardHeader>
-          <CardTitle className="admin-section-title">Daftar Notifikasi</CardTitle>
+          <CardTitle className="admin-section-title">
+            Daftar Notifikasi
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -293,52 +366,103 @@ export default function NotificationsPage() {
           ) : (
             <>
               <ul className="divide-y divide-gray-100">
-                {pagedNotifications.map((notif) => (
-                  <li
-                    key={notif.id}
-                    className={`py-4 flex flex-col gap-1 ${
-                      !notif.read
-                        ? "bg-blue-50 cursor-pointer"
-                        : "cursor-pointer"
-                    }`}
-                    onClick={() => openDetail(notif)}
-                    title="Lihat detail notifikasi"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold uppercase text-gray-500">
-                        {notif.type}
-                      </span>
-                      <span
-                        className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
-                          notif.read
-                            ? "bg-gray-200 text-gray-500"
-                            : "bg-blue-200 text-blue-800"
-                        }`}
-                      >
-                        {notif.read ? "Read" : "Unread"}
-                      </span>
-                      <span className="ml-auto text-xs text-gray-400">
-                        {notif.created_at
-                          ? new Date(notif.created_at).toLocaleString()
-                          : ""}
-                      </span>
-                      <button
-                        className="ml-2 p-1 text-red-500 hover:text-red-700"
-                        title="Hapus notifikasi"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(notif.id);
-                        }}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                    <div className="text-gray-900 text-sm">{notif.message}</div>
-                    <div className="text-xs text-gray-500">
-                      {notif.user_name || "-"} ({notif.user_email || "-"})
-                    </div>
-                  </li>
-                ))}
+                {pagedNotifications.map((notif) => {
+                  const TypeIcon = getTypeIcon(notif.type);
+                  return (
+                    <li
+                      key={notif.id}
+                      className={`py-4 flex flex-col gap-2 ${
+                        !notif.read
+                          ? "bg-blue-50 cursor-pointer"
+                          : "cursor-pointer"
+                      } hover:bg-gray-50 transition-colors`}
+                      onClick={() => openDetail(notif)}
+                      title="Lihat detail notifikasi"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
+                          <TypeIcon className="h-4 w-4 text-gray-500" />
+                          <span className="text-xs font-semibold uppercase text-gray-500">
+                            {NOTIF_TYPES.find((t) => t.value === notif.type)
+                              ?.label || notif.type}
+                          </span>
+                        </div>
+
+                        {/* Priority Badge */}
+                        <span
+                          className={`px-2 py-0.5 text-xs rounded-full border ${getPriorityColor(
+                            notif.priority
+                          )}`}
+                        >
+                          {notif.priority === "high"
+                            ? "Tinggi"
+                            : notif.priority === "medium"
+                            ? "Sedang"
+                            : notif.priority === "low"
+                            ? "Rendah"
+                            : "Normal"}
+                        </span>
+
+                        {/* Read Status */}
+                        <span
+                          className={`px-2 py-0.5 text-xs rounded-full ${
+                            notif.read
+                              ? "bg-gray-200 text-gray-500"
+                              : "bg-blue-200 text-blue-800"
+                          }`}
+                        >
+                          {notif.read ? "Read" : "Unread"}
+                        </span>
+
+                        <span className="ml-auto text-xs text-gray-400">
+                          {notif.created_at
+                            ? new Date(notif.created_at).toLocaleString()
+                            : ""}
+                        </span>
+
+                        <button
+                          className="ml-2 p-1 text-red-500 hover:text-red-700"
+                          title="Hapus notifikasi"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(notif.id);
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Title */}
+                      <div className="text-gray-900 font-medium">
+                        {notif.title || "No Title"}
+                      </div>
+
+                      {/* Message */}
+                      <div className="text-gray-700 text-sm">
+                        {notif.message}
+                      </div>
+
+                      {/* User Info & Related Data */}
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <div>
+                          {notif.user_name || "-"} ({notif.user_email || "-"})
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {notif.related_type && (
+                            <span className="px-2 py-0.5 bg-gray-100 rounded">
+                              {notif.related_type}
+                            </span>
+                          )}
+                          {notif.related_id && (
+                            <span className="px-2 py-0.5 bg-gray-100 rounded">
+                              ID: {notif.related_id.slice(0, 8)}...
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
               {/* Pagination Controls */}
               <div className="flex justify-center items-center gap-2 mt-4">
@@ -362,7 +486,7 @@ export default function NotificationsPage() {
               </div>
               {/* Modal Detail Notifikasi */}
               <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-                <DialogContent>
+                <DialogContent className="max-w-2xl">
                   <DialogHeader>
                     <DialogTitle>Detail Notifikasi</DialogTitle>
                     <DialogDescription>
@@ -370,53 +494,150 @@ export default function NotificationsPage() {
                     </DialogDescription>
                   </DialogHeader>
                   {selectedNotif && (
-                    <div className="space-y-2">
-                      <div>
-                        <span className="font-semibold">Tipe:</span>{" "}
-                        {selectedNotif.type}
+                    <div className="space-y-4">
+                      {/* Header Info */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            Tipe:
+                          </span>
+                          <div className="flex items-center gap-2 mt-1">
+                            {(() => {
+                              const TypeIcon = getTypeIcon(selectedNotif.type);
+                              return (
+                                <>
+                                  <TypeIcon className="h-4 w-4 text-gray-500" />
+                                  <span className="text-sm">
+                                    {NOTIF_TYPES.find(
+                                      (t) => t.value === selectedNotif.type
+                                    )?.label || selectedNotif.type}
+                                  </span>
+                                </>
+                              );
+                            })()}
+                          </div>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            Prioritas:
+                          </span>
+                          <div className="mt-1">
+                            <span
+                              className={`px-2 py-1 text-xs rounded-full border ${getPriorityColor(
+                                selectedNotif.priority
+                              )}`}
+                            >
+                              {selectedNotif.priority === "high"
+                                ? "Tinggi"
+                                : selectedNotif.priority === "medium"
+                                ? "Sedang"
+                                : selectedNotif.priority === "low"
+                                ? "Rendah"
+                                : "Normal"}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <span className="font-semibold">Status:</span>{" "}
-                        {selectedNotif.read ? "Read" : "Unread"}
+
+                      {/* Status & Time */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            Status:
+                          </span>
+                          <div className="mt-1">
+                            <span
+                              className={`px-2 py-1 text-xs rounded-full ${
+                                selectedNotif.read
+                                  ? "bg-gray-200 text-gray-500"
+                                  : "bg-blue-200 text-blue-800"
+                              }`}
+                            >
+                              {selectedNotif.read ? "Read" : "Unread"}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <span className="font-semibold text-gray-700">
+                            Waktu:
+                          </span>
+                          <div className="text-sm mt-1">
+                            {selectedNotif.created_at
+                              ? new Date(
+                                  selectedNotif.created_at
+                                ).toLocaleString()
+                              : "-"}
+                          </div>
+                        </div>
                       </div>
+
+                      {/* Title */}
                       <div>
-                        <span className="font-semibold">Waktu:</span>{" "}
-                        {selectedNotif.created_at
-                          ? new Date(selectedNotif.created_at).toLocaleString()
-                          : "-"}
+                        <span className="font-semibold text-gray-700">
+                          Judul:
+                        </span>
+                        <div className="text-lg font-medium mt-1 text-gray-900">
+                          {selectedNotif.title || "No Title"}
+                        </div>
                       </div>
+
+                      {/* Message */}
                       <div>
-                        <span className="font-semibold">Pesan:</span>
-                        <div className="bg-gray-100 rounded p-2 mt-1 text-sm">
+                        <span className="font-semibold text-gray-700">
+                          Pesan:
+                        </span>
+                        <div className="bg-gray-100 rounded p-3 mt-1 text-sm">
                           {selectedNotif.message}
                         </div>
                       </div>
+
+                      {/* User Info */}
                       <div>
-                        <span className="font-semibold">Nama:</span>{" "}
-                        {selectedNotif.user_name || "-"}{" "}
+                        <span className="font-semibold text-gray-700">
+                          User:
+                        </span>
+                        <div className="text-sm mt-1">
+                          {selectedNotif.user_name || "-"} (
+                          {selectedNotif.user_email || "-"})
+                        </div>
                       </div>
-                      <div>
-                        <span className="font-semibold">Email:</span>{" "}
-                        {selectedNotif.user_email || "-"}
-                      </div>
-                      {selectedNotif.user_id && (
+
+                      {/* Related Data */}
+                      {(selectedNotif.related_type ||
+                        selectedNotif.related_id) && (
                         <div>
-                          <span className="font-semibold">User ID:</span>{" "}
-                          {selectedNotif.user_id}
+                          <span className="font-semibold text-gray-700">
+                            Data Terkait:
+                          </span>
+                          <div className="flex items-center gap-2 mt-1">
+                            {selectedNotif.related_type && (
+                              <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
+                                Tipe: {selectedNotif.related_type}
+                              </span>
+                            )}
+                            {selectedNotif.related_id && (
+                              <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded font-mono">
+                                ID: {selectedNotif.related_id}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       )}
-                      <div className="flex gap-2 mt-4">
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 pt-4 border-t">
                         <DialogClose asChild>
-                          <button className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+                          <Button variant="outline" className="flex-1">
                             Tutup
-                          </button>
+                          </Button>
                         </DialogClose>
-                        <button
-                          className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                        <Button
+                          variant="destructive"
                           onClick={() => handleDelete(selectedNotif.id)}
+                          className="flex-1"
                         >
                           Hapus Notifikasi
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   )}
