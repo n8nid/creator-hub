@@ -4,6 +4,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
+import { createNotificationForAllAdmins } from "./notification-utils";
+import {
+  NOTIFICATION_TYPES,
+  NOTIFICATION_PRIORITIES,
+  RELATED_TYPES,
+} from "./supabase";
 
 type Profile = {
   id: string;
@@ -157,6 +163,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         status: "approved", // hanya menandakan user aktif/email verified
         // JANGAN set flag creator apapun di sini
       });
+
+      // Create notification for all admins about new user registration
+      try {
+        await createNotificationForAllAdmins({
+          type: NOTIFICATION_TYPES.USER_REGISTRATION,
+          title: "User Baru Terdaftar",
+          message: `User baru terdaftar: ${email}`,
+          related_id: data.user.id,
+          related_type: RELATED_TYPES.USER,
+          priority: NOTIFICATION_PRIORITIES.MEDIUM,
+          read: false,
+        });
+      } catch (notificationError) {
+        console.error("Error creating notification:", notificationError);
+        // Don't fail the signup if notification fails
+      }
     }
   };
 
