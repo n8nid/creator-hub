@@ -147,7 +147,7 @@ export default function DirectoryPage() {
       .length,
     expertCreators: creators.filter((c) => c.experience_level === "expert")
       .length,
-    averageRating: 4.6, // Dummy data
+    averageRating: 0, // Will be calculated from real data when rating system is implemented
   };
 
   const uniqueLocations = Array.from(

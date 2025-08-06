@@ -24,162 +24,6 @@ export default function CreatorsPage() {
   const [hasMore, setHasMore] = useState(false);
   const supabase = createClientComponentClient();
 
-  // Data dummy untuk testing (tanpa Bagus dan Okky)
-  const dummyCreators: Creator[] = [
-    {
-      id: "dummy-1",
-      name: "John Hopkins",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 5,
-      experience_level: "expert",
-    },
-    {
-      id: "dummy-2",
-      name: "Sarah Johnson",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 2,
-      experience_level: "beginner",
-    },
-    {
-      id: "dummy-3",
-      name: "Ahmad Fauzi",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 4,
-      experience_level: "intermediate",
-    },
-    {
-      id: "dummy-4",
-      name: "Maria Garcia",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 6,
-      experience_level: "advanced",
-    },
-    {
-      id: "dummy-5",
-      name: "David Chen",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 1,
-      experience_level: "beginner",
-    },
-    {
-      id: "dummy-6",
-      name: "Lisa Anderson",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 8,
-      experience_level: "expert",
-    },
-    {
-      id: "dummy-7",
-      name: "Rizki Pratama",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 3,
-      experience_level: "intermediate",
-    },
-    {
-      id: "dummy-8",
-      name: "Emma Wilson",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 4,
-      experience_level: "advanced",
-    },
-    {
-      id: "dummy-9",
-      name: "Budi Santoso",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 2,
-      experience_level: "beginner",
-    },
-    {
-      id: "dummy-10",
-      name: "Jennifer Lee",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 6,
-      experience_level: "expert",
-    },
-    {
-      id: "dummy-11",
-      name: "Michael Brown",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 3,
-      experience_level: "intermediate",
-    },
-    {
-      id: "dummy-12",
-      name: "Siti Nurhaliza",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 5,
-      experience_level: "advanced",
-    },
-    {
-      id: "dummy-13",
-      name: "Robert Taylor",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 2,
-      experience_level: "beginner",
-    },
-    {
-      id: "dummy-14",
-      name: "Dewi Sartika",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 7,
-      experience_level: "expert",
-    },
-    {
-      id: "dummy-15",
-      name: "James Wilson",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 4,
-      experience_level: "intermediate",
-    },
-    {
-      id: "dummy-16",
-      name: "Nina Kartika",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 1,
-      experience_level: "beginner",
-    },
-    {
-      id: "dummy-17",
-      name: "Christopher Davis",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 8,
-      experience_level: "expert",
-    },
-    {
-      id: "dummy-18",
-      name: "Rina Marlina",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 3,
-      experience_level: "intermediate",
-    },
-    {
-      id: "dummy-19",
-      name: "Daniel Martinez",
-      profile_image: null,
-      status: "approved",
-      workflow_count: 6,
-      experience_level: "advanced",
-    },
-  ];
-
   const fetchCreators = async () => {
     try {
       setLoading(true);
@@ -191,19 +35,14 @@ export default function CreatorsPage() {
       if (response.ok) {
         apiCreators = await response.json();
         console.log("API creators loaded:", apiCreators.length);
+        setCreators(apiCreators);
       } else {
         console.error("Failed to fetch creators from API");
+        setCreators([]);
       }
-
-      // Gabungkan data API + dummy data
-      const combinedCreators = [...apiCreators, ...dummyCreators];
-      setCreators(combinedCreators);
-      console.log("Total creators (API + Dummy):", combinedCreators.length);
     } catch (error) {
       console.error("Error fetching creators:", error);
-      // Fallback ke dummy data saja jika error
-      setCreators(dummyCreators);
-      console.log("Using dummy data only:", dummyCreators.length);
+      setCreators([]);
     } finally {
       setLoading(false);
     }
