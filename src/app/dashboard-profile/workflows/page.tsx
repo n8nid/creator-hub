@@ -378,7 +378,7 @@ export default function WorkflowsSubPage() {
                   </div>
 
                   {/* Admin Notes for Rejected Workflows */}
-                  {w.status === "rejected" && w.admin_notes && (
+                  {w.status === "rejected" && (
                     <div className="bg-red-50 border border-red-200 rounded p-2">
                       <div className="flex items-start gap-2">
                         <div className="flex-shrink-0 mt-0.5">
@@ -396,7 +396,7 @@ export default function WorkflowsSubPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs text-red-700 line-clamp-2 break-words">
-                            {w.admin_notes}
+                            Edit dan cek kembali detail penolakan workflow anda
                           </p>
                         </div>
                       </div>

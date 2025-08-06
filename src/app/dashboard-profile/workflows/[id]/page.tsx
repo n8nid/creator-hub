@@ -103,28 +103,54 @@ export default function WorkflowDetailUserPage() {
     }
     setSaving(true);
     try {
+      // Prepare update data
+      const updateData: any = {
+        title: editForm.title,
+        description: editForm.description,
+        tags: editForm.tags,
+        category: editForm.category,
+        complexity: editForm.complexity,
+        json_n8n: editForm.json_n8n,
+        screenshot_url: editForm.screenshot_url,
+      };
+
+      // If workflow is rejected, also resubmit it
+      if (workflow?.status === "rejected") {
+        updateData.status = "pending";
+        updateData.admin_notes = null; // Clear admin notes
+        updateData.tanggal_approval = null; // Clear approval date
+      }
+
       const { error } = await supabase
         .from("workflows")
-        .update({
-          title: editForm.title,
-          description: editForm.description,
-          tags: editForm.tags,
-          category: editForm.category,
-          complexity: editForm.complexity,
-          json_n8n: editForm.json_n8n,
-          screenshot_url: editForm.screenshot_url,
-        })
+        .update(updateData)
         .eq("id", workflowId);
+
       if (error) {
-        toast.error(`Gagal menyimpan perubahan: ${error.message}`);
+        toast.error(
+          `Gagal ${
+            workflow?.status === "rejected" ? "mengajukan" : "menyimpan"
+          } perubahan: ${error.message}`
+        );
         setSaving(false);
         return;
       }
-      toast.success("Perubahan berhasil disimpan!");
+
+      const successMessage =
+        workflow?.status === "rejected"
+          ? "Workflow berhasil diajukan ulang!"
+          : "Perubahan berhasil disimpan!";
+
+      toast.success(successMessage);
       // Redirect ke halaman workflow saya
       router.push("/dashboard-profile/workflows");
     } catch (err: any) {
-      toast.error(err?.message || "Gagal menyimpan perubahan.");
+      toast.error(
+        err?.message ||
+          `Gagal ${
+            workflow?.status === "rejected" ? "mengajukan" : "menyimpan"
+          } perubahan.`
+      );
     } finally {
       setSaving(false);
     }
@@ -228,7 +254,11 @@ export default function WorkflowDetailUserPage() {
 
         <div className="space-y-3 sm:space-y-4">
           <h1 className="workflow-page-title">
-            <div className="workflow-page-title-line-1">Ubah dan Simpan</div>
+            <div className="workflow-page-title-line-1">
+              {isOwner && workflow?.status === "rejected"
+                ? "Ubah dan Ajukan Ulang"
+                : "Ubah dan Simpan"}
+            </div>
             <div className="workflow-page-title-line-2">
               Workflow Terbaru Anda
             </div>
@@ -290,6 +320,37 @@ export default function WorkflowDetailUserPage() {
                 <p className="text-sm">
                   <strong>Test preview workflow</strong> - Gunakan preview untuk
                   memastikan workflow masih berjalan dengan baik
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Admin Notes for Rejected Workflows in Edit Mode */}
+      {isOwner && workflow?.status === "rejected" && workflow?.admin_notes && (
+        <div className="mb-6 sm:mb-8">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-5 w-5 text-red-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base sm:text-lg font-semibold text-red-800 mb-2">
+                  Feedback dari Admin
+                </h3>
+                <p className="text-sm text-red-700 whitespace-pre-wrap">
+                  {workflow.admin_notes}
                 </p>
               </div>
             </div>
@@ -490,8 +551,12 @@ export default function WorkflowDetailUserPage() {
               {saving ? (
                 <span className="flex items-center gap-2">
                   <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-4 h-4"></span>
-                  Menyimpan...
+                  {workflow.status === "rejected"
+                    ? "Mengajukan..."
+                    : "Menyimpan..."}
                 </span>
+              ) : workflow.status === "rejected" ? (
+                "Ajukan Perubahan"
               ) : (
                 "Simpan Perubahan"
               )}
@@ -511,100 +576,6 @@ export default function WorkflowDetailUserPage() {
         </form>
       ) : (
         <div className="space-y-6">
-          {/* Status Badges */}
-          <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center px-3 py-1 text-sm font-semibold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 rounded-full">
-              {workflow.complexity || "-"}
-            </span>
-            <span
-              className={`inline-flex items-center px-3 py-1 text-sm font-semibold rounded-full ${
-                workflow.status === "approved"
-                  ? "bg-green-100 text-green-800"
-                  : workflow.status === "pending"
-                  ? "bg-yellow-100 text-yellow-800"
-                  : workflow.status === "rejected"
-                  ? "bg-red-100 text-red-800"
-                  : "bg-gray-100 text-gray-700"
-              }`}
-            >
-              {workflow.status}
-            </span>
-          </div>
-
-          {/* Admin Notes for Rejected Workflows */}
-          {workflow.status === "rejected" && workflow.admin_notes && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-red-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-sm font-medium text-red-800 mb-2">
-                    Feedback dari Admin
-                  </h3>
-                  <p className="text-sm text-red-700 whitespace-pre-wrap">
-                    {workflow.admin_notes}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Resubmit Button for Rejected Workflows */}
-          {workflow.status === "rejected" && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-yellow-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-sm font-medium text-yellow-800 mb-2">
-                    Workflow Ditolak
-                  </h3>
-                  <p className="text-sm text-yellow-700 mb-3">
-                    Workflow Anda telah ditolak oleh admin. Anda dapat
-                    mengajukan ulang setelah memperbaiki sesuai feedback di
-                    atas.
-                  </p>
-                  <Button
-                    onClick={handleResubmit}
-                    disabled={saving}
-                    className="bg-yellow-600 hover:bg-yellow-700 text-white"
-                  >
-                    {saving ? (
-                      <span className="flex items-center gap-2">
-                        <span className="animate-spin border-2 border-t-transparent border-white rounded-full w-4 h-4"></span>
-                        Mengajukan Ulang...
-                      </span>
-                    ) : (
-                      "Ajukan Ulang Workflow"
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Description */}
           <div className="prose max-w-none">
             <div dangerouslySetInnerHTML={{ __html: workflow.description }} />
