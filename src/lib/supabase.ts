@@ -146,6 +146,7 @@ export type Database = {
           complexity: "simple" | "medium" | "complex" | null;
           status: "draft" | "pending" | "approved" | "rejected";
           admin_notes: string | null;
+          tanggal_approval: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -160,6 +161,7 @@ export type Database = {
           complexity?: "simple" | "medium" | "complex" | null;
           status?: "draft" | "pending" | "approved" | "rejected";
           admin_notes?: string | null;
+          tanggal_approval?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -174,6 +176,7 @@ export type Database = {
           complexity?: "simple" | "medium" | "complex" | null;
           status?: "draft" | "pending" | "approved" | "rejected";
           admin_notes?: string | null;
+          tanggal_approval?: string | null;
           created_at?: string;
           updated_at?: string;
         };

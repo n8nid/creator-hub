@@ -27,6 +27,7 @@ interface Workflow {
   admin_notes?: string;
   description?: string;
   profile_name?: string;
+  tanggal_approval?: string | null;
 }
 
 export default function ModerasiWorkflowPage() {
@@ -83,7 +84,9 @@ export default function ModerasiWorkflowPage() {
     // Query workflows sesuai tab, filter & search (tanpa join)
     let query = supabase
       .from("workflows")
-      .select("id, title, status, created_at, profile_id, admin_notes")
+      .select(
+        "id, title, status, created_at, profile_id, admin_notes, tanggal_approval"
+      )
       .order("created_at", { ascending: false });
     if (tab !== "all") {
       query = query.eq("status", tab);
@@ -148,7 +151,11 @@ export default function ModerasiWorkflowPage() {
     setActionLoading(workflowId);
     const { error } = await supabase
       .from("workflows")
-      .update({ status: "rejected", admin_notes: reason })
+      .update({
+        status: "rejected",
+        admin_notes: reason,
+        tanggal_approval: new Date().toISOString(),
+      })
       .eq("id", workflowId);
     if (error) {
       toast({
@@ -170,7 +177,7 @@ export default function ModerasiWorkflowPage() {
     const { data } = await supabase
       .from("workflows")
       .select(
-        "id, title, status, created_at, profile_id, admin_notes, description"
+        "id, title, status, created_at, profile_id, admin_notes, description, tanggal_approval"
       )
       .eq("id", workflowId)
       .single();
@@ -193,6 +200,7 @@ export default function ModerasiWorkflowPage() {
         admin_notes: data.admin_notes || "",
         description: data.description || "",
         profile_name: profileName,
+        tanggal_approval: data.tanggal_approval || null,
       });
     } else {
       setSelectedWorkflow(null);
@@ -314,6 +322,9 @@ export default function ModerasiWorkflowPage() {
                     <th className="px-4 py-2 text-left">Judul</th>
                     <th className="px-4 py-2 text-left">Creator</th>
                     <th className="px-4 py-2 text-left">Tanggal Pengajuan</th>
+                    {(tab === "approved" || tab === "rejected") && (
+                      <th className="px-4 py-2 text-left">Tanggal Approval</th>
+                    )}
                     {tab === "rejected" && (
                       <th className="px-4 py-2 text-left">Alasan Penolakan</th>
                     )}
@@ -332,6 +343,15 @@ export default function ModerasiWorkflowPage() {
                           ? new Date(wf.created_at).toLocaleDateString("id-ID")
                           : "-"}
                       </td>
+                      {(tab === "approved" || tab === "rejected") && (
+                        <td className="px-4 py-2">
+                          {wf.tanggal_approval
+                            ? new Date(wf.tanggal_approval).toLocaleDateString(
+                                "id-ID"
+                              )
+                            : "-"}
+                        </td>
+                      )}
                       {tab === "rejected" && (
                         <td className="px-4 py-2">{wf.admin_notes || "-"}</td>
                       )}
