@@ -14,12 +14,23 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { FileText, Eye, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import {
+  FileText,
+  Eye,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  User,
+  Calendar,
+  MessageSquare,
+  Shield,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import ReactMarkdown from "react-markdown";
 
 interface Workflow {
   id: string;
@@ -31,6 +42,11 @@ interface Workflow {
   description?: string;
   profile_name?: string;
   tanggal_approval?: string | null;
+  json_n8n?: string;
+  screenshot_url?: string;
+  tags?: string[];
+  category?: string;
+  complexity?: string;
 }
 
 export default function ModerasiWorkflowPage() {
@@ -54,6 +70,7 @@ export default function ModerasiWorkflowPage() {
     null
   );
   const [detailLoading, setDetailLoading] = useState(false);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -177,10 +194,11 @@ export default function ModerasiWorkflowPage() {
 
   const handleShowDetail = async (workflowId: string) => {
     setDetailLoading(true);
+    setDetailDialogOpen(true);
     const { data } = await supabase
       .from("workflows")
       .select(
-        "id, title, status, created_at, profile_id, admin_notes, description, tanggal_approval"
+        "id, title, status, created_at, profile_id, admin_notes, description, tanggal_approval, json_n8n, screenshot_url, tags, category, complexity"
       )
       .eq("id", workflowId)
       .single();
@@ -204,6 +222,11 @@ export default function ModerasiWorkflowPage() {
         description: data.description || "",
         profile_name: profileName,
         tanggal_approval: data.tanggal_approval || null,
+        json_n8n: data.json_n8n || "",
+        screenshot_url: data.screenshot_url || "",
+        tags: data.tags || [],
+        category: data.category || "",
+        complexity: data.complexity || "",
       });
     } else {
       setSelectedWorkflow(null);
@@ -360,7 +383,10 @@ export default function ModerasiWorkflowPage() {
                       )}
                       {tab === "pending" && (
                         <td className="px-4 py-2 space-x-2">
-                          <Dialog>
+                          <Dialog
+                            open={detailDialogOpen}
+                            onOpenChange={setDetailDialogOpen}
+                          >
                             <DialogTrigger asChild>
                               <Button
                                 size="sm"
@@ -370,51 +396,200 @@ export default function ModerasiWorkflowPage() {
                                 Lihat Detail
                               </Button>
                             </DialogTrigger>
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>Detail Workflow</DialogTitle>
-                                <DialogDescription>
-                                  {detailLoading || !selectedWorkflow ? (
-                                    <div>Loading...</div>
-                                  ) : (
-                                    <div className="space-y-2">
-                                      <div>
-                                        <b>Judul:</b> {selectedWorkflow.title}
-                                      </div>
-                                      <div>
-                                        <b>Status:</b> {selectedWorkflow.status}
-                                      </div>
-                                      <div>
-                                        <b>Creator:</b>{" "}
-                                        {selectedWorkflow?.profile_name || "-"}
-                                      </div>
-                                      <div>
-                                        <b>Tanggal Pengajuan:</b>{" "}
-                                        {selectedWorkflow.created_at
-                                          ? new Date(
-                                              selectedWorkflow.created_at
-                                            ).toLocaleDateString("id-ID")
-                                          : "-"}
-                                      </div>
-                                      {selectedWorkflow.description && (
-                                        <div>
-                                          <b>Deskripsi:</b>{" "}
-                                          {selectedWorkflow.description}
+                            <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+                              <DialogHeader className="pb-4 border-b border-gray-200">
+                                <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+                                  <div className="p-2 bg-blue-100 rounded-lg">
+                                    <FileText className="h-6 w-6 text-blue-600" />
+                                  </div>
+                                  <div>
+                                    <div>Detail Workflow</div>
+                                    <div className="text-sm font-normal text-gray-600">
+                                      {selectedWorkflow?.title}
+                                    </div>
+                                  </div>
+                                </DialogTitle>
+                              </DialogHeader>
+
+                              {detailLoading ? (
+                                <div className="py-12 text-center">
+                                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                                  <p className="mt-4 text-gray-600 font-medium">
+                                    Memuat detail workflow...
+                                  </p>
+                                </div>
+                              ) : selectedWorkflow ? (
+                                <div className="space-y-6 py-4">
+                                  {/* Basic Information */}
+                                  <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                    <div className="p-4 border-b border-gray-100">
+                                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                        <div className="p-1.5 bg-blue-100 rounded-lg">
+                                          <FileText className="h-4 w-4 text-blue-600" />
                                         </div>
-                                      )}
-                                      {selectedWorkflow.admin_notes && (
-                                        <div>
-                                          <b>Alasan Penolakan:</b>{" "}
-                                          {selectedWorkflow.admin_notes}
+                                        Informasi Dasar
+                                      </h3>
+                                    </div>
+                                    <div className="p-4 space-y-4">
+                                      <div className="flex items-start gap-3">
+                                        <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                          <FileText className="h-4 w-4 text-gray-600" />
                                         </div>
-                                      )}
+                                        <div className="flex-1">
+                                          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                            Judul Workflow
+                                          </label>
+                                          <p className="text-sm font-medium text-gray-900 mt-1">
+                                            {selectedWorkflow.title}
+                                          </p>
+                                        </div>
+                                      </div>
+
+                                      <div className="flex items-start gap-3">
+                                        <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                          <User className="h-4 w-4 text-gray-600" />
+                                        </div>
+                                        <div className="flex-1">
+                                          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                            Creator
+                                          </label>
+                                          <p className="text-sm font-medium text-gray-900 mt-1">
+                                            {selectedWorkflow.profile_name ||
+                                              "-"}
+                                          </p>
+                                        </div>
+                                      </div>
+
+                                      <div className="flex items-start gap-3">
+                                        <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                          <Calendar className="h-4 w-4 text-gray-600" />
+                                        </div>
+                                        <div className="flex-1">
+                                          <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                            Tanggal Pengajuan
+                                          </label>
+                                          <p className="text-sm font-medium text-gray-900 mt-1">
+                                            {selectedWorkflow.created_at
+                                              ? new Date(
+                                                  selectedWorkflow.created_at
+                                                ).toLocaleDateString("id-ID", {
+                                                  year: "numeric",
+                                                  month: "long",
+                                                  day: "numeric",
+                                                })
+                                              : "-"}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Description Card */}
+                                  {selectedWorkflow.description && (
+                                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                      <div className="p-4 border-b border-gray-100">
+                                        <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                          <div className="p-1.5 bg-indigo-100 rounded-lg">
+                                            <MessageSquare className="h-4 w-4 text-indigo-600" />
+                                          </div>
+                                          Deskripsi
+                                        </h3>
+                                      </div>
+                                      <div className="p-4">
+                                        <div className="prose prose-sm max-w-none text-gray-700 prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline">
+                                          <ReactMarkdown>
+                                            {selectedWorkflow.description}
+                                          </ReactMarkdown>
+                                        </div>
+                                      </div>
                                     </div>
                                   )}
-                                </DialogDescription>
-                                <DialogClose asChild>
-                                  <Button variant="outline">Tutup</Button>
-                                </DialogClose>
-                              </DialogHeader>
+
+                                  {/* Workflow Preview */}
+                                  {selectedWorkflow.json_n8n && (
+                                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                      <div className="p-4 border-b border-gray-100">
+                                        <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                          <div className="p-1.5 bg-green-100 rounded-lg">
+                                            <Eye className="h-4 w-4 text-green-600" />
+                                          </div>
+                                          Preview Workflow
+                                        </h3>
+                                      </div>
+                                      <div className="p-4">
+                                        <div className="border rounded-lg bg-gray-50 p-4 overflow-x-auto">
+                                          <div
+                                            dangerouslySetInnerHTML={{
+                                              __html: `<n8n-demo workflow='${selectedWorkflow.json_n8n.replace(
+                                                /'/g,
+                                                "&#39;"
+                                              )}' frame="true"></n8n-demo>`,
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Admin Notes (if exists) */}
+                                  {selectedWorkflow.admin_notes && (
+                                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                      <div className="p-4 border-b border-gray-100">
+                                        <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                          <div className="p-1.5 bg-red-100 rounded-lg">
+                                            <Shield className="h-4 w-4 text-red-600" />
+                                          </div>
+                                          Catatan Admin
+                                        </h3>
+                                      </div>
+                                      <div className="p-4">
+                                        <p className="text-sm text-gray-700">
+                                          {selectedWorkflow.admin_notes}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              ) : null}
+
+                              <DialogFooter className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setDetailDialogOpen(false)}
+                                >
+                                  Tutup
+                                </Button>
+                                {selectedWorkflow && tab === "pending" && (
+                                  <>
+                                    <Button
+                                      className="bg-green-600 hover:bg-green-700"
+                                      disabled={
+                                        actionLoading === selectedWorkflow.id
+                                      }
+                                      onClick={() => {
+                                        handleApprove(selectedWorkflow.id);
+                                        setDetailDialogOpen(false);
+                                      }}
+                                    >
+                                      Approve
+                                    </Button>
+                                    <Button
+                                      variant="destructive"
+                                      disabled={
+                                        actionLoading === selectedWorkflow.id
+                                      }
+                                      onClick={() => {
+                                        setShowRejectDialog(
+                                          selectedWorkflow.id
+                                        );
+                                        setDetailDialogOpen(false);
+                                      }}
+                                    >
+                                      Reject
+                                    </Button>
+                                  </>
+                                )}
+                              </DialogFooter>
                             </DialogContent>
                           </Dialog>
                           <Button
