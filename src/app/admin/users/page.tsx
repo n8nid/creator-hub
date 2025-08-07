@@ -43,7 +43,22 @@ import {
   MapPin,
   Mail,
   Globe,
+  User,
+  Shield,
+  CheckCircle,
+  MessageSquare,
+  FileText,
+  Star,
+  Activity,
+  Linkedin,
+  Github,
+  Twitter,
+  Instagram,
+  Youtube,
+  Phone,
+  MessageCircle,
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 
@@ -58,6 +73,28 @@ interface User {
   role: "user" | "creator" | "admin";
   created_at: string;
   updated_at: string;
+}
+
+interface UserProfile {
+  id: string;
+  user_id: string;
+  name: string;
+  bio?: string;
+  about_markdown?: string;
+  location?: string;
+  website?: string;
+  linkedin?: string;
+  twitter?: string;
+  github?: string;
+  instagram?: string;
+  threads?: string;
+  discord?: string;
+  youtube?: string;
+  Whatsapp?: string;
+  profile_image?: string;
+  status: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface UserStats {
@@ -79,11 +116,37 @@ export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUserProfile, setSelectedUserProfile] =
+    useState<UserProfile | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
   const { toast } = useToast();
+
+  // Handle show user detail with profile data
+  const handleShowDetail = async (user: User) => {
+    setSelectedUser(user);
+    setSelectedUserProfile(null); // Reset profile data
+
+    try {
+      // Fetch profile data from profiles table
+      const { data: profileData, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching profile:", error);
+        // If no profile found, that's okay - user might not have a profile yet
+      } else {
+        setSelectedUserProfile(profileData);
+      }
+    } catch (error) {
+      console.error("Error in handleShowDetail:", error);
+    }
+  };
 
   // Process profile data
   const processProfile = (
@@ -717,82 +780,528 @@ export default function UsersPage() {
                             <Dialog>
                               <DialogTrigger asChild>
                                 <Button
-                                  variant="ghost"
+                                  variant="outline"
                                   size="sm"
-                                  onClick={() => setSelectedUser(user)}
+                                  onClick={() => handleShowDetail(user)}
                                 >
-                                  <Eye className="h-4 w-4" />
+                                  Detail
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="max-w-2xl">
-                                <DialogHeader>
-                                  <DialogTitle>Detail User</DialogTitle>
-                                  <DialogDescription>
-                                    Informasi lengkap tentang user ini
-                                  </DialogDescription>
+                              <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+                                <DialogHeader className="pb-4 border-b border-gray-200">
+                                  <DialogTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+                                    <div className="p-2 bg-blue-100 rounded-lg">
+                                      <User className="h-6 w-6 text-blue-600" />
+                                    </div>
+                                    <div>
+                                      <div>Detail User</div>
+                                      <div className="text-sm font-normal text-gray-600">
+                                        {selectedUser?.full_name}
+                                      </div>
+                                    </div>
+                                  </DialogTitle>
                                 </DialogHeader>
-                                {selectedUser && (
-                                  <div className="space-y-6">
-                                    {/* User Info */}
-                                    <div className="flex items-center space-x-4">
-                                      <Avatar className="h-16 w-16">
-                                        <AvatarImage
-                                          src={selectedUser.avatar_url}
-                                        />
-                                        <AvatarFallback>
+
+                                {!selectedUser ? (
+                                  <div className="py-12 text-center">
+                                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                                    <p className="mt-4 text-gray-600 font-medium">
+                                      Memuat detail user...
+                                    </p>
+                                  </div>
+                                ) : selectedUser ? (
+                                  <div className="space-y-6 py-4">
+                                    {/* Profile Header */}
+                                    <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
+                                      {selectedUser.avatar_url ? (
+                                        <div className="w-16 h-16 rounded-full overflow-hidden">
+                                          <img
+                                            src={selectedUser.avatar_url}
+                                            alt={selectedUser.full_name}
+                                            className="w-full h-full object-cover"
+                                          />
+                                        </div>
+                                      ) : (
+                                        <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                                           {selectedUser.full_name
-                                            .split(" ")
-                                            .map((n) => n[0])
-                                            .join("")
+                                            .charAt(0)
                                             .toUpperCase()}
-                                        </AvatarFallback>
-                                      </Avatar>
-                                      <div>
-                                        <h3 className="text-lg font-semibold">
+                                        </div>
+                                      )}
+                                      <div className="flex-1">
+                                        <h2 className="text-xl font-bold text-gray-900">
                                           {selectedUser.full_name}
-                                        </h3>
-                                        <p className="text-muted-foreground">
-                                          {selectedUser.email}
+                                        </h2>
+                                        <p className="text-gray-600">
+                                          {selectedUser.bio || (
+                                            <span className="text-gray-400 italic">
+                                              Belum ada bio
+                                            </span>
+                                          )}
                                         </p>
-                                        <div className="flex items-center space-x-2 mt-2">
-                                          {getRoleBadge(selectedUser.role)}
-                                          {getStatusBadge(selectedUser.status)}
+                                        <div className="flex items-center gap-1 mt-1 text-sm text-gray-500">
+                                          <MapPin className="h-3 w-3" />
+                                          {selectedUser.location || (
+                                            <span className="text-gray-400 italic">
+                                              Belum ada lokasi
+                                            </span>
+                                          )}
                                         </div>
                                       </div>
                                     </div>
 
-                                    {/* Additional Info */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                      <div className="space-y-2">
-                                        <div className="flex items-center space-x-2 text-sm">
-                                          <Calendar className="h-4 w-4 text-muted-foreground" />
-                                          <span>
-                                            Bergabung:{" "}
-                                            {formatDateTime(
-                                              selectedUser.created_at
-                                            )}
-                                          </span>
+                                    {/* About Section - Always Display */}
+                                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                      <div className="p-4 border-b border-gray-100">
+                                        <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                          <div className="p-1.5 bg-green-100 rounded-lg">
+                                            <FileText className="h-4 w-4 text-green-600" />
+                                          </div>
+                                          Tentang User
+                                        </h3>
+                                      </div>
+                                      <div className="p-4">
+                                        <div className="prose prose-sm max-w-none text-gray-700">
+                                          {selectedUserProfile?.about_markdown ? (
+                                            <ReactMarkdown>
+                                              {
+                                                selectedUserProfile.about_markdown
+                                              }
+                                            </ReactMarkdown>
+                                          ) : (
+                                            <span className="text-gray-400 italic">
+                                              Belum ada tentang user
+                                            </span>
+                                          )}
                                         </div>
-                                        {selectedUser.location && (
-                                          <div className="flex items-center space-x-2 text-sm">
-                                            <MapPin className="h-4 w-4 text-muted-foreground" />
-                                            <span>{selectedUser.location}</span>
+                                      </div>
+                                    </div>
+
+                                    {/* Main Content Grid */}
+                                    <div className="grid gap-6 lg:grid-cols-2">
+                                      {/* Left Column */}
+                                      <div className="space-y-6">
+                                        {/* Basic Information Card */}
+                                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                          <div className="p-4 border-b border-gray-100">
+                                            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                              <div className="p-1.5 bg-blue-100 rounded-lg">
+                                                <UserCheck className="h-4 w-4 text-blue-600" />
+                                              </div>
+                                              Informasi Dasar
+                                            </h3>
                                           </div>
-                                        )}
-                                        {selectedUser.bio && (
-                                          <div className="text-sm">
-                                            <p className="font-medium mb-1">
-                                              Bio:
-                                            </p>
-                                            <p className="text-muted-foreground">
-                                              {selectedUser.bio}
-                                            </p>
+                                          <div className="p-4 space-y-4">
+                                            <div className="flex items-center gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                                <UserCheck className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Nama Lengkap
+                                                </label>
+                                                <p className="text-sm font-medium text-gray-900">
+                                                  {selectedUser.full_name}
+                                                </p>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <MessageCircle className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Bio
+                                                </label>
+                                                <p className="text-sm text-gray-700 mt-1">
+                                                  {selectedUser.bio || (
+                                                    <span className="text-gray-400 italic">
+                                                      Belum ada bio
+                                                    </span>
+                                                  )}
+                                                </p>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-center gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                                <MapPin className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Lokasi
+                                                </label>
+                                                <p className="text-sm font-medium text-gray-900">
+                                                  {selectedUser.location || (
+                                                    <span className="text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </p>
+                                              </div>
+                                            </div>
                                           </div>
-                                        )}
+                                        </div>
+
+                                        {/* Professional Card */}
+                                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                          <div className="p-4 border-b border-gray-100">
+                                            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                              <div className="p-1.5 bg-purple-100 rounded-lg">
+                                                <Star className="h-4 w-4 text-purple-600" />
+                                              </div>
+                                              Profesional
+                                            </h3>
+                                          </div>
+                                          <div className="p-4 space-y-4">
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <Shield className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Role
+                                                </label>
+                                                <div className="mt-1">
+                                                  <span className="inline-flex px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-800 rounded-full capitalize">
+                                                    {selectedUser.role}
+                                                  </span>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <CheckCircle className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Status
+                                                </label>
+                                                <div className="mt-1">
+                                                  <span
+                                                    className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full capitalize ${
+                                                      selectedUser.status ===
+                                                      "approved"
+                                                        ? "bg-green-100 text-green-800"
+                                                        : selectedUser.status ===
+                                                          "pending"
+                                                        ? "bg-yellow-100 text-yellow-800"
+                                                        : selectedUser.status ===
+                                                          "draft"
+                                                        ? "bg-blue-100 text-blue-800"
+                                                        : "bg-red-100 text-red-800"
+                                                    }`}
+                                                  >
+                                                    {selectedUser.status}
+                                                  </span>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Right Column */}
+                                      <div className="space-y-6">
+                                        {/* Social Media & Contact Card */}
+                                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                          <div className="p-4 border-b border-gray-100">
+                                            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                              <div className="p-1.5 bg-indigo-100 rounded-lg">
+                                                <Activity className="h-4 w-4 text-indigo-600" />
+                                              </div>
+                                              Social Media & Kontak
+                                            </h3>
+                                          </div>
+                                          <div className="p-4 space-y-4">
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <Mail className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Email
+                                                </label>
+                                                <div className="mt-1">
+                                                  <p className="text-sm font-medium text-gray-900">
+                                                    {selectedUser.email}
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <Globe className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Website
+                                                </label>
+                                                <div className="mt-1">
+                                                  {selectedUserProfile?.website ? (
+                                                    <a
+                                                      href={
+                                                        selectedUserProfile.website
+                                                      }
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                                                    >
+                                                      {
+                                                        selectedUserProfile.website
+                                                      }
+                                                    </a>
+                                                  ) : (
+                                                    <span className="text-sm text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <Linkedin className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  LinkedIn
+                                                </label>
+                                                <div className="mt-1">
+                                                  {selectedUserProfile?.linkedin ? (
+                                                    <a
+                                                      href={
+                                                        selectedUserProfile.linkedin
+                                                      }
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                                                    >
+                                                      {
+                                                        selectedUserProfile.linkedin
+                                                      }
+                                                    </a>
+                                                  ) : (
+                                                    <span className="text-sm text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <Github className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  GitHub
+                                                </label>
+                                                <div className="mt-1">
+                                                  {selectedUserProfile?.github ? (
+                                                    <a
+                                                      href={
+                                                        selectedUserProfile.github
+                                                      }
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                                                    >
+                                                      {
+                                                        selectedUserProfile.github
+                                                      }
+                                                    </a>
+                                                  ) : (
+                                                    <span className="text-sm text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <Twitter className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Twitter
+                                                </label>
+                                                <div className="mt-1">
+                                                  {selectedUserProfile?.twitter ? (
+                                                    <a
+                                                      href={
+                                                        selectedUserProfile.twitter
+                                                      }
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                                                    >
+                                                      {
+                                                        selectedUserProfile.twitter
+                                                      }
+                                                    </a>
+                                                  ) : (
+                                                    <span className="text-sm text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <Instagram className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Instagram
+                                                </label>
+                                                <div className="mt-1">
+                                                  {selectedUserProfile?.instagram ? (
+                                                    <a
+                                                      href={
+                                                        selectedUserProfile.instagram
+                                                      }
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                                                    >
+                                                      {
+                                                        selectedUserProfile.instagram
+                                                      }
+                                                    </a>
+                                                  ) : (
+                                                    <span className="text-sm text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <Youtube className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  YouTube
+                                                </label>
+                                                <div className="mt-1">
+                                                  {selectedUserProfile?.youtube ? (
+                                                    <a
+                                                      href={
+                                                        selectedUserProfile.youtube
+                                                      }
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                                                    >
+                                                      {
+                                                        selectedUserProfile.youtube
+                                                      }
+                                                    </a>
+                                                  ) : (
+                                                    <span className="text-sm text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <MessageCircle className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Discord
+                                                </label>
+                                                <div className="mt-1">
+                                                  {selectedUserProfile?.discord ? (
+                                                    <span className="text-sm font-medium text-gray-900">
+                                                      {
+                                                        selectedUserProfile.discord
+                                                      }
+                                                    </span>
+                                                  ) : (
+                                                    <span className="text-sm text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <Phone className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  WhatsApp
+                                                </label>
+                                                <div className="mt-1">
+                                                  {selectedUserProfile?.Whatsapp ? (
+                                                    <span className="text-sm font-medium text-gray-900">
+                                                      {
+                                                        selectedUserProfile.Whatsapp
+                                                      }
+                                                    </span>
+                                                  ) : (
+                                                    <span className="text-sm text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div className="flex items-start gap-3">
+                                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center mt-0.5">
+                                                <MessageSquare className="h-4 w-4 text-gray-600" />
+                                              </div>
+                                              <div className="flex-1">
+                                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                                                  Threads
+                                                </label>
+                                                <div className="mt-1">
+                                                  {selectedUserProfile?.threads ? (
+                                                    <a
+                                                      href={
+                                                        selectedUserProfile.threads
+                                                      }
+                                                      target="_blank"
+                                                      rel="noopener noreferrer"
+                                                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                                                    >
+                                                      {
+                                                        selectedUserProfile.threads
+                                                      }
+                                                    </a>
+                                                  ) : (
+                                                    <span className="text-sm text-gray-400 italic">
+                                                      Belum ada
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
-                                )}
+                                ) : null}
                               </DialogContent>
                             </Dialog>
 
