@@ -2988,8 +2988,20 @@ n8n-demo {
   transform: translateY(0) scale(0.98) !important;
 }
 
-/* Pagination Button Styles - Smaller version of homepage buttons */
+/* Pagination Button Styles - Updated for new color scheme */
 .btn-primary.px-3,
+.btn-primary.px-4 {
+  padding: 8px 16px !important;
+  min-height: 36px !important;
+  font-size: 14px !important;
+  gap: 0 !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+  color: #9333ea !important;
+  box-shadow: 0 4px 12px -2px rgba(147, 51, 234, 0.2),
+    0 2px 4px -1px rgba(147, 51, 234, 0.1) !important;
+}
+
 .btn-secondary.px-3,
 .btn-secondary.px-4 {
   padding: 8px 16px !important;
@@ -2997,19 +3009,30 @@ n8n-demo {
   font-size: 14px !important;
   gap: 0 !important;
   border-radius: 12px !important;
+  background: linear-gradient(135deg, #d946ef 0%, #9333ea 100%) !important;
+  color: #ffffff !important;
   box-shadow: 0 4px 12px -2px rgba(147, 51, 234, 0.2),
     0 2px 4px -1px rgba(147, 51, 234, 0.1) !important;
 }
 
 .btn-primary.px-3:hover,
+.btn-primary.px-4:hover {
+  transform: translateY(-1px) scale(1.01) !important;
+  box-shadow: 0 6px 16px -3px rgba(147, 51, 234, 0.3),
+    0 3px 6px -2px rgba(147, 51, 234, 0.2) !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
 .btn-secondary.px-3:hover,
 .btn-secondary.px-4:hover {
   transform: translateY(-1px) scale(1.01) !important;
   box-shadow: 0 6px 16px -3px rgba(147, 51, 234, 0.3),
     0 3px 6px -2px rgba(147, 51, 234, 0.2) !important;
+  background: linear-gradient(135deg, #e879f9 0%, #a855f7 100%) !important;
 }
 
 .btn-primary.px-3:active,
+.btn-primary.px-4:active,
 .btn-secondary.px-3:active,
 .btn-secondary.px-4:active {
   transform: translateY(0) scale(0.99) !important;
@@ -3471,6 +3494,8 @@ n8n-demo {
   font-size: 14px !important;
   gap: 0 !important;
   border-radius: 12px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+  color: #9333ea !important;
   box-shadow: 0 4px 12px -2px rgba(147, 51, 234, 0.2),
     0 2px 4px -1px rgba(147, 51, 234, 0.1) !important;
 }
@@ -3490,6 +3515,15 @@ n8n-demo {
   transform: translateY(-1px) scale(1.01) !important;
   box-shadow: 0 6px 16px -3px rgba(147, 51, 234, 0.3),
     0 3px 6px -2px rgba(147, 51, 234, 0.2) !important;
+}
+
+/* Specific hover states for pagination buttons */
+.btn-primary.pagination-btn:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+}
+
+.btn-secondary.pagination-btn:hover {
+  background: linear-gradient(135deg, #e879f9 0%, #a855f7 100%) !important;
 }
 
 .pagination-btn:active {
