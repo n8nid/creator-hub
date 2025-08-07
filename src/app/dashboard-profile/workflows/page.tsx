@@ -193,7 +193,7 @@ export default function WorkflowsSubPage() {
   }
 
   return (
-    <div className="space-y-8 mt-4 overflow-x-hidden">
+    <div className="space-y-8 mt-4 pb-8 overflow-x-hidden">
       {/* Header Section */}
       <div className="px-2">
         <p className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">
@@ -285,7 +285,7 @@ export default function WorkflowsSubPage() {
           {/* Add Workflow Button */}
           <Link
             href="/dashboard-profile/workflows/add"
-            className="btn-primary px-4 py-2 text-sm"
+            className="workflow-dashboard-btn"
           >
             <Plus className="w-4 h-4 mr-2" />
             <span className="hidden sm:inline">Tambah Workflow</span>
@@ -486,12 +486,12 @@ export default function WorkflowsSubPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-1 sm:gap-2 mt-8 px-4">
+        <div className="flex items-center justify-center gap-1 sm:gap-2 mt-8 mb-12 px-4">
           {/* Previous Button */}
           <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm disabled:opacity-50 pagination-btn"
+            className="workflow-pagination-btn workflow-pagination-prev"
           >
             <span className="hidden sm:inline">Previous</span>
             <span className="sm:hidden">Prev</span>
@@ -510,8 +510,8 @@ export default function WorkflowsSubPage() {
                     onClick={() => setCurrentPage(page as number)}
                     className={
                       currentPage === page
-                        ? "btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm min-w-[32px] sm:min-w-[40px] pagination-btn"
-                        : "btn-secondary px-3 sm:px-4 py-2 text-xs sm:text-sm min-w-[32px] sm:min-w-[40px] pagination-btn"
+                        ? "workflow-pagination-btn workflow-pagination-active"
+                        : "workflow-pagination-btn workflow-pagination-inactive"
                     }
                   >
                     {page}
@@ -527,7 +527,7 @@ export default function WorkflowsSubPage() {
               setCurrentPage(Math.min(totalPages, currentPage + 1))
             }
             disabled={currentPage === totalPages}
-            className="btn-primary px-3 sm:px-4 py-2 text-xs sm:text-sm disabled:opacity-50 pagination-btn"
+            className="workflow-pagination-btn workflow-pagination-next"
           >
             Next
           </button>
