@@ -80,6 +80,8 @@ export default function UsersPage() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   const { toast } = useToast();
 
@@ -461,6 +463,17 @@ export default function UsersPage() {
     return matchesSearch && matchesStatus;
   });
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const indexOfLastUser = currentPage * itemsPerPage;
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  // Reset to first page when search or filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterStatus]);
+
   const getStatusBadge = (status: string) => {
     const statusConfig = {
       draft: { label: "Draft", className: "bg-gray-100 text-gray-800" },
@@ -655,7 +668,7 @@ export default function UsersPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredUsers.length === 0 ? (
+                  {currentUsers.length === 0 ? (
                     <tr>
                       <td
                         colSpan={6}
@@ -667,7 +680,7 @@ export default function UsersPage() {
                       </td>
                     </tr>
                   ) : (
-                    filteredUsers.map((user) => (
+                    currentUsers.map((user) => (
                       <tr key={user.id} className="border-b">
                         <td className="p-4 align-middle">
                           <div className="flex items-center space-x-3">
@@ -841,6 +854,56 @@ export default function UsersPage() {
                   )}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {filteredUsers.length > 0 && (
+            <div className="flex items-center justify-between px-4 py-4 border-t">
+              <div className="text-sm text-muted-foreground">
+                Showing {indexOfFirstUser + 1} to{" "}
+                {Math.min(indexOfLastUser, filteredUsers.length)} of{" "}
+                {filteredUsers.length} users
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="workflow-pagination-btn-prev"
+                >
+                  Previous
+                </Button>
+                <div className="flex items-center space-x-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(page)}
+                        className={
+                          currentPage === page
+                            ? "workflow-pagination-btn-active"
+                            : "workflow-pagination-btn-inactive"
+                        }
+                      >
+                        {page}
+                      </Button>
+                    )
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="workflow-pagination-btn-next"
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>

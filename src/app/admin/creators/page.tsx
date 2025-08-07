@@ -389,7 +389,8 @@ export default function ModerasiCreatorPage() {
               id="reason"
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
-              className="min-h-[100px]"
+              className="min-h-[100px] border-red-200 focus:border-red-500 focus:ring-red-500"
+              placeholder="Tulis alasan penolakan..."
             />
           </div>
           <DialogFooter>
@@ -400,6 +401,7 @@ export default function ModerasiCreatorPage() {
               Batal
             </Button>
             <Button
+              variant="destructive"
               onClick={async () => {
                 if (!selectedApp) return;
                 setActionLoading(selectedApp.id);
@@ -440,7 +442,7 @@ export default function ModerasiCreatorPage() {
               }}
               disabled={actionLoading === selectedApp?.id}
             >
-              Simpan
+              Konfirmasi Reject
             </Button>
           </DialogFooter>
         </DialogContent>
