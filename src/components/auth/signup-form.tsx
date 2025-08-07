@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { GoogleLoginButton } from "./google-login-button";
 
 const formSchema = z
   .object({
@@ -161,6 +162,19 @@ export function SignUpForm() {
           >
             {isLoading ? "Creating account..." : "Create account"}
           </Button>
+          
+          {/* Divider */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-white/20" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-transparent px-2 text-gray-400">Or</span>
+            </div>
+          </div>
+          
+          {/* Google Login Button */}
+          <GoogleLoginButton text="Continue with Google" />
         </form>
       </Form>
 

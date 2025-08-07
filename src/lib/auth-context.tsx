@@ -76,9 +76,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log("Auth state change:", event, !!session);
+      console.log("User provider:", session?.user?.app_metadata?.provider);
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
+        // Handle OAuth user data insertion
+        if (event === 'SIGNED_IN' && session.user.app_metadata?.provider === 'google') {
+          console.log("Processing Google OAuth user:", session.user.email);
+          await handleOAuthUser(session.user);
+        }
         fetchProfile(session.user.id);
       } else {
         setProfile(null);
@@ -151,6 +157,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         status: "approved", // hanya menandakan user aktif/email verified
         // JANGAN set flag creator apapun di sini
       });
+    }
+  };
+
+  // Handle OAuth user data insertion
+  const handleOAuthUser = async (user: User) => {
+    try {
+      // Check if user already exists in public.users table
+      const { data: existingUser } = await supabase
+        .from("users")
+        .select("id")
+        .eq("id", user.id)
+        .single();
+
+      let isNewUser = false;
+
+      if (!existingUser) {
+        // User baru - lakukan Sign Up
+        console.log("New user detected, creating account...");
+        isNewUser = true;
+        
+        // Insert into public.users table
+        await supabase.from("users").insert({
+          id: user.id,
+          email: user.email,
+        });
+      } else {
+        // User lama - lakukan Sign In
+        console.log("Existing user detected, signing in...");
+      }
+
+      // Check if profile already exists
+      const { data: existingProfile } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+
+      if (!existingProfile) {
+        // Insert into profiles table with Google data
+        await supabase.from("profiles").insert({
+          user_id: user.id,
+          name: user.user_metadata?.full_name || user.email || "User",
+          profile_image: user.user_metadata?.avatar_url,
+          status: "approved",
+        });
+      }
+
+      // Show appropriate toast message
+      if (isNewUser) {
+        toast.success("Akun berhasil dibuat! Selamat datang di Creator Hub.");
+      } else {
+        toast.success("Login berhasil! Selamat datang kembali.");
+      }
+    } catch (error) {
+      console.error("Error handling OAuth user:", error);
+      toast.error("Terjadi kesalahan saat memproses data user.");
     }
   };
 
