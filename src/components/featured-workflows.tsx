@@ -39,15 +39,42 @@ const FeaturedWorkflows = () => {
       const { data } = await supabase
         .from("workflows")
         .select(
-          "id, title, description, category, tags, profile_id, json_n8n, screenshot_url"
+          "id, title, description, category, tags, profile_id, json_n8n, screenshot_url, created_at"
         )
         .eq("status", "approved")
         .order("created_at", { ascending: false })
-        .limit(8);
+        .limit(50);
 
-      // Fetch profile data for each workflow
       if (data && data.length > 0) {
-        const profileIds = [...new Set(data.map((w) => w.profile_id))];
+        // Kelompokkan berdasarkan creator (profile_id) dengan urutan waktu terbaru
+        const groups = new Map<string, any[]>();
+        const orderedProfileIds: string[] = [];
+        for (const w of data) {
+          if (!groups.has(w.profile_id)) {
+            groups.set(w.profile_id, []);
+            orderedProfileIds.push(w.profile_id);
+          }
+          groups.get(w.profile_id)!.push(w);
+        }
+
+        // Round-robin: ambil 1 per creator dulu, lalu putaran berikutnya jika kurang dari 8
+        const selected: any[] = [];
+        let round = 0;
+        let exhausted = false;
+        while (selected.length < 8 && !exhausted) {
+          exhausted = true;
+          for (const pid of orderedProfileIds) {
+            const arr = groups.get(pid)!;
+            if (arr[round]) {
+              selected.push(arr[round]);
+              if (selected.length === 8) break;
+              exhausted = false;
+            }
+          }
+          round++;
+        }
+
+        const profileIds = [...new Set(selected.map((w) => w.profile_id))];
         const { data: profiles } = await supabase
           .from("profiles")
           .select("id, name, profile_image")
@@ -58,7 +85,7 @@ const FeaturedWorkflows = () => {
           return acc;
         }, {});
 
-        const workflowsWithProfiles = data.map((w) => ({
+        const workflowsWithProfiles = selected.map((w) => ({
           ...w,
           profile_name: profilesMap[w.profile_id]?.name || "Unknown Creator",
           profile_image: profilesMap[w.profile_id]?.profile_image || null,
