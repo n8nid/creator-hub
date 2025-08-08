@@ -15,6 +15,7 @@ import {
 import Link from "next/link";
 // import { workflowCategories } from "@/data/category-workflows"; // Category filter disabled
 import GradientCircle from "@/components/GradientCircle";
+import CategoryPlaceholder from "@/components/CategoryPlaceholder";
 
 type WorkflowWithProfileName = {
   profile_id: string;
@@ -259,7 +260,7 @@ export default function WorkflowsPage() {
                     <div className="bg-gray-50 border-b border-gray-200 workflow-preview-header">
                       {/* Div wrapper dengan posisi relative untuk workflow preview */}
                       <div className="h-full workflow-preview-wrapper">
-                        <div className="workflow-preview-container workflow-preview-transform">
+                        <div className="workflow-preview-container">
                           {workflow.screenshot_url ? (
                             <div className="workflow-preview-content absolute w-full h-full">
                               <img
@@ -268,29 +269,8 @@ export default function WorkflowsPage() {
                                 className="w-full h-full object-cover"
                               />
                             </div>
-                          ) : workflow.json_n8n ? (
-                            <div
-                              className="workflow-preview-content absolute -translate-x-48  min-w-[1000px] h-full"
-                              dangerouslySetInnerHTML={{
-                                __html: `<n8n-demo workflow='${workflow.json_n8n.replace(
-                                  /'/g,
-                                  "&#39;"
-                                )}' frame="true" style="width: 100%; height: 100%; border: none; border-radius: 0; margin: 0; padding: 0; overflow: hidden; display: block;"></n8n-demo>`,
-                              }}
-                            />
                           ) : (
-                            <div className="workflow-preview-content absolute w-full h-full flex items-center justify-center bg-gray-100">
-                              <div className="text-center text-gray-500">
-                                <div className="text-2xl mb-1">📋</div>
-                                <p className="text-xs">No workflow data</p>
-                                <p className="text-xs text-gray-400 mt-1">
-                                  json_n8n field empty
-                                </p>
-                                <p className="text-xs text-gray-400 mt-1">
-                                  Add workflow JSON to see preview
-                                </p>
-                              </div>
-                            </div>
+                            <CategoryPlaceholder category={workflow.category} />
                           )}
                         </div>
                       </div>

@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import CategoryPlaceholder from "@/components/CategoryPlaceholder";
 import {
   Search,
   ExternalLink,
@@ -89,30 +90,30 @@ export default function CreatorDetailPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [creatorEmail, setCreatorEmail] = useState<string>("");
   // Menggunakan supabase yang sudah diimport dari @/lib/supabase
-  
+
   // Helper function untuk memformat nomor WhatsApp untuk link wa.me
   const formatWhatsAppForLink = (whatsappNumber: string): string => {
-    if (!whatsappNumber) return '';
-    
-    const cleanNumber = whatsappNumber.replace(/\s/g, '');
-    
+    if (!whatsappNumber) return "";
+
+    const cleanNumber = whatsappNumber.replace(/\s/g, "");
+
     // Jika sudah dalam format 62xxx, hapus semua non-digit
     if (/^62[0-9]+$/.test(cleanNumber)) {
       return cleanNumber;
     }
-    
+
     // Jika dalam format +62xxx, hapus + dan semua non-digit
     if (/^\+62[0-9]+$/.test(cleanNumber)) {
-      return cleanNumber.replace(/\D/g, '');
+      return cleanNumber.replace(/\D/g, "");
     }
-    
+
     // Jika dalam format 08xxx, ubah ke 62xxx
     if (/^08[0-9]+$/.test(cleanNumber)) {
-      return '62' + cleanNumber.substring(1);
+      return "62" + cleanNumber.substring(1);
     }
-    
+
     // Fallback: hapus semua non-digit
-    return cleanNumber.replace(/\D/g, '');
+    return cleanNumber.replace(/\D/g, "");
   };
 
   useEffect(() => {
@@ -614,7 +615,9 @@ export default function CreatorDetailPage() {
                 )}
                 {creator.Whatsapp && (
                   <a
-                    href={`https://wa.me/${formatWhatsAppForLink(creator.Whatsapp)}`}
+                    href={`https://wa.me/${formatWhatsAppForLink(
+                      creator.Whatsapp
+                    )}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-white hover:text-gray-300 transition-colors"
@@ -825,7 +828,7 @@ export default function CreatorDetailPage() {
                           <div className="bg-gray-50 border-b border-gray-200 workflow-preview-header">
                             {/* Div wrapper dengan posisi relative untuk workflow preview */}
                             <div className="h-full workflow-preview-wrapper">
-                              <div className="workflow-preview-container workflow-preview-transform">
+                              <div className="workflow-preview-container">
                                 {workflow.screenshot_url ? (
                                   <div className="workflow-preview-content absolute w-full h-full">
                                     <img
@@ -834,31 +837,10 @@ export default function CreatorDetailPage() {
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
-                                ) : workflow.json_n8n ? (
-                                  <div
-                                    className="workflow-preview-content absolute -translate-x-48  min-w-[1000px] h-full"
-                                    dangerouslySetInnerHTML={{
-                                      __html: `<n8n-demo workflow='${workflow.json_n8n.replace(
-                                        /'/g,
-                                        "&#39;"
-                                      )}' frame="true" style="width: 100%; height: 100%; border: none; border-radius: 0; margin: 0; padding: 0; overflow: hidden; display: block;"></n8n-demo>`,
-                                    }}
-                                  />
                                 ) : (
-                                  <div className="workflow-preview-content absolute w-full h-full flex items-center justify-center bg-gray-100">
-                                    <div className="text-center text-gray-500">
-                                      <div className="text-2xl mb-1">📋</div>
-                                      <p className="text-xs">
-                                        No workflow data
-                                      </p>
-                                      <p className="text-xs text-gray-400 mt-1">
-                                        json_n8n field empty
-                                      </p>
-                                      <p className="text-xs text-gray-400 mt-1">
-                                        Add workflow JSON to see preview
-                                      </p>
-                                    </div>
-                                  </div>
+                                  <CategoryPlaceholder
+                                    category={workflow.category}
+                                  />
                                 )}
                               </div>
                             </div>
