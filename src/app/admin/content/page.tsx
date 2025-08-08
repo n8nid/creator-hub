@@ -3,12 +3,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Plus, Calendar, Newspaper, Search } from "lucide-react";
+import { Plus, Calendar, Newspaper, Search, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Event {
   id: string;
@@ -47,6 +58,17 @@ export default function ContentManagementPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [deleteDialog, setDeleteDialog] = useState<{
+    isOpen: boolean;
+    type: "event" | "news" | null;
+    id: string | null;
+    title: string | null;
+  }>({
+    isOpen: false,
+    type: null,
+    id: null,
+    title: null,
+  });
 
   // Statistics
   const [stats, setStats] = useState({
@@ -154,39 +176,66 @@ export default function ContentManagementPage() {
     fetchData();
   }, [activeTab, statusFilter, searchQuery]);
 
-  const handleDelete = async (type: "event" | "news", id: string) => {
-    if (!confirm(`Are you sure you want to archive this ${type}?`)) return;
+  const openDeleteDialog = (
+    type: "event" | "news",
+    id: string,
+    title: string
+  ) => {
+    setDeleteDialog({
+      isOpen: true,
+      type,
+      id,
+      title,
+    });
+  };
+
+  const closeDeleteDialog = () => {
+    setDeleteDialog({
+      isOpen: false,
+      type: null,
+      id: null,
+      title: null,
+    });
+  };
+
+  const handleDelete = async () => {
+    if (!deleteDialog.type || !deleteDialog.id) return;
 
     try {
-      const response = await fetch(`/api/admin/content/${type}s/${id}`, {
-        method: "DELETE",
-      });
+      const endpoint = deleteDialog.type === "news" ? "news" : "events";
+      const response = await fetch(
+        `/api/admin/content/${endpoint}/${deleteDialog.id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         toast({
-          title: "Success",
-          description: `${
-            type.charAt(0).toUpperCase() + type.slice(1)
-          } archived successfully`,
+          title: "✅ Berhasil Dihapus",
+          description: `"${deleteDialog.title}" telah berhasil dihapus secara permanen dari database.`,
         });
-        if (type === "event") {
+        if (deleteDialog.type === "event") {
           fetchEvents();
         } else {
           fetchNews();
         }
         fetchStats();
+        closeDeleteDialog();
       } else {
         const data = await response.json();
         toast({
-          title: "Error",
-          description: data.error || `Failed to archive ${type}`,
+          title: "❌ Gagal Menghapus",
+          description:
+            data.error ||
+            `Gagal menghapus "${deleteDialog.title}". Silakan coba lagi.`,
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: `Failed to archive ${type}`,
+        title: "❌ Gagal Menghapus",
+        description: `Terjadi kesalahan saat menghapus "${deleteDialog.title}". Silakan coba lagi.`,
         variant: "destructive",
       });
     }
@@ -483,9 +532,12 @@ export default function ContentManagementPage() {
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleDelete("event", event.id)}
+                          onClick={() =>
+                            openDeleteDialog("event", event.id, event.title)
+                          }
                         >
-                          Archive
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          Hapus
                         </Button>
                       </div>
                     </div>
@@ -548,9 +600,16 @@ export default function ContentManagementPage() {
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleDelete("news", newsItem.id)}
+                          onClick={() =>
+                            openDeleteDialog(
+                              "news",
+                              newsItem.id,
+                              newsItem.title
+                            )
+                          }
                         >
-                          Archive
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          Hapus
                         </Button>
                       </div>
                     </div>
@@ -561,6 +620,36 @@ export default function ContentManagementPage() {
           </Tabs>
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialog.isOpen} onOpenChange={closeDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Trash2 className="h-5 w-5 text-destructive" />
+              Konfirmasi Hapus
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Apakah Anda yakin ingin menghapus{" "}
+              <span className="font-semibold text-foreground">
+                "{deleteDialog.title}"
+              </span>
+              ? Tindakan ini tidak dapat dibatalkan dan data akan dihapus secara
+              permanen.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Hapus Permanen
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

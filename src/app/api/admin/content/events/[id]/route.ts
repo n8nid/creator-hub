@@ -183,20 +183,17 @@ export async function DELETE(
       );
     }
 
-    // Soft delete by setting status to archived
+    // Hard delete - permanently remove from database
     const { error } = await supabase
       .from("events")
-      .update({
-        status: "archived",
-        updated_at: new Date().toISOString(),
-      })
+      .delete()
       .eq("id", params.id);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ message: "Event archived successfully" });
+    return NextResponse.json({ message: "Event deleted successfully" });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal server error" },
