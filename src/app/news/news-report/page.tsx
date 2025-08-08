@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation";
 import GradientCircle from "@/components/GradientCircle";
 import { useNews } from "@/hooks/use-news";
 import { FileText, Calendar, Clock, TrendingUp, Search } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function NewsReportPage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
-  const { news, loading: newsLoading, error: newsError } = useNews(20);
+  const [displayedNews, setDisplayedNews] = useState(9);
+  const [hasMore, setHasMore] = useState(false);
+  const { news, loading: newsLoading, error: newsError } = useNews();
 
   // Format date helper
   const formatDate = (dateString: string) => {
@@ -37,6 +39,20 @@ export default function NewsReportPage() {
       (item.excerpt?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
       (item.content?.toLowerCase() || "").includes(searchTerm.toLowerCase())
   );
+
+  // Get visible news based on displayed count
+  const visibleNews = filteredNews.slice(0, displayedNews);
+
+  // Check if there are more news to show
+  useEffect(() => {
+    const filteredCount = filteredNews.length;
+    setHasMore(filteredCount > displayedNews);
+  }, [filteredNews, displayedNews]);
+
+  // Handle load more
+  const handleLoadMore = () => {
+    setDisplayedNews((prev) => prev + 9);
+  };
 
   return (
     <div className="text-white content-above-gradient relative">
@@ -130,7 +146,7 @@ export default function NewsReportPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {newsLoading ? (
               // Loading skeleton
-              Array.from({ length: 6 }).map((_, index) => (
+              Array.from({ length: 9 }).map((_, index) => (
                 <div
                   key={index}
                   className="bg-white/10 rounded-2xl overflow-hidden animate-pulse"
@@ -148,8 +164,8 @@ export default function NewsReportPage() {
               <div className="col-span-full flex items-center justify-center py-12">
                 <p className="text-white/60">Error loading news</p>
               </div>
-            ) : filteredNews.length > 0 ? (
-              filteredNews.map((newsItem) => (
+            ) : visibleNews.length > 0 ? (
+              visibleNews.map((newsItem) => (
                 <div
                   key={newsItem.id}
                   className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
@@ -262,11 +278,27 @@ export default function NewsReportPage() {
             )}
           </div>
 
-          {/* Load More Button (if needed) */}
-          {news.length > 6 && (
+          {/* Load More Button */}
+          {hasMore && (
             <div className="flex justify-center mt-12">
-              <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-medium">
-                Lihat Semua Berita
+              <button
+                onClick={handleLoadMore}
+                className="px-10 py-4 rounded-full font-medium bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-3"
+              >
+                <span>Lihat Semua Berita</span>
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 17l9.2-9.2M17 17V7H7"
+                  />
+                </svg>
               </button>
             </div>
           )}
