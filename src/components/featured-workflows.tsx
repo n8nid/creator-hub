@@ -164,7 +164,7 @@ const FeaturedWorkflows = () => {
                 <Link
                   key={workflow.id}
                   href={`/workflows/${workflow.id}`}
-                  className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 block overflow-hidden h-full flex-shrink-0 w-80"
+                  className="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 block overflow-hidden flex-shrink-0 workflow-card"
                 >
                   {/* Div 1: Workflow Preview Diagram (Full Width) */}
                   <div className="w-full relative workflow-preview-section overflow-hidden">

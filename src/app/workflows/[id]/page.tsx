@@ -182,13 +182,7 @@ export default function WorkflowDetailPublicPage() {
 
             {/* Kanan - Workflow Canvas */}
             <div className="rounded-2xl w-full lg:w-[50%] flex items-center justify-center">
-              {workflow.screenshot_url ? (
-                <img
-                  src={workflow.screenshot_url}
-                  alt="Workflow Screenshot"
-                  className="w-full h-auto object-cover"
-                />
-              ) : workflow.json_n8n ? (
+              {workflow.json_n8n ? (
                 <div
                   className="relative w-full"
                   style={{ aspectRatio: "16/8" }}

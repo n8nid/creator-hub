@@ -1093,21 +1093,21 @@ body {
 
 /* Workflow Page Styles */
 .workflow-card {
-  width: 100%;
-  max-width: 530px;
-  height: 130px;
-  min-height: 540px;
+  width: 320px;
+  height: 584px;
   position: relative;
   flex-shrink: 0;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .workflow-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, 320px);
   gap: 24px 32px;
   justify-content: center;
-  align-items: start;
+  align-items: stretch;
   /* Mengikuti container-box tanpa padding tambahan */
   width: 100%;
   max-width: 100%;
@@ -1119,112 +1119,111 @@ body {
 /* Ultra Wide Desktop (2560px+) */
 @media (min-width: 2561px) {
   .workflow-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fit, 320px);
     max-width: 3000px;
     margin: 0 auto;
   }
 
   .workflow-card {
-    max-width: 550px;
+    width: 320px;
+    height: 584px;
   }
 }
 
 /* Large Desktop (1921px - 2560px) */
 @media (min-width: 1921px) and (max-width: 2560px) {
   .workflow-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, 320px);
     max-width: 2400px;
     margin: 0 auto;
   }
 
   .workflow-card {
-    max-width: 530px;
+    width: 320px;
+    height: 584px;
   }
 }
 
 /* Large Laptop (1441px - 1920px) */
 @media (min-width: 1441px) and (max-width: 1920px) {
   .workflow-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, 320px);
   }
 
   .workflow-card {
-    max-width: 400px;
+    width: 320px;
+    height: 584px;
   }
 }
 
 /* Standard Laptop (1025px - 1440px) */
 @media (min-width: 769px) and (max-width: 1024px) {
   .workflow-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, 320px);
   }
 
   .workflow-card {
-    max-width: 450px;
+    width: 320px;
+    height: 584px;
   }
 }
 
 /* Tablet Portrait (768px - 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
   .workflow-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, 320px);
     gap: 20px;
     justify-items: center;
   }
 
   .workflow-card {
-    max-width: 395px !important;
-    min-width: 280px !important;
-    height: auto !important;
-    min-height: 450px !important;
-    width: 100% !important;
+    width: 320px !important;
+    height: 584px !important;
   }
 }
 
 /* Tablet Landscape (481px - 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
   .workflow-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, 320px);
   }
 
   .workflow-card {
-    max-width: 350px;
-    height: auto;
-    min-height: 420px;
+    width: 320px;
+    height: 584px;
   }
 }
 
 /* Tablet/Mobile Landscape (481px - 768px) */
 @media (min-width: 481px) and (max-width: 768px) and (orientation: landscape) {
   .workflow-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, 320px);
   }
 
   .workflow-card {
-    max-width: 250px;
-    height: auto;
-    min-height: 350px;
+    width: 320px;
+    height: 584px;
   }
 }
 
 /* Mobile Portrait (320px - 480px) */
 @media (max-width: 480px) {
   .workflow-grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(auto-fit, 320px);
     gap: 12px;
   }
 
   .workflow-card {
-    max-width: 100%;
-    height: auto;
-    min-height: 260px;
+    width: 320px;
+    height: 584px;
   }
 }
 
 /* Small Mobile (320px - 375px) */
 @media (max-width: 375px) {
   .workflow-card {
-    min-height: 220px;
+    width: 320px;
+    height: 584px;
   }
 }
 
@@ -1415,10 +1414,8 @@ body {
 
   /* Optimasi card workflow untuk tablet */
   .workflow-card {
-    max-width: 395px !important;
-    min-width: 280px !important;
-    height: auto !important;
-    min-height: 450px !important;
+    width: 320px !important;
+    height: 584px !important;
   }
 
   /* Sesuaikan padding content untuk tablet */
@@ -1494,7 +1491,8 @@ body {
 
   /* Kurangi tinggi card untuk mobile */
   .workflow-card {
-    min-height: 380px !important;
+    width: 320px !important;
+    height: 584px !important;
   }
 }
 
@@ -1515,7 +1513,8 @@ body {
 
   /* Kurangi tinggi card untuk small mobile */
   .workflow-card {
-    min-height: 340px !important;
+    width: 320px !important;
+    height: 584px !important;
   }
 }
 
@@ -1536,7 +1535,8 @@ body {
 
   /* Kurangi tinggi card untuk very small mobile */
   .workflow-card {
-    min-height: 300px !important;
+    width: 320px !important;
+    height: 584px !important;
   }
 }
 
@@ -1557,7 +1557,8 @@ body {
 
   /* Kurangi tinggi card untuk extra small mobile */
   .workflow-card {
-    min-height: 280px !important;
+    width: 320px !important;
+    height: 584px !important;
   }
 }
 
@@ -1710,6 +1711,14 @@ n8n-demo {
   text-align: left;
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+
+/* Ensure card content area uses flexbox for equal distribution */
+.workflow-card .p-4.sm\\:p-6 {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
 }
 
 /* Mobile responsive untuk workflow card content */
