@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -40,6 +40,11 @@ export default function ImageUpload({
   );
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync with currentImage prop changes
+  React.useEffect(() => {
+    setUploadedImage(currentImage || null);
+  }, [currentImage]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -117,7 +122,10 @@ export default function ImageUpload({
       setUploadedImage(data.url);
       setUploadedPath(data.path);
 
-      onUploadComplete(data.url, data.path);
+      // Call parent callback after state is updated
+      setTimeout(() => {
+        onUploadComplete(data.url, data.path);
+      }, 0);
     } catch (error) {
       console.error("Upload error:", error);
       onUploadError(error instanceof Error ? error.message : "Upload failed");

@@ -388,7 +388,10 @@ export default function WorkflowDetailUserPage() {
               <MDEditor
                 value={editForm.description || ""}
                 onChange={(value) =>
-                  setEditForm({ ...editForm, description: value || "" })
+                  setEditForm((prev: any) => ({
+                    ...prev,
+                    description: value || "",
+                  }))
                 }
                 preview="edit"
                 height={300}
@@ -507,13 +510,13 @@ export default function WorkflowDetailUserPage() {
               bucket="workflow"
               currentImage={editForm.screenshot_url}
               onUploadComplete={(url: string, path: string) => {
-                setEditForm({ ...editForm, screenshot_url: url });
+                setEditForm((prev: any) => ({ ...prev, screenshot_url: url }));
               }}
               onUploadError={(error: string) => {
                 toast.error(`Gagal mengupload gambar: ${error}`);
               }}
               onRemove={() => {
-                setEditForm({ ...editForm, screenshot_url: "" });
+                setEditForm((prev: any) => ({ ...prev, screenshot_url: "" }));
               }}
             />
             <p className="text-sm text-gray-600 mt-2">

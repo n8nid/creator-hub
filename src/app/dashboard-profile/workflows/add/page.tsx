@@ -308,7 +308,10 @@ export default function AddWorkflowPage() {
             <MDEditor
               value={workflowForm.description || ""}
               onChange={(value) =>
-                setWorkflowForm({ ...workflowForm, description: value || "" })
+                setWorkflowForm((prev) => ({
+                  ...prev,
+                  description: value || "",
+                }))
               }
               preview="edit"
               height={300}
@@ -330,7 +333,7 @@ export default function AddWorkflowPage() {
           </label>
           <TagInput
             value={workflowForm.tags || []}
-            onChange={(tags) => setWorkflowForm((f) => ({ ...f, tags }))}
+            onChange={(tags) => setWorkflowForm((prev) => ({ ...prev, tags }))}
             placeholder="Tambah tag untuk workflow..."
           />
           <p className="text-sm text-gray-600 mt-2">
@@ -363,13 +366,13 @@ export default function AddWorkflowPage() {
             bucket="workflow"
             currentImage={workflowForm.screenshot_url}
             onUploadComplete={(url: string, path: string) => {
-              setWorkflowForm({ ...workflowForm, screenshot_url: url });
+              setWorkflowForm((prev) => ({ ...prev, screenshot_url: url }));
             }}
             onUploadError={(error: string) => {
               toast.error(`Gagal mengupload gambar: ${error}`);
             }}
             onRemove={() => {
-              setWorkflowForm({ ...workflowForm, screenshot_url: "" });
+              setWorkflowForm((prev) => ({ ...prev, screenshot_url: "" }));
             }}
             className="w-full"
           />
